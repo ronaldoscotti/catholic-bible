@@ -28,6 +28,7 @@ If that holds, v1 shipped. If it doesn't, it didn't, however much code exists.
 
 | # | Epic | Exit criterion | How it's verified |
 |---|---|---|---|
+| B0 | Project scaffolding | `docker compose up` works and CI is green on a clean checkout | CI green on the merge commit, and a job that follows the README quickstart |
 | B1 | Canon and spine | `map()` is total and never raises. Orphans come back as data with a reason. `orphans.json` published | TDD, plus a conformance corpus: Ps 50/51, Dan 13-14, the Greek additions to Esther, Sirach, 1 Chr 6, `Jo` against `Jó` |
 | B2 | Corpus extraction | `make` regenerates the dataset byte for byte | Not TDD. Golden files, plus a CI job that regenerates and diffs. If output changes without the generator changing, the build breaks |
 | B3 | Read API | Parity with the read endpoints this replaces | TDD on handlers, contract tests against the OpenAPI schema |

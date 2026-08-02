@@ -44,7 +44,11 @@ There is no stable verse identity for the Catholic canon. Without one, a comment
 
 ## Constraints
 
-The public identity is a structured, human-readable id such as `PSA.50.3`, not an opaque integer. A database id is an artifact of the order a seed ran in, and freezing one into a public contract is a mistake that cannot be undone. A derived integer for interval arithmetic ships alongside it and can be recomputed without breaking anyone.
+Two identities, and the split is deliberate.
+
+Internally the storage model matches the source implementation. An indexed integer per verse, a canonical order for interval arithmetic, and a unique constraint on book, chapter and verse. That design works and it ports as it is.
+
+On the wire the published identity is structured and human readable, `PSA.50.3`. The integer stays in the response as a derived field for callers doing range maths, and it can be recomputed without breaking anyone. A database id is an artifact of the order a seed ran in, so freezing one into a public contract is a mistake nobody can undo later.
 
 The spine is a Vulgate-numbering superset. It takes the maximum and never reduces. The New Testament stays untouched, because modern NT numbering is what the liturgy, the catechism and every cross-reference apparatus already use.
 
