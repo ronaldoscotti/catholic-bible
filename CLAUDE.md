@@ -59,6 +59,12 @@ Status checklists advance when the artifact exists.
 Python and FastAPI. Read-only HTTP, typed request and response models with
 Pydantic, OpenAPI published.
 
+`openapi.json` is committed and CI regenerates it. A route that changed without
+the document following fails the build, and so does a route carrying no summary,
+no response model or no documented errors. FastAPI serves an undocumented route
+without complaining, and that is how a published contract goes quietly out of
+date while every test stays green.
+
 SQLite on local disk, with FTS5 for lexical search. **No external database, and
 this is a decision rather than a limitation.** The corpus is 73 books and it is
 static, which makes a file the correct store. It gives sub-millisecond reads, no

@@ -49,11 +49,14 @@ I think issue #[N] is done. Before opening the pull request:
    evidence for each. Anything unmet stays unchecked.
 3. Run the verification named in the epic. If it is not a test, do the thing it
    actually says and record the result.
-4. Check that no rule in CLAUDE.md was broken, including em-dashes in prose and
+4. If the epic touched the HTTP surface, regenerate openapi.json and commit it.
+   Say which routes changed and confirm every route still carries a summary, a
+   response model and its error responses.
+5. Check that no rule in CLAUDE.md was broken, including em-dashes in prose and
    any JSON that got edited by hand rather than generated.
-5. Update the status block in docs/method/README.md only for stages whose
+6. Update the status block in docs/method/README.md only for stages whose
    artifact now exists.
-6. Open the pull request. The description says what changed, why, what is still
+7. Open the pull request. The description says what changed, why, what is still
    broken, and what you would do next with more time.
 
 Do not mark a criterion met because the code looks right. Met means verified.
