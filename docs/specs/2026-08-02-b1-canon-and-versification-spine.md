@@ -119,6 +119,15 @@ turns a class of orphan from "no counterpart" into a stated cause, which is the
 difference between a report and a shrug. `partialVerses` stays unused in B1 and
 the reason is written in the epic rather than left to inference.
 
+*Superseded on 2026-08-02, while writing the plan. Both keys are present in
+`vulgata-versification.json` and both are empty, so `excluded_by_scheme` cannot
+fire and the paragraph above rejected `partialVerses` on a ground it failed to
+apply to its neighbour. The closed set is four reasons, and a fifth for the
+Vulgate Psalm titles is proposed in the
+[plan](../plans/2026-08-02-b1-canon-and-versification-spine.md) on evidence
+rather than on a key name. The paragraph stands as written because a spec edited
+to match a later finding stops being a record of what was believed first.*
+
 `orphans.json` is generated from running every address of every supported scheme
 through the function, broken down by book and by scheme, with the reason.
 
@@ -159,6 +168,13 @@ Portuguese ports from the canon file, 73 names plus abbreviations plus alias
 lists, already collision-free there.
 
 English ports from the Douay reference parser in the private repo.
+
+*Superseded on 2026-08-02, while writing the plan. English user-facing names
+come from `DouayCanonMap`. `DouayReferenceParser` parses the Latin apparatus of
+the original Douay, so what it carries is the Latin abbreviations, which means
+Latin is a port too and only the full Latin names are authored. The plan also
+records a collision this paragraph missed, `1 Kings` meaning Samuel in Douay and
+Kings in modern English.*
 
 Latin is authored here, from the traditional names, and it is the one part of
 B1 that is not a port. `Genesis`, `Exodus`, `Canticum Canticorum`,
