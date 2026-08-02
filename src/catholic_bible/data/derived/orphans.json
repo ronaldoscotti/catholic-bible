@@ -1,0 +1,173 @@
+{
+  "describes": {
+    "source_commit": "0494a69e66657a16d822898e71f4eb3b2bc4ae80",
+    "spine_sha256": "9a1443085d1c3975fd83e2faa9efc314ddc8e20fcc6e3fb241aa37a78ab2a1e1"
+  },
+  "schemes": {
+    "vulgate": {
+      "addresses_examined": 39046,
+      "resolved": 35838,
+      "orphans": 3208,
+      "by_reason": {
+        "chapter_out_of_range": 13,
+        "no_counterpart": 3039,
+        "psalm_title": 147,
+        "verse_out_of_range": 9
+      },
+      "by_book": {
+        "1ES": {
+          "no_counterpart": 451
+        },
+        "1PE": {
+          "verse_out_of_range": 1
+        },
+        "2ES": {
+          "no_counterpart": 942
+        },
+        "2TH": {
+          "verse_out_of_range": 1
+        },
+        "3MA": {
+          "no_counterpart": 228
+        },
+        "4MA": {
+          "no_counterpart": 482
+        },
+        "6EZ": {
+          "no_counterpart": 141
+        },
+        "ACT": {
+          "verse_out_of_range": 2
+        },
+        "BEL": {
+          "no_counterpart": 42
+        },
+        "DAG": {
+          "no_counterpart": 241
+        },
+        "ESG": {
+          "no_counterpart": 267
+        },
+        "GAL": {
+          "verse_out_of_range": 1
+        },
+        "HEB": {
+          "verse_out_of_range": 1
+        },
+        "JON": {
+          "verse_out_of_range": 1
+        },
+        "LAO": {
+          "no_counterpart": 20
+        },
+        "LJE": {
+          "no_counterpart": 72
+        },
+        "MAN": {
+          "no_counterpart": 15
+        },
+        "MAT": {
+          "verse_out_of_range": 1
+        },
+        "PS2": {
+          "no_counterpart": 7
+        },
+        "PSA": {
+          "psalm_title": 147
+        },
+        "REV": {
+          "verse_out_of_range": 1
+        },
+        "S3Y": {
+          "no_counterpart": 67
+        },
+        "SIR": {
+          "chapter_out_of_range": 13
+        },
+        "SUS": {
+          "no_counterpart": 64
+        }
+      }
+    },
+    "org": {
+      "addresses_examined": 38371,
+      "resolved": 35498,
+      "orphans": 2873,
+      "by_reason": {
+        "chapter_out_of_range": 13,
+        "no_counterpart": 2705,
+        "psalm_title": 147,
+        "verse_out_of_range": 8
+      },
+      "by_book": {
+        "1ES": {
+          "no_counterpart": 426
+        },
+        "1PE": {
+          "verse_out_of_range": 1
+        },
+        "2ES": {
+          "no_counterpart": 942
+        },
+        "2TH": {
+          "verse_out_of_range": 1
+        },
+        "3MA": {
+          "no_counterpart": 228
+        },
+        "4MA": {
+          "no_counterpart": 482
+        },
+        "6EZ": {
+          "no_counterpart": 141
+        },
+        "ACT": {
+          "verse_out_of_range": 2
+        },
+        "BEL": {
+          "no_counterpart": 1
+        },
+        "DAG": {
+          "no_counterpart": 175
+        },
+        "ESG": {
+          "no_counterpart": 267
+        },
+        "GAL": {
+          "verse_out_of_range": 1
+        },
+        "HEB": {
+          "verse_out_of_range": 1
+        },
+        "LAO": {
+          "no_counterpart": 20
+        },
+        "MAN": {
+          "no_counterpart": 15
+        },
+        "MAT": {
+          "verse_out_of_range": 1
+        },
+        "PS2": {
+          "no_counterpart": 7
+        },
+        "PSA": {
+          "psalm_title": 147
+        },
+        "REV": {
+          "verse_out_of_range": 1
+        },
+        "S3Y": {
+          "no_counterpart": 1
+        },
+        "SIR": {
+          "chapter_out_of_range": 13
+        }
+      }
+    },
+    "douay": {
+      "reportable": false,
+      "why": "Douay has no declared coordinate space in this repo. It arrives with the text in B2."
+    }
+  }
+}

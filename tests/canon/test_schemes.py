@@ -64,6 +64,17 @@ def test_an_origin_with_no_slot_on_the_spine_loses_to_one_that_has_a_slot() -> N
     assert ORG.to_spine("S3Y", 1, 67) == ("DAN", 3, 90)
 
 
+def test_an_address_on_the_spine_is_not_traded_for_one_that_is_not() -> None:
+    """The table carries source versifications beyond the Vulgate.
+
+    Greek Daniel travels as DAG, so inverting hands org DAN 1:1 an origin of
+    DAG 1:1, which the canon does not have. Applying it would orphan 251
+    addresses of a book that maps perfectly well.
+    """
+    assert ORG.to_spine("DAN", 1, 1) == ("DAN", 1, 1)
+    assert ORG.to_spine("DAN", 3, 24) == ("DAN", 3, 91)
+
+
 def test_org_passes_through_where_the_spine_already_numbers_in_org() -> None:
     assert ORG.to_spine("MAL", 3, 19) == ("MAL", 3, 19)
     assert ORG.to_spine("GEN", 1, 1) == ("GEN", 1, 1)

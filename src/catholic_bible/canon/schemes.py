@@ -68,6 +68,7 @@ class VulgateScheme:
         mapped = table.get("mappedVerses", {})
         assert isinstance(mapped, dict)
         self._per_verse = _pair_up(mapped)
+        self._origins = tuple(mapped)
         self._mode: dict[str, Mode] = {}
 
     def declares(self, book: str) -> bool:
@@ -77,6 +78,14 @@ class VulgateScheme:
     def declared_books(self) -> dict[str, list[int]]:
         """Every book the table declares, with its Vulgate verse counts."""
         return dict(self._max)
+
+    def declared_pairs(self) -> tuple[str, ...]:
+        """The origin side of every remap the table declares, ranges unexpanded."""
+        return self._origins
+
+    def declared_targets(self) -> dict[str, str]:
+        """Vulgate address to the `org` address the table names for it."""
+        return dict(self._per_verse)
 
     def mode_for(self, book: str) -> Mode:
         cached = self._mode.get(book)
@@ -130,6 +139,12 @@ class OrgScheme:
     rest, 23 have no resolvable origin and 9 have several, and those 9 stay
     ambiguous on purpose. This diverges from the source implementation and the
     reasoning is in DECISIONS.md.
+
+    The table also carries source versifications other than the Vulgate, `DAG`
+    for Greek Daniel among them, so inverting can hand a perfectly good address
+    a remap that lands nowhere. `DAN 1:1` is declared only from `DAG 1:1`, which
+    the canon does not have. An address already on the spine is therefore never
+    traded for one that is not.
     """
 
     def __init__(self, table: dict[str, object], vulgate: VulgateScheme) -> None:
@@ -147,8 +162,15 @@ class OrgScheme:
     def to_spine(self, book: str, chapter: int, verse: int) -> Address:
         if self._vulgate.mode_for(book) is not Mode.IDENTITY:
             return book, chapter, verse
+
         target = self._inverse.get(f"{book} {chapter}:{verse}")
-        return _parse(target) if target else (book, chapter, verse)
+        if target is None:
+            return book, chapter, verse
+
+        candidate = _parse(target)
+        if not SPINE.contains(*candidate) and SPINE.contains(book, chapter, verse):
+            return book, chapter, verse
+        return candidate
 
 
 class DouayScheme:
