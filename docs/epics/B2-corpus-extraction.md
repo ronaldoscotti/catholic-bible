@@ -1,4 +1,4 @@
-# [B2] Corpus extraction and deterministic generator
+# [B2] Corpus export and integrity
 
 | | |
 |---|---|
@@ -8,8 +8,8 @@
 | Blocks | B3, B4, B5, and C1 in `concordantia` |
 
 **As** a developer who wants Catholic Scripture in my app
-**I need** the full text of three translations, generated from source by a script anyone can run
-**So that** I can trust the data without auditing it by hand, and so that a contributor can prove their change did what they said it did
+**I need** the full text of three translations, published with a checksum and a stated origin
+**So that** I can tell a correction from a corruption without auditing 73 books by hand
 
 ## Context
 
@@ -21,34 +21,43 @@ The English half also unblocks the most interesting thing the sibling repo will 
 
 ## Source
 
-The import pipeline and the per-source normalizer interface already exist and pass tests in a private repo, and the corpus itself is already seeded there. `CONTEXT.local.md` maps the files and lists which translations port and which stay out. Export the existing data as a deterministic fixture first, then rebuild the generator in Python against it, and check both sides agree.
+Extraction already happened. The import pipeline, the per-source normalizer and the curated 1956 orthography allow-list live in the private repo named in `CONTEXT.local.md`, they pass tests there, and the corpus is seeded there. None of that moves here.
+
+What moves here is the finished data, through an export script that lives in this repo and reads that one. See [`DECISIONS.md`](../../DECISIONS.md) for why the generator stayed behind and what the choice costs.
 
 ## Problem
 
-The Portuguese Catholic Bible circulates today as scraped HTML and JSON files of unclear origin, with 1956 spellings, source errors carried forward, and no way to tell a fix from a corruption. A developer who wants Matos Soares copies a file and finds out three weeks later that a book is missing. There is no reproducible path from a source to a dataset.
+The Portuguese Catholic Bible circulates today as scraped HTML and JSON files of unclear origin, with 1956 spellings, source errors carried forward, and no way to tell a fix from a corruption. A developer who wants Matos Soares copies a file and finds out three weeks later that a book is missing. Nothing published states where it came from or whether it still matches.
 
 ## Acceptance criteria
 
 - [ ] Matos Soares (pt), Douay-Rheims (en) and the Clementine Vulgate (la) are complete for all 73 books
 - [ ] Every verse resolves against the B1 spine, and any that do not are reported as orphans rather than dropped silently
-- [ ] `make` regenerates the entire dataset from source, deterministically, byte for byte identical across runs and machines
-- [ ] A CI job regenerates the dataset and diffs it against what is committed. If output changed without the generator changing, the build fails
-- [ ] The 1956 orthography normalization is a curated allow-list, not a dictionary pass, and the list is versioned and reviewable
+- [ ] A committed export script produces the published dataset from the private source, and running it twice on the same source commit gives byte for byte identical output
+- [ ] Every published file carries a checksum and a provenance record naming its source, the source commit and the export date
+- [ ] A CI job verifies every checksum and every provenance record on a clean checkout, with no access to the private source. A byte that moved without its provenance moving fails the build
 - [ ] `LIMITS.md` records the per-book orphan rate with the cause, whatever the number turns out to be
+- [ ] `LIMITS.md` states plainly that a stranger cannot rebuild this dataset, and why
 - [ ] Each translation carries its license and its public-domain basis in machine-readable form
 
 ## Constraints
 
-No JSON maintained by hand. If a value cannot be produced by the generator, it does not ship.
+No JSON edited by hand. A value no script produced does not ship.
 
-Normalizing 1956 spelling is where a careless pass does damage. `pacto` is a word. A naive mute-consonant rule turns real words into wrong ones, so the allow-list is curated and every entry is defensible.
+The export reads the private repo and writes here. It never reaches the other way, and it never rewrites what it exported.
 
-Provenance for `Dancrf/biblia-db` and `mborders/vulgata` gets confirmed before extraction starts, not after.
+The 1956 orthography allow-list is not reimplemented. It is curated in the private repo, it is already reviewable there, and a second copy of it here would be a second thing to keep right.
+
+Provenance for `Dancrf/biblia-db` and `mborders/vulgata` is confirmed in the private repo before anything is exported, not after.
 
 ## Out of scope
 
 No commentary. No cross-references. No Ave Maria text, which is under copyright and stays out permanently.
 
+No extraction, no scraping, no upstream dumps. Those stay in the private repo.
+
 ## Verification
 
-Not test-driven, and the epic says so rather than growing a decorative unit test. Golden files hold the expected output. The real gate is the CI regeneration diff, which is what actually proves the corpus was not adjusted by hand.
+Not test-driven, and the epic says so rather than growing a decorative unit test.
+
+The gate is the CI integrity job, and it has to pass on a runner with no access to the private source. It recomputes every checksum, reads every provenance record, and fails when a published byte moved without its record moving. That is what proves the corpus was not adjusted by hand, which is the only thing the old regeneration diff was ever proving.
