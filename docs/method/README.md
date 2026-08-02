@@ -38,7 +38,7 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 5  Implement        B0, the project scaffolding
 [x] 6  QA               docs/qa/B0-project-scaffolding.md
 [x] 7  Code review      docs/reviews/B0-project-scaffolding.md, one author
-[ ] 8  PR               open on B0, not merged
+[x] 8  PR               open on B0, CI green, not merged
 ```
 
 The checklist advances when the artifact exists and not before. One epic has

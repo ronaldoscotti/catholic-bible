@@ -39,8 +39,8 @@ rule.
 - [x] `Makefile` exposes at minimum `make test`, `make lint`, `make fmt`, `make run`
 - [x] `compose.yaml` brings the service up on a clean checkout with no credentials
 - [x] A CI workflow runs lint, type check and tests on every push and every pull request
-- [ ] CI is green on the first commit that lands this epic
-- [ ] `README.md` has a quickstart that a stranger can follow, and it is the path CI exercises
+- [x] CI is green on the first commit that lands this epic
+- [x] `README.md` has a quickstart that a stranger can follow, and it is the path CI exercises
 
 ## Constraints
 
