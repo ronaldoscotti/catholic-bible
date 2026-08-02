@@ -75,6 +75,10 @@ class Aliases:
     def codes_in(self, language: Language) -> set[str]:
         return set(self._by_language[language].values())
 
+    def size(self) -> dict[Language, int]:
+        """How many written forms each language resolves."""
+        return {language: len(keys) for language, keys in self._by_language.items()}
+
     def conflicts(self) -> dict[str, list[str]]:
         """Aliases claimed for two different books, winner first.
 

@@ -141,30 +141,12 @@ class OrgScheme:
     """`org` numbering into the spine, which is the inverse direction.
 
     The Copenhagen table runs Vulgate to `org`, so this inverts it and applies
-    it only where the spine numbers a book in Vulgate. Where the spine already
-    numbers in `org` an `org` address is already home.
+    it only where the spine numbers a book in Vulgate. The index is sparse, so
+    only addresses that actually diverge are rewritten.
 
-    The index is sparse. Only addresses that actually diverge are rewritten, so
-    applying it to a book with few pairs touches only those few.
-
-    Inverting is not free. The table merges verses and it names the same target
-    from more than one origin, so 135 `org` addresses arrive with two or more
-    declared Vulgate origins. Taking whichever came last is arbitrary and it
-    costs real resolutions: the Song of the Three is declared from both `DAN`
-    and `DAG`, and only `DAN` has a slot on the spine.
-
-    So the rule is first declared wins, unless the first has no slot on the
-    spine and a later one does. That is a choice between origins the table
-    already asserts rather than an invented address, and it recovers 103. Of the
-    rest, 23 have no resolvable origin and 9 have several, and those 9 stay
-    ambiguous on purpose. This diverges from the source implementation and the
-    reasoning is in DECISIONS.md.
-
-    The table also carries source versifications other than the Vulgate, `DAG`
-    for Greek Daniel among them, so inverting can hand a perfectly good address
-    a remap that lands nowhere. `DAN 1:1` is declared only from `DAG 1:1`, which
-    the canon does not have. An address already on the spine is therefore never
-    traded for one that is not.
+    Inverting is not a function. The table merges verses and carries source
+    versifications beyond the Vulgate, which needs two tie-break rules. Both
+    diverge from the source implementation and both are in DECISIONS.md.
     """
 
     def __init__(self, table: dict[str, object], vulgate: VulgateScheme) -> None:

@@ -71,15 +71,9 @@ def map_address(scheme: Scheme, book: str, chapter: int, verse: int) -> Result:
 def to_scheme(scheme: Scheme, verse: VerseId) -> Result:
     """The other direction, a spine address read in `scheme`.
 
-    Also total. An address the spine does not hold comes back as an orphan for
-    the same reason it would going the other way.
-
-    The answer verifies itself. The remap table is not a bijection, so running
-    it backwards can produce an address that looks right and is not: the spine
-    holds `PSA.115.1` and reading it back naively gives `org` 115:1, while `org`
-    115:1 actually comes from a different psalm. A wrong address a consumer
-    trusts is worse than no address, so the candidate is mapped forward again
-    and only survives if it lands where it started.
+    Also total. The remap table is not a bijection, so the candidate is mapped
+    forward again and only survives if it lands where it started. See
+    DECISIONS.md.
     """
     source = (verse.book, verse.chapter, verse.verse)
     if not SPINE.contains(*source):

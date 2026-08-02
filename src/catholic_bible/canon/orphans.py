@@ -61,11 +61,8 @@ def org_addresses() -> list[Address]:
     """The same space read in `org`, which is its image under the table.
 
     The table declares verse counts for the Vulgate and not for `org`, so
-    sweeping `org` over the Vulgate counts would ask the `org` map about
-    coordinates `org` never uses. Daniel is where that shows: the Vulgate has
-    fourteen chapters and `org` keeps Susanna and Bel as separate books, so
-    feeding it Daniel 13 manufactures orphans that no `org` source would ever
-    produce.
+    sweeping the Vulgate counts would ask the `org` map about coordinates `org`
+    never uses and manufacture orphans no source could emit.
     """
     pairs = VULGATE.declared_targets()
     seen: dict[Address, None] = {}
