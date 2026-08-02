@@ -44,10 +44,13 @@ That's v1. Everything below is after.
 | B8 | Rate limiting | Per-IP limit, `429` with `Retry-After`. No keys, no accounts, until per-IP stops holding |
 | B9 | Full-text search | FTS5 over the corpus, lexical only |
 | B10 | Packages | `pip install` for the parser, `npm i` for the data |
+| B11 | Catechism cross-references | Given a verse, the paragraph numbers that cite it and a link to the official text. Not one word of that text |
 
 ## Not doing
 
-The Catena Aurea in Portuguese stays out. The English translation is public domain and can come later; the Portuguese edition I have is a modern one with open provenance, and publishing it would be a copyright problem wearing a nice cover. The Catechism, canon law and magisterial documents stay out for the same reason, and there is a good product already serving that corpus.
+The Catena Aurea in Portuguese stays out. The English translation is public domain and can come later; the Portuguese edition I have is a modern one with open provenance, and publishing it would be a copyright problem wearing a nice cover. The text of the Catechism stays out for the same reason, along with canon law and the magisterial documents, and there is a good product already serving that corpus.
+
+What does come in is the citation graph, in B11. A verse points at the paragraph numbers that cite it and the reader follows a link to `vatican.va` for the words. Numbers and links carry no text, and that boundary is written into `CLAUDE.md` so it cannot erode into a helpful summary later.
 
 No user accounts. An account is a login, and you need a login when someone has to come back and manage something. Nobody does yet.
 
