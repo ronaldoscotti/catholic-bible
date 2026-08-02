@@ -29,10 +29,25 @@ The export needs the private repo and they do not have it. The reproducibility
 gate stops being regeneration, and claiming otherwise would put a line in the
 README that the first curious reader disproves in ten minutes.
 
-**What replaces it.** Integrity. Every published file ships with a checksum and
-a provenance record naming its source, the commit it came from, and the date it
-was exported. CI verifies both on every push. A byte that moved without its
-provenance moving breaks the build, which is the property the regeneration diff
-existed to give. Nothing here is edited by hand and the check is what proves it.
+**What replaces it.** Two checks that prove two different things, and the
+difference matters enough to write down.
 
-The cost goes in `LIMITS.md` when that file lands in B7.
+Every published file ships with a checksum and a provenance record naming its
+source, the commit it came from, and the date it was exported. CI recomputes the
+hashes on every push, on a clean checkout, with no access to the private source.
+That catches a truncated file, a bad merge or a partial commit. It does not catch
+a deliberate edit, because the data and the hash are both committed here and
+whoever edits a verse can recompute the hash. A self-referential checksum is an
+integrity check and never an authorship check.
+
+Catching a hand edit needs an independent source, which is what the regeneration
+diff had. So the second check re-runs the export where the private repo lives, at
+the commit the provenance record names, and diffs it against what is committed
+here. That one has teeth and it cannot run on a fork.
+
+A first draft of this entry said the checksum proved nobody edited the corpus by
+hand. It does not, a review caught it, and the sentence is corrected rather than
+quietly deleted.
+
+The cost goes in `LIMITS.md` when that file lands in B7. A stranger can verify
+integrity and cannot verify authorship, and that is the honest shape of it.

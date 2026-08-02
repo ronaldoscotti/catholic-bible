@@ -33,11 +33,13 @@ The Portuguese Catholic Bible circulates today as scraped HTML and JSON files of
 
 - [ ] Matos Soares (pt), Douay-Rheims (en) and the Clementine Vulgate (la) are complete for all 73 books
 - [ ] Every verse resolves against the B1 spine, and any that do not are reported as orphans rather than dropped silently
-- [ ] A committed export script produces the published dataset from the private source, and running it twice on the same source commit gives byte for byte identical output
+- [ ] A committed export script produces the published dataset from the private source
 - [ ] Every published file carries a checksum and a provenance record naming its source, the source commit and the export date
-- [ ] A CI job verifies every checksum and every provenance record on a clean checkout, with no access to the private source. A byte that moved without its provenance moving fails the build
+- [ ] A CI job on a clean checkout, with no access to the private source, recomputes every checksum and fails on a mismatch
+- [ ] An export job runs where the private source is, re-exports at the recorded source commit, and diffs against what is committed here. This is the job that catches a hand edit, and it fails the build when the two disagree
+- [ ] Running the export twice at the same source commit gives byte for byte identical output, checked by the export job rather than asserted
 - [ ] `LIMITS.md` records the per-book orphan rate with the cause, whatever the number turns out to be
-- [ ] `LIMITS.md` states plainly that a stranger cannot rebuild this dataset, and why
+- [ ] `LIMITS.md` states plainly that a stranger cannot rebuild this dataset, and states which of the two jobs a stranger can actually run
 - [ ] Each translation carries its license and its public-domain basis in machine-readable form
 
 ## Constraints
@@ -60,4 +62,10 @@ No extraction, no scraping, no upstream dumps. Those stay in the private repo.
 
 Not test-driven, and the epic says so rather than growing a decorative unit test.
 
-The gate is the CI integrity job, and it has to pass on a runner with no access to the private source. It recomputes every checksum, reads every provenance record, and fails when a published byte moved without its record moving. That is what proves the corpus was not adjusted by hand, which is the only thing the old regeneration diff was ever proving.
+Two jobs, and they prove different things. Saying which is which is the point, because an earlier draft of this epic claimed the first one proved something it cannot.
+
+The checksum job runs on a clean checkout with no access to the private source. It recomputes every hash and fails on a mismatch. What it catches is a truncated file, a partial commit, a bad merge, a corrupted download. What it does not catch is a deliberate edit, because the data and its checksum are both committed here, so anyone editing a verse recomputes the hash and commits both. A self-referential hash is an integrity check and never an authorship check, and treating it as one would ship a green build that manufactures confidence.
+
+The export job is the one with teeth. It runs where the private source lives, re-exports at the source commit named in the provenance record, and diffs against what is committed here. A hand-edited verse shows up as a diff against an independent source, which is what the old regeneration gate did and the only mechanism that does it.
+
+The cost is that the second job cannot run on a fork or on a clean public checkout. A stranger can verify integrity and cannot verify authorship, and `LIMITS.md` says that in those words.

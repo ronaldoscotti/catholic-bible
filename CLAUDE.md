@@ -88,13 +88,17 @@ scraping and orthography normalization stay in the private repo, because they
 are solved there and a second implementation of them here would be a second set
 of bugs.
 
-The export needs that private repo and a stranger does not have it, so the gate
-on a clean checkout is integrity rather than regeneration. Every published file
-carries a checksum and a provenance record naming its source, its commit and its
-export date. CI verifies both on every push, and a byte that moved without its
-provenance moving fails the build. What this costs is written in `LIMITS.md`
-rather than argued away, because a reproducibility claim this repo cannot
-honour on a clean checkout is worse than an honest limit.
+Every published file carries a checksum and a provenance record naming its
+source, its commit and its export date. CI recomputes the hashes on a clean
+checkout, which catches corruption and not a deliberate edit, because the data
+and the hash are committed together. Catching an edit needs the independent
+source, so a second job re-exports where the private repo lives and diffs. Do not
+describe the first job as proof that nothing was hand-edited. It is not, and
+`docs/epics/B2-corpus-extraction.md` spells out which job proves what.
+
+What this costs goes in `LIMITS.md` in B7 rather than being argued away, because
+a reproducibility claim this repo cannot honour on a clean checkout is worse
+than an honest limit.
 
 Nothing enters without a case in the conformance corpus. Not even a new alias.
 
