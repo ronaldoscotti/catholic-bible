@@ -206,6 +206,12 @@ Do not ship the Portuguese Catena Aurea. Its provenance is open. The English
 translation is public domain and can come later as its own epic with its own
 label, so the two never get confused.
 
+Do not ship the text of the Catechism. Paragraph numbers and links to
+`vatican.va` are references, and B11 publishes those. A summary, a title, a
+first line or an extracted snippet is the text wearing a hat and it is the same
+refusal. If a reader can learn what a paragraph says without leaving this
+dataset, the line was crossed.
+
 Do not add accounts or authentication.
 
 Do not reach into the sibling repo's datastore, and do not let it reach into
