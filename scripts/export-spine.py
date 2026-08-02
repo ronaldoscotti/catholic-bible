@@ -39,10 +39,15 @@ BOOK_LINE = re.compile(r"^\s*\[(?P<fields>'code'.*)\],?\s*$")
 
 DOUAY_PAIR = re.compile(r"'(?P<name>[A-Z0-9 ]+)'\s*=>\s*'(?P<code>[A-Z0-9]{3})'")
 
+APPARATUS_PHP = "app/Services/Bible/DouayReferenceParser.php"
+SINGLE_PAIR = re.compile(r"'(?P<abbr>[a-z]{2,})'\s*=>\s*'(?P<code>[A-Z0-9]{3})'")
+NUMBERED_PAIR = re.compile(r"'(?P<abbr>[a-z]{2,})'\s*=>\s*\[(?P<codes>[^\]]+)\]")
+
 SOURCE_OF = {
     **VERBATIM,
     "canon.json": CANON_PHP,
     "douay-names.json": DOUAY_PHP,
+    "latin-abbreviations.json": APPARATUS_PHP,
 }
 
 
@@ -98,6 +103,47 @@ def php_douay_names_to_json(php: str, codes: set[str]) -> dict[str, str]:
     return names
 
 
+def php_latin_abbreviations_to_json(php: str, codes: set[str]) -> dict[str, object]:
+    """Reads the Latin abbreviations out of the Douay apparatus parser.
+
+    The original Douay prints its cross-references in Latin, so the parser that
+    reads that apparatus already carries the abbreviations: `ios`, `iudic`,
+    `sap`, `eccli`, `apoc`.
+
+    The two tables stay apart. Some abbreviations are in both, and merging them
+    loses the distinction that resolves them: bare `io` is John while `1 io` is
+    the first epistle. Flattened into one list the number would index the wrong
+    book.
+    """
+    body = php[php.index("const SINGLE") :]
+    numbered_at = body.index("const NUMBERED")
+    defaults_at = body.index("BARE_DEFAULTS_TO_FIRST")
+
+    single = {m["abbr"]: m["code"] for m in SINGLE_PAIR.finditer(body[:numbered_at])}
+    numbered = {
+        m["abbr"]: re.findall(r"'([A-Z0-9]{3})'", m["codes"])
+        for m in NUMBERED_PAIR.finditer(body[numbered_at:defaults_at])
+    }
+    defaults_end = body.index("];", defaults_at)
+    defaults = re.findall(r"'([a-z]{2,})'", body[defaults_at:defaults_end])
+
+    seen = set(single.values()) | {c for targets in numbered.values() for c in targets}
+    unknown = sorted(seen - codes)
+    if unknown:
+        raise ValueError(f"Latin abbreviations point outside the canon: {unknown}")
+    if len(single) < 100 or not numbered or not defaults:
+        raise ValueError(f"expected the full apparatus, parsed {len(single)} single")
+    stray = sorted(set(defaults) - set(numbered))
+    if stray:
+        raise ValueError(f"bare defaults that name no numbered book: {stray}")
+
+    return {
+        "single": dict(sorted(single.items())),
+        "numbered": dict(sorted(numbered.items())),
+        "bare_defaults_to_first": sorted(set(defaults)),
+    }
+
+
 def git(source: Path, *args: str) -> str:
     return subprocess.run(
         ["git", "-C", str(source), *args],
@@ -141,6 +187,14 @@ def main() -> int:
     douay = (json.dumps(names, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
     (DEST / "douay-names.json").write_bytes(douay)
     written["douay-names.json"] = hashlib.sha256(douay).hexdigest()
+
+    latin = php_latin_abbreviations_to_json(
+        (source / APPARATUS_PHP).read_text(encoding="utf-8"),
+        {str(book["code"]) for book in books},
+    )
+    payload = (json.dumps(latin, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    (DEST / "latin-abbreviations.json").write_bytes(payload)
+    written["latin-abbreviations.json"] = hashlib.sha256(payload).hexdigest()
 
     # The commit date rather than the run date, so re-exporting at the same
     # source commit is byte for byte identical.
