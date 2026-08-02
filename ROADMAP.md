@@ -30,8 +30,8 @@ If that holds, v1 shipped. If it doesn't, it didn't, however much code exists.
 |---|---|---|---|
 | B0 | Project scaffolding | `docker compose up` works and CI is green on a clean checkout | CI green on the merge commit, and a job that follows the README quickstart |
 | B1 | Canon and spine | `map()` is total and never raises. Orphans come back as data with a reason. `orphans.json` published | TDD, plus a conformance corpus: Ps 50/51, Dan 13-14, the Greek additions to Esther, Sirach, 1 Chr 6, `Jo` against `Jó` |
-| B2 | Corpus export | Three translations published, each with a checksum and a stated origin | Not TDD. A CI job on a clean checkout, with no access to the private source, recomputes every checksum and reads every provenance record. A byte that moved without its record moving breaks the build |
-| B3 | Read API | Parity with the read endpoints this replaces | TDD on handlers, contract tests against the OpenAPI schema |
+| B2 | Corpus export | Three translations published, each with a checksum and a stated origin | Not TDD. A clean-checkout job recomputes every checksum, which catches corruption. A job running where the private source lives re-exports and diffs, which is the one that catches a hand edit |
+| B3 | Read API | Parity with the read endpoints this replaces | TDD on handlers, contract tests against the OpenAPI schema. `openapi.json` is committed and CI fails when it drifts from the routes or when a route ships with nothing said about it |
 | B4 | Commentary and cross-references | Haydock in English and Portuguese, cross-references, all anchored on the same verse id | TDD on anchor resolution. Machine-translation provenance stated on the first screen of the README |
 | B5 | Static artifacts and CDN | A one-line `fetch()` works from a blank HTML file | Copy it out of the README and run it |
 | B6 | Production deploy | Live over HTTPS, health check, cost near zero | Smoke test in CI against the public URL |

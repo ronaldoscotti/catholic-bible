@@ -36,6 +36,8 @@ Reading a specific verse today means picking a data dump, learning its layout, w
 - [ ] A range that crosses a chapter boundary resolves correctly
 - [ ] Every response carries the structured verse id, so a caller can anchor other data on it
 - [ ] Request and response schemas are typed and the OpenAPI document is published
+- [ ] `openapi.json` is committed, and a CI job regenerates it from the code and fails when the committed copy differs
+- [ ] No route reaches the document naked. A route with no summary, no response model or no documented error responses fails the build
 - [ ] The API is read-only. No endpoint writes
 - [ ] An unresolvable reference returns a structured error explaining why, never a stack trace and never a guess
 - [ ] The whole service runs from `docker compose up` on a clean checkout with no external database
@@ -55,3 +57,7 @@ No full-text search. Lexical search is B9 and semantic search belongs to `concor
 ## Verification
 
 Test-driven on the handlers and the reference resolver. Contract tests run against the published OpenAPI schema. The conformance corpus from B1 is exercised through the HTTP layer as well, because a parser that is right in a unit test and wrong behind a URL encoder is still wrong.
+
+The documented surface gets its own gate, in two directions. The committed `openapi.json` has to match what the code generates, which catches a route that changed without the document following. And every route has to carry a summary, a response model and its error responses, which catches a route that shipped with nothing said about it. FastAPI publishes an undocumented route without complaining, so the second direction is the one that rots quietly.
+
+The idea is borrowed from the private repo, where a coverage test compares the API client collection against the real routes in both directions and blocks the push when either side is missing. That mechanism is why the collection there is still accurate. What changes here is that the document is generated rather than written, so the missing half is not a missing file. It is a route nobody described.
