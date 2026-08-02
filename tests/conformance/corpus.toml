@@ -1,0 +1,337 @@
+# The conformance corpus.
+#
+# Nothing enters this repo without a case here. Not even one alias.
+#
+# Every case carries what went in, what must come out, where the expectation
+# comes from, and why the case is hard. That last field is the one that makes
+# the file readable a year from now, and it is an acceptance criterion rather
+# than a courtesy.
+#
+# Authored, not generated. It is test evidence and not part of the dataset.
+
+# ---------------------------------------------------------------- versification
+
+[[case]]
+id = "miserere-from-org"
+kind = "map"
+scheme = "org"
+input = "PSA 51:1"
+expect = "PSA.50.1"
+provenance = "Copenhagen table, PSA 50:0-21 maps to PSA 51:0-21, read backwards."
+why_hard = """
+The Miserere is Psalm 50 in the Vulgate and Psalm 51 nearly everywhere else. An
+app built on the wrong scheme quietly contradicts the missal in the pew, and
+neither numbering is a mistake."""
+
+[[case]]
+id = "miserere-from-the-vulgate"
+kind = "map"
+scheme = "vulgate"
+input = "PSA 50:3"
+expect = "PSA.50.3"
+provenance = "The spine numbers the Psalter in Vulgate, so this is identity."
+why_hard = """
+It proves the spine is mixed. The same book passes through untouched from one
+scheme and shifts by one from the other."""
+
+[[case]]
+id = "vulgate-psalm-title"
+kind = "map"
+scheme = "vulgate"
+input = "PSA 50:0"
+expect = "orphan:psalm_title"
+provenance = "147 ranges in the Copenhagen table open at verse 0."
+why_hard = """
+Verse 0 is the psalm title, not a verse that ran past the end of the chapter.
+It is the largest single orphan class in the report, and calling it out of
+range would make the report describe its own biggest finding wrongly."""
+
+[[case]]
+id = "susanna"
+kind = "map"
+scheme = "org"
+input = "SUS 1:1"
+expect = "DAN.13.1"
+provenance = "Copenhagen table, DAN 13:1-64 maps to SUS 1:1-64."
+why_hard = """
+org has no slot for Susanna inside Daniel and carries her as a separate book.
+The spine gives Daniel fourteen chapters, so the address has to cross a book
+boundary to land."""
+
+[[case]]
+id = "song-of-the-three"
+kind = "map"
+scheme = "org"
+input = "S3Y 1:1"
+expect = "DAN.3.24"
+provenance = "Copenhagen table, DAN 3:24-90 maps to S3Y 1:1-67."
+why_hard = """
+The table declares this passage from both DAN and DAG, and only DAN has a slot
+on the spine. Taking whichever origin the file listed last orphans all 65
+addresses while the table itself says where they go."""
+
+[[case]]
+id = "bel-opening-verse-is-ambiguous"
+kind = "map"
+scheme = "org"
+input = "BEL 1:1"
+expect = "DAN.13.65"
+provenance = "Copenhagen table declares BEL 1:1 from DAN 13:65 and from DAN 14:1."
+why_hard = """
+Two textual traditions, both on the spine, both legitimate. Daniel 13 ends at 64
+in most editions and at 65 in the one that carries the transition into Bel. The
+first declared origin wins, and a tie-break picking 14:1 would read better while
+choosing a tradition by heuristic. See DECISIONS.md."""
+
+[[case]]
+id = "bel-second-verse-is-not"
+kind = "map"
+scheme = "org"
+input = "BEL 1:2"
+expect = "DAN.14.2"
+provenance = "Copenhagen table, DAN 14:2-41 maps to BEL 1:2-41."
+why_hard = """
+It sits next to an ambiguous address and is not ambiguous itself, which is what
+makes the ambiguity above a property of one verse rather than of the book."""
+
+[[case]]
+id = "daniel-is-not-hijacked-by-greek-daniel"
+kind = "map"
+scheme = "org"
+input = "DAN 1:1"
+expect = "DAN.1.1"
+provenance = "The table carries DAG, Greek Daniel, as a separate source scheme."
+why_hard = """
+Inverting the table hands org DAN 1:1 an origin of DAG 1:1, which the canon does
+not have. Applying it orphaned 251 addresses of a book that maps perfectly well.
+An address already on the spine is never traded for one that is not."""
+
+[[case]]
+id = "greek-esther"
+kind = "map"
+scheme = "org"
+input = "ESG 1:1"
+expect = "orphan:no_counterpart"
+provenance = "ESG has verse counts in the table and no entry in the canon."
+why_hard = """
+The spine carries the Greek additions inside Esther, as chapters 11 to 16, so
+the material is present and the address is not. This is an orphan that a reader
+could easily mistake for missing text."""
+
+[[case]]
+id = "the-prayer-of-solomon"
+kind = "map"
+scheme = "vulgate"
+input = "SIR 52:1"
+expect = "orphan:chapter_out_of_range"
+provenance = "The table gives Sirach 52 chapters. The spine gives it 51."
+why_hard = """
+Sirach numbering diverges at the end rather than the beginning, so everything
+looks right until the last chapter. Thirteen verses orphan."""
+
+[[case]]
+id = "the-genesis-boundary"
+kind = "map"
+scheme = "vulgate"
+input = "GEN 31:55"
+expect = "GEN.32.1"
+provenance = "Copenhagen table, GEN 31:55 maps to GEN 32:1."
+why_hard = """
+The spine build takes its Vulgate maximum from remapped coordinates. Taken raw,
+Genesis 31 would record 55 verses instead of 54, the book would count zero
+identity orphans, its mode would flip, and every org address in Genesis would
+resolve one verse off with nothing failing."""
+
+[[case]]
+id = "the-chronicles-genealogy"
+kind = "map"
+scheme = "org"
+input = "1CH 6:66"
+expect = "1CH.6.81"
+provenance = "Copenhagen table, 1CH 6:16-81 maps to 1CH 6:1-66."
+why_hard = """
+org moves the first fifteen verses of the Vulgate chapter into chapter 5, so the
+same chapter has 81 verses on the spine and 66 in org and the offset is not a
+constant. The epic predicted an orphan here. It is not one, and the epic is
+corrected rather than the expectation bent to match."""
+
+[[case]]
+id = "joel-in-douay"
+kind = "map"
+scheme = "douay"
+input = "JOL 2:28"
+expect = "JOL.3.1"
+provenance = "DouayCanonMap, Joel 2:28-32 maps to 3:1-5."
+why_hard = """
+Douay follows the Vulgate three chapter division and the spine follows the four
+chapter one. It is one of two books where Douay is not identity."""
+
+[[case]]
+id = "malachi-in-douay"
+kind = "map"
+scheme = "douay"
+input = "MAL 4:1"
+expect = "MAL.3.19"
+provenance = "DouayCanonMap, Malachi 4:1-6 maps to 3:19-24."
+why_hard = "The other one. A four chapter book folding into three."
+
+[[case]]
+id = "a-code-nothing-declares"
+kind = "map"
+scheme = "org"
+input = "XYZ 1:1"
+expect = "orphan:unknown_book"
+provenance = "Not in the canon and not in the scheme table."
+why_hard = """
+It separates a typo from a real book with no counterpart, which is the
+difference between a bug report and a versification fact."""
+
+# ------------------------------------------------------------------- references
+
+[[case]]
+id = "john-three-sixteen"
+kind = "reference"
+input = "Jo 3,16"
+expect = "JHN 3:16-3:16"
+provenance = "Portuguese alias list in the canon."
+why_hard = "The most common lookup there is, and the one the accent breaks."
+
+[[case]]
+id = "job-three-sixteen"
+kind = "reference"
+input = "Jó 3,16"
+expect = "JOB 3:16-3:16"
+provenance = "Portuguese alias list in the canon."
+why_hard = """
+One accent apart from the case above. Normalization lowercases and trims and
+does nothing else, and a port reaching for Unicode folding to be helpful makes
+Job unreachable while sending the reader to a gospel with no error anywhere."""
+
+[[case]]
+id = "a-range-across-a-chapter"
+kind = "reference"
+input = "Ex 13,1-14,5"
+expect = "EXO 13:1-14:5"
+provenance = "Grammar ported from the working implementation."
+why_hard = """
+The end chapter is optional in the grammar, so the parser has to tell a missing
+group from an empty one and inherit the opening chapter when it is absent."""
+
+[[case]]
+id = "a-lectionary-reading-that-skips"
+kind = "reference"
+input = "Mc 5,22-24.35-43"
+expect = "MRK 5:22-5:43"
+parts = "5:22-5:24,5:35-5:43"
+provenance = "The shape a Sunday lectionary actually prints."
+why_hard = """
+The bounds span verses the reading does not include, so a consumer reading the
+bounds alone prints the wrong thing. The parts are the truth."""
+
+[[case]]
+id = "a-whole-chapter"
+kind = "reference"
+input = "Sl 23"
+expect = "PSA 23:1-23:1"
+provenance = "Grammar ported from the working implementation."
+why_hard = """
+No verse at all, so the bounds anchor on the first verse and a flag carries the
+intent. Reading the bounds without the flag returns one verse of a psalm."""
+
+[[case]]
+id = "a-dotted-abbreviation-does-not-parse"
+kind = "reference"
+input = "Mt. 5,3"
+expect = "error:unknown_book"
+provenance = "The source treats any dot as a lectionary separator, and so does this."
+why_hard = """
+It is a common way to write a reference in Portuguese and it fails. Recorded as
+a known limit rather than fixed by inventing behaviour the source does not have."""
+
+# ---------------------------------------------------------------------- aliases
+
+[[case]]
+id = "douay-first-kings-is-samuel"
+kind = "alias"
+input = "1 Kings"
+expect = "1SA"
+provenance = "DouayCanonMap, exported from the private repository."
+why_hard = """
+Both spellings are correct English. Douay prints Samuel as 1 and 2 Kings and
+modern English does not, so one reading has to lose and the loser is silent.
+B3 documents this on the endpoint."""
+
+[[case]]
+id = "douay-third-kings-is-kings"
+kind = "alias"
+input = "3 Kings"
+expect = "1KI"
+provenance = "DouayCanonMap."
+why_hard = """
+It is the only English name left for the book modern readers call 1 Kings, so
+the decision above costs a reader who does not know Douay."""
+
+[[case]]
+id = "the-code-jude"
+kind = "alias"
+input = "JUD"
+expect = "JUD"
+provenance = "USX code."
+why_hard = "A code is a code. Case carries meaning at this boundary."
+
+[[case]]
+id = "the-portuguese-for-judith"
+kind = "alias"
+input = "Jud"
+expect = "JDT"
+provenance = "Portuguese alias list in the canon."
+why_hard = """
+One capital letter from the case above and a different book. Lowercasing the
+code into the alias would send an API caller passing a canonical code into the
+wrong book."""
+
+[[case]]
+id = "latin-apocalypse"
+kind = "alias"
+input = "Apocalypsis"
+expect = "REV"
+provenance = "Authored here, liturgical usage."
+why_hard = "Latin is the one alias set with no Portuguese or English source to port."
+
+[[case]]
+id = "latin-sirach"
+kind = "alias"
+input = "Ecclesiasticus"
+expect = "SIR"
+provenance = "Douay name and Latin name agree here."
+why_hard = """
+It is one letter from Ecclesiastes, which is a different book, and both are in
+the canon."""
+
+[[case]]
+id = "latin-ecclesiastes"
+kind = "alias"
+input = "Ecclesiastes"
+expect = "ECC"
+provenance = "Douay name and Latin name agree here too."
+why_hard = "The other half of the pair above. Neither may absorb the other."
+
+[[case]]
+id = "latin-first-kings-follows-the-vulgate"
+kind = "alias"
+input = "I Regum"
+expect = "1SA"
+provenance = "Authored here, and the exported apparatus agrees, reg covering all four."
+why_hard = """
+Latin reckons the four books of Kings the way Douay does, so the Latin and the
+Douay names agree with each other and disagree with modern English."""
+
+[[case]]
+id = "a-bare-numbered-latin-abbreviation"
+kind = "alias"
+input = "Cor"
+expect = "1CO"
+provenance = "BARE_DEFAULTS_TO_FIRST in the Douay apparatus parser."
+why_hard = """
+Bare it means the first epistle, numbered it means whichever the number says.
+Flattening the two tables into one list makes the number index the wrong book."""

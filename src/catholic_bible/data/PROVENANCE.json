@@ -1,0 +1,30 @@
+{
+  "source": {
+    "repository": "meu-feed-catolico-api",
+    "commit": "0494a69e66657a16d822898e71f4eb3b2bc4ae80",
+    "commit_date": "2026-08-02T00:02:18-03:00",
+    "private": true
+  },
+  "files": {
+    "canon.json": {
+      "sha256": "158977b65b3c354de732d07731622d53afe160239445e8416169ed61285e66c8",
+      "from": "database/data/catholic-canon.php"
+    },
+    "douay-names.json": {
+      "sha256": "95ad1e1958cbc099d71ea692306eb6a062b5e4ec9d56a920c0f4d4b1549c36f8",
+      "from": "app/Services/Bible/DouayCanonMap.php"
+    },
+    "latin-abbreviations.json": {
+      "sha256": "dcbd96e3a0969cd9668d016f744603cb3788003f3a2ff54d3bfad13e0b137a9d",
+      "from": "app/Services/Bible/DouayReferenceParser.php"
+    },
+    "versification.json": {
+      "sha256": "9a1443085d1c3975fd83e2faa9efc314ddc8e20fcc6e3fb241aa37a78ab2a1e1",
+      "from": "database/data/catholic-versification.json"
+    },
+    "vulgate-scheme.json": {
+      "sha256": "e09ea002e89aa86cdfbdd4cb69b1ff2c75070801e0648c37aef580d4fc8d06a0",
+      "from": "database/data/vulgata-versification.json"
+    }
+  }
+}

@@ -1,0 +1,281 @@
+{
+  "single": {
+    "abac": "HAB",
+    "abd": "OBA",
+    "abdi": "OBA",
+    "act": "ACT",
+    "acts": "ACT",
+    "actuum": "ACT",
+    "ag": "HAG",
+    "agg": "HAG",
+    "aggae": "HAG",
+    "agge": "HAG",
+    "am": "AMO",
+    "amos": "AMO",
+    "ap": "REV",
+    "apo": "REV",
+    "apoc": "REV",
+    "apocal": "REV",
+    "bar": "BAR",
+    "baruch": "BAR",
+    "cant": "SNG",
+    "cantic": "SNG",
+    "col": "COL",
+    "colos": "COL",
+    "coloss": "COL",
+    "dan": "DAN",
+    "dani": "DAN",
+    "deu": "DEU",
+    "deut": "DEU",
+    "deuter": "DEU",
+    "duet": "DEU",
+    "eccl": "ECC",
+    "ecclci": "SIR",
+    "eccle": "ECC",
+    "ecclei": "SIR",
+    "eccles": "ECC",
+    "eccli": "SIR",
+    "ecclus": "SIR",
+    "eph": "EPH",
+    "ephe": "EPH",
+    "ephes": "EPH",
+    "ephesi": "EPH",
+    "es": "ISA",
+    "esa": "ISA",
+    "esai": "ISA",
+    "est": "EST",
+    "ester": "EST",
+    "esth": "EST",
+    "ex": "EXO",
+    "exo": "EXO",
+    "exod": "EXO",
+    "exodi": "EXO",
+    "ez": "EZK",
+    "eze": "EZK",
+    "ezec": "EZK",
+    "ezech": "EZK",
+    "ezechi": "EZK",
+    "gal": "GAL",
+    "galat": "GAL",
+    "galatians": "GAL",
+    "gen": "GEN",
+    "hab": "HAB",
+    "habac": "HAB",
+    "heb": "HEB",
+    "hebr": "HEB",
+    "hebrews": "HEB",
+    "hier": "JER",
+    "ia": "JAS",
+    "iac": "JAS",
+    "iaco": "JAS",
+    "iacob": "JAS",
+    "iames": "JAS",
+    "ier": "JER",
+    "iere": "JER",
+    "io": "JHN",
+    "ioa": "JHN",
+    "ioan": "JHN",
+    "ioann": "JHN",
+    "iob": "JOB",
+    "ioel": "JOL",
+    "iohn": "JHN",
+    "ion": "JON",
+    "iona": "JON",
+    "ionae": "JON",
+    "ios": "JOS",
+    "iosu": "JOS",
+    "iosue": "JOS",
+    "is": "ISA",
+    "isa": "ISA",
+    "isai": "ISA",
+    "iud": "JUD",
+    "iudae": "JUD",
+    "iude": "JUD",
+    "iudi": "JDG",
+    "iudic": "JDG",
+    "iudit": "JDT",
+    "iudith": "JDT",
+    "james": "JAS",
+    "jer": "JER",
+    "jere": "JER",
+    "job": "JOB",
+    "john": "JHN",
+    "jude": "JUD",
+    "lam": "LAM",
+    "lamen": "LAM",
+    "lc": "LUK",
+    "lev": "LEV",
+    "levi": "LEV",
+    "levit": "LEV",
+    "lu": "LUK",
+    "luc": "LUK",
+    "luca": "LUK",
+    "luke": "LUK",
+    "mal": "MAL",
+    "malac": "MAL",
+    "malach": "MAL",
+    "malachi": "MAL",
+    "mar": "MRK",
+    "marc": "MRK",
+    "mark": "MRK",
+    "mat": "MAT",
+    "math": "MAT",
+    "matt": "MAT",
+    "matth": "MAT",
+    "matthew": "MAT",
+    "mc": "MRK",
+    "mich": "MIC",
+    "miche": "MIC",
+    "mr": "MRK",
+    "mt": "MAT",
+    "nah": "NAM",
+    "nahum": "NAM",
+    "nu": "NUM",
+    "num": "NUM",
+    "os": "HOS",
+    "ose": "HOS",
+    "osee": "HOS",
+    "phil": "PHP",
+    "phile": "PHM",
+    "philem": "PHM",
+    "philemon": "PHM",
+    "phili": "PHP",
+    "philip": "PHP",
+    "philipp": "PHP",
+    "pro": "PRO",
+    "prov": "PRO",
+    "ps": "PSA",
+    "psa": "PSA",
+    "psal": "PSA",
+    "psalm": "PSA",
+    "ro": "ROM",
+    "rom": "ROM",
+    "roman": "ROM",
+    "romans": "ROM",
+    "ruth": "RUT",
+    "sap": "WIS",
+    "sapi": "WIS",
+    "soph": "ZEP",
+    "sopho": "ZEP",
+    "thren": "LAM",
+    "tit": "TIT",
+    "titus": "TIT",
+    "tob": "TOB",
+    "tobi": "TOB",
+    "zac": "ZEC",
+    "zach": "ZEC",
+    "zacha": "ZEC"
+  },
+  "numbered": {
+    "cor": [
+      "1CO",
+      "2CO"
+    ],
+    "esd": [
+      "EZR",
+      "NEH"
+    ],
+    "esdr": [
+      "EZR",
+      "NEH"
+    ],
+    "io": [
+      "1JN",
+      "2JN",
+      "3JN"
+    ],
+    "ioa": [
+      "1JN",
+      "2JN",
+      "3JN"
+    ],
+    "ioan": [
+      "1JN",
+      "2JN",
+      "3JN"
+    ],
+    "macc": [
+      "1MA",
+      "2MA"
+    ],
+    "mach": [
+      "1MA",
+      "2MA"
+    ],
+    "machab": [
+      "1MA",
+      "2MA"
+    ],
+    "par": [
+      "1CH",
+      "2CH"
+    ],
+    "para": [
+      "1CH",
+      "2CH"
+    ],
+    "paral": [
+      "1CH",
+      "2CH"
+    ],
+    "paralip": [
+      "1CH",
+      "2CH"
+    ],
+    "pet": [
+      "1PE",
+      "2PE"
+    ],
+    "petr": [
+      "1PE",
+      "2PE"
+    ],
+    "re": [
+      "1SA",
+      "2SA",
+      "1KI",
+      "2KI"
+    ],
+    "reg": [
+      "1SA",
+      "2SA",
+      "1KI",
+      "2KI"
+    ],
+    "thes": [
+      "1TH",
+      "2TH"
+    ],
+    "thess": [
+      "1TH",
+      "2TH"
+    ],
+    "thessal": [
+      "1TH",
+      "2TH"
+    ],
+    "tim": [
+      "1TI",
+      "2TI"
+    ],
+    "timo": [
+      "1TI",
+      "2TI"
+    ],
+    "timoth": [
+      "1TI",
+      "2TI"
+    ]
+  },
+  "bare_defaults_to_first": [
+    "cor",
+    "pet",
+    "petr",
+    "thes",
+    "thess",
+    "thessal",
+    "tim",
+    "timo",
+    "timoth"
+  ]
+}

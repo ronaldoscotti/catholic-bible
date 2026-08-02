@@ -51,3 +51,108 @@ quietly deleted.
 
 The cost goes in `LIMITS.md` when that file lands in B7. A stranger can verify
 integrity and cannot verify authorship, and that is the honest shape of it.
+
+## Inverting the scheme table prefers the origin the spine can hold
+
+Decided 2026-08-02, while implementing B1.
+
+The Copenhagen table runs Vulgate to `org`, and reading `org` needs the other
+direction, so the table gets inverted. Inverting is not free. The table merges
+verses and it reaches the same target from more than one origin, which leaves
+157 `org` addresses with two or more declared Vulgate origins. Something has to
+choose.
+
+This repo keeps the first declared origin, unless that one has no slot on the
+spine and a later one does. Then the later one wins.
+
+**What lost.** Keeping whichever origin the file listed last, which is what
+falls out of building the index without thinking about it and what the source
+implementation does. It is arbitrary in a way that shows: the Song of the Three
+is declared from both `DAN` and `DAG`, only `DAN` exists on the spine, and last
+wins picks `DAG`. Sixty five addresses then orphan while the table itself says
+where they go.
+
+**What it costs.** A divergence from the working implementation, which is the
+thing this port is most careful to avoid. It is deliberate, it is one rule in
+one constructor, and a conformance case pins it so the two cannot drift quietly.
+
+**The numbers, measured rather than estimated.** The inverse index only fires on
+books the spine numbers in Vulgate, so the population is smaller than the raw
+table suggests. 135 `org` addresses arrive ambiguous. In 103 of them exactly one
+declared origin has a slot on the spine and the rule recovers it. In 23 no
+origin has a slot and the address orphans either way. In 9 more than one origin
+has a slot.
+
+A first draft of this entry counted 157 and 105, which were measured across the
+whole table without the mode gate that decides whether the index is consulted at
+all. The corrected figures are above.
+
+**Those 9 stay ambiguous and get recorded.** Six are the same merge shape, where
+the Vulgate splits one `org` verse in two and the first is what an apparatus
+means. Three are chapter boundaries between textual traditions, and `BEL 1:1` is
+the clearest of them: Daniel 13 ends at 64 in most editions and at 65 in the one
+that carries the transition into Bel, so the table declares that verse and
+Daniel 14:1 as the same address. Both are legitimate and neither is a mistake.
+
+The tempting move is a tie-break that reads nicely, nearest verse number or
+whichever keeps the sequence contiguous, which would pick Daniel 14:1 and feel
+better. That is choosing a textual tradition with a heuristic and calling it
+arithmetic. B1 exists to stop exactly that, so the rule stays blunt and all nine
+go into the conformance corpus naming both candidates.
+
+## The mapping layer decides what is an orphan
+
+Decided 2026-08-02, while implementing B1.
+
+The source implementation keeps its scheme maps pure and detects orphans in the
+importer, so one place decides and the maps stay simple. That is the right call
+there because an importer exists.
+
+Here it does not. The importer is B2 and B1 has to publish `orphans.json`, so
+detection moves into the mapping layer and the scheme maps stay pure below it.
+
+**What lost.** Waiting for B2 and keeping the shape identical to the source. It
+would leave B1 unable to meet its own acceptance criteria, which is a high price
+for a structural match.
+
+## Reading a spine address back into a scheme verifies itself
+
+Decided 2026-08-02, while implementing B1.
+
+The epic asks for the mapping in both directions. The forward direction reads a
+scheme address onto the spine and the reverse reads a spine address back out.
+They are not symmetric, because the remap table is not a bijection.
+
+Run backwards naively, the table produces addresses that look right and are not.
+The spine holds `PSA.115.1`, reading it back gives `org` 115:1, and `org` 115:1
+is a different psalm coming from `PSA 113:9`. Sixty two addresses behaved that
+way across the three schemes.
+
+So the reverse direction computes its candidate and then maps it forward again,
+and it only returns the candidate if it lands where it started. Anything else is
+an orphan.
+
+**What lost.** Returning the candidate and documenting the caveat. It would have
+been less code and a smaller diff, and it would have handed a consumer a wrong
+verse address with nothing to tell them. A wrong answer someone trusts is worse
+than an absent one, and this is the epic whose whole point is that distinction.
+
+**What it costs.** Twenty one addresses have no Vulgate reading and forty one
+have no `org` reading. Douay has none, because it touches only Joel and Malachi
+and both are clean. Those numbers are pinned in a test rather than tolerated.
+
+## An unresolvable reference is a value, not an exception
+
+Decided 2026-08-02, while implementing B1.
+
+The source parser throws on an unknown book or a malformed reference. Here both
+come back as values carrying the reason.
+
+**What lost.** The exception, which is idiomatic in the framework the original
+lives in and which makes the happy path read cleanly.
+
+The rule in `CLAUDE.md` is that a domain error the caller can act on is a return
+value and an exception is for a genuine fault. A reader typing a book name that
+does not exist is not a fault. It is the most ordinary thing that happens to a
+reference parser, and B3 has to turn it into a structured HTTP error rather than
+a stack trace.
