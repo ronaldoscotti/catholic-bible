@@ -95,7 +95,9 @@ are solved there and a second implementation of them here would be a second set
 of bugs.
 
 Every published file carries a checksum and a provenance record naming its
-source, its commit and its export date. CI recomputes the hashes on a clean
+source, its commit and that commit's date. Not the date the export ran, because
+a run timestamp would make two exports of the same data differ and break the one
+check that catches a hand edit. `DECISIONS.md` carries the reasoning. CI recomputes the hashes on a clean
 checkout, which catches corruption and not a deliberate edit, because the data
 and the hash are committed together. Catching an edit needs the independent
 source, so a second job re-exports where the private repo lives and diffs. Do not

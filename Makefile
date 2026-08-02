@@ -29,18 +29,13 @@ export-corpus:
 	uv run scripts/build-orphans.py
 	uv run scripts/build-coverage.py
 
-# The job with teeth. Re-exports into a scratch directory and compares it with
-# what is committed, so a hand edit is still on disk when the comparison runs.
-# An earlier version exported over the committed files first, which destroyed
-# the evidence before looking for it. It cannot run on a fork or in CI, and
-# LIMITS.md says so.
+# The job with teeth. Re-exports at the commit provenance records, into a
+# scratch directory, and compares. Exporting over the committed files first
+# would destroy the evidence before looking for it, and re-exporting at
+# whatever the source happens to be checked out at would report every
+# unrelated commit as a hand edit. LIMITS.md tells the reader that MISMATCH
+# means someone edited a verse, so it must not cry wolf.
+# It cannot run on a fork or in CI.
 verify-export:
 	@test -n "$(SOURCE)" || { echo "usage: make verify-export SOURCE=~/path/to/private/repo"; exit 1; }
-	@rm -rf .verify && mkdir -p .verify/spine .verify/corpus
-	@./scripts/export-spine.py --source $(SOURCE) --dest .verify/spine >/dev/null
-	@./scripts/export-corpus.py --source $(SOURCE) --dest .verify/corpus >/dev/null
-	@diff -r .verify/corpus src/catholic_bible/data/corpus \
-	  && diff -r .verify/spine src/catholic_bible/data --exclude=corpus --exclude=derived \
-	  && echo "verified: the committed data is byte for byte a fresh export" \
-	  || { echo "MISMATCH: committed data differs from a fresh export"; rm -rf .verify; exit 1; }
-	@rm -rf .verify
+	@./scripts/verify-export.sh "$(SOURCE)"

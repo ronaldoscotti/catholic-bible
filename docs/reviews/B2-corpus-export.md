@@ -77,6 +77,52 @@ individually rather than summarised.
 database name in any committed file. The cleanroom clone and the container grep
 are in the QA notes.
 
+## Second pass, after the review tool ran
+
+Seven findings, all reproduced before being acted on, and the second one was the
+serious one.
+
+**`verify-export` would have accused the author of tampering.** It re-exported
+from whatever the private repository happened to be checked out at, and a fresh
+export writes the current commit into provenance, so the first unrelated commit
+over there makes the comparison differ. `LIMITS.md` teaches the reader that the
+mismatch message means someone edited a verse. Reproduced with an empty commit,
+which produced the accusation. It now refuses up front unless the source sits on
+the commit provenance records, and it tells the operator what to do instead. It
+also separates `diff` exit 1 from exit 2, so a missing directory is reported as
+a broken comparison rather than as a finding.
+
+**The database password reached argv and every traceback.**
+`CalledProcessError` prints the whole argument list, so any failure, a stopped
+container being the easy one, printed the private repository's password to the
+terminal. Confirmed by running a failing command and reading the exception.
+Credentials now go in on stdin as a defaults file, so they are absent from argv
+and from `ps`, and a query failure raises with the server's message only.
+
+**`load()` took any string into a path.** `load("../PROVENANCE")` read outside
+the corpus directory, and `functools.cache` made every distinct string a
+permanent entry. It failed later on a missing key, so it was harmless today and
+would not be once B3 hands it a segment from a URL. Checked against the published
+set now, one line, in the module where that set already lives.
+
+**The published count came from the rows rather than the document.** They agree
+today. They would stop agreeing the moment two source rows landed on one address,
+and the number would overstate the file while the test pinned both sides to the
+same constant.
+
+**The uncommitted-changes guard covered the fixtures and not the importer**,
+while the comment beside it claimed the commit described both. Widened to the
+whole source tree.
+
+**`.verify/` was in `.gitignore` and not in `.dockerignore`**, against that
+file's own stated invariant, so an interrupted verification would sweep a second
+copy of the corpus into the image.
+
+**The export date criterion was ticked with no export date anywhere.** It cannot
+coexist with byte identical reruns, the trade is real and deliberate, and it was
+undocumented. Now in `DECISIONS.md`, with the epic and `CLAUDE.md` corrected to
+say source commit date.
+
 ## What a second reviewer should look at first
 
 `LIMITS.md`, and specifically whether it is honest enough. It is the document

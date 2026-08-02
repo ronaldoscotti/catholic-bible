@@ -155,3 +155,23 @@ def test_susanna_and_bel_carry_text() -> None:
         verses = load(code).verses
         assert verses["DAN.13.1"].text.strip()
         assert verses["DAN.14.1"].text.strip()
+
+
+def test_only_a_published_code_reaches_the_filesystem() -> None:
+    """B3 hands this a path segment from an HTTP route.
+
+    Unchecked, it reads outside the corpus directory and every distinct string a
+    caller sends becomes a permanent cache entry.
+    """
+    with pytest.raises(KeyError):
+        load("../PROVENANCE")
+    with pytest.raises(KeyError):
+        load("ave-maria")
+
+
+def test_the_recorded_count_is_the_count_in_the_document() -> None:
+    """Taken from the rows it would overstate what the file holds, because two
+    source rows at one address collapse into one published entry."""
+    for code in VERSIONS:
+        raw = json.loads((CORPUS_DIR / f"{code}.json").read_text(encoding="utf-8"))
+        assert PROVENANCE["files"][f"{code}.json"]["verses"] == len(raw["verses"])

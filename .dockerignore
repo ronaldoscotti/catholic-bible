@@ -19,3 +19,6 @@ __pycache__/
 /tmp/
 *.sqlite3-journal
 .DS_Store
+
+# scratch from make verify-export
+.verify/

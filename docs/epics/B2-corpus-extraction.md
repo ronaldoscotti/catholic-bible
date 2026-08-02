@@ -36,7 +36,7 @@ The Portuguese Catholic Bible circulates today as scraped HTML and JSON files of
 - [x] Matos Soares (pt), Douay-Rheims (en) and the Clementine Vulgate (la) are complete for all 73 books
 - [x] Every verse resolves against the B1 spine, and any that do not are reported as orphans rather than dropped silently
 - [x] A committed export script produces the published dataset from the private source
-- [x] Every published file carries a checksum and a provenance record naming its source, the source commit and the export date
+- [x] Every published file carries a checksum and a provenance record naming its source, the source commit and the source commit date
 - [x] A CI job on a clean checkout, with no access to the private source, recomputes every checksum and fails on a mismatch
 - [x] An export job runs where the private source is, re-exports at the recorded source commit, and diffs against what is committed here. This is the job that catches a hand edit, and it fails the build when the two disagree
 - [x] Running the export twice at the same source commit gives byte for byte identical output, checked by the export job rather than asserted
@@ -44,7 +44,14 @@ The Portuguese Catholic Bible circulates today as scraped HTML and JSON files of
 - [x] `LIMITS.md` states plainly that a stranger cannot rebuild this dataset, and states which of the two jobs a stranger can actually run
 - [x] Each translation carries its license and its public-domain basis in machine-readable form
 
-Three of those need their wording qualified rather than ticked in silence.
+Four of those need their wording qualified rather than ticked in silence.
+
+**There is no export date and there deliberately is not.** The criterion asked
+for one and it cannot coexist with the criterion two lines below it, which
+requires two runs at the same source commit to produce identical bytes. A run
+timestamp breaks that, and then the only check that catches a hand edit reports
+a difference on every run. The record names the source commit date instead.
+`DECISIONS.md` carries the reasoning.
 
 **Complete means complete where the source is.** Twelve Douay-Rheims verses are
 empty in the upstream MIT fixture and are omitted rather than published as empty

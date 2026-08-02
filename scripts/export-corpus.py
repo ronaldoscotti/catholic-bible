@@ -84,10 +84,15 @@ def git(source: Path, *args: str) -> str:
 def query(container: str, credentials: dict[str, str], sql: str) -> str:
     """Runs SQL in the source container and returns the single value it selects.
 
-    utf8mb4 is not optional. The client defaults to latin1 here, which brings
-    every accented character back as a raw byte and would corrupt the entire
-    Portuguese and Latin corpus silently.
+    Credentials go in on stdin as a defaults file rather than on the command
+    line. On the command line they reach `ps`, and they reach the traceback of
+    any failure, because CalledProcessError prints the whole argument list.
+
+    utf8mb4 is not optional either. The client defaults to latin1 here, which
+    brings every accented character back as a raw byte and would corrupt the
+    entire Portuguese and Latin corpus silently.
     """
+    defaults = "[client]\nuser={user}\npassword={password}\n".format(**credentials)
     result = subprocess.run(
         [
             "docker",
@@ -95,9 +100,8 @@ def query(container: str, credentials: dict[str, str], sql: str) -> str:
             "-i",
             container,
             "mysql",
+            "--defaults-extra-file=/dev/stdin",
             "--default-character-set=utf8mb4",
-            f"-u{credentials['user']}",
-            f"-p{credentials['password']}",
             credentials["database"],
             "-N",
             "-B",
@@ -105,9 +109,12 @@ def query(container: str, credentials: dict[str, str], sql: str) -> str:
             "-e",
             sql,
         ],
-        check=True,
+        input=defaults.encode("utf-8"),
         capture_output=True,
     )
+    if result.returncode != 0:
+        reason = result.stderr.decode("utf-8").strip()
+        raise RuntimeError(f"the source database refused the query: {reason}")
     return result.stdout.decode("utf-8").strip()
 
 
@@ -162,7 +169,7 @@ def metadata(
 
 def build(
     code: str, rows: list[dict[str, object]], info: dict[str, object]
-) -> tuple[bytes, list[str]]:
+) -> tuple[bytes, list[str], int]:
     """The published document, and the addresses left out of it.
 
     An address whose text is blank upstream is omitted rather than published as
@@ -187,7 +194,10 @@ def build(
     payload = (json.dumps(document, ensure_ascii=False, indent=1) + "\n").encode(
         "utf-8"
     )
-    return payload, blank
+    # Counted from the document rather than from the rows. Two source rows at one
+    # address collapse into one published entry, and a count taken before that
+    # would overstate what the file holds.
+    return payload, blank, len(verses)
 
 
 def main() -> int:
@@ -206,9 +216,12 @@ def main() -> int:
     if not (source / ".env").is_file():
         parser.error(f"{source} does not look like the source repository")
 
-    dirty = git(source, "status", "--porcelain", "--", *set(FIXTURES.values()))
+    # The whole tree, not only the fixtures. Provenance names a commit and the
+    # tables are a function of the import code as much as of the input files, so
+    # an uncommitted change to the importer makes that record wrong too.
+    dirty = git(source, "status", "--porcelain")
     if dirty:
-        parser.error(f"the input fixtures have uncommitted changes:\n{dirty}")
+        parser.error(f"the source repository has uncommitted changes:\n{dirty}")
 
     credentials = read_credentials(source)
     dest = Path(args.dest).resolve() if args.dest else DEST
@@ -217,16 +230,18 @@ def main() -> int:
     files: dict[str, dict[str, object]] = {}
     for code in VERSIONS:
         rows = fetch(args.container, credentials, code)
-        payload, blank = build(code, rows, metadata(args.container, credentials, code))
+        payload, blank, published = build(
+            code, rows, metadata(args.container, credentials, code)
+        )
         (dest / f"{code}.json").write_bytes(payload)
         files[f"{code}.json"] = {
             "sha256": hashlib.sha256(payload).hexdigest(),
-            "verses": len(rows) - len(blank),
+            "verses": published,
             "blank_upstream": blank,
             "from": FIXTURES[code],
         }
         print(
-            f"  {code}  {len(rows) - len(blank)} verses  {len(payload) // 1024} KiB"
+            f"  {code}  {published} verses  {len(payload) // 1024} KiB"
             + (f"  ({len(blank)} blank upstream, omitted)" if blank else "")
         )
 

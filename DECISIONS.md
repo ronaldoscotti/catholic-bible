@@ -141,6 +141,32 @@ than an absent one, and this is the epic whose whole point is that distinction.
 have no `org` reading. Douay has none, because it touches only Joel and Malachi
 and both are clean. Those numbers are pinned in a test rather than tolerated.
 
+## Provenance records the source commit date and never the run date
+
+Decided 2026-08-02, in B1, and it stayed in B2.
+
+Every published file names when its source was committed. None of them names
+when the export ran.
+
+**What lost.** The export date, which is what `CLAUDE.md` and the B2 epic both
+ask for by name, and which is what a reader expects to find in a provenance
+record.
+
+It cannot coexist with the other requirement in the same list. Running the
+export twice at one source commit has to produce byte identical output, because
+that is what makes the comparison against a fresh export mean anything. A run
+timestamp makes every rerun differ, and then the only check in this repo that
+catches a hand edit reports a difference every single time.
+
+Between a date that says when a command ran and a date that says which version
+of the source these bytes came from, the second is the one a consumer can act
+on. The first answers a question nobody asks.
+
+**What it costs.** Two documents ask for something this repo does not provide,
+and both are now corrected rather than left to imply it. A reader who wants to
+know when the export ran has the git history of this repo, which is a better
+answer anyway because it is signed and ordered.
+
 ## An unresolvable reference is a value, not an exception
 
 Decided 2026-08-02, while implementing B1.

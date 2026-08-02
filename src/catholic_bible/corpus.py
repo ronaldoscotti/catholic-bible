@@ -33,6 +33,15 @@ class Version:
 
 @cache
 def load(code: str) -> Version:
+    """One published translation.
+
+    The code is checked against the published set before it reaches a path. B3
+    hands this a segment from an HTTP route, where an unchecked value reads
+    outside the corpus directory and every distinct string a caller sends
+    becomes a permanent cache entry.
+    """
+    if code not in VERSIONS:
+        raise KeyError(f"no published version named {code!r}")
     raw = json.loads((CORPUS_DIR / f"{code}.json").read_text(encoding="utf-8"))
     return Version(
         code=code,
