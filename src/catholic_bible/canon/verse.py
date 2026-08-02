@@ -10,7 +10,14 @@ Parsing answers shape and says nothing about whether the address exists.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
+
+# ASCII digits, minus allowed so a negative reports as not positive rather than
+# as not a number. No plus, because a published id has one spelling. str.isdigit
+# accepts superscripts and other scripts that int() then refuses, which turned a
+# value into an exception.
+_NUMBER = re.compile(r"^-?[0-9]+$")
 
 
 @dataclass(frozen=True, slots=True)
@@ -37,9 +44,9 @@ class VerseId:
             return MalformedVerseId(text, "shape")
 
         book, raw_chapter, raw_verse = parts
-        if not book or not raw_chapter.lstrip("-").isdigit():
-            return MalformedVerseId(text, "shape" if not book else "not_a_number")
-        if not raw_verse.lstrip("-").isdigit():
+        if not book:
+            return MalformedVerseId(text, "shape")
+        if not _NUMBER.match(raw_chapter) or not _NUMBER.match(raw_verse):
             return MalformedVerseId(text, "not_a_number")
 
         chapter, verse = int(raw_chapter), int(raw_verse)

@@ -136,6 +136,13 @@ def php_latin_abbreviations_to_json(php: str, codes: set[str]) -> dict[str, obje
     stray = sorted(set(defaults) - set(numbered))
     if stray:
         raise ValueError(f"bare defaults that name no numbered book: {stray}")
+    # The alias layer spells these numbers in Roman up to IV, which the four
+    # books of Kings already use to the last slot. A fifth would break at import.
+    longest = max(len(targets) for targets in numbered.values())
+    if longest > 4:
+        raise ValueError(
+            f"a numbered abbreviation carries {longest} books, Roman stops at IV"
+        )
 
     return {
         "single": dict(sorted(single.items())),
@@ -166,6 +173,14 @@ def main() -> int:
     source = Path(args.source).expanduser().resolve()
     if not (source / CANON_PHP).is_file():
         parser.error(f"{source} does not look like the source repository")
+
+    # Provenance names a commit. If a file being read has uncommitted edits, the
+    # bytes shipped are not the bytes that commit holds and the record lies,
+    # while the checksums still match because they come from those same bytes.
+    # Only the files actually read are checked, so unrelated dirt does not block.
+    dirty = git(source, "status", "--porcelain", "--", *SOURCE_OF.values())
+    if dirty:
+        parser.error(f"the source files have uncommitted changes:\n{dirty}")
 
     DEST.mkdir(parents=True, exist_ok=True)
 

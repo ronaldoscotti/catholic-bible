@@ -75,6 +75,21 @@ def test_a_vulgate_psalm_title_is_named_for_what_it_is() -> None:
     assert orphan(Scheme.VULGATE, "PSA", 50, 0) is OrphanReason.PSALM_TITLE
 
 
+@pytest.mark.parametrize(
+    ("scheme", "book"), [(Scheme.ORG, "GEN"), (Scheme.DOUAY, "JHN")]
+)
+def test_verse_zero_outside_the_psalter_is_not_a_psalm_title(
+    scheme: Scheme, book: str
+) -> None:
+    """The reason set is closed and its members name distinguishable causes.
+
+    Verse 0 is a title in the Vulgate psalter and nowhere else. The report never
+    saw this because it only sweeps declared addresses, where verse 0 occurs in
+    PSA alone, so the mislabel was invisible until something asked directly.
+    """
+    assert orphan(scheme, book, 1, 0) is OrphanReason.VERSE_OUT_OF_RANGE
+
+
 def test_an_orphan_carries_the_address_that_was_asked_for() -> None:
     result = map_address(Scheme.ORG, "ESG", 3, 7)
     assert isinstance(result, Orphan)

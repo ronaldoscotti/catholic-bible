@@ -37,7 +37,7 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
 [x] 3  Spec             docs/specs/2026-08-02-b1-canon-and-versification-spine.md
 [x] 4  Plan             docs/plans/2026-08-02-b1-canon-and-versification-spine.md
-[x] 5  Implement        B0 merged. B1 on a branch, 215 tests
+[x] 5  Implement        B0 merged. B1 on a branch, 222 tests
 [x] 6  QA               docs/qa/, B0 and B1
 [x] 7  Code review      docs/reviews/, B0 and B1, one author
 [x] 8  PR               B0 merged as e8f97f0. B1 open

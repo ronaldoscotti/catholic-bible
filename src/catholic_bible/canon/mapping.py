@@ -102,6 +102,7 @@ def _why(scheme: Scheme, source_book: str, target: Address) -> OrphanReason:
 
     if SPINE.verse_count(target_book, chapter) is None:
         return OrphanReason.CHAPTER_OUT_OF_RANGE
-    if verse == 0:
+    # Verse 0 is the title in the Vulgate psalter and nothing anywhere else.
+    if verse == 0 and target_book == "PSA":
         return OrphanReason.PSALM_TITLE
     return OrphanReason.VERSE_OUT_OF_RANGE

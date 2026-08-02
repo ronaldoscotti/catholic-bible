@@ -36,6 +36,18 @@ def test_a_malformed_id_comes_back_as_a_value_carrying_what_was_wrong(
     assert parsed.text == text
 
 
+@pytest.mark.parametrize("text", ["GEN.--5.1", "GEN.².3", "GEN.1.٥", "GEN.+1.1"])
+def test_a_digit_that_is_not_an_integer_is_still_a_value(text: str) -> None:
+    """The guard used to be lstrip and isdigit, and both lie.
+
+    lstrip removes every leading dash, so `--5` passed and int() then raised.
+    str.isdigit is true for superscripts and for other scripts, so `²` raised
+    and Arabic-Indic `٥` parsed silently as five. Both would reach B3 as a 500
+    where the contract says a structured error.
+    """
+    assert isinstance(VerseId.parse(text), MalformedVerseId)
+
+
 def test_parsing_does_not_check_the_spine() -> None:
     """Shape and existence are different questions and different layers."""
     assert VerseId.parse("XYZ.1.1") == VerseId("XYZ", 1, 1)
