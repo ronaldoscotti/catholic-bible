@@ -2,8 +2,18 @@
 
 *Stage 4. Written 2026-08-02, against issue #2 and the spec dated the same day.*
 
-**Gate.** This is a human review gate. The document exists so the decomposition
-can be argued with before code exists. It does not claim anyone approved it.
+**Gate.** This is a human review gate and it was met. The plan was presented
+with the three decisions below that it could not make on its own, and approved
+in one message. Implementation started after that and not before.
+
+The three answers were: Douay names canonical in English, a fifth orphan reason
+for the Vulgate psalm titles, and liturgical Latin as the canonical form.
+
+**One thing this plan missed.** The epic asks for the mapping in both
+directions and none of the nine milestones below covers reading a spine address
+back into a scheme. It was found during the acceptance criteria walk and built
+then. A plan that had decomposed it would have caught the asymmetry earlier,
+because running the table backwards turns out to need its own rule.
 
 ## What changed since the spec
 

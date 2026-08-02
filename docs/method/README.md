@@ -35,17 +35,29 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 0  Understand       docs/method/00-understand.md
 [x] 1  Context          docs/method/01-context.md
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
-[ ] 3  Spec             no epic has needed one yet. B0 took the short route
-[ ] 4  Plan             same
-[x] 5  Implement        B0, the project scaffolding
-[x] 6  QA               docs/qa/B0-project-scaffolding.md
-[x] 7  Code review      docs/reviews/B0-project-scaffolding.md, one author
-[x] 8  PR               open on B0, CI green, not merged
+[x] 3  Spec             docs/specs/2026-08-02-b1-canon-and-versification-spine.md
+[x] 4  Plan             docs/plans/2026-08-02-b1-canon-and-versification-spine.md
+[x] 5  Implement        B0 merged. B1 on a branch, 215 tests
+[x] 6  QA               docs/qa/, B0 and B1
+[x] 7  Code review      docs/reviews/, B0 and B1, one author
+[x] 8  PR               B0 merged as e8f97f0. B1 open
 ```
 
-The checklist advances when the artifact exists and not before. One epic has
-run, and it is the one that builds the project rather than any of the ones that
-build the thing the project is for. B1 onward is still a plan.
+The checklist advances when the artifact exists and not before. Two epics have
+run. B0 builds the project and B1 is the first one that builds the thing the
+project is for.
+
+The two gates on B1 were not met the same way and the difference is recorded
+rather than averaged.
+
+**Stage 3 was waived.** The author waived the blocking wait in writing before
+the spec was written. The document exists as the record of what was decided
+before code existed, which survives a waiver, and it does not claim anyone
+stopped and read it.
+
+**Stage 4 was met.** The plan was written, presented with the three decisions it
+could not make on its own, and approved in a single explicit message. The code
+came after.
 
 ## The short route
 
