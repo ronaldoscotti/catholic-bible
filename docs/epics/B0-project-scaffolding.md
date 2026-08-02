@@ -39,8 +39,19 @@ rule.
 - [x] `Makefile` exposes at minimum `make test`, `make lint`, `make fmt`, `make run`
 - [x] `compose.yaml` brings the service up on a clean checkout with no credentials
 - [x] A CI workflow runs lint, type check and tests on every push and every pull request
-- [x] CI is green on the first commit that lands this epic
-- [x] `README.md` has a quickstart that a stranger can follow, and it is the path CI exercises
+- [ ] CI is green on the first commit that lands this epic
+- [ ] `README.md` has a quickstart that a stranger can follow, and it is the path CI exercises
+
+The last two are blocked rather than failing.
+
+CI is green on both commits of the branch, on `push` and on `pull_request`. The
+verification below asks for the merge commit specifically, and the merge has not
+happened.
+
+The quickstart was followed from a fresh clone with nothing installed but
+Docker, and it produced the documented response byte for byte. The repository is
+private, so its first line is a `git clone` no stranger can run. The criterion
+ticks when the repository is public.
 
 ## Constraints
 
