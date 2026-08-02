@@ -39,8 +39,25 @@ There is no stable verse identity for the Catholic canon. Without one, a comment
 - [ ] The mapping function is total. It always returns. An address with no target comes back as an orphan carrying a reason, never as a thrown exception
 - [ ] The mapping never guesses. Where there is no target it returns an orphan rather than the nearest plausible verse
 - [ ] `orphans.json` is generated and published, broken down by book and by scheme, with the reason for each
-- [ ] A conformance corpus passes, covering at minimum: Psalm 51 in `org` resolving to Psalm 50 on the spine, Daniel 13 and 14, the Greek additions to Esther, Sirach numbering, the Joel and Malachi chapter breaks, Tobit's two textual traditions, and 1 Chronicles 6 where the correct answer is an expected orphan
+- [ ] A conformance corpus passes, covering at minimum: Psalm 51 in `org` resolving to Psalm 50 on the spine, Daniel 13 and 14, the Greek additions to Esther, Sirach numbering, the Joel and Malachi chapter breaks, and 1 Chronicles 6
 - [ ] Every conformance case records its input, expected output, provenance, and a note on why it is hard
+
+Two items in that list were written before the data was read and are corrected
+here rather than bent to fit.
+
+**1 Chronicles 6 is not an orphan.** This epic predicted one. The spine records
+81 verses, `org` records 66 because it moves the first fifteen into chapter 5,
+and the table maps between them, so `1CH 6:66` in `org` resolves to `1CH.6.81`.
+The case stays in the corpus because the offset is not a constant, which is what
+made it worth naming. What changes is the expected answer.
+
+**Tobit's two textual traditions are not in scope after all.** The frozen scheme
+table declares no divergence for Tobit, in either direction, and the spine and
+the table agree on fourteen chapters. There is nothing here to assert beyond
+identity, and writing a case that asserts identity while claiming to cover two
+traditions would be decoration. The long Greek recension is a question about
+text rather than about addresses, so it belongs with the corpus in B2 if it
+belongs anywhere.
 
 ## Constraints
 
