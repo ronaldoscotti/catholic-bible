@@ -28,7 +28,7 @@ Finding "cordeiro de Deus" in the text requires downloading the whole corpus and
 - [ ] Portuguese and Latin accents and diacritics are handled correctly
 - [ ] Results carry the structured verse id and a snippet with the match highlighted
 - [ ] Results are ranked and paginated
-- [ ] The search index is built by the B2 generator and ships as a build artifact
+- [ ] The search index is built by the B2 export and ships as a build artifact
 
 ## Constraints
 

@@ -91,6 +91,13 @@ The dataset is generated and the generator is committed. Regeneration is
 byte-identical and CI diffs it, which is what proves the corpus was not adjusted
 by hand.
 
+*Superseded on 2026-08-02, while scoping B1. The generator stays in the private
+repo and this one exports its finished output, with checksums and provenance
+carrying the proof instead. The paragraph above is what was believed at stage 1
+and it stands as written, because a context document edited to match a later
+decision stops being a record of anything. The reasoning is in
+[`DECISIONS.md`](../../DECISIONS.md).*
+
 Two publication channels. Static files on a CDN cover the developer who wants a
 chapter, at zero cost with no server to defend. The API covers the caller who
 holds a reference rather than a file path.

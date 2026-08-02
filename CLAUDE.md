@@ -80,9 +80,25 @@ Dependency direction runs one way. The canon and the spine know nothing about
 storage. Storage knows nothing about HTTP. HTTP knows nothing about the
 generator. A module that imports upward is a bug rather than a shortcut.
 
-The generator is committed and the dataset is generated. No JSON maintained by
-hand. `make` regenerates everything byte for byte identical, and CI fails when
-output changes without the generator changing.
+The dataset is exported and never authored. It comes out of the private
+repository named in `CONTEXT.local.md`, already normalized and already tested
+there, and it reaches this repo through a committed export script. No JSON is
+edited by hand, and a value no script produced does not ship. Extraction,
+scraping and orthography normalization stay in the private repo, because they
+are solved there and a second implementation of them here would be a second set
+of bugs.
+
+Every published file carries a checksum and a provenance record naming its
+source, its commit and its export date. CI recomputes the hashes on a clean
+checkout, which catches corruption and not a deliberate edit, because the data
+and the hash are committed together. Catching an edit needs the independent
+source, so a second job re-exports where the private repo lives and diffs. Do not
+describe the first job as proof that nothing was hand-edited. It is not, and
+`docs/epics/B2-corpus-extraction.md` spells out which job proves what.
+
+What this costs goes in `LIMITS.md` in B7 rather than being argued away, because
+a reproducibility claim this repo cannot honour on a clean checkout is worse
+than an honest limit.
 
 Nothing enters without a case in the conformance corpus. Not even a new alias.
 

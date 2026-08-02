@@ -1,6 +1,6 @@
 # Roadmap
 
-*Planning. Nothing here is built yet. Last updated 2026-08-01.*
+*B0 has shipped and nothing else has. Last updated 2026-08-02.*
 
 A read-only API and a published dataset for the Catholic Bible. 73 books, Portuguese, English and Latin, public domain throughout.
 
@@ -30,7 +30,7 @@ If that holds, v1 shipped. If it doesn't, it didn't, however much code exists.
 |---|---|---|---|
 | B0 | Project scaffolding | `docker compose up` works and CI is green on a clean checkout | CI green on the merge commit, and a job that follows the README quickstart |
 | B1 | Canon and spine | `map()` is total and never raises. Orphans come back as data with a reason. `orphans.json` published | TDD, plus a conformance corpus: Ps 50/51, Dan 13-14, the Greek additions to Esther, Sirach, 1 Chr 6, `Jo` against `Jó` |
-| B2 | Corpus extraction | `make` regenerates the dataset byte for byte | Not TDD. Golden files, plus a CI job that regenerates and diffs. If output changes without the generator changing, the build breaks |
+| B2 | Corpus export | Three translations published, each with a checksum and a stated origin | Not TDD. A CI job on a clean checkout, with no access to the private source, recomputes every checksum and reads every provenance record. A byte that moved without its record moving breaks the build |
 | B3 | Read API | Parity with the read endpoints this replaces | TDD on handlers, contract tests against the OpenAPI schema |
 | B4 | Commentary and cross-references | Haydock in English and Portuguese, cross-references, all anchored on the same verse id | TDD on anchor resolution. Machine-translation provenance stated on the first screen of the README |
 | B5 | Static artifacts and CDN | A one-line `fetch()` works from a blank HTML file | Copy it out of the README and run it |
@@ -55,9 +55,9 @@ No TypeScript library. The data ships as JSON and the parser ships in Python. A 
 
 ## How it gets built
 
-Test-driven from the first commit, with the boundary stated instead of faked. Extraction gets golden files and a byte-identical regeneration check. The eval in the sibling repo gets a regression gate rather than a unit test. Writing a fake unit test around a data dump to keep a coverage number pretty is worse than admitting where the method doesn't reach.
+Test-driven from the first commit, with the boundary stated instead of faked. The exported corpus gets checksums and a provenance record for every file, checked in CI on a clean checkout. The eval in the sibling repo gets a regression gate rather than a unit test. Writing a fake unit test around a data dump to keep a coverage number pretty is worse than admitting where the method doesn't reach.
 
-The dataset is generated and the generator lives in the repo. No JSON maintained by hand.
+The dataset is exported from the private repo where it was built and normalized, through an export script that lives here. No JSON edited by hand. Rebuilding it from raw sources needs that private repo, so a stranger cannot do it, and `LIMITS.md` says so instead of the README implying otherwise. The reasoning is in `DECISIONS.md`.
 
 Every slice has a reason to exist, and the reason is either a metric it moves or a claim it proves. I once let a team gold-plate for six months and it cost me the engineering team. That doesn't happen here.
 

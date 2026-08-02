@@ -23,7 +23,7 @@ Someone building a small page or prototyping in a single HTML file has no way to
 
 ## Acceptance criteria
 
-- [ ] JSON artifacts are generated per translation and per book by the B2 generator
+- [ ] JSON artifacts are produced per translation and per book by the B2 export
 - [ ] Artifacts are served over a CDN with no signup and no key
 - [ ] A one-line `fetch()` copied out of the README works from a blank HTML file
 - [ ] Artifacts are versioned, and a published version is immutable
