@@ -156,9 +156,12 @@ developer.
 epic, and that file is the source of truth for its GitHub issue. Title comes
 from the H1, milestone and labels come from the metadata table.
 
-`scripts/create-issues.sh` creates the issues from those files. Edit the file
-and run it again rather than editing the issue in the browser, because an issue
-edited in the browser drifts from the repo and the repo is what gets read.
+`scripts/sync-issues.sh` creates the issues from those files and rewrites them
+when the files move ahead. It keys on the bracketed epic id, so renaming an epic
+updates its issue rather than opening a second one, and it reports which of
+title, body and labels actually moved. Edit the file and run it again rather
+than editing the issue in the browser, because an issue edited in the browser
+drifts from the repo and the repo is what gets read.
 
 An epic closes when its acceptance criteria are checked and its verification
 ran. Not when the code merged.
