@@ -35,17 +35,17 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 0  Understand       docs/method/00-understand.md
 [x] 1  Context          docs/method/01-context.md
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
-[x] 3  Spec             docs/specs/2026-08-02-b1-canon-and-versification-spine.md
-[x] 4  Plan             docs/plans/2026-08-02-b1-canon-and-versification-spine.md
-[x] 5  Implement        B0 merged. B1 on a branch, 222 tests
-[x] 6  QA               docs/qa/, B0 and B1
-[x] 7  Code review      docs/reviews/, B0 and B1, one author
-[x] 8  PR               B0 merged as e8f97f0. B1 open
+[x] 3  Spec             docs/specs/, B1 and B2
+[x] 4  Plan             docs/plans/, B1 and B2
+[x] 5  Implement        B0 and B1 merged. B2 on a branch, 265 tests
+[x] 6  QA               docs/qa/, B0 B1 B2
+[x] 7  Code review      docs/reviews/, B0 B1 B2, one author
+[x] 8  PR               B0 and B1 merged. B2 open
 ```
 
-The checklist advances when the artifact exists and not before. Two epics have
-run. B0 builds the project and B1 is the first one that builds the thing the
-project is for.
+The checklist advances when the artifact exists and not before. Three epics have
+run. B0 builds the project, B1 builds the addresses, and B2 is the first one that
+publishes Scripture.
 
 The two gates on B1 were not met the same way and the difference is recorded
 rather than averaged.
@@ -58,6 +58,9 @@ stopped and read it.
 **Stage 4 was met.** The plan was written, presented with the three decisions it
 could not make on its own, and approved in a single explicit message. The code
 came after.
+
+Both gates were met on B2. The spec was presented with three open questions and
+approved, then the plan, then the code.
 
 ## The short route
 
@@ -89,10 +92,11 @@ Work lands through pull requests and never through a push to `main`, so the gate
 has somewhere to fire the day there is a second person. A checklist that counts
 a self-approval as a review is decoration.
 
-**The correctness claim is unmeasured.** This repo promises a versification
-spine, a total mapping function and an honest orphan report. The orphan rate is
-not known yet. It will be published when it is measured, whatever it turns out
-to be, and until then no number appears anywhere in this repo.
+**The orphan rate is not measurable here.** This repo promised an honest orphan
+report. B2 found that an orphan is a source verse the import dropped before the
+corpus crossed over, so nothing here remembers them. What is published instead is
+the unfilled count per book, which is the same question from the side this repo
+can see, and `LIMITS.md` says which is which rather than printing a zero.
 
 ## Reference documents
 
