@@ -1,7 +1,8 @@
 # Session prompt
 
 Paste one of these at the start of a Claude Code session. Replace `[N]` with the
-issue number.
+GitHub issue number and `[B]` with the epic id, which are not the same thing.
+Issue #4 is epic B2. The epic id is what names the file.
 
 These do not restate the rules. `CLAUDE.md` loads automatically and carries the
 conventions, the pipeline and the boundaries. A session prompt that repeats them
@@ -17,7 +18,7 @@ Read in order:
 1. CLAUDE.md
 2. CONTEXT.local.md — required. If it is missing, stop and ask for it.
 3. docs/method/README.md — the pipeline and where this repo actually stands
-4. The issue body, which is docs/epics/[N]-*.md
+4. The issue body, which is docs/epics/[B]-*.md
 
 Route: check the epic. Scaffolding and isolated changes take the fast lane,
 which is understand, context, TDD, QA, review, PR, with no spec document and no
