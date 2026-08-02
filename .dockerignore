@@ -1,0 +1,21 @@
+# Anything git hides, Docker hides too. These two files drift apart silently,
+# and COPY . /app is what turns the drift into a leak.
+CONTEXT.local.md
+*.local.md
+.env
+.env.*
+!.env.example
+
+.git/
+.github/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+/scratch/
+/tmp/
+*.sqlite3-journal
+.DS_Store

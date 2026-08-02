@@ -1,0 +1,17 @@
+services:
+  api:
+    build: .
+    ports:
+      # Loopback rather than every interface. Docker writes its own iptables
+      # rules and a bare "8000:8000" would publish this to the local network.
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen("http://127.0.0.1:8000/health")
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 5s

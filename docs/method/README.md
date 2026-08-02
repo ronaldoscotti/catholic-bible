@@ -22,7 +22,9 @@ read the commits and read these documents. Nothing here is aspirational.
 | 8 | PR | pull request | reviewed before merge |
 
 Stages 3 and 4 are human review gates. Silence is not approval and neither is
-the agent's own confidence.
+the agent's own confidence. Scaffolding and isolated changes skip both, under
+the rule in [`SESSION_PROMPT.md`](../../SESSION_PROMPT.md) and the conditions in
+[The short route](#the-short-route) below.
 
 Epics run this pipeline one at a time. The epic is the unit of work and it
 lives in `docs/epics/` with a matching GitHub issue.
@@ -33,18 +35,37 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 0  Understand       docs/method/00-understand.md
 [x] 1  Context          docs/method/01-context.md
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
-[ ] 3  Spec             no epic has reached a written spec yet
-[ ] 4  Plan             nothing planned
-[ ] 5  Implement        no code exists in this repo
-[ ] 6  QA               nothing to exercise
-[ ] 7  Code review      nothing to review
-[ ] 8  PR               no pull request has been opened
+[ ] 3  Spec             no epic has needed one yet. B0 took the short route
+[ ] 4  Plan             same
+[x] 5  Implement        B0, the project scaffolding
+[x] 6  QA               docs/qa/B0-project-scaffolding.md
+[x] 7  Code review      docs/reviews/B0-project-scaffolding.md, one author
+[x] 8  PR               open on B0, CI green, not merged
 ```
 
-Everything below the third line is empty and says so. The checklist advances
-when the artifact exists and not before. A roadmap with ten epics and no code
-is a plan, and calling it anything else would make every other line here worth
-nothing.
+The checklist advances when the artifact exists and not before. One epic has
+run, and it is the one that builds the project rather than any of the ones that
+build the thing the project is for. B1 onward is still a plan.
+
+## The short route
+
+Scaffolding and isolated changes skip stages 3 and 4 and go understand,
+context, implement, QA, review, pull request. The rule is written in
+[`SESSION_PROMPT.md`](../../SESSION_PROMPT.md), which is committed and predates
+the first epic, so the route was decided before anything ran it rather than
+after. B0 ran that way. Nothing in it touches the canon, the spine, the data
+model or a public seam, and a spec document describing a `pyproject.toml` would
+be a description of a file rather than a decision about one.
+
+The same file says the shape of the work gets presented and approved before any
+code is written, which is what happened with the one decision in B0 that has
+consequences downstream, the package layout. That approval lives in the session
+transcript. A reader checking this repo cannot open a transcript, so what they
+can check instead is the rule that required the approval and the commit order,
+where `SESSION_PROMPT.md` lands two commits before any Python.
+
+Anything that touches the canon, the spine, the data model or a public seam
+takes the full pipeline. B1 does.
 
 ## The gates that are not met
 
