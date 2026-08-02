@@ -31,8 +31,10 @@ meta() { grep -m1 "^| $1 " "$2" 2>/dev/null | sed 's/^|[^|]*|[[:space:]]*//; s/[
 # GitHub stores CRLF and keeps its own trailing whitespace. Compare the text.
 normalize() { tr -d '\r' | sed 's/[[:space:]]*$//'; }
 
-# Label names out of an epic's metadata row, one per line.
-labels_of() { meta Labels "$1" | grep -o '`[^`]*`' | tr -d '`' | sort; }
+# Label names out of an epic's metadata row, one per line. An epic with no
+# Labels row is legal and returns nothing, so the grep miss cannot be allowed to
+# fail the pipeline under pipefail.
+labels_of() { meta Labels "$1" | grep -o '`[^`]*`' | tr -d '`' | sort || true; }
 
 echo "== labels =="
 for f in "$EPICS_DIR"/*.md; do labels_of "$f"; done | sort -u | while read -r label; do
@@ -82,8 +84,10 @@ for f in "$EPICS_DIR"/*.md; do
   done < <(labels_of "$f")
 
   if [ -z "$number" ]; then
-    gh issue create --title "$title" --body-file "$body" ${milestone:+--milestone "$milestone"} "${label_args[@]}"
+    url=$(gh issue create --title "$title" --body-file "$body" ${milestone:+--milestone "$milestone"} "${label_args[@]}")
     rm -f "$body"
+    echo "  created  $title"
+    echo "           $url"
     continue
   fi
 
@@ -92,11 +96,13 @@ for f in "$EPICS_DIR"/*.md; do
   live_title=$(gh issue view "$number" --json title -q .title)
   live_body=$(gh issue view "$number" --json body -q .body | normalize)
   live_labels=$(gh issue view "$number" --json labels -q '[.labels[].name] | sort | join(",")')
+  live_milestone=$(gh issue view "$number" --json milestone -q '.milestone.title // ""')
 
   changed=()
   [ "$live_title" = "$title" ] || changed+=(title)
   [ "$live_body" = "$(cat "$body")" ] || changed+=(body)
   [ "$live_labels" = "$want_labels" ] || changed+=(labels)
+  [ "$live_milestone" = "$milestone" ] || changed+=(milestone)
 
   if [ ${#changed[@]} -eq 0 ]; then
     rm -f "$body"
@@ -104,8 +110,13 @@ for f in "$EPICS_DIR"/*.md; do
     continue
   fi
 
+  # Split on the comma, never on whitespace. A label added in the browser can
+  # carry a space, "help wanted" being the one GitHub ships by default, and
+  # word splitting would ask gh to remove two labels that do not exist.
   edit_args=("${label_args[@]/--label/--add-label}")
-  for l in $(printf '%s' "$live_labels" | tr ',' ' '); do
+  IFS=, read -ra live_arr <<< "$live_labels"
+  for l in ${live_arr[@]+"${live_arr[@]}"}; do
+    [ -n "$l" ] || continue
     labels_of "$f" | grep -qxF "$l" || edit_args+=(--remove-label "$l")
   done
 
