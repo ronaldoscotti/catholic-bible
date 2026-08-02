@@ -44,7 +44,7 @@ rule.
 
 The last two are blocked rather than failing.
 
-CI is green on both commits of the branch, on `push` and on `pull_request`. The
+CI is green on every commit of the branch, on `push` and on `pull_request`. The
 verification below asks for the merge commit specifically, and the merge has not
 happened.
 
