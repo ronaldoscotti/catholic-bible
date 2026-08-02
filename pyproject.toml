@@ -38,3 +38,6 @@ files = ["src", "tests"]
 testpaths = ["tests"]
 addopts = "--strict-markers --strict-config"
 filterwarnings = ["error"]
+# Tests are functions here. Left on, collection grabs any imported class whose
+# name starts with Test, and the domain has Testament.
+python_classes = []
