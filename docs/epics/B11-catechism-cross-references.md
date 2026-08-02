@@ -4,7 +4,7 @@
 |---|---|
 | Milestone | v1.1 |
 | Labels | `epic` `area/data` `milestone-spec` |
-| Depends on | B1, B4 |
+| Depends on | B1, B2, B4 |
 | Blocks | nothing |
 
 *Milestone spec. Expanded against the code that exists when it is reached.*
