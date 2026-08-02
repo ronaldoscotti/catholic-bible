@@ -68,6 +68,37 @@ def map_address(scheme: Scheme, book: str, chapter: int, verse: int) -> Result:
     return Orphan(scheme, (book, chapter, verse), _why(scheme, book, target))
 
 
+def to_scheme(scheme: Scheme, verse: VerseId) -> Result:
+    """The other direction, a spine address read in `scheme`.
+
+    Also total. An address the spine does not hold comes back as an orphan for
+    the same reason it would going the other way.
+
+    The answer verifies itself. The remap table is not a bijection, so running
+    it backwards can produce an address that looks right and is not: the spine
+    holds `PSA.115.1` and reading it back naively gives `org` 115:1, while `org`
+    115:1 actually comes from a different psalm. A wrong address a consumer
+    trusts is worse than no address, so the candidate is mapped forward again
+    and only survives if it lands where it started.
+    """
+    source = (verse.book, verse.chapter, verse.verse)
+    if not SPINE.contains(*source):
+        return Orphan(scheme, source, _why(scheme, verse.book, source))
+
+    match scheme:
+        case Scheme.VULGATE:
+            target = VULGATE.from_spine(*source)
+        case Scheme.ORG:
+            target = ORG.from_spine(*source)
+        case Scheme.DOUAY:
+            target = DOUAY.from_spine(*source)
+
+    back = map_address(scheme, *target)
+    if isinstance(back, Mapped) and back.verse == verse:
+        return Mapped(VerseId(*target))
+    return Orphan(scheme, source, OrphanReason.NO_COUNTERPART)
+
+
 def _why(scheme: Scheme, source_book: str, target: Address) -> OrphanReason:
     target_book, chapter, verse = target
 

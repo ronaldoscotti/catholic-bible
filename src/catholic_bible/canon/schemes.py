@@ -70,6 +70,7 @@ class VulgateScheme:
         self._per_verse = _pair_up(mapped)
         self._origins = tuple(mapped)
         self._mode: dict[str, Mode] = {}
+        self._inverse_of: dict[str, str] = {}
 
     def declares(self, book: str) -> bool:
         """Whether the Copenhagen table knows this book at all."""
@@ -111,6 +112,25 @@ class VulgateScheme:
                 if not SPINE.contains(*self._apply(book, index, verse)):
                     org_misses += 1
         return Mode.IDENTITY if identity_misses <= org_misses else Mode.ORG
+
+    def from_spine(self, book: str, chapter: int, verse: int) -> Address:
+        """The other direction, spine to Vulgate.
+
+        Where the spine numbers a book in Vulgate there is nothing to do. Where
+        it numbers in `org` the address has to come back through the table, so
+        this asks the inverse index for it.
+        """
+        if self.mode_for(book) is Mode.IDENTITY:
+            return book, chapter, verse
+        origin = self._inverse_of.get(f"{book} {chapter}:{verse}")
+        return _parse(origin) if origin else (book, chapter, verse)
+
+    def bind_inverse(self, inverse: dict[str, str]) -> None:
+        self._inverse_of = inverse
+
+    def apply_table(self, book: str, chapter: int, verse: int) -> Address:
+        """The table applied regardless of mode, Vulgate coordinates to `org`."""
+        return self._apply(book, chapter, verse)
 
     def _apply(self, book: str, chapter: int, verse: int) -> Address:
         target = self._per_verse.get(f"{book} {chapter}:{verse}")
@@ -159,6 +179,10 @@ class OrgScheme:
             ):
                 self._inverse[target] = origin
 
+    def index(self) -> dict[str, str]:
+        """The resolved inverse, `org` address to Vulgate origin."""
+        return dict(self._inverse)
+
     def to_spine(self, book: str, chapter: int, verse: int) -> Address:
         if self._vulgate.mode_for(book) is not Mode.IDENTITY:
             return book, chapter, verse
@@ -171,6 +195,17 @@ class OrgScheme:
         if not SPINE.contains(*candidate) and SPINE.contains(book, chapter, verse):
             return book, chapter, verse
         return candidate
+
+    def from_spine(self, book: str, chapter: int, verse: int) -> Address:
+        """The other direction, spine to `org`.
+
+        Mirror image of `to_spine`. Where the spine numbers a book in Vulgate
+        the table applies forward, and where it already numbers in `org` the
+        address is already there.
+        """
+        if self._vulgate.mode_for(book) is not Mode.IDENTITY:
+            return book, chapter, verse
+        return self._vulgate.apply_table(book, chapter, verse)
 
 
 class DouayScheme:
@@ -200,6 +235,16 @@ class DouayScheme:
             return book, 3, 18 + verse
         return book, chapter, verse
 
+    def from_spine(self, book: str, chapter: int, verse: int) -> Address:
+        if book == "JOL":
+            if chapter == 3:
+                return book, 2, verse + 27
+            if chapter == 4:
+                return book, 3, verse
+        elif book == "MAL" and chapter == 3 and verse >= 19:
+            return book, 4, verse - 18
+        return book, chapter, verse
+
 
 def _pair_up(mapped: dict[str, str]) -> dict[str, str]:
     """Expands the table's ranges into positional single-verse pairs.
@@ -221,7 +266,9 @@ def _load() -> tuple[VulgateScheme, OrgScheme, DouayScheme]:
         (DATA_DIR / "vulgate-scheme.json").read_text(encoding="utf-8")
     )
     vulgate = VulgateScheme(table)
-    return vulgate, OrgScheme(table, vulgate), DouayScheme()
+    org = OrgScheme(table, vulgate)
+    vulgate.bind_inverse(org.index())
+    return vulgate, org, DouayScheme()
 
 
 VULGATE, ORG, DOUAY = _load()

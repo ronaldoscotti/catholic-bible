@@ -115,6 +115,32 @@ detection moves into the mapping layer and the scheme maps stay pure below it.
 would leave B1 unable to meet its own acceptance criteria, which is a high price
 for a structural match.
 
+## Reading a spine address back into a scheme verifies itself
+
+Decided 2026-08-02, while implementing B1.
+
+The epic asks for the mapping in both directions. The forward direction reads a
+scheme address onto the spine and the reverse reads a spine address back out.
+They are not symmetric, because the remap table is not a bijection.
+
+Run backwards naively, the table produces addresses that look right and are not.
+The spine holds `PSA.115.1`, reading it back gives `org` 115:1, and `org` 115:1
+is a different psalm coming from `PSA 113:9`. Sixty two addresses behaved that
+way across the three schemes.
+
+So the reverse direction computes its candidate and then maps it forward again,
+and it only returns the candidate if it lands where it started. Anything else is
+an orphan.
+
+**What lost.** Returning the candidate and documenting the caveat. It would have
+been less code and a smaller diff, and it would have handed a consumer a wrong
+verse address with nothing to tell them. A wrong answer someone trusts is worse
+than an absent one, and this is the epic whose whole point is that distinction.
+
+**What it costs.** Twenty one addresses have no Vulgate reading and forty one
+have no `org` reading. Douay has none, because it touches only Joel and Malachi
+and both are clean. Those numbers are pinned in a test rather than tolerated.
+
 ## An unresolvable reference is a value, not an exception
 
 Decided 2026-08-02, while implementing B1.
