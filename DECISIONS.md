@@ -70,15 +70,35 @@ falls out of building the index without thinking about it and what the source
 implementation does. It is arbitrary in a way that shows: the Song of the Three
 is declared from both `DAN` and `DAG`, only `DAN` exists on the spine, and last
 wins picks `DAG`. Sixty five addresses then orphan while the table itself says
-where they go. Across the whole table the rule recovers 105 of the 157.
+where they go.
 
 **What it costs.** A divergence from the working implementation, which is the
 thing this port is most careful to avoid. It is deliberate, it is one rule in
 one constructor, and a conformance case pins it so the two cannot drift quietly.
 
-The 29 addresses whose origins all have slots keep the first declared one, and
-that is a convention rather than a finding. Where the Vulgate splits one `org`
-verse in two, the first is the one an apparatus means.
+**The numbers, measured rather than estimated.** The inverse index only fires on
+books the spine numbers in Vulgate, so the population is smaller than the raw
+table suggests. 135 `org` addresses arrive ambiguous. In 103 of them exactly one
+declared origin has a slot on the spine and the rule recovers it. In 23 no
+origin has a slot and the address orphans either way. In 9 more than one origin
+has a slot.
+
+A first draft of this entry counted 157 and 105, which were measured across the
+whole table without the mode gate that decides whether the index is consulted at
+all. The corrected figures are above.
+
+**Those 9 stay ambiguous and get recorded.** Six are the same merge shape, where
+the Vulgate splits one `org` verse in two and the first is what an apparatus
+means. Three are chapter boundaries between textual traditions, and `BEL 1:1` is
+the clearest of them: Daniel 13 ends at 64 in most editions and at 65 in the one
+that carries the transition into Bel, so the table declares that verse and
+Daniel 14:1 as the same address. Both are legitimate and neither is a mistake.
+
+The tempting move is a tie-break that reads nicely, nearest verse number or
+whichever keeps the sequence contiguous, which would pick Daniel 14:1 and feel
+better. That is choosing a textual tradition with a heuristic and calling it
+arithmetic. B1 exists to stop exactly that, so the rule stays blunt and all nine
+go into the conformance corpus naming both candidates.
 
 ## The mapping layer decides what is an orphan
 

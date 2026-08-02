@@ -1,0 +1,82 @@
+"""The total mapping function.
+
+It always returns. An address with no target on the spine comes back as an
+orphan carrying a distinguishable reason, never as an exception and never as
+the nearest plausible verse.
+
+This is the layer that decides what an orphan is. The scheme maps below it stay
+pure and answer only where an address lands. See DECISIONS.md for why that
+responsibility sits here rather than in an importer.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from enum import StrEnum
+
+from catholic_bible.canon.books import CANON
+from catholic_bible.canon.schemes import DOUAY, ORG, VULGATE
+from catholic_bible.canon.spine import SPINE
+from catholic_bible.canon.verse import VerseId
+
+Address = tuple[str, int, int]
+
+
+class Scheme(StrEnum):
+    VULGATE = "vulgate"
+    ORG = "org"
+    DOUAY = "douay"
+
+
+class OrphanReason(StrEnum):
+    """Why an address has no home on the spine. A closed set."""
+
+    UNKNOWN_BOOK = "unknown_book"
+    NO_COUNTERPART = "no_counterpart"
+    CHAPTER_OUT_OF_RANGE = "chapter_out_of_range"
+    VERSE_OUT_OF_RANGE = "verse_out_of_range"
+    PSALM_TITLE = "psalm_title"
+
+
+@dataclass(frozen=True, slots=True)
+class Mapped:
+    verse: VerseId
+
+
+@dataclass(frozen=True, slots=True)
+class Orphan:
+    scheme: Scheme
+    source: Address
+    reason: OrphanReason
+
+
+Result = Mapped | Orphan
+
+
+def map_address(scheme: Scheme, book: str, chapter: int, verse: int) -> Result:
+    """Translates one address from `scheme` onto the spine."""
+    match scheme:
+        case Scheme.VULGATE:
+            target = VULGATE.to_spine(book, chapter, verse)
+        case Scheme.ORG:
+            target = ORG.to_spine(book, chapter, verse)
+        case Scheme.DOUAY:
+            target = DOUAY.to_spine(book, chapter, verse)
+
+    if SPINE.contains(*target):
+        return Mapped(VerseId(*target))
+    return Orphan(scheme, (book, chapter, verse), _why(scheme, book, target))
+
+
+def _why(scheme: Scheme, source_book: str, target: Address) -> OrphanReason:
+    target_book, chapter, verse = target
+
+    if CANON.by_code(target_book) is None:
+        known = scheme is not Scheme.DOUAY and VULGATE.declares(source_book)
+        return OrphanReason.NO_COUNTERPART if known else OrphanReason.UNKNOWN_BOOK
+
+    if SPINE.verse_count(target_book, chapter) is None:
+        return OrphanReason.CHAPTER_OUT_OF_RANGE
+    if verse == 0:
+        return OrphanReason.PSALM_TITLE
+    return OrphanReason.VERSE_OUT_OF_RANGE

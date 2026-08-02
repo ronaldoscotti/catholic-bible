@@ -70,6 +70,14 @@ class VulgateScheme:
         self._per_verse = _pair_up(mapped)
         self._mode: dict[str, Mode] = {}
 
+    def declares(self, book: str) -> bool:
+        """Whether the Copenhagen table knows this book at all."""
+        return book in self._max
+
+    def declared_books(self) -> dict[str, list[int]]:
+        """Every book the table declares, with its Vulgate verse counts."""
+        return dict(self._max)
+
     def mode_for(self, book: str) -> Mode:
         cached = self._mode.get(book)
         if cached is None:
@@ -111,16 +119,17 @@ class OrgScheme:
     applying it to a book with few pairs touches only those few.
 
     Inverting is not free. The table merges verses and it names the same target
-    from more than one origin, so 157 `org` addresses arrive with two or more
+    from more than one origin, so 135 `org` addresses arrive with two or more
     declared Vulgate origins. Taking whichever came last is arbitrary and it
     costs real resolutions: the Song of the Three is declared from both `DAN`
     and `DAG`, and only `DAN` has a slot on the spine.
 
     So the rule is first declared wins, unless the first has no slot on the
     spine and a later one does. That is a choice between origins the table
-    already asserts rather than an invented address, and it recovers 105 of the
-    157. This diverges from the source implementation and the reasoning is in
-    DECISIONS.md.
+    already asserts rather than an invented address, and it recovers 103. Of the
+    rest, 23 have no resolvable origin and 9 have several, and those 9 stay
+    ambiguous on purpose. This diverges from the source implementation and the
+    reasoning is in DECISIONS.md.
     """
 
     def __init__(self, table: dict[str, object], vulgate: VulgateScheme) -> None:
