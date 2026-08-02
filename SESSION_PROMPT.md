@@ -2,7 +2,24 @@
 
 Paste one of these at the start of a Claude Code session. Replace `[N]` with the
 GitHub issue number and `[B]` with the epic id, which are not the same thing.
-Issue #4 is epic B2. The epic id is what names the file.
+The epic id is what names the file.
+
+## The issue to epic map
+
+Read this before picking one up. The first run of `scripts/sync-issues.sh`
+walked the epic files in shell glob order, where `B10` sorts before `B2`, so the
+issues were opened in that order and everything from B2 down carries a number
+one higher than it looks. Issue numbers cannot be renumbered. The script now
+sorts by version so the next epic does not join them.
+
+| Issue | Epic | | Issue | Epic |
+|---|---|---|---|---|
+| #1 | B0 project scaffolding | | #7 | B5 static artifacts and CDN |
+| #2 | B1 canon and versification spine | | #8 | B6 production deploy |
+| #3 | **B10** packages | | #9 | B7 decisions and limits |
+| #4 | **B2** corpus export | | #10 | B8 rate limiting |
+| #5 | B3 read API | | #11 | B9 full-text search |
+| #6 | B4 commentary and cross-references | | #18 | B11 catechism cross-references |
 
 These do not restate the rules. `CLAUDE.md` loads automatically and carries the
 conventions, the pipeline and the boundaries. A session prompt that repeats them
@@ -16,8 +33,8 @@ Working on issue #[N] in this repo.
 
 Read in order:
 1. CLAUDE.md
-2. CONTEXT.local.md — required. If it is missing, stop and ask for it.
-3. docs/method/README.md — the pipeline and where this repo actually stands
+2. CONTEXT.local.md, required. If it is missing, stop and ask for it.
+3. docs/method/README.md, the pipeline and where this repo actually stands
 4. The issue body, which is docs/epics/[B]-*.md
 
 Route: check the epic. Scaffolding and isolated changes take the fast lane,

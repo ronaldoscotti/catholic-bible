@@ -61,7 +61,11 @@ echo
 echo "== issues =="
 existing=$(gh issue list --state all --limit 200 --json number,title -q '.[] | "\(.number)\t\(.title)"')
 
-for f in "$EPICS_DIR"/*.md; do
+# Roadmap order, not glob order. A shell glob sorts B10 before B2, and the first
+# run of this script created the issues in that order, which is why issue #3 is
+# epic B10. Issue numbers cannot be renumbered, so this only keeps the next epic
+# from landing in the same trap. The map is in SESSION_PROMPT.md.
+for f in $(printf '%s\n' "$EPICS_DIR"/*.md | sort -V); do
   title=$(head -1 "$f" | sed 's/^#[[:space:]]*//')
   [ -n "$title" ] || { echo "  SKIP     $f has no H1"; continue; }
 
