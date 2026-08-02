@@ -22,7 +22,9 @@ read the commits and read these documents. Nothing here is aspirational.
 | 8 | PR | pull request | reviewed before merge |
 
 Stages 3 and 4 are human review gates. Silence is not approval and neither is
-the agent's own confidence.
+the agent's own confidence. Scaffolding and isolated changes skip both, under
+the rule in [`SESSION_PROMPT.md`](../../SESSION_PROMPT.md) and the conditions in
+[The short route](#the-short-route) below.
 
 Epics run this pipeline one at a time. The epic is the unit of work and it
 lives in `docs/epics/` with a matching GitHub issue.
@@ -48,15 +50,19 @@ build the thing the project is for. B1 onward is still a plan.
 ## The short route
 
 Scaffolding and isolated changes skip stages 3 and 4 and go understand,
-context, implement, QA, review, pull request. B0 ran that way. Nothing in it
-touches the canon, the spine, the data model or a public seam, and a spec
-document describing a `pyproject.toml` would be a description of a file rather
-than a decision about one.
+context, implement, QA, review, pull request. The rule is written in
+[`SESSION_PROMPT.md`](../../SESSION_PROMPT.md), which is committed and predates
+the first epic, so the route was decided before anything ran it rather than
+after. B0 ran that way. Nothing in it touches the canon, the spine, the data
+model or a public seam, and a spec document describing a `pyproject.toml` would
+be a description of a file rather than a decision about one.
 
-The one decision in B0 with consequences downstream is the package layout, and
-it was put in writing and approved before any code was written. That approval
-is the gate, held in the conversation rather than in a document, and it is why
-the route is shorter rather than looser.
+The same file says the shape of the work gets presented and approved before any
+code is written, which is what happened with the one decision in B0 that has
+consequences downstream, the package layout. That approval lives in the session
+transcript. A reader checking this repo cannot open a transcript, so what they
+can check instead is the rule that required the approval and the commit order,
+where `SESSION_PROMPT.md` lands two commits before any Python.
 
 Anything that touches the canon, the spine, the data model or a public seam
 takes the full pipeline. B1 does.
