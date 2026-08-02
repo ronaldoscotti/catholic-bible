@@ -28,6 +28,7 @@ VERBATIM = {
     "vulgate-scheme.json": "database/data/vulgata-versification.json",
 }
 CANON_PHP = "database/data/catholic-canon.php"
+DOUAY_PHP = "app/Services/Bible/DouayCanonMap.php"
 
 CANON_KEYS = {"code", "testament", "canon_group", "deutero", "name", "abbr", "aliases"}
 CANON_SIZE = 73
@@ -35,6 +36,14 @@ CANON_SIZE = 73
 # One book per line, opening on the 'code' key. An upstream reformat matches
 # nothing and fails the size check below rather than exporting a short canon.
 BOOK_LINE = re.compile(r"^\s*\[(?P<fields>'code'.*)\],?\s*$")
+
+DOUAY_PAIR = re.compile(r"'(?P<name>[A-Z0-9 ]+)'\s*=>\s*'(?P<code>[A-Z0-9]{3})'")
+
+SOURCE_OF = {
+    **VERBATIM,
+    "canon.json": CANON_PHP,
+    "douay-names.json": DOUAY_PHP,
+}
 
 
 def php_canon_to_json(php: str) -> list[dict[str, object]]:
@@ -70,6 +79,23 @@ def php_canon_to_json(php: str) -> list[dict[str, object]]:
             f"expected {CANON_SIZE} books in the canon, parsed {len(books)}"
         )
     return books
+
+
+def php_douay_names_to_json(php: str, codes: set[str]) -> dict[str, str]:
+    """Reads the Douay book names out of the map's PHP const.
+
+    Names are the ones the Douay-Rheims and Haydock print, so `1 KINGS` is
+    Samuel here and `3 KINGS` is Kings. That is correct Douay usage and it
+    collides with modern English, which the alias layer resolves in favour of
+    Douay because this dataset is anchored on that apparatus.
+    """
+    names = {m.group("name"): m.group("code") for m in DOUAY_PAIR.finditer(php)}
+    if len(names) != CANON_SIZE:
+        raise ValueError(f"expected {CANON_SIZE} Douay names, parsed {len(names)}")
+    unknown = sorted(set(names.values()) - codes)
+    if unknown:
+        raise ValueError(f"Douay names point at codes outside the canon: {unknown}")
+    return names
 
 
 def git(source: Path, *args: str) -> str:
@@ -108,6 +134,14 @@ def main() -> int:
     (DEST / "canon.json").write_bytes(canon)
     written["canon.json"] = hashlib.sha256(canon).hexdigest()
 
+    names = php_douay_names_to_json(
+        (source / DOUAY_PHP).read_text(encoding="utf-8"),
+        {str(book["code"]) for book in books},
+    )
+    douay = (json.dumps(names, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+    (DEST / "douay-names.json").write_bytes(douay)
+    written["douay-names.json"] = hashlib.sha256(douay).hexdigest()
+
     # The commit date rather than the run date, so re-exporting at the same
     # source commit is byte for byte identical.
     provenance = {
@@ -118,7 +152,7 @@ def main() -> int:
             "private": True,
         },
         "files": {
-            name: {"sha256": digest, "from": VERBATIM.get(name, CANON_PHP)}
+            name: {"sha256": digest, "from": SOURCE_OF[name]}
             for name, digest in sorted(written.items())
         },
     }

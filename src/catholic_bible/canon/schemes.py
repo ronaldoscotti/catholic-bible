@@ -1,0 +1,196 @@
+"""Translating other numbering schemes into the spine.
+
+Three of them. The Vulgate, `org` (the Copenhagen scheme, anchored on the
+Masoretic text) and Douay.
+
+None of these validate against the spine. They answer where an address lands,
+and whether that landing exists is the mapping layer's question.
+"""
+
+from __future__ import annotations
+
+import json
+import re
+from enum import StrEnum
+from functools import cached_property
+
+from catholic_bible.canon import DATA_DIR
+from catholic_bible.canon.spine import SPINE
+
+Address = tuple[str, int, int]
+
+_REF = re.compile(
+    r"^(?P<book>\S+) (?P<chapter>\d+):(?P<verses>\d+)(?:-(?P<last>\d+))?$"
+)
+
+
+class Mode(StrEnum):
+    """How the spine numbers one book."""
+
+    IDENTITY = "identity"
+    ORG = "org"
+
+
+def expand(ref: str) -> list[str]:
+    """`PSA 50:0-21` into the 22 single-verse keys it stands for."""
+    match = _REF.match(ref)
+    if match is None:
+        return []
+    book, chapter = match["book"], int(match["chapter"])
+    first = int(match["verses"])
+    last = int(match["last"]) if match["last"] else first
+    return [f"{book} {chapter}:{verse}" for verse in range(first, last + 1)]
+
+
+def _parse(ref: str) -> Address:
+    book, rest = ref.split(" ", 1)
+    chapter, verse = rest.split(":", 1)
+    return book, int(chapter), int(verse)
+
+
+class VulgateScheme:
+    """Vulgate numbering into the spine.
+
+    The Copenhagen table maps the Vulgate onto `org`. The spine is mixed, so
+    applying that table wholesale would be wrong for the Psalter. Mode is
+    therefore decided per book by counting: run every verse the Vulgate has
+    through both readings, keep the one that lands fewer addresses outside the
+    spine, and let a tie keep identity.
+    """
+
+    def __init__(self, table: dict[str, object]) -> None:
+        raw_max = table.get("maxVerses", {})
+        assert isinstance(raw_max, dict)
+        # The counts arrive as strings upstream.
+        self._max: dict[str, list[int]] = {
+            book: [int(count) for count in counts] for book, counts in raw_max.items()
+        }
+        mapped = table.get("mappedVerses", {})
+        assert isinstance(mapped, dict)
+        self._per_verse = _pair_up(mapped)
+        self._mode: dict[str, Mode] = {}
+
+    def mode_for(self, book: str) -> Mode:
+        cached = self._mode.get(book)
+        if cached is None:
+            cached = self._mode[book] = self._decide(book)
+        return cached
+
+    def to_spine(self, book: str, chapter: int, verse: int) -> Address:
+        if self.mode_for(book) is Mode.ORG:
+            return self._apply(book, chapter, verse)
+        return book, chapter, verse
+
+    def _decide(self, book: str) -> Mode:
+        counts = self._max.get(book)
+        if counts is None:
+            return Mode.IDENTITY
+
+        identity_misses = org_misses = 0
+        for index, count in enumerate(counts, start=1):
+            for verse in range(1, count + 1):
+                if not SPINE.contains(book, index, verse):
+                    identity_misses += 1
+                if not SPINE.contains(*self._apply(book, index, verse)):
+                    org_misses += 1
+        return Mode.IDENTITY if identity_misses <= org_misses else Mode.ORG
+
+    def _apply(self, book: str, chapter: int, verse: int) -> Address:
+        target = self._per_verse.get(f"{book} {chapter}:{verse}")
+        return _parse(target) if target else (book, chapter, verse)
+
+
+class OrgScheme:
+    """`org` numbering into the spine, which is the inverse direction.
+
+    The Copenhagen table runs Vulgate to `org`, so this inverts it and applies
+    it only where the spine numbers a book in Vulgate. Where the spine already
+    numbers in `org` an `org` address is already home.
+
+    The index is sparse. Only addresses that actually diverge are rewritten, so
+    applying it to a book with few pairs touches only those few.
+
+    Inverting is not free. The table merges verses and it names the same target
+    from more than one origin, so 157 `org` addresses arrive with two or more
+    declared Vulgate origins. Taking whichever came last is arbitrary and it
+    costs real resolutions: the Song of the Three is declared from both `DAN`
+    and `DAG`, and only `DAN` has a slot on the spine.
+
+    So the rule is first declared wins, unless the first has no slot on the
+    spine and a later one does. That is a choice between origins the table
+    already asserts rather than an invented address, and it recovers 105 of the
+    157. This diverges from the source implementation and the reasoning is in
+    DECISIONS.md.
+    """
+
+    def __init__(self, table: dict[str, object], vulgate: VulgateScheme) -> None:
+        self._vulgate = vulgate
+        mapped = table.get("mappedVerses", {})
+        assert isinstance(mapped, dict)
+        self._inverse: dict[str, str] = {}
+        for origin, target in _pair_up(mapped).items():
+            held = self._inverse.get(target)
+            if held is None or (
+                not SPINE.contains(*_parse(held)) and SPINE.contains(*_parse(origin))
+            ):
+                self._inverse[target] = origin
+
+    def to_spine(self, book: str, chapter: int, verse: int) -> Address:
+        if self._vulgate.mode_for(book) is not Mode.IDENTITY:
+            return book, chapter, verse
+        target = self._inverse.get(f"{book} {chapter}:{verse}")
+        return _parse(target) if target else (book, chapter, verse)
+
+
+class DouayScheme:
+    """Douay-Rheims naming and numbering into the spine.
+
+    Identity in 71 books. Joel and Malachi carry the Vulgate chapter division,
+    which the spine does not, so they shift.
+    """
+
+    @cached_property
+    def _names(self) -> dict[str, str]:
+        raw: dict[str, str] = json.loads(
+            (DATA_DIR / "douay-names.json").read_text(encoding="utf-8")
+        )
+        return raw
+
+    def to_usx(self, douay_name: str) -> str | None:
+        return self._names.get(douay_name)
+
+    def to_spine(self, book: str, chapter: int, verse: int) -> Address:
+        if book == "JOL":
+            if chapter == 2 and verse >= 28:
+                return book, 3, verse - 27
+            if chapter == 3:
+                return book, 4, verse
+        elif book == "MAL" and chapter == 4:
+            return book, 3, 18 + verse
+        return book, chapter, verse
+
+
+def _pair_up(mapped: dict[str, str]) -> dict[str, str]:
+    """Expands the table's ranges into positional single-verse pairs.
+
+    A pair whose two sides expand to different lengths is skipped rather than
+    aligned by guesswork, which is what the source implementation does.
+    """
+    pairs: dict[str, str] = {}
+    for origin, target in mapped.items():
+        left, right = expand(origin), expand(target)
+        if len(left) != len(right) or not left:
+            continue
+        pairs.update(zip(left, right, strict=True))
+    return pairs
+
+
+def _load() -> tuple[VulgateScheme, OrgScheme, DouayScheme]:
+    table: dict[str, object] = json.loads(
+        (DATA_DIR / "vulgate-scheme.json").read_text(encoding="utf-8")
+    )
+    vulgate = VulgateScheme(table)
+    return vulgate, OrgScheme(table, vulgate), DouayScheme()
+
+
+VULGATE, ORG, DOUAY = _load()
