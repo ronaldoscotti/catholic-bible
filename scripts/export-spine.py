@@ -163,6 +163,7 @@ def git(source: Path, *args: str) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", default=os.environ.get("CATHOLIC_BIBLE_SOURCE"))
+    parser.add_argument("--dest", default=None)
     args = parser.parse_args()
 
     if not args.source:
@@ -182,17 +183,18 @@ def main() -> int:
     if dirty:
         parser.error(f"the source files have uncommitted changes:\n{dirty}")
 
-    DEST.mkdir(parents=True, exist_ok=True)
+    dest = Path(args.dest).resolve() if args.dest else DEST
+    dest.mkdir(parents=True, exist_ok=True)
 
     written: dict[str, str] = {}
     for name, relative in VERBATIM.items():
         payload = (source / relative).read_bytes()
-        (DEST / name).write_bytes(payload)
+        (dest / name).write_bytes(payload)
         written[name] = hashlib.sha256(payload).hexdigest()
 
     books = php_canon_to_json((source / CANON_PHP).read_text(encoding="utf-8"))
     canon = (json.dumps(books, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
-    (DEST / "canon.json").write_bytes(canon)
+    (dest / "canon.json").write_bytes(canon)
     written["canon.json"] = hashlib.sha256(canon).hexdigest()
 
     names = php_douay_names_to_json(
@@ -200,7 +202,7 @@ def main() -> int:
         {str(book["code"]) for book in books},
     )
     douay = (json.dumps(names, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
-    (DEST / "douay-names.json").write_bytes(douay)
+    (dest / "douay-names.json").write_bytes(douay)
     written["douay-names.json"] = hashlib.sha256(douay).hexdigest()
 
     latin = php_latin_abbreviations_to_json(
@@ -208,7 +210,7 @@ def main() -> int:
         {str(book["code"]) for book in books},
     )
     payload = (json.dumps(latin, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
-    (DEST / "latin-abbreviations.json").write_bytes(payload)
+    (dest / "latin-abbreviations.json").write_bytes(payload)
     written["latin-abbreviations.json"] = hashlib.sha256(payload).hexdigest()
 
     # The commit date rather than the run date, so re-exporting at the same
@@ -225,7 +227,7 @@ def main() -> int:
             for name, digest in sorted(written.items())
         },
     }
-    (DEST / "PROVENANCE.json").write_text(
+    (dest / "PROVENANCE.json").write_text(
         json.dumps(provenance, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
 

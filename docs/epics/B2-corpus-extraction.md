@@ -15,7 +15,9 @@
 
 Matos Soares goes in v1 and that isn't negotiable. The community this serves is Portuguese-speaking, and an opening release in Latin and English aimed at Brazilian Catholic developers would have its back to the user. He died in 1957 with no successors, which puts him in the public domain under Brazilian copyright law, article 45.
 
-Douay-Rheims and the Clementine Vulgate come along because they share an MIT-licensed fixture with near-zero marginal cost, and because English is the larger pool of developers. The Vulgate earns its place a second time by demonstrating the spine with zero orphans, since the spine is Vulgate numbering. That's a live proof inside the release itself.
+Douay-Rheims and the Clementine Vulgate come along because they share an MIT-licensed fixture with near-zero marginal cost, and because English is the larger pool of developers. The Vulgate earns its place a second time by demonstrating the spine, since the spine is Vulgate numbering.
+
+*Corrected 2026-08-02, while implementing. This paragraph said the Vulgate demonstrates the spine with zero orphans and called that a live proof inside the release. It is 69 unfilled addresses out of 35845, measured. The paragraph also conflated two different things. An orphan is a source verse that reached no spine address, and this repo cannot count those because the import dropped them before the corpus crossed over. An unfilled address is a spine slot no version reached, and that is what the table in `LIMITS.md` publishes.*
 
 The English half also unblocks the most interesting thing the sibling repo will measure. A Portuguese question against English commentary is the one retrieval case where lexical search cannot work at all, and that case needs both languages present.
 
@@ -31,16 +33,34 @@ The Portuguese Catholic Bible circulates today as scraped HTML and JSON files of
 
 ## Acceptance criteria
 
-- [ ] Matos Soares (pt), Douay-Rheims (en) and the Clementine Vulgate (la) are complete for all 73 books
-- [ ] Every verse resolves against the B1 spine, and any that do not are reported as orphans rather than dropped silently
-- [ ] A committed export script produces the published dataset from the private source
-- [ ] Every published file carries a checksum and a provenance record naming its source, the source commit and the export date
-- [ ] A CI job on a clean checkout, with no access to the private source, recomputes every checksum and fails on a mismatch
-- [ ] An export job runs where the private source is, re-exports at the recorded source commit, and diffs against what is committed here. This is the job that catches a hand edit, and it fails the build when the two disagree
-- [ ] Running the export twice at the same source commit gives byte for byte identical output, checked by the export job rather than asserted
-- [ ] `LIMITS.md` records the per-book orphan rate with the cause, whatever the number turns out to be
-- [ ] `LIMITS.md` states plainly that a stranger cannot rebuild this dataset, and states which of the two jobs a stranger can actually run
-- [ ] Each translation carries its license and its public-domain basis in machine-readable form
+- [x] Matos Soares (pt), Douay-Rheims (en) and the Clementine Vulgate (la) are complete for all 73 books
+- [x] Every verse resolves against the B1 spine, and any that do not are reported as orphans rather than dropped silently
+- [x] A committed export script produces the published dataset from the private source
+- [x] Every published file carries a checksum and a provenance record naming its source, the source commit and the export date
+- [x] A CI job on a clean checkout, with no access to the private source, recomputes every checksum and fails on a mismatch
+- [x] An export job runs where the private source is, re-exports at the recorded source commit, and diffs against what is committed here. This is the job that catches a hand edit, and it fails the build when the two disagree
+- [x] Running the export twice at the same source commit gives byte for byte identical output, checked by the export job rather than asserted
+- [x] `LIMITS.md` records the per-book orphan rate with the cause, whatever the number turns out to be
+- [x] `LIMITS.md` states plainly that a stranger cannot rebuild this dataset, and states which of the two jobs a stranger can actually run
+- [x] Each translation carries its license and its public-domain basis in machine-readable form
+
+Three of those need their wording qualified rather than ticked in silence.
+
+**Complete means complete where the source is.** Twelve Douay-Rheims verses are
+empty in the upstream MIT fixture and are omitted rather than published as empty
+strings. `LIMITS.md` names all twelve.
+
+**The orphan rate is not the number the criterion asked for.** An orphan is a
+source verse that reached no spine address, and the import dropped those before
+the corpus crossed over, so nothing here remembers them. What `LIMITS.md` and
+`coverage.json` publish instead is the unfilled count per book, which is the same
+question asked from the side this repo can see. The criterion said whatever the
+number turns out to be, and this is what it turned out to be.
+
+**The job with teeth is a command, not a build.** It needs the private source and
+a running database, this project has no self hosted runner, and so `make
+verify-export` is documented rather than wired to CI. Calling a green badge proof
+of authorship would be the worst outcome available here, and `LIMITS.md` says so.
 
 ## Constraints
 

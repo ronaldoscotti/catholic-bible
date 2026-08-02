@@ -1,0 +1,45 @@
+{
+  "source": {
+    "repository": "meu-feed-catolico-api",
+    "commit": "0494a69e66657a16d822898e71f4eb3b2bc4ae80",
+    "commit_date": "2026-08-02T00:02:18-03:00",
+    "private": true
+  },
+  "fixtures": {
+    "database/data/matos-soares.json.gz": "2297094f1649f2ccb4a612033d57e2994501baf06e14259b44180c00eeafd5d2",
+    "database/data/vulgata-source.json.gz": "d88dda56ea4420cdd668083c2e6091fd51cdd33d0851515a81d66c957467f737"
+  },
+  "files": {
+    "douay-rheims.json": {
+      "sha256": "32600cdd1a65aa65682d3dcab48a8c88d259fa43ca0b841a6f5eec15c673f91b",
+      "verses": 35764,
+      "blank_upstream": [
+        "2SA.13.39",
+        "JDT.4.6",
+        "PSA.19.10",
+        "PSA.28.11",
+        "PSA.150.6",
+        "PRO.28.25",
+        "WIS.18.25",
+        "ISA.46.12",
+        "AMO.9.15",
+        "MAL.3.12",
+        "1TH.4.12",
+        "2TH.2.11"
+      ],
+      "from": "database/data/vulgata-source.json.gz"
+    },
+    "matos-soares.json": {
+      "sha256": "fe4cd631a2cbb26ee2823c90fef49f268f7774e13624b6bdab4218ce7ae7d367",
+      "verses": 35563,
+      "blank_upstream": [],
+      "from": "database/data/matos-soares.json.gz"
+    },
+    "vulgata-clementina.json": {
+      "sha256": "3b2d53325f904fc605803da95a7d10ea50d6c36043660612cefefd1d2795cd6c",
+      "verses": 35776,
+      "blank_upstream": [],
+      "from": "database/data/vulgata-source.json.gz"
+    }
+  }
+}
