@@ -1,0 +1,14 @@
+# Private context never reaches an image.
+CONTEXT.local.md
+*.local.md
+
+.git/
+.github/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+.DS_Store

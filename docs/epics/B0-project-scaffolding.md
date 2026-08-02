@@ -30,15 +30,15 @@ rule.
 
 ## Acceptance criteria
 
-- [ ] `pyproject.toml` declares the project, its dependencies and its entry points
-- [ ] `uv` manages dependencies and the lockfile is committed
-- [ ] The package layout separates canon and spine, storage, and HTTP, with the dependency direction enforceable by inspection
-- [ ] `ruff` runs lint and format with configuration committed
-- [ ] Type checking runs with configuration committed
-- [ ] `pytest` runs, with one real test that fails when the code it covers is broken
-- [ ] `Makefile` exposes at minimum `make test`, `make lint`, `make fmt`, `make run`
-- [ ] `compose.yaml` brings the service up on a clean checkout with no credentials
-- [ ] A CI workflow runs lint, type check and tests on every push and every pull request
+- [x] `pyproject.toml` declares the project, its dependencies and its entry points
+- [x] `uv` manages dependencies and the lockfile is committed
+- [x] The package layout separates canon and spine, storage, and HTTP, with the dependency direction enforceable by inspection
+- [x] `ruff` runs lint and format with configuration committed
+- [x] Type checking runs with configuration committed
+- [x] `pytest` runs, with one real test that fails when the code it covers is broken
+- [x] `Makefile` exposes at minimum `make test`, `make lint`, `make fmt`, `make run`
+- [x] `compose.yaml` brings the service up on a clean checkout with no credentials
+- [x] A CI workflow runs lint, type check and tests on every push and every pull request
 - [ ] CI is green on the first commit that lands this epic
 - [ ] `README.md` has a quickstart that a stranger can follow, and it is the path CI exercises
 
