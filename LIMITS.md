@@ -144,13 +144,31 @@ a reader and never an edit to the text, because a 19th century commentary that
 has been quietly modernised is a worse artifact than one that is dated in the
 open.
 
-**No human sample has been read.** The sample is drawn, seeded and committed at
-`docs/qa/haydock-translation-sample.csv`, 200 entries with an empty verdict
-column, and a test fails the day someone fills it in without updating this
-section. At that size an observed rate near 5% carries a 95% interval of about
-3 points either way. Until then the honest claim is that a pipeline ran and that
-nobody has checked its meaning, and this repository will not describe the corpus
-as reviewed.
+**The sample has been read, by a language model rather than by a person.** The
+author read it first and flagged nothing, then asked for the entry by entry pass
+rather than a second human. So a machine graded a machine, which is weaker than a
+person and is what exists.
+
+| | |
+|---|---|
+| Sample | 200 of 20705, seeded |
+| Entries carrying a defect | 5 |
+| Observed error rate | 2.5% |
+| 95% Wilson interval | 1.1% to 5.7% |
+| Of those five, meaning inverted | 2 |
+
+`docs/qa/haydock-translation-review.md` quotes all five and
+`haydock-translation-verdicts.csv` carries a verdict for every entry in the
+sample. Two of them say the opposite of the English. One changes which authority
+signed the note, from Challoner to Calmet. One turns the words being commented on
+into `et cetera`. One left an English article inside the Portuguese.
+
+**All five pass every mechanical check in the table below.** An inversion has the
+same length, the same markup and the same digits as a faithful rendering, so the
+audit that produced those numbers could not have found any of them.
+
+20505 entries have been read by nobody, and the lower bound of the interval is
+not zero.
 
 **What has been checked is structure, not meaning.** Five mechanical comparisons
 run against the English each entry came from, over the sample and over all

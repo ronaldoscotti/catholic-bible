@@ -16,11 +16,17 @@ language model, not by a person. The prompt required faithful rendering,
 Catholic ecclesiastical terminology and untouched Scripture citations, and it
 asked the model to flag polemic, dated exegesis, pre-modern science and language
 about the Jewish people that the Church has revised since Nostra Aetate. 5.47%
-of records came back flagged and every one of them was published anyway. **No
-human has read a sample and written down an error rate.** The sample is drawn
-and waiting in `docs/qa/haydock-translation-sample.csv`, 200 entries, and the
-day someone fills in the verdict column this paragraph gets a number in it. The
+of records came back flagged and every one of them was published anyway. The
 English is the 1859 transcription and it was not touched.
+
+**200 of the 20705 entries have been read against the English, and 5 carried a
+defect.** That is 2.5%, with a 95% interval of 1.1% to 5.7%, and two of the five
+say the opposite of what the English says. `docs/qa/haydock-translation-review.md`
+names all five and quotes them.
+
+**A language model did that reading, so it is a machine grading a machine.** It
+is weaker than a person and it is what exists. The author read the sample first
+and flagged nothing. 20505 entries have still been read by nobody.
 
 What has been checked is structure. No body is empty, none is identical to the
 English it came from, none is wildly shorter or longer, and in the sample of 200
