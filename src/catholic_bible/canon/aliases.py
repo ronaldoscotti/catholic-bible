@@ -36,6 +36,30 @@ class Language(StrEnum):
     LA = "la"
 
 
+def name_of(code: str, language: Language) -> str:
+    """How a book is named to a reader being served in this language.
+
+    Here rather than in the HTTP layer because the static artifacts need the
+    same answer and a second copy of the dispatch would be a second thing to
+    keep right.
+    """
+    if language is Language.EN:
+        return ENGLISH_DISPLAY[code]
+    if language is Language.LA:
+        return LATIN_NAMES[code]
+    found = CANON.by_code(code)
+    return code if found is None else found.name
+
+
+def abbreviation_of(code: str, language: Language) -> str:
+    if language is Language.EN:
+        return ENGLISH_ABBREVIATIONS[code]
+    if language is Language.LA:
+        return LATIN_ABBREVIATIONS[code]
+    found = CANON.by_code(code)
+    return code if found is None else found.abbreviation
+
+
 class Aliases:
     def __init__(self) -> None:
         self._by_language: dict[Language, dict[str, str]] = {
