@@ -89,10 +89,18 @@ def read(text: str, scheme: InputScheme) -> tuple[Reference, list[int]]:
         )
 
     orders: list[int] = []
+    landed: list[tuple[int, int]] = []
     for start, end in parsed.spans():
         first = _order_of(parsed.book, start, scheme, text)
         last = _order_of(parsed.book, end, scheme, text)
         orders.extend(range(min(first, last), max(first, last) + 1))
+        landed.append((min(first, last), max(first, last)))
+
+    if scheme is not InputScheme.SPINE:
+        # The reference that comes back names where the addresses landed and
+        # never what was typed. Echoing the input beside spine ids publishes a
+        # document that contradicts itself, `Sl 51,1` over `PSA.50.1`.
+        parsed = _on_the_spine(parsed, landed)
 
     unique = sorted(set(orders))
     if unique[-1] - unique[0] > MAX_SPAN:
@@ -103,6 +111,22 @@ def read(text: str, scheme: InputScheme) -> tuple[Reference, list[int]]:
             text,
         )
     return parsed, unique
+
+
+def _on_the_spine(parsed: Reference, landed: list[tuple[int, int]]) -> Reference:
+    spans = []
+    for first, last in landed:
+        start, end = SPINE.at_order(first), SPINE.at_order(last)
+        assert start is not None and end is not None
+        spans.append((((start.chapter, start.verse)), ((end.chapter, end.verse))))
+
+    opening = SPINE.at_order(landed[0][0])
+    assert opening is not None
+    return Reference(
+        opening.book,
+        (spans[0][0], spans[-1][1]),
+        parts=tuple(spans) if parsed.parts is not None else None,
+    )
 
 
 def _explain(parsed: UnparsedReference) -> str:

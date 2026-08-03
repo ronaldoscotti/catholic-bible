@@ -182,3 +182,115 @@ value and an exception is for a genuine fault. A reader typing a book name that
 does not exist is not a fault. It is the most ordinary thing that happens to a
 reference parser, and B3 has to turn it into a structured HTTP error rather than
 a stack trace.
+
+## The API returns its models directly and wraps nothing
+
+Decided 2026-08-02, while specifying B3.
+
+Every route returns its typed model. There is no `data` envelope.
+
+**What lost.** The envelope the ported implementation uses, which is a Laravel
+convention and which every response there carries. Keeping it would have made
+migration a rename rather than a reshape.
+
+It puts one polymorphic generic over the whole published document, and a
+consumer unwraps every response before reading it. FastAPI generates a clean
+schema from a returned model and a wrapper is the one thing that makes it
+unreadable.
+
+**What it costs.** A consumer moving from the private API rewrites its response
+handling. That is one of two breaking differences and the other is below.
+
+## The verse id on the wire is the published string
+
+Decided 2026-08-02, in B3, following the identity split B1 made.
+
+Responses carry `"id": "PSA.50.3"`. The private API carries
+`"verse_id": 30489`.
+
+**What lost.** The integer, which is smaller, which sorts, and which every
+existing consumer of the private API already stores.
+
+It is an artifact of the order a seed ran in. B1 decided it stays internal
+because a published contract that freezes it can never be undone, and the dense
+integer still exists inside this repo where the range arithmetic needs it.
+
+**What it costs.** Every consumer migrating breaks on this field, and it breaks
+loudly rather than quietly, which is the only reason it is acceptable.
+
+## Storage is SQLite even though nothing here searches yet
+
+Decided 2026-08-02, in B3, and argued against in review before it stood.
+
+The API reads a SQLite file built from the published corpus by a committed
+script. The file is derived, reproducible, and not committed.
+
+**What lost.** Reading the published JSON into memory. `corpus.load` already
+exists, is already cached, already guards its argument against a path, and costs
+34.8 MB retained and 52.4 MB peak, measured rather than estimated. It is one
+line and it serves every route in B3.
+
+The reason to pay now is B9. Search needs FTS5, FTS5 needs the store, and
+changing the store under routes that already shipped is the expensive version of
+this decision rather than the cheap one. The seam costs less before there are
+consumers.
+
+**What it costs.** A build script, a Makefile target, two ignore file entries, a
+Dockerfile layer and a CI step, for an epic that does no searching. The review
+called that gold plating and the argument is recorded here rather than won
+quietly. If B9 arrives and FTS5 does not need this shape, that is the entry that
+gets written next.
+
+## Reason codes are a closed set and the message is a courtesy
+
+Decided 2026-08-02, in B3.
+
+Errors go under FastAPI's own `detail` key with a typed body inside. `reason`
+comes from an enum of eleven members, four of them new here and the rest carried
+through from B1 unchanged.
+
+**What lost.** RFC 9457 problem details, which is the broader standard. Adopting
+it means either overriding FastAPI's built in validation error shape or
+publishing two error shapes in one document, and neither is worth the
+conformance.
+
+Also lost, a `message` a caller could branch on. It is prose, it is English, and
+it is free to change. A caller reading it breaks when somebody edits a sentence.
+
+**What it costs.** A consumer that already parses problem details has to special
+case this one API.
+
+## An incoming reference says which numbering it was written in
+
+Decided 2026-08-02, in B3, after a review found the gap.
+
+`passage` and `resolve` take `scheme`, defaulting to `spine`.
+
+**What lost.** Silence, which is what the first draft of the spec had. `Sl 51,1`
+parses, lands on the spine, and returns Psalm 51, which is `org` Psalm 52. A
+reader asking for the Miserere gets the next psalm with a 200 and nothing
+anywhere saying so.
+
+The roadmap opens by naming that exact failure as the reason this repo exists,
+and the spec had spent a section on printing both numbers on the way out and
+nothing on reading them on the way in.
+
+**What it costs.** Four values on a public surface from the first day, and three
+of them go through B1 code carrying a known defect. Two wrong answers are pinned
+by a test and whether more exist in the other 72 books is not measurable here.
+`LIMITS.md` says so.
+
+## A whole chapter reference is refused rather than answered
+
+Decided 2026-08-02, in B3.
+
+`Sl 23` and `Ex 13-14` come back 422 from `passage` and `resolve`, naming the
+shape that was refused and pointing at the chapter route.
+
+**What lost.** Answering them. The parser already reads `Ex 13-14` as chapter 13
+with chapter 14 dropped, so answering would be a 200 returning less than was
+asked for, with nothing to tell the caller. A wrong answer someone trusts is
+worse than an absent one, which is the rule B1 was built on.
+
+**What it costs.** A caller pasting a chapter reference into `passage` gets an
+error where a helpful API would guess. Guessing is what this repo does not do.

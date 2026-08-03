@@ -5,15 +5,16 @@ Portuguese, English and Latin, public domain throughout.
 
 ## Status
 
-Scaffolding, and that is the honest word for it.
+Scripture is here and it is readable over HTTP. Three translations, 107103
+verses, addressed on a versification spine of 35845 slots.
 
-There is no Bible in this repo yet. No canon, no versification spine, no verses,
-no commentary, no dataset. What exists today is a Python project that builds,
-runs in a container, tests, lints and type checks, so the first real epic can be
-written test first instead of test eventually. The only endpoint is `/health`.
+There is no commentary and there are no cross-references yet, no full text
+search, no static artifacts on a CDN, and nothing is deployed. The API is read
+only and it always will be.
 
-`ROADMAP.md` says what is coming and why. `docs/epics/` holds one file per epic
-and `docs/method/` records the process that produced them.
+`ROADMAP.md` says what is coming and why. `docs/epics/` holds one file per epic,
+`docs/method/` records the process that produced them, and `LIMITS.md` says what
+this repo cannot prove.
 
 ## Quickstart
 
@@ -35,10 +36,51 @@ curl http://localhost:8000/health
 {"status":"ok","version":"0.0.0"}
 ```
 
-Interactive docs are at `http://localhost:8000/docs`.
+Then read a verse. Sirach 24:1, in Portuguese, by reference.
+
+```sh
+curl "http://localhost:8000/v1/resolve?ref=Eclo%2024,1"
+```
+
+Or by address, in Latin.
+
+```sh
+curl http://localhost:8000/v1/versions/vulgata-clementina/books/SIR/chapters/24/verses/1
+```
+
+```json
+{"id":"SIR.24.1","book":"SIR","chapter":24,"verse":1,"reference":"Eccli. 24,1","text":"Sapientia laudabit animam suam, et in Deo honorabitur, et in medio populi sui gloriabitur,"}
+```
+
+Interactive docs are at `http://localhost:8000/docs` and the published contract
+is `openapi.json` in this repository.
 
 CI runs those same commands on a clean checkout for every push and every pull
 request, because a quickstart nobody executes rots within a month.
+
+## Reading it
+
+Seven routes, all `GET`, all under `/v1`.
+
+```
+GET /v1/versions
+GET /v1/versions/{version}/books
+GET /v1/versions/{version}/books/{book}
+GET /v1/versions/{version}/books/{book}/chapters/{chapter}
+GET /v1/versions/{version}/books/{book}/chapters/{chapter}/verses/{verse}
+GET /v1/passage?ref=&versions=&scheme=
+GET /v1/resolve?ref=&scheme=
+```
+
+A book is named by its USX code or by any name that resolves, in Portuguese,
+English or Latin. `Jo` is John and `Jó` is Job, and the accent is never folded.
+
+**Say which numbering you wrote a reference in.** `Sl 51,1` means the spine's
+Psalm 51 by default and `?scheme=org` makes it the Miserere, which the spine
+numbers 50. Both answers are correct and only one of them is yours.
+
+Names, abbreviations and notation follow the language of the version being read,
+so the same verse comes back as `Eclo 24,1`, `Ecclus. 24:1` and `Eccli. 24,1`.
 
 ## Development
 
@@ -61,7 +103,7 @@ of letting a second path drift beside it.
 ```
 src/catholic_bible/
   canon/     the 73 books and the versification spine
-  storage/   SQLite, with FTS5 for lexical search
+  storage/   SQLite on local disk, built from the published corpus
   api/       FastAPI
 ```
 

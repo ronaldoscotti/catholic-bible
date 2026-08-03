@@ -194,3 +194,44 @@ def test_an_unknown_version_in_a_passage_is_a_404(client: TestClient) -> None:
 def test_a_passage_crosses_a_book_boundary(client: TestClient) -> None:
     found = client.get("/v1/passage", params={"ref": "Ml 3,23-24"}).json()
     assert [verse["id"] for verse in found["verses"]] == ["MAL.3.23", "MAL.3.24"]
+
+
+def test_the_reference_names_where_the_addresses_landed(client: TestClient) -> None:
+    """Not what was typed. Echoing the input contradicts the ids beside it.
+
+    `Sl 51,1` under `org` resolves to `PSA.50.1`, and answering with the input
+    reference publishes a document where the prose says 51 and the id says 50.
+    """
+    org = client.get("/v1/resolve", params={"ref": "Sl 51,1", "scheme": "org"}).json()
+    assert org == {
+        "reference": "Sl 50,1",
+        "book": "PSA",
+        "ids": ["PSA.50.1"],
+        "preview": org["preview"],
+    }
+
+    douay = client.get(
+        "/v1/resolve", params={"ref": "Ml 4,1", "scheme": "douay"}
+    ).json()
+    assert douay["reference"] == "Ml 3,19"
+    assert douay["ids"] == ["MAL.3.19"]
+
+
+def test_a_scheme_only_book_comes_back_named_on_the_spine(
+    client: TestClient,
+) -> None:
+    """`SUS` is Susanna in `org` and the spine calls that Daniel 13."""
+    found = client.get("/v1/resolve", params={"ref": "SUS 1,1", "scheme": "org"}).json()
+    assert found["book"] == "DAN"
+    assert found["reference"] == "Dn 13,1"
+    assert found["ids"] == ["DAN.13.1"]
+
+
+def test_a_disjoint_reference_keeps_its_parts_after_remapping(
+    client: TestClient,
+) -> None:
+    found = client.get(
+        "/v1/passage", params={"ref": "Sl 10,1.11,1", "scheme": "org"}
+    ).json()
+    assert found["reference"] == "Sl 9,22.10,1"
+    assert [verse["id"] for verse in found["verses"]] == ["PSA.9.22", "PSA.10.1"]
