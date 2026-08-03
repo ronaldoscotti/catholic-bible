@@ -145,6 +145,7 @@ def texts_at(
         return {}
 
     version_marks = ",".join("?" * len(codes))
+    wanted = set(orders)
     return {
         (str(row["version"]), int(row["canonical_order"])): str(row["text"])
         for row in connection.execute(
@@ -153,7 +154,7 @@ def texts_at(
             f"AND canonical_order BETWEEN ? AND ?",
             (*codes, min(orders), max(orders)),
         )
-        if int(row["canonical_order"]) in set(orders)
+        if int(row["canonical_order"]) in wanted
     }
 
 
@@ -161,7 +162,21 @@ def address(connection: sqlite3.Connection, verse_id: str) -> Row | None:
     return _one(connection.execute("SELECT * FROM spine WHERE id = ?", (verse_id,)))
 
 
-def at_order(connection: sqlite3.Connection, order: int) -> Row | None:
-    return _one(
-        connection.execute("SELECT * FROM spine WHERE canonical_order = ?", (order,))
-    )
+def addresses_between(
+    connection: sqlite3.Connection, first: int, last: int
+) -> dict[int, Row]:
+    """Every spine address in a range, keyed by order.
+
+    One query. Asking per address is up to 501 round trips for a passage at the
+    cap, and the range is contiguous by construction.
+    """
+    return {
+        int(row["canonical_order"]): row
+        for row in _all(
+            connection.execute(
+                "SELECT * FROM spine WHERE canonical_order BETWEEN ? AND ? "
+                "ORDER BY canonical_order",
+                (first, last),
+            )
+        )
+    }

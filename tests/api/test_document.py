@@ -122,3 +122,57 @@ def test_the_health_route_stays_outside_the_versioned_surface(
     """It is operational and it is not part of the contract a consumer pins."""
     assert client.get("/health").status_code == 200
     assert client.get("/v1/health").status_code == 404
+
+
+def test_the_document_publishes_one_error_shape_and_only_one() -> None:
+    """FastAPI's own validation error is a list under the same key.
+
+    Declaring `responses={422: ErrorResponse}` replaces the entry in the
+    document and not the behaviour, so the document promised an object while
+    the runtime answered a list. A generated client breaks on the first
+    malformed request and neither gate can see it, because both compare the
+    document to the decorators.
+    """
+    published = DOCUMENT.read_text(encoding="utf-8")
+    assert "HTTPValidationError" not in published
+
+    schemas = json.loads(published)["components"]["schemas"]
+    assert not [name for name in schemas if "Validation" in name]
+
+
+@pytest.mark.parametrize(
+    ("url", "why"),
+    [
+        ("/v1/resolve", "a required query parameter is missing"),
+        ("/v1/resolve?ref=Jo 3,16&scheme=bogus", "an enum value is not one of them"),
+        ("/v1/versions/matos-soares/books/JHN/chapters/x", "a path integer is not one"),
+    ],
+)
+def test_a_validation_failure_answers_in_the_published_shape(
+    url: str, why: str, client: TestClient
+) -> None:
+    found = client.get(url)
+    assert found.status_code == 422, why
+    detail = found.json()["detail"]
+    assert isinstance(detail, dict), why
+    assert detail["reason"] == "malformed", why
+    assert detail["message"], why
+
+
+def test_health_fails_when_the_store_is_unreadable(tmp_path: Path) -> None:
+    """Answering on the process alone reports healthy while every route 500s.
+
+    `docker compose up --wait` then succeeds on a service that cannot serve a
+    verse, which is the one thing the quickstart claims.
+    """
+    from catholic_bible.storage import database  # noqa: PLC0415
+
+    original = database.DB_PATH
+    database.DB_PATH = tmp_path / "absent.db"
+    try:
+        found = TestClient(app, raise_server_exceptions=False).get("/health")
+    finally:
+        database.DB_PATH = original
+
+    assert found.status_code == 503
+    assert found.json()["detail"]["reason"] == "store_unavailable"

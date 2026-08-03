@@ -170,11 +170,14 @@ def versions_named(
     The original defaults to an empty list and answers with empty columns, which
     is a silent empty response on a public contract.
     """
-    if not written:
+    named = [part.strip() for part in (written or "").split(",") if part.strip()]
+    if not named:
+        # Guarding the raw string instead lets `,,` and a lone space through as
+        # an empty list, and the caller then indexes it.
         return [reader.default_version(connection)]
 
     found = []
-    for code in [part.strip() for part in written.split(",") if part.strip()]:
+    for code in named:
         row = reader.version(connection, code)
         if row is None:
             raise errors.not_found(

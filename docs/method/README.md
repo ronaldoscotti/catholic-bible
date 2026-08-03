@@ -37,9 +37,9 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
 [x] 3  Spec             docs/specs/, B1 B2 B3
 [x] 4  Plan             docs/plans/, B1 B2 B3
-[x] 5  Implement        B0 B1 B2 merged. B3 on a branch, 442 tests
+[x] 5  Implement        B0 B1 B2 merged. B3 on a branch, 449 tests
 [x] 6  QA               docs/qa/, B0 B1 B2 B3
-[ ] 7  Code review      docs/reviews/, B0 B1 B2. B3 has none
+[x] 7  Code review      docs/reviews/, B0 B1 B2 B3, one author
 [x] 8  PR               B0 B1 B2 merged. B3 open as #23
 ```
 
@@ -47,10 +47,10 @@ The checklist advances when the artifact exists and not before. Four epics have
 run. B0 builds the project, B1 builds the addresses, B2 publishes Scripture and
 B3 serves it.
 
-Stage 7 is unchecked because B3 has no review notes. Three epics have them and
-the fourth does not, and a box ticked on three out of four is a box that reads
-as four. Stage 8 is ticked because the pull request exists, which is the whole
-of what that stage deposits.
+Stage 7 ran on B3 after the pull request opened rather than before, which is the
+wrong order and is recorded rather than tidied. It found ten things, nine of them
+real, and the first broke an acceptance criterion the walk had already marked
+met. The walk carries the correction.
 
 The two gates on B1 were not met the same way and the difference is recorded
 rather than averaged.

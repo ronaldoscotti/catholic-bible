@@ -1,11 +1,7 @@
 """What the routes return.
 
-No envelope. Every route returns its model directly, which is what generates a
-clean document and what a typed consumer reads without unwrapping.
-
-The verse id is the published string and never the internal integer. The integer
-is an artifact of the order a seed ran in and a public contract that freezes one
-cannot be undone.
+No envelope, and the verse id on the wire is the published string. Both are in
+DECISIONS.md with what lost.
 """
 
 from __future__ import annotations
@@ -118,5 +114,9 @@ class ResolvedOut(BaseModel):
     book: str
     ids: list[str] = Field(examples=[["1CO.13.4", "1CO.13.5"]])
     preview: str | None = Field(
-        description="The first verse of the span, in the default version"
+        description=(
+            "The first verse of the span the default version publishes. Where "
+            "that version has a gap it is a later verse, and the ids say which "
+            "addresses the span covers."
+        )
     )

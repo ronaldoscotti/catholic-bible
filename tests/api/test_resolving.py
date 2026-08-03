@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
+from catholic_bible.api.routes import CATALOGUE, IMMUTABLE
+
 
 def test_a_single_verse_resolves(client: TestClient) -> None:
     found = client.get("/v1/resolve", params={"ref": "Jo 3,16"}).json()
@@ -235,3 +237,39 @@ def test_a_disjoint_reference_keeps_its_parts_after_remapping(
     ).json()
     assert found["reference"] == "Sl 9,22.10,1"
     assert [verse["id"] for verse in found["verses"]] == ["PSA.9.22", "PSA.10.1"]
+
+
+def test_a_versions_parameter_of_separators_falls_back_rather_than_crashing(
+    client: TestClient,
+) -> None:
+    """`versions=,,` used to be a 500 with a traceback.
+
+    Guarding the raw string let it through as an empty list and the handler
+    indexed it. Criterion 9 says never a stack trace, and a 500 is one.
+    """
+    for written in (",,", ",", " ", "", " , , "):
+        found = client.get(
+            "/v1/passage", params={"ref": "Jo 3,16", "versions": written}
+        )
+        assert found.status_code == 200, repr(written)
+        assert found.json()["versions"] == ["matos-soares"], repr(written)
+
+
+def test_an_answer_that_depends_on_the_default_version_is_not_immutable(
+    client: TestClient,
+) -> None:
+    """The default is not in the URL, so a year of it is a year nobody can fix."""
+    assert (
+        client.get("/v1/resolve", params={"ref": "Jo 3,16"}).headers["cache-control"]
+        == CATALOGUE
+    )
+    assert (
+        client.get("/v1/passage", params={"ref": "Jo 3,16"}).headers["cache-control"]
+        == CATALOGUE
+    )
+    assert (
+        client.get(
+            "/v1/passage", params={"ref": "Jo 3,16", "versions": "douay-rheims"}
+        ).headers["cache-control"]
+        == IMMUTABLE
+    )

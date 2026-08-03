@@ -33,8 +33,9 @@ from catholic_bible.storage.database import connect
 # version, which is the release policy, so a reader may cache it forever.
 IMMUTABLE = "public, max-age=31536000, immutable"
 
-# Not the version list. It grows with every translation and every epic that adds
-# one, and a client that cached it for a year never sees the fourth.
+# Not the version list, and not an answer that depends on which version is the
+# default. Both move without the URL moving, and a year of immutable is a year
+# nothing can invalidate.
 CATALOGUE = "public, max-age=3600"
 
 router = APIRouter(prefix="/v1")
@@ -164,7 +165,7 @@ def list_versions(connection: Database, response: Response) -> list[models.Versi
     "/versions/{version}/books",
     summary="The books one translation reaches",
     response_model=list[models.BookOut],
-    responses=errors.NOT_FOUND,
+    responses={**errors.NOT_FOUND, **errors.UNPROCESSABLE},
 )
 def list_books(
     version: str, connection: Database, response: Response
@@ -179,7 +180,7 @@ def list_books(
     "/versions/{version}/books/{book}",
     summary="A whole book, grouped by chapter",
     response_model=models.BookWhole,
-    responses=errors.NOT_FOUND,
+    responses={**errors.NOT_FOUND, **errors.UNPROCESSABLE},
 )
 def read_book(
     version: str, book: str, connection: Database, response: Response
@@ -192,6 +193,13 @@ def read_book(
     verses = reader.verses_between(
         connection, version, int(row["first_order"]), int(row["last_order"])
     )
+    if not verses:
+        raise errors.not_found(
+            errors.Reason.UNPUBLISHED_IN_VERSION,
+            f"{version} does not publish {code}",
+            code,
+        )
+
     grouped: dict[int, list[models.VerseOut]] = {}
     for verse in verses:
         grouped.setdefault(int(verse["chapter"]), []).append(
@@ -215,7 +223,7 @@ def read_book(
     "/versions/{version}/books/{book}/chapters/{chapter}",
     summary="One chapter, with its neighbours",
     response_model=models.ChapterOut,
-    responses=errors.NOT_FOUND,
+    responses={**errors.NOT_FOUND, **errors.UNPROCESSABLE},
 )
 def read_chapter(
     version: str, book: str, chapter: int, connection: Database, response: Response
@@ -260,7 +268,7 @@ def _neighbour_out(row: reader.Row | None) -> models.Neighbour | None:
     "/versions/{version}/books/{book}/chapters/{chapter}/verses/{verse}",
     summary="One verse",
     response_model=models.VerseOut,
-    responses=errors.NOT_FOUND,
+    responses={**errors.NOT_FOUND, **errors.UNPROCESSABLE},
 )
 def read_verse(
     version: str,
@@ -319,17 +327,15 @@ def resolve(
     wanted = set(orders)
     covered = [row for row in members if int(row["canonical_order"]) in wanted]
 
-    ids = []
-    for order in orders:
-        found = reader.at_order(connection, order)
-        if found is not None:
-            ids.append(str(found["id"]))
+    addresses = reader.addresses_between(connection, orders[0], orders[-1])
 
-    response.headers["Cache-Control"] = IMMUTABLE
+    # Not immutable. The preview and the notation both come from whichever
+    # version is the default, and that is not in the URL.
+    response.headers["Cache-Control"] = CATALOGUE
     return models.ResolvedOut(
         reference=format_reference(reference, language),
         book=reference.book,
-        ids=ids,
+        ids=[str(addresses[order]["id"]) for order in orders if order in addresses],
         preview=str(covered[0]["text"]) if covered else None,
     )
 
@@ -353,10 +359,11 @@ def passage(
     language = reader.language_of(str(wanted[0]["language"]))
 
     held = reader.texts_at(connection, codes, orders)
+    addresses = reader.addresses_between(connection, orders[0], orders[-1])
 
     verses = []
     for order in orders:
-        address = reader.at_order(connection, order)
+        address = addresses.get(order)
         if address is None:
             continue
         book = str(address["book"])
@@ -379,7 +386,9 @@ def passage(
             )
         )
 
-    response.headers["Cache-Control"] = IMMUTABLE
+    # Immutable only when the caller named the versions. Left to the default,
+    # the answer moves when the default does and the URL says nothing.
+    response.headers["Cache-Control"] = IMMUTABLE if versions else CATALOGUE
     return models.PassageOut(
         reference=format_reference(reference, language),
         book=reference.book,

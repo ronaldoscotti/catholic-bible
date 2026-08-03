@@ -1,12 +1,8 @@
 """The one error shape the whole document uses.
 
-FastAPI emits `{"detail": …}` for its own validation failures and there is no way
-to suppress that without fighting the framework, so errors go under that key with
-a typed body inside rather than a sentence.
-
-RFC 9457 problem details lost. It is the broader standard and adopting it would
-mean either overriding FastAPI's built in validation shape or publishing two
-error shapes in one document.
+Errors go under FastAPI's own `detail` key with a typed body inside. Validation
+failures are reshaped into the same body, so the document has one error type and
+a generated client has one to handle. See DECISIONS.md for what lost.
 """
 
 from __future__ import annotations
@@ -15,6 +11,7 @@ from enum import StrEnum
 from typing import Any
 
 from fastapi import Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
@@ -40,6 +37,7 @@ class Reason(StrEnum):
     MALFORMED = "malformed"
     WHOLE_CHAPTER = "whole_chapter"
     RANGE_TOO_LARGE = "range_too_large"
+    STORE_UNAVAILABLE = "store_unavailable"
 
     NO_COUNTERPART = "no_counterpart"
     CHAPTER_OUT_OF_RANGE = "chapter_out_of_range"
@@ -88,6 +86,25 @@ async def handle(request: Request, error: Exception) -> JSONResponse:
         status_code=error.status,
         content={"detail": error.problem.model_dump()},
     )
+
+
+async def handle_validation(request: Request, error: Exception) -> JSONResponse:
+    """FastAPI's own 422, reshaped into the one error shape this API publishes.
+
+    Left alone it answers with a list under `detail` while every route documents
+    an object, so a generated client breaks on the first malformed request and
+    the document gate cannot see it, because both directions only compare the
+    document to the decorators.
+    """
+    assert isinstance(error, RequestValidationError)
+    first = error.errors()[0]
+    where = ".".join(str(part) for part in first["loc"][1:]) or "the request"
+    problem = Problem(
+        reason=Reason.MALFORMED,
+        message=f"{where} is not acceptable. {first['msg']}",
+        input=None if first.get("input") is None else str(first["input"]),
+    )
+    return JSONResponse(status_code=422, content={"detail": problem.model_dump()})
 
 
 Responses = dict[int | str, dict[str, Any]]

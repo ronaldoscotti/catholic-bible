@@ -1,10 +1,8 @@
 """Opening the read database.
 
 One read only connection per request. `sqlite3` connections are not thread safe
-and uvicorn runs sync handlers in a threadpool, so a module level connection
-passes every serial test and fails under concurrency. A pool is the other answer
-and it is not earned yet, because opening read only against a warm page cache is
-microseconds and nothing here has users.
+and uvicorn runs sync handlers in a threadpool, so a module level one passes
+every serial test and fails under load. A pool is not earned yet.
 """
 
 from __future__ import annotations

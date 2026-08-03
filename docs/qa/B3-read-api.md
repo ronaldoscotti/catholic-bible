@@ -99,9 +99,19 @@ $ docker compose exec -T api python -c "…connect().execute('DELETE FROM texts'
 OperationalError attempt to write a readonly database
 ```
 
-**9. An unresolvable reference returns a structured error explaining why.** Met.
-Eleven reason codes in a closed set, four new here and seven carried through
-from B1 unchanged, with a test asserting the two sets stay in step.
+**9. An unresolvable reference returns a structured error explaining why.** Met
+now, and it was not met when this walk was first written. Twelve reason codes in
+a closed set, five new here and seven carried through from B1 unchanged, with a
+test asserting the two sets stay in step.
+
+**This walk said met and was wrong.** The review tool found
+`?versions=,,` answering `500 Internal Server Error`, which is the stack trace
+the criterion forbids, on a shape I had not tried. Fixed, and five separator
+shapes are pinned. The same pass found the published 422 schema promising an
+object while FastAPI's own validation failure answered a list, so a generated
+client broke on the first malformed request. Both gates were blind to it because
+both compare the document to the decorators and neither sends a request. Three
+parameterized cases now send real malformed requests and read the shape back.
 
 ```
 $ curl -sS "http://localhost:8000/v1/resolve?ref=Habakuk%203,2"
@@ -177,8 +187,10 @@ table, and the three invariants were proved to bite by mutating `Ecclus.` into
 
 ## What is not covered
 
-No load test and no latency number. The store was chosen with one side of the
-comparison measured and the other not, and `LIMITS.md` says so.
+No load test. There is now one latency number, 5 ms for a 500 verse three
+version passage on a laptop, down from 21 ms once the per address point queries
+became one range query. One number on one machine is not a load test and
+`LIMITS.md` says which is which.
 
 Nothing is deployed. B6 is where a public URL exists.
 

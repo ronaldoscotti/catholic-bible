@@ -121,8 +121,6 @@ Deutsche Bibelgesellschaft holds, and 879 derived from the Ave Maria apparatus.
 
 No per book files and no CDN. That is B5.
 
-No API over any of this. That is B3.
-
 ## What the read API cannot prove, added in B3
 
 ### 219 authored strings were checked for consistency and not for tradition
@@ -171,10 +169,13 @@ The psalm counterpart the API publishes comes from the ported table and not from
 ported table covers the Psalter and nowhere else. Joel and Malachi are numbered
 differently between traditions too, and this API says nothing about that.
 
-### Nothing here measures how fast it is
+### One latency number is not a load test
 
-The store was chosen over reading JSON with one side of the comparison measured
-and the other not. 34.8 MB retained is the cost of the alternative. The SQLite
-side opens a connection per request and holds a page cache per connection, and
-that number does not exist. No route has been load tested and nothing is
-deployed.
+A 500 verse passage across three versions answers in 5 ms on a laptop, measured
+after the per address point queries became one range query and down from 21 ms
+before it. That is one number, on one machine, with one request at a time.
+
+Nothing here has been load tested, no route has been measured under concurrency,
+and nothing is deployed. The memory side of the store decision is also half
+measured. 34.8 MB retained is the cost of the alternative that lost, and the
+resident cost of a connection per request with a page cache each does not exist.

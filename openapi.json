@@ -253,19 +253,6 @@
         "title": "ErrorResponse",
         "type": "object"
       },
-      "HTTPValidationError": {
-        "properties": {
-          "detail": {
-            "items": {
-              "$ref": "#/components/schemas/ValidationError"
-            },
-            "title": "Detail",
-            "type": "array"
-          }
-        },
-        "title": "HTTPValidationError",
-        "type": "object"
-      },
       "Health": {
         "properties": {
           "status": {
@@ -410,6 +397,7 @@
           "malformed",
           "whole_chapter",
           "range_too_large",
+          "store_unavailable",
           "no_counterpart",
           "chapter_out_of_range",
           "verse_out_of_range",
@@ -446,7 +434,7 @@
                 "type": "null"
               }
             ],
-            "description": "The first verse of the span, in the default version",
+            "description": "The first verse of the span the default version publishes. Where that version has a gap it is a later verse, and the ids say which addresses the span covers.",
             "title": "Preview"
           },
           "reference": {
@@ -502,46 +490,6 @@
         ],
         "title": "Scheme",
         "type": "string"
-      },
-      "ValidationError": {
-        "properties": {
-          "ctx": {
-            "title": "Context",
-            "type": "object"
-          },
-          "input": {
-            "title": "Input"
-          },
-          "loc": {
-            "items": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
-            "title": "Location",
-            "type": "array"
-          },
-          "msg": {
-            "title": "Message",
-            "type": "string"
-          },
-          "type": {
-            "title": "Error Type",
-            "type": "string"
-          }
-        },
-        "required": [
-          "loc",
-          "msg",
-          "type"
-        ],
-        "title": "ValidationError",
-        "type": "object"
       },
       "VerseOut": {
         "properties": {
@@ -673,6 +621,7 @@
   "paths": {
     "/health": {
       "get": {
+        "description": "Reads the store rather than only proving the process is alive.\n\nAnswering on the process alone reports healthy while every `/v1` route\nfails, which is what a missing database does, and `docker compose up\n--wait` then succeeds on a service that cannot serve a verse.",
         "operationId": "health_health_get",
         "responses": {
           "200": {
@@ -684,9 +633,19 @@
               }
             },
             "description": "Successful Response"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The store is unreadable"
           }
         },
-        "summary": "Whether the service is up"
+        "summary": "Whether the service can answer"
       }
     },
     "/v1/passage": {
@@ -876,11 +835,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             },
-            "description": "Validation Error"
+            "description": "The reference cannot be resolved"
           }
         },
         "summary": "The books one translation reaches"
@@ -934,11 +893,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             },
-            "description": "Validation Error"
+            "description": "The reference cannot be resolved"
           }
         },
         "summary": "A whole book, grouped by chapter"
@@ -1001,11 +960,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             },
-            "description": "Validation Error"
+            "description": "The reference cannot be resolved"
           }
         },
         "summary": "One chapter, with its neighbours"
@@ -1077,11 +1036,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             },
-            "description": "Validation Error"
+            "description": "The reference cannot be resolved"
           }
         },
         "summary": "One verse"
