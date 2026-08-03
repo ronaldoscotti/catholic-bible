@@ -457,6 +457,177 @@
         "title": "CommentarySource",
         "type": "object"
       },
+      "CrossReference": {
+        "properties": {
+          "end": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The last verse of the target range, where the target is one",
+            "title": "End"
+          },
+          "id": {
+            "description": "The address it hangs on",
+            "examples": [
+              "GEN.1.1"
+            ],
+            "title": "Id",
+            "type": "string"
+          },
+          "primary": {
+            "description": "A curated Catholic reference or a strong consensus, rather than the weak tail. The weight it derives from is not published, because it is a vote count for one source and a constant for the others.",
+            "title": "Primary",
+            "type": "boolean"
+          },
+          "reference": {
+            "examples": [
+              "Jo 1,1"
+            ],
+            "title": "Reference",
+            "type": "string"
+          },
+          "source": {
+            "examples": [
+              "douay"
+            ],
+            "title": "Source",
+            "type": "string"
+          },
+          "to": {
+            "examples": [
+              "JHN.1.1"
+            ],
+            "title": "To",
+            "type": "string"
+          },
+          "whole_chapter": {
+            "title": "Whole Chapter",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "to",
+          "end",
+          "reference",
+          "whole_chapter",
+          "primary",
+          "source"
+        ],
+        "title": "CrossReference",
+        "type": "object"
+      },
+      "CrossReferenceSource": {
+        "properties": {
+          "attribution": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Where a licence requires it, this is the notice that satisfies it",
+            "title": "Attribution"
+          },
+          "code": {
+            "examples": [
+              "openbible"
+            ],
+            "title": "Code",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "rights": {
+            "examples": [
+              "CC BY 4.0"
+            ],
+            "title": "Rights",
+            "type": "string"
+          },
+          "rights_basis": {
+            "title": "Rights Basis",
+            "type": "string"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "rights",
+          "rights_basis",
+          "attribution",
+          "url"
+        ],
+        "title": "CrossReferenceSource",
+        "type": "object"
+      },
+      "CrossReferencesOut": {
+        "properties": {
+          "ids": {
+            "examples": [
+              [
+                "GEN.1.1"
+              ]
+            ],
+            "items": {
+              "type": "string"
+            },
+            "title": "Ids",
+            "type": "array"
+          },
+          "reference": {
+            "examples": [
+              "Gn 1,1"
+            ],
+            "title": "Reference",
+            "type": "string"
+          },
+          "references": {
+            "description": "At most 30 per address, highest weight first",
+            "items": {
+              "$ref": "#/components/schemas/CrossReference"
+            },
+            "title": "References",
+            "type": "array"
+          },
+          "sources": {
+            "description": "Only the sources this answer drew on, with their attribution",
+            "items": {
+              "$ref": "#/components/schemas/CrossReferenceSource"
+            },
+            "title": "Sources",
+            "type": "array"
+          }
+        },
+        "required": [
+          "reference",
+          "ids",
+          "sources",
+          "references"
+        ],
+        "title": "CrossReferencesOut",
+        "type": "object"
+      },
       "ErrorResponse": {
         "properties": {
           "detail": {
@@ -936,6 +1107,77 @@
         "summary": "Commentary on one verse"
       }
     },
+    "/v1/books/{book}/chapters/{chapter}/verses/{verse}/cross-references": {
+      "get": {
+        "operationId": "read_cross_references_v1_books__book__chapters__chapter__verses__verse__cross_references_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "book",
+            "required": true,
+            "schema": {
+              "title": "Book",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "chapter",
+            "required": true,
+            "schema": {
+              "maximum": 9223372036854775807,
+              "minimum": -9223372036854775808,
+              "title": "Chapter",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "verse",
+            "required": true,
+            "schema": {
+              "maximum": 9223372036854775807,
+              "minimum": -9223372036854775808,
+              "title": "Verse",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CrossReferencesOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "No such resource"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The reference cannot be resolved"
+          }
+        },
+        "summary": "The passages one verse points at"
+      }
+    },
     "/v1/commentary": {
       "get": {
         "operationId": "commentary_for_v1_commentary_get",
@@ -982,6 +1224,54 @@
           }
         },
         "summary": "Commentary on a written reference"
+      }
+    },
+    "/v1/cross-references": {
+      "get": {
+        "operationId": "cross_references_for_v1_cross_references_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ref",
+            "required": true,
+            "schema": {
+              "title": "Ref",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scheme",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/InputScheme",
+              "default": "spine"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CrossReferencesOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The reference cannot be resolved"
+          }
+        },
+        "summary": "The passages a written reference points at"
       }
     },
     "/v1/passage": {

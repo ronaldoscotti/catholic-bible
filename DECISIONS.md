@@ -430,3 +430,60 @@ state this was found in, by measuring rather than by a complaint.
 **What it costs.** A second of build time and a `sqlite_stat1` table in a file
 that is derived anyway. The corpus is static, so the statistics are computed once
 and cannot go stale.
+
+## The allusion set ships and the Ave Maria apparatus does not
+
+Decided 2026-08-03, in B4, by the author.
+
+The 292 pairs of New Testament to deuterocanonical addresses are published. The
+879 entries scraped from the Ave Maria margins are not.
+
+**What lost.** Refusing both, which is what the epic's criterion says literally
+and what the first reading of it recommended. The measured cost of refusing the
+allusion set was cutting deuterocanonical linkage from 920 rows to 255, a 61%
+loss, in an epic whose stated problem is that the deuterocanonical books are the
+ones nothing connects.
+
+The distinction that decided it: the allusion set reproduces no text, no note
+and no editorial prose, so what would be copied is a list of address pairs. A
+bare pair of Scripture references is a fact about Scripture. The Ave Maria set
+is the editorial selection of a protected 1957 edition whose text this
+repository already refuses, and it contributes one deuterocanonical link.
+
+**What it costs.** A rights position taken on a reading rather than on advice.
+`LIMITS.md` says so in those words and names the cost of being wrong, which is
+673 rows and a rebuild.
+
+## The read cuts at thirty per address and the weight stays off the wire
+
+Decided 2026-08-03, in B4.
+
+`primary` is published, true at weight 20 or above. The weight itself is not.
+
+**What lost.** Publishing the weight, which is the more transparent option and
+also the more misleading one. It is a vote count for OpenBible, a constant of
+100 for the Douay margins and a constant of 90 for the allusion set, so the three
+are not comparable and a consumer sorting by it across sources would be doing
+arithmetic on three different units.
+
+**What it costs.** A consumer cannot rank inside a source. Both numbers are
+ported rather than derived and `LIMITS.md` says so instead of dressing them as
+analysis.
+
+## Scattered addresses are fetched one by one and contiguous ones as a range
+
+Decided 2026-08-03, in B4, after measuring.
+
+`addresses_at` joins `addresses_between` rather than replacing it.
+
+A cross-reference target set runs from Genesis to Revelation, so the range that
+covers it is the whole spine. Reading Genesis 1:1 as a range cost 35845 rows to
+answer 30 and took 35 ms over HTTP, against 2.8 ms once the addresses were asked
+for individually.
+
+**What lost.** One function for both, which is tidier and wrong. A passage is
+contiguous by construction and a reference target set is not, so the shape of
+the read follows the shape of the data rather than the shape of the code.
+
+**What it costs.** A bind parameter list, chunked at 900, because a passage at
+the 500 verse cap can want fifteen thousand of them.

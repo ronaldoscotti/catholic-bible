@@ -17,7 +17,7 @@ import re
 import sqlite3
 from collections.abc import Mapping
 
-from catholic_bible import commentary
+from catholic_bible import commentary, cross_references
 from catholic_bible.canon.books import CANON
 from catholic_bible.canon.spine import SPINE
 from catholic_bible.canon.verse import VerseId
@@ -127,6 +127,28 @@ CREATE TABLE commentary_body (
     text TEXT NOT NULL,
     PRIMARY KEY (commentary, language)
 ) WITHOUT ROWID;
+
+CREATE TABLE cross_reference_sources (
+    code TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    rights TEXT NOT NULL,
+    rights_basis TEXT NOT NULL,
+    attribution TEXT,
+    url TEXT
+) WITHOUT ROWID;
+
+-- The second layer on the same anchor, and the reason B4 exists. Reading the
+-- references on a passage is a range scan on the primary key, which is why the
+-- anchor leads it.
+CREATE TABLE cross_references (
+    from_order INTEGER NOT NULL REFERENCES spine(canonical_order),
+    to_order INTEGER NOT NULL REFERENCES spine(canonical_order),
+    to_end INTEGER,
+    whole_chapter INTEGER NOT NULL,
+    weight INTEGER NOT NULL,
+    source TEXT NOT NULL REFERENCES cross_reference_sources(code),
+    PRIMARY KEY (from_order, to_order)
+) WITHOUT ROWID;
 """
 
 
@@ -141,6 +163,7 @@ def build(connection: sqlite3.Connection) -> None:
         build_texts(connection, code, published.verses)
     for position, code in enumerate(commentary.SOURCES):
         build_commentary(connection, commentary.load(code), position)
+    build_cross_references(connection, cross_references.load())
 
     # Without statistics the planner guesses, and it guessed that scanning all
     # 41410 commentary bodies was cheaper than driving the join off the coverage
@@ -314,3 +337,53 @@ def build_commentary(
     )
     connection.executemany("INSERT INTO commentary VALUES (?, ?, ?, ?, ?, ?)", entries)
     connection.executemany("INSERT INTO commentary_body VALUES (?, ?, ?, ?)", bodies)
+
+
+def build_cross_references(
+    connection: sqlite3.Connection, apparatus: cross_references.Apparatus
+) -> None:
+    """The apparatus, with both ends checked against the spine.
+
+    Same rule as the corpus and the commentary. A reference whose anchor or
+    target drifted by one points a reader at a neighbouring verse, which reads
+    as a curated connection and is not one.
+    """
+    connection.executemany(
+        "INSERT INTO cross_reference_sources (code, name, rights, rights_basis,"
+        " attribution, url) VALUES (?, ?, ?, ?, ?, ?)",
+        [
+            (
+                code,
+                info["name"],
+                info["rights"],
+                info["rights_basis"],
+                info.get("attribution"),
+                info.get("url"),
+            )
+            for code, info in sorted(apparatus.sources.items())
+        ],
+    )
+
+    rows = []
+    for reference in apparatus.references:
+        anchor = SPINE.order_of(reference.anchor)
+        target = SPINE.order_of(reference.target)
+        if anchor is None or target is None:
+            raise ValueError(
+                f"{reference.anchor} to {reference.target} is not on the spine"
+            )
+        rows.append(
+            (
+                anchor,
+                target,
+                reference.end,
+                int(reference.whole_chapter),
+                reference.weight,
+                reference.source,
+            )
+        )
+
+    rows.sort(key=lambda row: (row[0], row[1]))
+    connection.executemany(
+        "INSERT INTO cross_references VALUES (?, ?, ?, ?, ?, ?)", rows
+    )

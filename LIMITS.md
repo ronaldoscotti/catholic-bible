@@ -99,6 +99,9 @@ question from the text, so both get an answer.
 | Clementine Vulgate | public domain | promulgated 1592 | MIT |
 | Haydock, English | public domain | printed 1811 to 1814, the author died 1849 | transcription, no licence stated upstream |
 | Haydock, Portuguese | machine translation of a public domain text | derived here, no third party claim | same |
+| Douay cross references | CC0 | the 1582 and 1610 margins | transcription dedicated to the public domain |
+| OpenBible cross references | CC BY 4.0 | published under Creative Commons Attribution | attribution required and given |
+| NT to deuterocanonical allusions | addresses only | see the section below | no fixture licence stated |
 
 The machine readable version of this table travels inside each published file,
 under `version.rights`, so a consumer never has to come back here to find out
@@ -116,8 +119,6 @@ as the public domain verse text. The export names its columns and never selects
 that one, and a test fails if a heading reaches a published file.
 
 ## What is not here yet
-
-No cross references. That is the second half of B4.
 
 No per book files and no CDN. That is B5.
 
@@ -288,3 +289,73 @@ Nothing here has been load tested, no route has been measured under concurrency,
 and nothing is deployed. The memory side of the store decision is also half
 measured. 34.8 MB retained is the cost of the alternative that lost, and the
 resident cost of a connection per request with a page cache each does not exist.
+
+
+## What the cross-references cannot prove, added in B4
+
+### The 292 authored pairs ship on a reading, not on a ruling
+
+The set that connects the New Testament to the deuterocanonical books is 292
+pairs of addresses, expanded in both directions to 673 rows. It carries no text,
+no note and no editorial prose of any kind, and it is where 665 of the 920
+surviving deuterocanonical links come from.
+
+The reading is that a bare pair of Scripture references is a fact about
+Scripture rather than an expression of anyone's editorial work, so a list of
+them is not the apparatus it was compiled with. That is a reading. It has not
+been tested by anyone who practises copyright law and this repository is not
+pretending otherwise. What is recorded here is the reasoning and the cost of
+being wrong, which is 673 rows and a rebuild.
+
+The alternative was refusing them, and the measured cost of that was cutting
+deuterocanonical linkage by 61%, to protect against copying nothing.
+
+### The Ave Maria apparatus is excluded and cost nothing
+
+879 entries scraped from the Ave Maria edition's own margins, the same protected
+1957 edition whose text this repository already refuses. They contribute exactly
+one link touching a deuterocanonical book, so the exclusion costs a rounding
+error. It is not a flag on the export. The source is absent from the list, so
+shipping it would take an edit rather than an oversight.
+
+### The orphan report is an upper bound and says so
+
+The importer in the private repository counts what it could not resolve and
+throws it away, so the resolved rows cannot answer the question. The fixtures
+are files, so the export diffs against them instead.
+
+| Source | Fixture pairs | Exported | Unaccounted |
+|---|---|---|---|
+| `openbible` | 211804 | 204601 | 7203 |
+| `na27` | 341 | 673 | 5 |
+| `douay` | not countable | 2362 | not countable |
+
+The gap holds two different things and the diff cannot tell them apart. An entry
+the import could not resolve is an orphan. An entry another source had already
+written is dropped by the unique constraint and is not one. Both are absences.
+
+**The OpenBible losses are concentrated in Daniel**, 655 of them on Daniel
+pointing at Daniel and another 425 between Daniel and the Psalms. That is where
+the `org` scheme carries Susanna and Bel as their own books and this spine folds
+them into Daniel 13 and 14, so the remap is where the references go missing. It
+is a real defect and it is not measured further here.
+
+The Douay row is not countable because its fixture holds reference strings like
+`Act. 14, 15. 17, 24.` rather than addresses. Splitting them needs the parser,
+and a second parser in the export would be a second set of bugs rather than a
+check.
+
+### Thirty references per address is a ported number
+
+The read returns the thirty highest weighted references on each address. Genesis
+1:1 carries more than sixty strong ones and a client rendering all of them
+renders noise. Thirty is the private repository's number, carried across rather
+than derived from anything measured here, and the published file keeps every row
+so a consumer who disagrees can read the artifact instead of the API.
+
+### Weight does not reach the wire and `primary` is a threshold
+
+The weight is a vote count from OpenBible, a constant of 100 for the Douay
+margins and a constant of 90 for the allusion set. Those three numbers are not
+comparable, so publishing them would invite arithmetic that means nothing. What
+ships is `primary`, true at 20 or above. The threshold is also ported.
