@@ -29,6 +29,12 @@ _PART_WITH_CHAPTER = re.compile(r"^(\d+)[,:](.+)$")
 _PART_VERSES = re.compile(rf"^(\d+)(?:\s*{DASH}\s*(\d+))?$")
 _CHAPTER = re.compile(rf"^\s*(.+?)\s+(\d+)(?:\s*{DASH}\s*\d+)?\s*$")
 
+# Splits the written name off the numbers, so the lectionary shape is detected
+# on the numbers alone. Detecting it on the whole string sends `Ex. 13:1-14:5`
+# down the disjoint parser, because the English and Latin abbreviations end in a
+# period and the Portuguese ones do not.
+_HEAD = re.compile(r"^\s*(.+?)\s+(\d.*?)\s*$")
+
 
 @dataclass(frozen=True, slots=True)
 class UnparsedReference:
@@ -60,7 +66,8 @@ Parsed = Reference | UnparsedReference
 
 
 def parse_reference(text: str) -> Parsed:
-    if "." in text:
+    head = _HEAD.match(text)
+    if head is not None and "." in head[2]:
         return _parse_parts(text)
 
     match = _SPAN.match(text)

@@ -430,3 +430,16 @@ provenance = "Authored in B3. The Douay margin prints the singular, PSALM."
 why_hard = """
 The exported name is the margin form and the display name is not the same word.
 Both resolve, which is the point, and only one is printed."""
+
+[[case]]
+id = "an-abbreviation-with-a-period-is-not-a-lectionary-reading"
+kind = "reference"
+input = "Ex. 13:1-14:5"
+expect = "EXO 13:1-14:5"
+provenance = "Found in B3 by round tripping the formatter through the parser."
+why_hard = """
+The lectionary shape `Mc 5,22-24.35-43` is detected by the period, and every
+English and Latin abbreviation ends in one while no Portuguese abbreviation
+does. Reading the whole string sends most English references down the disjoint
+parser, where they come back malformed. The period only means a disjoint
+reading after the numbers start."""
