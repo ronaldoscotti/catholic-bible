@@ -251,25 +251,40 @@ the weakest link in every formatted reference this API returns.
 Nine of them carry conformance cases, chosen because they are the ones that
 would hurt. The other 210 do not.
 
-### Reading a spine address back into another scheme is wrong in two places
+### Reading a spine address back into another scheme, fixed in two places
 
-`to_scheme` maps a candidate forward again and keeps it only if it lands where
+*Corrected 2026-08-03. This section recorded two wrong answers and the reason
+they could not be caught. They are caught now and the section says what closed
+it and what did not.*
+
+`to_scheme` mapped a candidate forward again and kept it only if it landed where
 it started. That catches a candidate that moved and it cannot catch one that is
-out of range in the target scheme, because this repo holds the Copenhagen remap
-pairs and no `org` verse count table. A book that maps by identity round trips
-trivially.
+out of range in the target scheme, because an address the Copenhagen table is
+silent about maps by identity and returns where it started.
 
-Two addresses are confirmed wrong. Spine `PSA.15.11` reads back as `org` 15:11
-and spine `PSA.43.27` as `org` 43:27, and both are different psalms. The honest
-answer for each is an orphan.
+Spine `PSA.15.11` read back as `org` 15:11 and `PSA.43.27` as `org` 43:27, and
+both are different psalms.
 
-Whether more exist across the other 72 books is not measurable with what is in
-this repo. Saying that is better than publishing a number nobody can stand
-behind. B3 ships the ported psalm table, which is hand verified, and pins the
-two disagreements so the day B1 is corrected the suite says which one moved.
+It now asks the table whether it covers the address before trusting the round
+trip. Nine spine addresses fail that question, every one the last verse of a
+chapter the Vulgate carries and the table's source space does not.
 
-The psalm counterpart the API publishes comes from the ported table and not from
-`to_scheme`, so no route returns either wrong answer today.
+```
+PSA.15.11  PSA.43.27  SIR.37.35  ISA.45.26  DAN.10.22
+DAN.14.42  ACT.19.41  ROM.7.26   1CO.16.25
+```
+
+Acts 19:41 is the familiar one, in the Vulgate and absent from the Greek. The
+count of `org` addresses no scheme can name went from 41 to 50 and the ported
+psalm table and `to_scheme` now agree on all 150 psalms, where they used to
+agree on 148.
+
+**What this does not close.** The guard is sound where the table declares the
+book and says nothing where the table is silent about it, and 14 of the books it
+declares are not on this spine at all. Whether other schemes carry addresses this
+repo would still read back wrongly is not measurable here, for the same reason it
+was not before. What changed is that the failure mode with a witness has a fix
+and a test, not that the space was searched.
 
 ### The published numbering covers the Psalms and nothing else
 

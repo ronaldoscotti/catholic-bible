@@ -561,3 +561,31 @@ says spine. The published name is the word a reader has already met.
 It is the only artifact whose name differs from its source, and the mapping is a
 literal in the generator rather than a transformation, so the file itself is
 byte identical to what it was copied from.
+
+## The reverse map asks the table before it trusts the round trip
+
+`to_scheme` validated a candidate by mapping it forward and keeping it only if it
+landed where it started. That is sound against a candidate that moved and blind
+to one that does not exist in the target scheme, because an address the
+Copenhagen table is silent about maps by identity and returns where it started.
+
+The fix asks a different question first. The table declares the space it covers,
+and a spine address past the end of a chapter it declares is a Vulgate tail the
+table says nothing about. Reading that as `org` by identity is a guess, so it
+comes back an orphan instead.
+
+Nine addresses on this spine answer that way and every one is the last verse of a
+chapter. Acts 19:41 is the familiar one.
+
+The check lives on the scheme rather than in the mapping layer, because it is a
+statement about what the table covers and not about what the spine holds. The
+mapping layer still owns the decision to call it an orphan.
+
+What lost is a check that would work for every scheme. This one is `org` only.
+The Vulgate and Douay reverse maps are exact inverses by construction, so they do
+not have the failure mode, and writing a general mechanism for a defect that
+exists in one place would be a mechanism with one caller and no second opinion.
+
+What it does not buy is completeness. A book the table never mentions still reads
+back by identity, because silence is not a statement that the address is missing.
+`LIMITS.md` says which half is closed.

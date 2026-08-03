@@ -128,13 +128,14 @@ def test_the_accent_survives_the_url_encoder(client: TestClient) -> None:
     assert job.json()["ids"] == ["JOB.3.16"]
 
 
-def test_the_two_psalms_where_the_ported_table_and_b1_disagree() -> None:
-    """A B1 defect, pinned so the day it is fixed the suite says which moved.
+def test_the_ported_psalm_table_and_b1_now_agree_on_all_150() -> None:
+    """This pinned two disagreements until issue #22 was fixed.
 
-    `to_scheme` sees that a candidate does not return where it started and
-    cannot see that it is out of range in the target scheme, because this repo
-    holds no `org` verse count table. So spine PSA.15.11 reads back as `org`
-    15:11, which is a different psalm.
+    `to_scheme` saw that a candidate did not return where it started and could
+    not see that it was out of range in the target scheme, so spine PSA.15.11
+    read back as `org` 15:11, which is a different psalm. It now asks the
+    Copenhagen table whether it covers the address before trusting the round
+    trip, and the two independent answers agree on every psalm.
     """
     from catholic_bible.canon import psalms  # noqa: PLC0415
     from catholic_bible.canon.mapping import Mapped, Scheme, to_scheme  # noqa: PLC0415
@@ -155,4 +156,4 @@ def test_the_two_psalms_where_the_ported_table_and_b1_disagree() -> None:
         for psalm in range(1, 151)
         if psalms.counterpart(psalm) != reached(psalm)
     }
-    assert disagreeing == {15: ("16", "15-16"), 43: ("44", "43-44")}
+    assert disagreeing == {}

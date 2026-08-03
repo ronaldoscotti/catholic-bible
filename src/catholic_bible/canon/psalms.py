@@ -9,8 +9,9 @@ arithmetic. The offset runs 0, then +1 from psalm 10, then +2 at 114, then +1
 from 115, and back to 0 at 147. Twelve psalms carry the same number in both.
 
 B1's `to_scheme` computes the same answer from the Copenhagen table and the two
-agree on 148 psalms. The two they disagree on are pinned in a test, because
-`to_scheme` cannot see that a candidate is out of range in the target scheme.
+agree on all 150. They disagreed on two until issue #22, where `to_scheme` could
+not see that a candidate was out of range in the target scheme. Kept as a second
+independent statement, and a test compares them psalm by psalm.
 """
 
 from __future__ import annotations

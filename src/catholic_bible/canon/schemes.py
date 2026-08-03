@@ -80,6 +80,13 @@ class VulgateScheme:
         """Every book the table declares, with its Vulgate verse counts."""
         return dict(self._max)
 
+    def declared_verse_count(self, book: str, chapter: int) -> int | None:
+        """How many verses the table's source space gives this chapter."""
+        counts = self._max.get(book)
+        if counts is None or not 1 <= chapter <= len(counts):
+            return None
+        return counts[chapter - 1]
+
     def declared_pairs(self) -> tuple[str, ...]:
         """The origin side of every remap the table declares, ranges unexpanded."""
         return self._origins
@@ -164,6 +171,27 @@ class OrgScheme:
     def index(self) -> dict[str, str]:
         """The resolved inverse, `org` address to Vulgate origin."""
         return dict(self._inverse)
+
+    def speaks_for(self, book: str, chapter: int, verse: int) -> bool:
+        """Whether the table has anything to say about this spine address.
+
+        False only where the table declares the book and the address runs past
+        the space it covers. Those are Vulgate tails with no `org` origin, and
+        the round trip cannot catch them because an address the table is silent
+        about maps by identity and returns where it started. Nine exist on this
+        spine and every one is the last verse of a chapter. Acts 19:41 is the
+        familiar one, in the Vulgate and absent from the Greek.
+
+        A book the table never mentions comes back True. Silence is not a
+        statement that the address is missing, and identity is then the only
+        reading available.
+        """
+        if self._vulgate.mode_for(book) is not Mode.IDENTITY:
+            return True
+        if not self._vulgate.declares(book):
+            return True
+        declared = self._vulgate.declared_verse_count(book, chapter)
+        return declared is not None and verse <= declared
 
     def to_spine(self, book: str, chapter: int, verse: int) -> Address:
         if self._vulgate.mode_for(book) is not Mode.IDENTITY:

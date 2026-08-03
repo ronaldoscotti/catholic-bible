@@ -70,7 +70,7 @@ def test_every_address_it_returns_survives_the_round_trip(scheme: Scheme) -> Non
 
 @pytest.mark.parametrize(
     ("scheme", "unreadable"),
-    [(Scheme.VULGATE, 21), (Scheme.ORG, 41), (Scheme.DOUAY, 0)],
+    [(Scheme.VULGATE, 21), (Scheme.ORG, 50), (Scheme.DOUAY, 0)],
 )
 def test_the_addresses_no_scheme_can_name_are_counted(
     scheme: Scheme, unreadable: int
@@ -81,9 +81,52 @@ def test_the_addresses_no_scheme_can_name_are_counted(
     reverse map has no address that means only this verse. Those come back as
     orphans rather than as the neighbouring verse, and the count is pinned so a
     change in the map moves a number here instead of passing quietly.
+
+    `org` went from 41 to 50 when issue #22 was fixed. The nine are the Vulgate
+    tails below, which used to read back as themselves.
     """
     orphans = sum(
         isinstance(to_scheme(scheme, VerseId(*address)), Orphan)
         for address in SPINE.addresses()
     )
     assert orphans == unreadable
+
+
+# The last verse of a chapter the spine carries and the Copenhagen table does
+# not. Every one is a Vulgate tail with no `org` origin, and Acts 19:41 is the
+# familiar one, present in the Vulgate and absent from the Greek.
+VULGATE_TAILS = [
+    ("PSA", 15, 11),
+    ("PSA", 43, 27),
+    ("SIR", 37, 35),
+    ("ISA", 45, 26),
+    ("DAN", 10, 22),
+    ("DAN", 14, 42),
+    ("ACT", 19, 41),
+    ("ROM", 7, 26),
+    ("1CO", 16, 25),
+]
+
+
+@pytest.mark.parametrize(("book", "chapter", "verse"), VULGATE_TAILS)
+def test_a_vulgate_tail_has_no_org_counterpart(
+    book: str, chapter: int, verse: int
+) -> None:
+    """Issue #22. These read back as themselves and the psalm ones are provably
+    a different psalm, so the honest answer is an orphan rather than a guess."""
+    assert SPINE.contains(book, chapter, verse)
+    result = to_scheme(Scheme.ORG, VerseId(book, chapter, verse))
+    assert isinstance(result, Orphan), result
+    assert result.reason is OrphanReason.NO_COUNTERPART
+
+
+def test_the_verse_before_each_tail_still_maps() -> None:
+    """The guard has to refuse the tail and nothing else."""
+    for book, chapter, verse in VULGATE_TAILS:
+        result = to_scheme(Scheme.ORG, VerseId(book, chapter, verse - 1))
+        assert isinstance(result, Mapped), (book, chapter, verse - 1)
+
+
+def test_a_book_the_table_never_mentions_still_reads_back() -> None:
+    """Silence in the table is not a statement that the address is missing."""
+    assert read_as(Scheme.ORG, "JHN.3.16") == "JHN.3.16"

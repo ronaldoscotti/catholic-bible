@@ -83,6 +83,13 @@ def to_scheme(scheme: Scheme, verse: VerseId) -> Result:
         case Scheme.VULGATE:
             target = VULGATE.from_spine(*source)
         case Scheme.ORG:
+            # The round trip cannot catch a candidate that is out of range in
+            # `org`, because an address the Copenhagen table is silent about
+            # maps by identity and lands back where it started. Asking the
+            # scheme first is what closes that, and it is the scheme's question
+            # because it is a statement about the table rather than the spine.
+            if not ORG.speaks_for(*source):
+                return Orphan(scheme, source, OrphanReason.NO_COUNTERPART)
             target = ORG.from_spine(*source)
         case Scheme.DOUAY:
             target = DOUAY.from_spine(*source)
