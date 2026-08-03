@@ -137,8 +137,9 @@ the open, so the text reads as Haydock wrote it.
 
 **Human review is pending and wanted.** The sample is drawn, seeded and committed
 at `docs/qa/haydock-translation-sample.csv`, 200 entries with their English
-beside them, ready for a person to work through. `docs/qa/` holds the record of
-what has been checked so far.
+beside them, ready for a person to work through.
+`docs/qa/haydock-translation-review.md` holds the record of what has been checked
+so far and by what.
 
 **What has been checked is structure, not meaning.** Five mechanical comparisons
 run against the English each entry came from, over the sample and over all

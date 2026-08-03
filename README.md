@@ -18,7 +18,8 @@ The English beside it is the 1859 transcription and it was not touched.
 
 **Human review is pending and wanted.** A seeded sample of 200 entries sits at
 `docs/qa/haydock-translation-sample.csv` ready to be read, and
-`LIMITS.md` records what has been checked so far and by what. If you read
+`docs/qa/haydock-translation-review.md` records what has been checked so far and
+by what. If you read
 Portuguese and Latin, this is the most useful thing anyone could contribute.
 
 Cross-references are here as well. 207636 of them on 26726 addresses, from

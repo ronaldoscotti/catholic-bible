@@ -103,21 +103,33 @@ def test_the_error_rate_the_record_publishes_is_the_one_recorded() -> None:
     assert len(rows) == 200
     assert all(row["note"] for row in flagged), "a flagged entry says why"
 
+    rate = 100 * len(flagged) / len(rows)
     published = {
         "defects": rf"\| Entries with a defect \| {len(flagged)} \|",
-        "rate": rf"\*\*{round(100 * len(flagged) / len(rows), 1)}%\*\*",
+        "rate": rf"\*\*{rate:g}(?:\.0)?%\*\*",
         "inverted": rf"meaning changed \| {len(inverted)} \|",
     }
     for name, pattern in published.items():
         assert re.search(pattern, record), f"the record does not publish {name}"
+
+    # The count lives in the table and nowhere else. Prose that repeats it goes
+    # stale the moment a reader adds a verdict, and the table row above is the
+    # only thing this test can keep honest.
+    spelled = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six"}
+    word = spelled.get(len(flagged))
+    body = record.split("## The defects", 1)[1]
+    assert word is None or not re.search(rf"\b{word}\b", body, re.I), (
+        f"the record spells the defect count as {word!r} outside the table, "
+        "so a verdict added to the CSV leaves the prose contradicting it"
+    )
 
 
 def test_no_flagged_entry_would_have_been_caught_by_the_audit() -> None:
     """The claim the record makes about the boundary between the two checks.
 
     An inversion has the same length, markup and digits as a faithful rendering,
-    so the mechanical audit passes all five. If that ever stops being true the
-    prose saying so has to change.
+    so the mechanical audit passes every one of them. If that ever stops being
+    true the prose saying so has to change.
     """
     audit = _audit()
     with VERDICTS.open(encoding="utf-8", newline="") as handle:

@@ -41,8 +41,11 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5
 [x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4 B5, one author
 [x] 8  PR               B0 B1 B2 B3 B4 B5 merged. v1.0.0 released
-[ ] 8  PR               1.0.1 open, not merged and not tagged
 ```
+
+1.0.1 is open and is neither merged nor tagged. The 565 on row 5 is the count on
+that branch rather than on `main`, and B5 has a criterion unticked until the tag
+lands.
 
 The checklist advances when the artifact exists and not before. Six epics have
 run. B0 builds the project, B1 builds the addresses, B2 publishes Scripture, B3

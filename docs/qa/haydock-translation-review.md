@@ -20,12 +20,12 @@ for the entry by entry pass rather than a second human. That is what this is.
 | Entries with a defect | 5 |
 | **Observed error rate** | **2.5%** |
 | 95% Wilson interval | 1.1% to 5.7% |
-| Of the five, meaning changed | 2 |
+| Of those, meaning changed | 2 |
 
 The interval is what 200 entries support. It is not the rate of the corpus, it is
 the range the corpus rate plausibly sits in, and the lower bound is not zero.
 
-## The five
+## The defects
 
 **JER.9.5, the meaning is inverted.** The Septuagint reading in Haydock is
 `they have not left off, (6) in order to be converted`, meaning they never
@@ -54,7 +54,7 @@ The article did not get translated and sits inside the Portuguese sentence.
 
 `scripts/audit-translation.py` checks for an empty body, a body identical to the
 source, a length outside a band, emphasis markup that moved and a digit that did
-not survive. **All five entries pass every one of those checks.** Two of them say
+not survive. **Every one of them passes every one of those checks.** Two of them say
 the opposite of the English and pass, because an inversion is the same length,
 carries the same markup and contains the same digits.
 
@@ -72,7 +72,7 @@ would be misled by a nineteenth century commentary rendered faithfully.
 Nothing here re-examines the 244 bodies the export cut at a leaked marker. Those
 were verified structurally in B4 and none of them fell in this sample.
 
-A second reviewer would not produce these five. Judgement about where drift
-becomes error is exactly where two readers differ, and three of the five are the
+A second reviewer would not produce this same set. Judgement about where drift
+becomes error is exactly where two readers differ, and three of them are the
 kind a stricter reader might have let pass while a stricter one still might flag
 entries this pass called faithful.
