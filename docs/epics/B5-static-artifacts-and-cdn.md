@@ -25,7 +25,7 @@ Someone building a small page or prototyping in a single HTML file has no way to
 
 - [x] JSON artifacts are produced per translation and per book, by a committed generator reading what B2 published
 - [x] Artifacts are served over a CDN with no signup and no key
-- [ ] A one-line `fetch()` copied out of the README works from a blank HTML file
+- [x] A one-line `fetch()` copied out of the README works from a blank HTML file
 - [x] Artifacts are versioned, and a published version is immutable
 - [x] The canon, the spine and `orphans.json` ship as artifacts too, not only the text
 - [x] A checksum manifest lets a consumer verify what it downloaded
@@ -109,6 +109,24 @@ README left on `@v1.0.0` while `v1.0.1` is pushed would send the workflow to
 verify the previous release and pass without testing anything. The window
 between merging and tagging is the cost, and it closes when the tag lands and
 `cdn.yml` goes green against `@v1.0.1`. Re-tick then, and not before.
+
+**Re-ticked the same day, on evidence.** `v1.0.1` was pushed at `6bf4341`,
+`cdn.yml` went green on the tag push, and the line was then copied out of the
+README by hand and run.
+
+```
+const book = await (await fetch('https://cdn.jsdelivr.net/gh/ronaldoscotti/catholic-bible@v1.0.1/data/versions/matos-soares/books/SIR.json')).json()
+console.log(book.verses['SIR.24.1'].text)
+
+A sabedoria faz o seu próprio elogio, honra-se em Deus, gloria-se no meio do
+seu povo, abre a sua boca na Assembleia do Altíssimo, glorifica-se diante dos
+seus exércitos,
+```
+
+The headers came back `max-age=31536000, immutable` with CORS `*`, the served
+227872 bytes are identical to `git show v1.0.1:` on that path, and `@v1.0.0`
+still returns its own bytes, which is the half of the promise that would have
+been cheap to break.
 
 ## Constraints
 
