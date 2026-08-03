@@ -32,11 +32,28 @@ x-served-by: cache-fra-etou8220160-FRA, cache-cwb-sbct2070025-CWB
 No token, no account, and the last edge is Curitiba.
 
 **3. A one-line `fetch()` copied out of the README works from a blank HTML
-file.** Met, and verified in a browser rather than in node alone.
+file.** **Not met**, and this document said it was until the acceptance walk was
+run properly.
 
-The two lines were extracted from `README.md` with the same `grep` the CI job
-uses, pasted into a file whose entire body is a `<pre>` and a module script, and
-rendered in headless Chrome.
+What was verified is the mechanism. The two lines were extracted from `README.md`
+with the same `grep` the CI job uses, **the tag was rewritten to a commit hash**,
+and the result was pasted into a file whose entire body is a `<pre>` and a module
+script and rendered in headless Chrome.
+
+That substitution is the whole difference. Run the documented line exactly as
+published and it fails, because `v1.0.0` does not exist yet.
+
+```
+$ curl -o /dev/null -w '%{http_code}\n' \
+    "https://cdn.jsdelivr.net/gh/ronaldoscotti/catholic-bible@v1.0.0/data/versions/matos-soares/books/SIR.json"
+404
+```
+
+The criterion asks whether a line copied out of the README works. Today it does
+not. The box goes back to unchecked and it gets ticked when the tag exists and
+the line has been run without editing it.
+
+The browser evidence below stands on its own as proof that the approach works.
 
 ```
 $ "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
@@ -143,6 +160,19 @@ Success: no issues found in 60 source files
 ```
 
 29 of those 561 are new and all of them read the published tree.
+
+## The verification the epic names, run as written
+
+> An end-to-end check runs the exact `fetch()` line from the README against the
+> live CDN and asserts on the result, so the documented path is the tested path.
+
+It fails today. `.github/workflows/cdn.yml` is the check and it fires on a `v*`
+tag and weekly, so it has never run against a published URL. Run by hand, the
+documented line returns `404`.
+
+**The epic does not close on this pull request.** It closes when `v1.0.0` exists,
+the ruleset has been seen refusing to move it, and that workflow has gone green
+against the URL the README publishes.
 
 ## What QA did not cover
 

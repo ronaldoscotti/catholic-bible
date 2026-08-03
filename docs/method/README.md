@@ -60,6 +60,17 @@ the way it treats a pinned commit. It required a throwaway tag before anything w
 claimed. The assumption was wrong, and finding that out cost one request instead
 of one wrong sentence in a published README.
 
+**B5 has five of seven criteria met and it does not close.** Its named
+verification runs the exact `fetch()` line from the README against the live CDN,
+and that line points at `v1.0.0`, which does not exist until this merges and the
+tag is pushed. Run today it returns `404`.
+
+One of the two unmet boxes had been ticked and came back off. It was marked met
+on a browser run with the tag rewritten to a commit hash, which proves the
+approach and not the documented path. The acceptance walk caught it, which is
+what the walk is for, and `docs/qa/B5-static-artifacts.md` records the correction
+rather than quietly fixing the box.
+
 Stage 7 ran on B3 after the pull request opened rather than before, which is the
 wrong order and is recorded rather than tidied. It found ten things, nine of them
 real, and the first broke an acceptance criterion the walk had already marked

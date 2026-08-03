@@ -25,13 +25,13 @@ Someone building a small page or prototyping in a single HTML file has no way to
 
 - [x] JSON artifacts are produced per translation and per book by the B2 export
 - [x] Artifacts are served over a CDN with no signup and no key
-- [x] A one-line `fetch()` copied out of the README works from a blank HTML file
+- [ ] A one-line `fetch()` copied out of the README works from a blank HTML file
 - [ ] Artifacts are versioned, and a published version is immutable
 - [x] The canon, the spine and `orphans.json` ship as artifacts too, not only the text
 - [x] A checksum manifest lets a consumer verify what it downloaded
 - [x] The README documents the artifact URL pattern and the versioning rule
 
-Two of those need their wording qualified rather than ticked in silence.
+Three of those need saying out loud rather than being ticked or left in silence.
 
 **The artifacts do not come out of the B2 export.** They come out of a generator
 reading what B2 already committed. The export needs the private source, so an
@@ -46,6 +46,22 @@ no bypass actors, and jsDelivr was measured serving a semver tag as `immutable`
 for a year while serving a non-semver tag exactly like a moving branch. None of
 that is a published version until `v1.0.0` exists and has been seen to refuse
 being moved.
+
+**The fetch box came back off after it had been ticked.** It was marked met on a
+browser run that had the tag rewritten to a commit hash, which is a different
+line from the one the README publishes. Running the documented line exactly as it
+is written returns `404`, because `v1.0.0` does not exist.
+
+```
+$ node --input-type=module -e "$(grep -A1 '^const book = await' README.md)"
+SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
+$ curl -o /dev/null -w '%{http_code}' ".../catholic-bible@v1.0.0/data/versions/matos-soares/books/SIR.json"
+404
+```
+
+What is proven is the mechanism, at a pinned commit, in a real browser. What is
+not proven is the documented path, and the criterion asks about the documented
+path.
 
 ## Constraints
 
