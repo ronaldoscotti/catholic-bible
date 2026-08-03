@@ -1,6 +1,9 @@
 # QA, B5 static artifacts and CDN
 
-*Stage 6. Run 2026-08-03 against `feat/b5-static-artifacts` at `806be05`.*
+*Stage 6. Run 2026-08-03 against `feat/b5-static-artifacts` at `806be05`, and
+extended the same day against `v1.0.0` at `02e2f49` once the release existed.
+Criteria three and four could not be answered before the tag and are answered
+here rather than in a second document.*
 
 Reading the diff is not QA. What follows was run, and the output is pasted
 rather than summarised.
@@ -36,32 +39,30 @@ x-served-by: cache-fra-etou8220160-FRA, cache-cwb-sbct2070025-CWB
 No token, no account, and the last edge is Curitiba.
 
 **3. A one-line `fetch()` copied out of the README works from a blank HTML
-file.** **Not met**, and this document said it was until the acceptance walk was
-run properly.
+file.** Met, after the release, and this document claimed it once before it was
+true.
 
-What was verified is the mechanism. The two lines were extracted from `README.md`
-with the same `grep` the CI job uses, **the tag was rewritten to a commit hash**,
-and the result was pasted into a file whose entire body is a `<pre>` and a module
-script and rendered in headless Chrome.
+The first attempt marked it met on a browser run with **the tag rewritten to a
+commit hash**, which is a different line from the one the README publishes. The
+acceptance walk caught it, the box came off, and it stayed off through the whole
+pull request. Run at that point, the documented line returned `404`, because
+`v1.0.0` did not exist.
 
-That substitution is the whole difference. Run the documented line exactly as
-published and it fails, because `v1.0.0` does not exist yet.
+It exists now, at `02e2f49`, and the line runs with nothing edited.
 
 ```
-$ curl -o /dev/null -w '%{http_code}\n' \
-    "https://cdn.jsdelivr.net/gh/ronaldoscotti/catholic-bible@v1.0.0/data/versions/matos-soares/books/SIR.json"
-404
+$ node --input-type=module -e "$(grep -A1 '^const book = await' README.md)"
+A sabedoria faz o seu próprio elogio, honra-se em Deus, gloria-se no meio do seu
+povo; abre a sua boca na Assembleia do Altíssimo, glorifica-se diante dos seus
+exércitos,
 ```
 
-The criterion asks whether a line copied out of the README works. Today it does
-not. The box goes back to unchecked and it gets ticked when the tag exists and
-the line has been run without editing it.
-
-The browser evidence below stands on its own as proof that the approach works.
+The same two lines in a file whose entire body is a `<pre>` and a module script,
+rendered in headless Chrome against the published URL.
 
 ```
 $ "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
-    --virtual-time-budget=20000 --dump-dom http://localhost:8777/blank.html
+    --virtual-time-budget=25000 --dump-dom http://localhost:8778/published.html
 <pre id="out">A sabedoria faz o seu próprio elogio, honra-se em Deus, gloria-se no meio do
 seu povo; abre a sua boca na Assembleia do Altíssimo, glorifica-se diante dos
 seus exércitos,</pre>
@@ -71,8 +72,24 @@ Served over `http://localhost` rather than `file://`, because the browser
 extension was not connected and headless Chrome needed an origin. The CORS
 header is `*`, which accepts both.
 
-**4. Artifacts are versioned, and a published version is immutable.** Not met
-yet, and it cannot be until the tag exists. The mechanism is built and measured.
+**4. Artifacts are versioned, and a published version is immutable.** Met, and
+ticked because the ruleset was seen refusing rather than because it exists.
+
+```
+$ git push --force origin v1.0.0
+remote: - Cannot update this protected ref.
+remote: - Cannot force-push to this tag
+$ git push origin :refs/tags/v1.0.0
+remote: - Cannot delete this tag
+```
+
+The CDN honours it the way the semver probe predicted, and the bytes it serves
+are the bytes in the tag.
+
+```
+cache-control: public, max-age=31536000, s-maxage=31536000, immutable
+identical, 227872 bytes
+```
 
 **5. The canon, the spine and `orphans.json` ship as artifacts too.** Met.
 `data/canon.json`, `data/spine.json`, `data/orphans.json`, and
@@ -154,7 +171,7 @@ identical, 227872 bytes
 
 ```
 $ uv run pytest -q
-561 passed in 20.33s
+562 passed in 22.46s
 
 $ uv run ruff check . && uv run ruff format --check .
 All checks passed!
@@ -163,20 +180,30 @@ $ uv run mypy
 Success: no issues found in 60 source files
 ```
 
-29 of those 561 are new and all of them read the published tree.
+30 of those 562 are new and all of them read the published tree.
 
 ## The verification the epic names, run as written
 
 > An end-to-end check runs the exact `fetch()` line from the README against the
 > live CDN and asserts on the result, so the documented path is the tested path.
 
-It fails today. `.github/workflows/cdn.yml` is the check and it fires on a `v*`
-tag and weekly, so it has never run against a published URL. Run by hand, the
-documented line returns `404`.
+`.github/workflows/cdn.yml` is the check. It fired on the `v1.0.0` push and went
+green, asserting all three things against the live CDN.
 
-**The epic does not close on this pull request.** It closes when `v1.0.0` exists,
-the ruleset has been seen refusing to move it, and that workflow has gone green
-against the URL the README publishes.
+```
+documented https://cdn.jsdelivr.net/gh/ronaldoscotti/catholic-bible@v1.0.0/data/versions/matos-soares/books/SIR.json
+identical, 227872 bytes
+A sabedoria faz o seu próprio elogio, honra-se em Deus, ...
+370 files listed, versions/matos-soares/books/SIR.json verified
+```
+
+It ran once against a published URL and it runs again every Monday, which is the
+run that matters. A check that fires only at release time proves the URL worked
+once.
+
+**This is where the epic closes.** Seven of seven, the named verification run
+against the documented path rather than a rewritten one, and the immutability
+rule seen refusing.
 
 ## What QA did not cover
 

@@ -37,10 +37,10 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
 [x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5
 [x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5
-[x] 5  Implement        B0 B1 B2 B3 B4 merged. B5 on a branch, 561 tests
+[x] 5  Implement        B0 B1 B2 B3 B4 B5 merged, 562 tests
 [x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5
 [x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4 B5, one author
-[x] 8  PR               B0 B1 B2 B3 B4 merged. B5 open
+[x] 8  PR               B0 B1 B2 B3 B4 B5 merged. v1.0.0 released
 ```
 
 The checklist advances when the artifact exists and not before. Six epics have
@@ -60,16 +60,26 @@ the way it treats a pinned commit. It required a throwaway tag before anything w
 claimed. The assumption was wrong, and finding that out cost one request instead
 of one wrong sentence in a published README.
 
-**B5 has five of seven criteria met and it does not close.** Its named
-verification runs the exact `fetch()` line from the README against the live CDN,
-and that line points at `v1.0.0`, which does not exist until this merges and the
-tag is pushed. Run today it returns `404`.
+**B5 is the first epic here that closes.** Seven of seven criteria, and the two
+that could only be answered after the release were left empty through the whole
+pull request rather than ticked on the mechanism that would eventually prove
+them.
 
-One of the two unmet boxes had been ticked and came back off. It was marked met
+The named verification runs the exact `fetch()` line from `README.md` against the
+live CDN, and that line points at `v1.0.0`. Before the tag existed it returned
+`404`, and the epic file said so with the `404` pasted in. After the tag it
+returns Sirach 24:1 in Portuguese, in node and in a browser, with nothing edited.
+
+One of those two boxes had been ticked early and came back off. It was marked met
 on a browser run with the tag rewritten to a commit hash, which proves the
-approach and not the documented path. The acceptance walk caught it, which is
-what the walk is for, and `docs/qa/B5-static-artifacts.md` records the correction
+approach and not the documented path. The acceptance walk caught it, which is what
+the walk is for, and `docs/qa/B5-static-artifacts.md` records the correction
 rather than quietly fixing the box.
+
+Immutability is ticked because the ruleset was seen refusing a force push and a
+delete, not because it was configured. That is the same standard `main` was held
+to, and it is the standard this file means when it says an epic closes on its
+verification rather than on its merge.
 
 Stage 7 ran on B3 after the pull request opened rather than before, which is the
 wrong order and is recorded rather than tidied. It found ten things, nine of them
