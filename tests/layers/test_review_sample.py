@@ -113,7 +113,8 @@ def test_no_flagged_entry_would_have_been_caught_by_the_audit() -> None:
     audit = _audit()
     with VERDICTS.open(encoding="utf-8", newline="") as handle:
         flagged = {
-            row["address"] for row in csv.DictReader(handle)
+            row["address"]
+            for row in csv.DictReader(handle)
             if row["verdict"] != "faithful"
         }
     with SAMPLE.open(encoding="utf-8", newline="") as handle:
