@@ -18,6 +18,20 @@ class Rights(BaseModel):
     fixture_basis: str
 
 
+class CommentaryRights(BaseModel):
+    """The text and its translation get separate answers.
+
+    The Haydock is public domain and the Portuguese was produced by a language
+    model, which is a different claim about a different artifact and does not
+    fit in one field.
+    """
+
+    text: str
+    text_basis: str
+    translation: str = Field(examples=["machine"])
+    translation_basis: str
+
+
 class VersionOut(BaseModel):
     code: str = Field(examples=["matos-soares"])
     name: str
@@ -107,6 +121,45 @@ class PassageOut(BaseModel):
     book: str
     versions: list[str]
     verses: list[AlignedVerse]
+
+
+class Body(BaseModel):
+    language: str = Field(examples=["pt-BR"])
+    html: str = Field(description="Carries <em> and <strong> and no other markup")
+    text: str = Field(description="The same body with the markup removed")
+
+
+class CommentaryEntry(BaseModel):
+    start: str = Field(examples=["JHN.3.16"])
+    end: str = Field(examples=["JHN.3.17"], description="Equal to start for most notes")
+    reference: str = Field(examples=["Jo 3,16-17"])
+    label: str | None = Field(
+        description="How the printed edition labelled the note, where it did"
+    )
+    bodies: list[Body] = Field(
+        description="One per language. The source language is always present."
+    )
+
+
+class CommentarySource(BaseModel):
+    code: str = Field(examples=["haydock"])
+    name: str
+    author: str | None
+    description: str | None
+    language: str = Field(description="The language the notes were written in")
+    rights: CommentaryRights
+    entries: list[CommentaryEntry]
+
+
+class CommentaryOut(BaseModel):
+    reference: str = Field(examples=["Jo 3,16"])
+    ids: list[str] = Field(examples=[["JHN.3.16"]])
+    sources: list[CommentarySource] = Field(
+        description=(
+            "Empty where no source comments on this address, which is 14803 of "
+            "the 35845 addresses on the spine. Absence is an answer here."
+        )
+    )
 
 
 class ResolvedOut(BaseModel):

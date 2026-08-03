@@ -4,10 +4,11 @@ Passing as unit tests says nothing about what survives a URL encoder.
 `Jó 3,16` arrives as `J%C3%B3%203,16`, and an accent folded there sends the
 reader to the wrong book with a 200. That case is the reason this repo exists.
 
-All forty run, not a subset. The fifteen `map` cases go through `resolve` with
-the scheme they were written in, which is what the scheme parameter makes
+All forty three run, not a subset. The fifteen `map` cases go through `resolve`
+with the scheme they were written in, which is what the scheme parameter makes
 possible, and five of them name a book only that scheme has, which is what the
-scheme aware resolver makes possible.
+scheme aware resolver makes possible. The three `anchor` cases are B4, where the
+failure mode is a note that reaches no address and says nothing about it.
 """
 
 from __future__ import annotations
@@ -33,13 +34,34 @@ def _by_kind(kind: str) -> list[dict[str, Any]]:
 
 def test_every_case_reaches_http() -> None:
     """No case may be quietly skipped, which is what makes the claim true."""
-    assert len(CASES) == 40
+    assert len(CASES) == 43
     assert len(_by_kind("map")) == 15
     assert len(_by_kind("alias")) == 18
     assert len(_by_kind("reference")) == 7
+    assert len(_by_kind("anchor")) == 3
     assert len(CASES) == sum(
-        len(_by_kind(kind)) for kind in ("map", "alias", "reference")
+        len(_by_kind(kind)) for kind in ("map", "alias", "reference", "anchor")
     )
+
+
+@pytest.mark.parametrize("case", _by_kind("anchor"), ids=identify)
+def test_an_anchor_case_over_http(case: dict[str, Any], client: TestClient) -> None:
+    """A commentary note reaches the address it is anchored on.
+
+    The two clamped entries are here because the failure they had upstream is
+    silence. A note that covers nothing returns no error and no note, and only a
+    case that names the address notices.
+    """
+    book, chapter, verse = str(case["input"]).split(".")
+    found = client.get(f"/v1/books/{book}/chapters/{chapter}/verses/{verse}/commentary")
+
+    assert found.status_code == 200, case["id"]
+    spans = {
+        f"{entry['start']}-{entry['end']}"
+        for source in found.json()["sources"]
+        for entry in source["entries"]
+    }
+    assert case["expect"] in spans, (case["id"], spans)
 
 
 @pytest.mark.parametrize("case", _by_kind("map"), ids=identify)

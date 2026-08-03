@@ -8,9 +8,36 @@ Portuguese, English and Latin, public domain throughout.
 Scripture is here and it is readable over HTTP. Three translations, 107103
 verses, addressed on a versification spine of 35845 slots.
 
-There is no commentary and there are no cross-references yet, no full text
-search, no static artifacts on a CDN, and nothing is deployed. The API is read
-only and it always will be.
+Commentary is here too. The Haydock, 20705 notes over all 73 books, in English
+and in Portuguese, anchored on the same verse ids.
+
+**Read this before you use the Portuguese commentary.** It was translated by a
+language model, not by a person. The prompt required faithful rendering,
+Catholic ecclesiastical terminology and untouched Scripture citations, and it
+asked the model to flag polemic, dated exegesis, pre-modern science and language
+about the Jewish people that the Church has revised since Nostra Aetate. 5.47%
+of records came back flagged and every one of them was published anyway. **No
+human has read a sample and written down an error rate.** The sample is drawn
+and waiting in `docs/qa/haydock-translation-sample.csv`, 200 entries, and the
+day someone fills in the verdict column this paragraph gets a number in it. The
+English is the 1859 transcription and it was not touched.
+
+What has been checked is structure. No body is empty, none is identical to the
+English it came from, none is wildly shorter or longer, and in the sample of 200
+every digit survives. Across all 20705, one body in 115 differs in emphasis
+markup and one in 245 loses or gains a digit, and reading a handful of those
+shows both real losses and correct choices like `40 years` becoming
+`quarenta anos`. No mechanical check separates the two, which is what the sample
+is for. None of it says whether a sentence means what the Latin behind it means.
+`make audit-translation` recomputes all of it.
+
+There are no cross-references yet, no full text search, no static artifacts on a
+CDN, and nothing is deployed. The API is read only and it always will be.
+
+244 of the 20705 Portuguese bodies shipped with the translation harness's own
+control markers inside the text, and one unrelated note glued on behind each.
+That was found by running those checks and it is fixed. `LIMITS.md` says what
+was cut and how the cut was verified not to remove content.
 
 `ROADMAP.md` says what is coming and why. `docs/epics/` holds one file per epic,
 `docs/method/` records the process that produced them, and `LIMITS.md` says what
@@ -60,7 +87,7 @@ request, because a quickstart nobody executes rots within a month.
 
 ## Reading it
 
-Seven routes, all `GET`, all under `/v1`.
+Nine routes, all `GET`, all under `/v1`.
 
 ```
 GET /v1/versions
@@ -68,9 +95,15 @@ GET /v1/versions/{version}/books
 GET /v1/versions/{version}/books/{book}
 GET /v1/versions/{version}/books/{book}/chapters/{chapter}
 GET /v1/versions/{version}/books/{book}/chapters/{chapter}/verses/{verse}
+GET /v1/books/{book}/chapters/{chapter}/verses/{verse}/commentary
 GET /v1/passage?ref=&versions=&scheme=
 GET /v1/resolve?ref=&scheme=
+GET /v1/commentary?ref=&scheme=
 ```
+
+Commentary takes no version, because a note on John 3:16 is the same note
+whichever translation is on screen. Both languages come back together and the
+rights block on each source says which one a machine produced.
 
 A book is named by its USX code or by any name that resolves, in Portuguese,
 English or Latin. `Jo` is John and `Jó` is Job, and the accent is never folded.

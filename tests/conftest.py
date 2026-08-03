@@ -25,6 +25,7 @@ INPUTS = (
     DATA_DIR / "canon.json",
     DATA_DIR / "versification.json",
     DATA_DIR / "corpus",
+    DATA_DIR / "commentary",
     Path(storage.__file__).parent / "build.py",
 )
 

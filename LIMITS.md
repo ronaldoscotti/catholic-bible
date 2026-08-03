@@ -97,6 +97,8 @@ question from the text, so both get an answer.
 | Matos Soares | public domain | Brazilian law article 45, died 1957 with no successors | licence unstated upstream |
 | Douay-Rheims | public domain | first published 1582 and 1610 | MIT |
 | Clementine Vulgate | public domain | promulgated 1592 | MIT |
+| Haydock, English | public domain | printed 1811 to 1814, the author died 1849 | transcription, no licence stated upstream |
+| Haydock, Portuguese | machine translation of a public domain text | derived here, no third party claim | same |
 
 The machine readable version of this table travels inside each published file,
 under `version.rights`, so a consumer never has to come back here to find out
@@ -115,11 +117,116 @@ that one, and a test fails if a heading reaches a published file.
 
 ## What is not here yet
 
-No commentary and no cross references. That is B4, and two rights questions are
-already open there: 673 cross references sourced from Nestle-Aland 27, which the
-Deutsche Bibelgesellschaft holds, and 879 derived from the Ave Maria apparatus.
+No cross references. That is the second half of B4.
 
 No per book files and no CDN. That is B5.
+
+## What the commentary cannot prove, added in B4
+
+### Nobody has read the Portuguese
+
+Twenty thousand seven hundred and five notes were translated from English by a
+language model. The prompt required faithful rendering rather than paraphrase,
+Catholic ecclesiastical terminology mapped to the terms the Magisterium defines,
+Scripture citations and Latin left untouched, and the four categories below
+flagged rather than softened.
+
+| Flag | Records | What it marks |
+|---|---|---|
+| `linguagem_judeus` | 498 | language about the Jewish people revised since Nostra Aetate |
+| `tom_polemico` | 422 | sharp polemic against Protestants and the Reformation |
+| `exegese_datada` | 151 | authorship and dating stated as settled |
+| `ciencia_cronologia` | 125 | pre-modern science and chronology as literal fact |
+
+1196 of 21875 records, 5.47%. All of them were published. The flag is a note for
+a reader and never an edit to the text, because a 19th century commentary that
+has been quietly modernised is a worse artifact than one that is dated in the
+open.
+
+**No human sample has been read.** The sample is drawn, seeded and committed at
+`docs/qa/haydock-translation-sample.csv`, 200 entries with an empty verdict
+column, and a test fails the day someone fills it in without updating this
+section. At that size an observed rate near 5% carries a 95% interval of about
+3 points either way. Until then the honest claim is that a pipeline ran and that
+nobody has checked its meaning, and this repository will not describe the corpus
+as reviewed.
+
+**What has been checked is structure, not meaning.** Five mechanical comparisons
+run against the English each entry came from, over the sample and over all
+20705. `make audit-translation` recomputes every number below and a test pins
+them, because a number in this file that nothing recomputes is a number nobody
+can check.
+
+| Check | Sample of 200 | All 20705 |
+|---|---|---|
+| Portuguese body empty | 0 | 0 |
+| Portuguese identical to the English | 0 | 0 |
+| Length outside 0.6 to 1.8 of the source | 0 | 0 |
+| `<em>` and `<strong>` counts differ | 1, 0.5% | 181, 0.87% |
+| A digit does not survive | 0 | 84, 0.41% |
+
+The digit check joins thousands groups on both sides first, because English
+writes `400,000` and Portuguese writes `400.000` and a naive comparison reports
+112 differences where 28 of them are punctuation. Of the 84 that remain, reading
+six found a mix of legitimate choices and real losses. `100 fold` rendered as
+`cêntuplo` and `40 years` as `quarenta anos` are correct and count as
+differences here. A chapter number dropped from a citation is a defect.
+**Nothing mechanical can separate those two, which is the whole reason a person
+has to read the sample.**
+
+None of these five answers whether a sentence means what the Latin behind it
+means. They catch a body that was never translated, a body that was truncated
+and a citation that moved. They do not catch a fluent paragraph that says the
+opposite of the original, and that is the failure that would matter most.
+
+### Two hundred and forty four bodies shipped with pipeline markers in them
+
+Found while running the checks above, after the first pull request was open.
+
+The translation harness wrote its own control markers into the Portuguese text
+rather than into the field beside it. A reader of Genesis 35:6 saw the note, then
+`[[[REVIEW:exegese_datada|...]]`, then `[[[ID:484]]]`, and then the entire
+translation of an unrelated note glued on behind it. 244 of 20705 entries across
+56 books. The English was never touched.
+
+The export now cuts each body at the first marker. What that keeps measures
+between 0.85 and 1.32 of its English source, median 1.01, so the cut removes
+contamination rather than content, and every absorbed passage that still exists
+upstream carries its own translation on its own entry. The build refuses any body
+that still contains a marker, and a test over the published file is the third
+place the same contamination would have to get past.
+
+`PROVENANCE.json` records the count. It is the second value in this dataset that
+differs from what the source holds, after the two clamped anchors, and both
+differ by removing rather than by inventing.
+
+### Two notes lost their second verse
+
+Two entries are labelled `26-7` and `73-4`, meaning Matthew 15:26 to 27 and Luke
+1:73 to 74. The upstream extraction read the elided second number literally, so
+each entry ran from 26 to 7 and from 73 to 4, which no coverage test can match.
+Both notes were invisible in the source system.
+
+The export clamps the end onto the start, so each note is published on the first
+verse of its pair and absent from the second. Deriving the 27 from the label
+would have been this repository inventing a value no source holds, and it would
+have been right. Being right about a guess is not the same as having the data.
+Matthew 15:27 and Luke 1:74 read as having no Haydock note when a printed
+edition would show one.
+
+### 14803 addresses have no note at all
+
+Of 35845 spine addresses, 21042 are covered by at least one Haydock entry. The
+rest come back with an empty source list and a 200. That is the source edition
+being a commentary rather than a gloss on every verse, and it is not a gap this
+repository can close.
+
+### The plain text column is derived and never checked against a parser
+
+Every body carries HTML and the same body with the markup removed. The removal
+is a regular expression over a corpus that contains `<em>` and `<strong>` and
+nothing else, counted over all 41410 bodies. A tag this corpus does not have
+would survive into the text column, and nothing here would notice.
 
 ## What the read API cannot prove, added in B3
 
@@ -173,7 +280,9 @@ differently between traditions too, and this API says nothing about that.
 
 A 500 verse passage across three versions answers in 5 ms on a laptop, measured
 after the per address point queries became one range query and down from 21 ms
-before it. That is one number, on one machine, with one request at a time.
+before it. A commentary read answers in 4.4 ms, down from 15 ms once the build
+started running `ANALYZE` and the planner stopped scanning 16 MB of note bodies
+to find one. Those are three numbers, on one machine, with one request at a time.
 
 Nothing here has been load tested, no route has been measured under concurrency,
 and nothing is deployed. The memory side of the store decision is also half
