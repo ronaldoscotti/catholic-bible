@@ -25,8 +25,8 @@ Someone building a small page or prototyping in a single HTML file has no way to
 
 - [x] JSON artifacts are produced per translation and per book, by a committed generator reading what B2 published
 - [x] Artifacts are served over a CDN with no signup and no key
-- [ ] A one-line `fetch()` copied out of the README works from a blank HTML file
-- [ ] Artifacts are versioned, and a published version is immutable
+- [x] A one-line `fetch()` copied out of the README works from a blank HTML file
+- [x] Artifacts are versioned, and a published version is immutable
 - [x] The canon, the spine and `orphans.json` ship as artifacts too, not only the text
 - [x] A checksum manifest lets a consumer verify what it downloaded
 - [x] The README documents the artifact URL pattern and the versioning rule
@@ -44,28 +44,60 @@ one more file a stranger has to take on trust. Splitting downstream means anyone
 with a clone regenerates all 371 files and diffs them. `DECISIONS.md` carries the
 trade and `LIMITS.md` carries what it costs.
 
-**The immutability box stays empty until the tag is pushed.** The mechanism is
-built and measured. A ruleset on `refs/tags/v*` blocks deletion and update with
-no bypass actors, and jsDelivr was measured serving a semver tag as `immutable`
-for a year while serving a non-semver tag exactly like a moving branch. None of
-that is a published version until `v1.0.0` exists and has been seen to refuse
-being moved.
+**The last two boxes were ticked after the release, not before it.** Neither
+could be proven while `v1.0.0` did not exist, and both were left empty through
+the pull request rather than ticked on the mechanism.
 
-**The fetch box came back off after it had been ticked.** It was marked met on a
-browser run that had the tag rewritten to a commit hash, which is a different
-line from the one the README publishes. Running the documented line exactly as it
-is written returns `404`, because `v1.0.0` does not exist.
+`v1.0.0` was pushed at `02e2f49`, the merge commit on `main`. Then the
+documented line was run with nothing edited.
 
 ```
 $ node --input-type=module -e "$(grep -A1 '^const book = await' README.md)"
-SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON
-$ curl -o /dev/null -w '%{http_code}' ".../catholic-bible@v1.0.0/data/versions/matos-soares/books/SIR.json"
-404
+A sabedoria faz o seu próprio elogio, honra-se em Deus, gloria-se no meio do seu
+povo; abre a sua boca na Assembleia do Altíssimo, glorifica-se diante dos seus
+exércitos,
 ```
 
-What is proven is the mechanism, at a pinned commit, in a real browser. What is
-not proven is the documented path, and the criterion asks about the documented
-path.
+The same two lines in a blank HTML file, rendered in headless Chrome, put the
+verse on the page. The bytes served match the tag byte for byte, 227872 of them,
+and the header is the one the semver probe predicted.
+
+```
+cache-control: public, max-age=31536000, s-maxage=31536000, immutable
+access-control-allow-origin: *
+```
+
+Immutability is ticked because the ruleset was seen refusing, not because it
+exists.
+
+```
+$ git push --force origin v1.0.0
+remote: - Cannot update this protected ref.
+remote: - Cannot force-push to this tag
+$ git push origin :refs/tags/v1.0.0
+remote: - Cannot delete this tag
+```
+
+**The fetch box came off once, in the middle.** It had been marked met on a
+browser run with the tag rewritten to a commit hash, which is a different line
+from the one the README publishes, and the acceptance walk caught it. The
+correction is recorded in `docs/qa/B5-static-artifacts.md` rather than tidied
+away, and the box is ticked now on the published URL.
+
+## Verification, run
+
+`.github/workflows/cdn.yml` fired on the tag push and went green, asserting all
+three things against the live CDN.
+
+```
+documented https://cdn.jsdelivr.net/gh/ronaldoscotti/catholic-bible@v1.0.0/data/versions/matos-soares/books/SIR.json
+identical, 227872 bytes
+A sabedoria faz o seu próprio elogio, honra-se em Deus, ...
+370 files listed, versions/matos-soares/books/SIR.json verified
+```
+
+It runs again every Monday, which is the run that matters, because a check that
+fires only at release time proves the URL worked once.
 
 ## Constraints
 
