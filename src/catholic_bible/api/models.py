@@ -1,0 +1,90 @@
+"""What the routes return.
+
+No envelope. Every route returns its model directly, which is what generates a
+clean document and what a typed consumer reads without unwrapping.
+
+The verse id is the published string and never the internal integer. The integer
+is an artifact of the order a seed ran in and a public contract that freezes one
+cannot be undone.
+"""
+
+from __future__ import annotations
+
+from pydantic import BaseModel, Field
+
+from catholic_bible.canon.mapping import Scheme
+
+
+class Rights(BaseModel):
+    text: str
+    text_basis: str
+    fixture: str
+    fixture_basis: str
+
+
+class VersionOut(BaseModel):
+    code: str = Field(examples=["matos-soares"])
+    name: str
+    abbreviation: str | None
+    language: str = Field(examples=["pt-BR"])
+    year: int | None
+    source_url: str | None
+    rights: Rights
+    default: bool
+
+
+class BookOut(BaseModel):
+    code: str = Field(examples=["PSA"])
+    name: str = Field(description="In the language of the version")
+    abbreviation: str
+    testament: str = Field(examples=["OLD"])
+    group: str = Field(examples=["WISDOM"])
+    deuterocanonical: bool
+    chapters: int
+
+
+class VerseOut(BaseModel):
+    id: str = Field(examples=["PSA.50.3"], description="The published verse id")
+    book: str
+    chapter: int
+    verse: int
+    reference: str = Field(examples=["Sl 50,3"])
+    text: str
+
+
+class Numbering(BaseModel):
+    """What another scheme calls this chapter.
+
+    A string rather than a number, because the answer is sometimes a range. The
+    Vulgate psalm 9 is 9 and 10 elsewhere, and 114 and 115 are both 116.
+    """
+
+    scheme: Scheme
+    counterpart: str = Field(examples=["9-10"])
+
+
+class Neighbour(BaseModel):
+    book: str
+    chapter: int
+
+
+class ChapterOut(BaseModel):
+    version: str
+    book: BookOut
+    chapter: int
+    numbering: Numbering | None
+    previous: Neighbour | None
+    next: Neighbour | None
+    verses: list[VerseOut]
+
+
+class ChapterOfBook(BaseModel):
+    chapter: int
+    numbering: Numbering | None
+    verses: list[VerseOut]
+
+
+class BookWhole(BaseModel):
+    version: str
+    book: BookOut
+    chapters: list[ChapterOfBook]

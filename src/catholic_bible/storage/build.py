@@ -32,7 +32,22 @@ CREATE TABLE books (
     testament TEXT NOT NULL,
     canon_group TEXT NOT NULL,
     deuterocanonical INTEGER NOT NULL,
-    chapters INTEGER NOT NULL
+    chapters INTEGER NOT NULL,
+    first_order INTEGER NOT NULL,
+    last_order INTEGER NOT NULL
+) WITHOUT ROWID;
+
+-- The spine is dense and canonical order runs contiguously inside a chapter, so
+-- a chapter is a range rather than a set. Reading one is an indexed BETWEEN and
+-- the neighbouring chapter is the next row, which is what makes previous and
+-- next cost nothing.
+CREATE TABLE chapters (
+    book TEXT NOT NULL REFERENCES books(code),
+    chapter INTEGER NOT NULL,
+    verses INTEGER NOT NULL,
+    first_order INTEGER NOT NULL,
+    last_order INTEGER NOT NULL,
+    PRIMARY KEY (book, chapter)
 ) WITHOUT ROWID;
 
 CREATE TABLE spine (
@@ -69,8 +84,8 @@ CREATE UNIQUE INDEX texts_address ON texts(version, canonical_order);
 def build(connection: sqlite3.Connection) -> None:
     """The whole database, from the published files, in one transaction."""
     connection.executescript(SCHEMA)
-    build_canon(connection)
     build_spine(connection)
+    build_canon(connection)
     for code in VERSIONS:
         published = load(code)
         build_version(connection, code, published.metadata)
@@ -79,8 +94,25 @@ def build(connection: sqlite3.Connection) -> None:
 
 
 def build_canon(connection: sqlite3.Connection) -> None:
+    """The books and their chapters, with the order range each one spans.
+
+    Runs after the spine, because the ranges are read back off it rather than
+    recomputed here. Two walks of the same numbers disagree eventually.
+    """
+    connection.execute(
+        "INSERT INTO chapters "
+        "SELECT book, chapter, COUNT(*), MIN(canonical_order), MAX(canonical_order) "
+        "FROM spine GROUP BY book, chapter"
+    )
+
+    spans = {
+        str(book): (int(first), int(last))
+        for book, first, last in connection.execute(
+            "SELECT book, MIN(first_order), MAX(last_order) FROM chapters GROUP BY book"
+        )
+    }
     connection.executemany(
-        "INSERT INTO books VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO books VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
         [
             (
                 book.code,
@@ -89,6 +121,7 @@ def build_canon(connection: sqlite3.Connection) -> None:
                 str(book.group),
                 int(book.deuterocanonical),
                 SPINE.chapter_count(book.code) or 0,
+                *spans[book.code],
             )
             for book in CANON
         ],

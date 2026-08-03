@@ -166,7 +166,8 @@ def test_the_schema_leaves_room_for_full_text_search(
         """
         INSERT INTO versions (code, name, language, rights)
              VALUES ('v', 'V', 'la', '{}');
-        INSERT INTO books VALUES ('GEN', 1, 'OLD', 'PENTATEUCH', 0, 50);
+        INSERT INTO books VALUES ('GEN', 1, 'OLD', 'PENTATEUCH', 0, 50, 1, 1);
+        INSERT INTO chapters VALUES ('GEN', 1, 1, 1, 1);
         INSERT INTO spine VALUES (1, 'GEN.1.1', 'GEN', 1, 1);
         INSERT INTO texts (version, canonical_order, text)
              VALUES ('v', 1, 'in principio creavit Deus');

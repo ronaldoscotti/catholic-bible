@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from enum import StrEnum
 
 from catholic_bible.canon.aliases import ALIASES
 
@@ -36,10 +37,21 @@ _CHAPTER = re.compile(rf"^\s*(.+?)\s+(\d+)(?:\s*{DASH}\s*\d+)?\s*$")
 _HEAD = re.compile(r"^\s*(.+?)\s+(\d.*?)\s*$")
 
 
+class UnparsedReason(StrEnum):
+    """Why a written reference could not be read. A closed set.
+
+    It was a bare `str` until B3 needed to publish it, and a reason code a
+    caller branches on has to be closed or it is prose wearing a field name.
+    """
+
+    MALFORMED = "malformed"
+    UNKNOWN_BOOK = "unknown_book"
+
+
 @dataclass(frozen=True, slots=True)
 class UnparsedReference:
     text: str
-    reason: str
+    reason: UnparsedReason
     book: str | None = None
 
 
@@ -76,7 +88,7 @@ def parse_reference(text: str) -> Parsed:
 
     code = ALIASES.resolve(match[1])
     if code is None:
-        return UnparsedReference(text, "unknown_book", match[1])
+        return UnparsedReference(text, UnparsedReason.UNKNOWN_BOOK, match[1])
 
     chapter, verse = int(match[2]), int(match[3])
     start = (chapter, verse)
@@ -95,11 +107,11 @@ def _parse_parts(text: str) -> Parsed:
     """
     match = _PARTS.match(text)
     if match is None:
-        return UnparsedReference(text, "malformed")
+        return UnparsedReference(text, UnparsedReason.MALFORMED)
 
     code = ALIASES.resolve(match[1])
     if code is None:
-        return UnparsedReference(text, "unknown_book", match[1])
+        return UnparsedReference(text, UnparsedReason.UNKNOWN_BOOK, match[1])
 
     chapter = int(match[2])
     parts: list[Span] = []
@@ -111,7 +123,7 @@ def _parse_parts(text: str) -> Parsed:
 
         verses = _PART_VERSES.match(piece)
         if verses is None:
-            return UnparsedReference(text, "malformed", match[1])
+            return UnparsedReference(text, UnparsedReason.MALFORMED, match[1])
 
         first = int(verses[1])
         last = int(verses[2]) if verses[2] else first
@@ -124,11 +136,11 @@ def _parse_whole_chapter(text: str) -> Parsed:
     """`Sl 23`, and `Ex 13-14` anchored on the first chapter."""
     match = _CHAPTER.match(text)
     if match is None:
-        return UnparsedReference(text, "malformed")
+        return UnparsedReference(text, UnparsedReason.MALFORMED)
 
     code = ALIASES.resolve(match[1])
     if code is None:
-        return UnparsedReference(text, "unknown_book", match[1])
+        return UnparsedReference(text, UnparsedReason.UNKNOWN_BOOK, match[1])
 
     chapter = int(match[2])
     return Reference(code, ((chapter, 1), (chapter, 1)), whole_chapter=True)
