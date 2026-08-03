@@ -17,6 +17,9 @@ __pycache__/
 *.egg-info/
 /scratch/
 /tmp/
+# The image builds its own. A laptop built one would be copied over it.
+*.db
+*.sqlite3
 *.sqlite3-journal
 .DS_Store
 

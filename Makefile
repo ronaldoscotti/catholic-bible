@@ -1,10 +1,15 @@
-.PHONY: install test lint fmt typecheck run down export-corpus verify-export
+.PHONY: install test lint fmt typecheck run down db export-corpus verify-export
 
 install:
 	uv sync
 
 test:
 	uv run pytest
+
+# Derived from the committed corpus. Not committed, and carrying no checksum,
+# because CI already verifies the checksums of everything it is built from.
+db:
+	uv run scripts/build-db.py
 
 lint:
 	uv run ruff check .

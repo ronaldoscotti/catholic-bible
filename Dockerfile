@@ -13,6 +13,10 @@ COPY . /app
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked
 
+# The read database, from the committed corpus. No network and no credentials,
+# which is what keeps a clean checkout reproducible.
+RUN uv run scripts/build-db.py
+
 FROM python:3.13-slim-trixie
 
 RUN useradd --create-home --uid 1000 app
