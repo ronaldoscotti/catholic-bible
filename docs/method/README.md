@@ -95,13 +95,17 @@ met and both documents say so on their first screen.
 B4 ships in two slices. The first carries the commentary and the second carries
 the cross-references.
 
-**B4 has every acceptance criterion met and it does not close.** One of its two
-named verifications did not happen. The Portuguese Haydock was to get a human
-review sample with the size and the error rate written down, and the sample is
-drawn, seeded and committed with an empty verdict column. An epic closes when
-its criteria are checked and its verification ran, and a checklist that counts
-eight ticked boxes as done would be the kind of decoration this file exists to
-avoid.
+**B4 closes.** Its second verification asked for a human review sample with the
+size and the error rate written down. The author read the sample and flagged
+nothing, then asked for the entry by entry pass to be done rather than waiting
+for a second person, so a language model read 200 entries against their English
+and found 5 defects. 2.5%, with a 95% interval of 1.1% to 5.7%, and two of the
+five say the opposite of the English.
+
+That is a machine grading a machine and it is weaker than the criterion imagined.
+`README.md`, `LIMITS.md` and the epic all say so in those words. Recording it as
+met with the weakness named beats leaving a box unticked forever, and it beats
+calling it a human review.
 
 The two gates on B1 were not met the same way and the difference is recorded
 rather than averaged.

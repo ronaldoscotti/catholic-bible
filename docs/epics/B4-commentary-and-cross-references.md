@@ -56,4 +56,16 @@ Doré illustrations. Maps. Patristic texts beyond Haydock. The Catechism and mag
 
 Test-driven on anchor resolution and on the orphan path for unresolvable cross-references. The Portuguese Haydock gets a human review sample with the sample size and the error rate written down, because a quality claim without a denominator is not a claim.
 
-**Every criterion above is met and this epic does not close.** The sample is drawn, seeded and committed at `docs/qa/haydock-translation-sample.csv`, 200 entries with an empty verdict column. The size is written down and the error rate is not, because nobody has read it. An epic closes when its criteria are checked and its verification ran, and one of the two verifications did not.
+**Both verifications have now run and this epic closes.** The sample is drawn, seeded and committed at `docs/qa/haydock-translation-sample.csv`, and every one of its 200 entries carries a verdict in `haydock-translation-verdicts.csv`.
+
+| | |
+|---|---|
+| Sample | 200 of 20705 |
+| Entries carrying a defect | 5 |
+| Observed error rate | 2.5% |
+| 95% Wilson interval | 1.1% to 5.7% |
+| Of those five, meaning inverted | 2 |
+
+**The reading was done by a language model, not by a person.** The author read the sample and flagged nothing, then asked for the entry by entry pass rather than a second human. A machine graded a machine, which is weaker than the criterion imagined and is what happened. `README.md` and `LIMITS.md` both say so in those words rather than describing the corpus as reviewed.
+
+All five defects pass every check in `audit-translation.py`, and a test asserts that. An inversion carries the same length, markup and digits as a faithful rendering, which is the whole reason this verification could not be a script.
