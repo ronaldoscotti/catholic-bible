@@ -15,7 +15,7 @@ $ make typecheck
 Success: no issues found in 54 source files
 
 $ make test
-497 passed
+499 passed
 ```
 
 ## The epic criteria, walked one by one
@@ -98,6 +98,29 @@ The epic says the sample gets a size and an error rate written down. The size is
 written down. **The error rate is not, because nobody has read it, and this
 document will not record a number that does not exist.**
 
+**What was run instead, and what it is worth.** Five mechanical comparisons of
+each Portuguese body against the English it came from, over the sample and over
+all 20705.
+
+| Check | Sample of 200 | All 20705 |
+|---|---|---|
+| Portuguese body empty | 0 | 0 |
+| Identical to the English | 0 | 0 |
+| Length outside 0.6 to 1.8 of the source | 0 | 0 |
+| Emphasis markup counts differ | 1, 0.5% | 181, 0.87% |
+| A digit does not survive | 0 | 84, 0.41% |
+
+The digit check normalises thousands groups on both sides first, because English
+writes `400,000` and Portuguese writes `400.000`, and skipping that reports 112
+where 28 are punctuation. Of the 84 left, reading six found both real losses and
+correct choices, `40 years` becoming `quarenta anos` among them. Nothing
+mechanical separates those, and that is precisely the gap the human sample
+exists to close.
+
+These checks find a body that was never translated, one that was truncated and a
+citation that moved. They cannot find a fluent paragraph that says the opposite
+of the original.
+
 ## Defects found during the work
 
 **Two notes were invisible upstream.** Labelled `26-7` and `73-4`, meaning verses
@@ -140,6 +163,34 @@ rather than from the canon.
 Neither was found by reading. The first came from a review agent tracing the
 disjoint path by hand and the second from sending twenty five deliberately
 malformed requests, which is the pass B3 skipped and paid for.
+
+## What running those checks found, and it was serious
+
+**244 Portuguese bodies shipped with the translation harness's control markers
+inside the text.** A reader of Genesis 35:6 saw the note, then
+`[[[REVIEW:exegese_datada|...]]`, then `[[[ID:484]]]`, and then the entire
+translation of an unrelated note. 244 of 20705 entries across 56 books. The
+English was never touched and no test noticed, because every test asked whether
+a body existed and none asked what was in it.
+
+It was found by running the structural pass above rather than by reading code, a
+day after the pull request opened.
+
+The export cuts each body at the first marker. The cut was verified not to
+remove content two ways. What it keeps measures between 0.85 and 1.32 of its
+English source, median 1.01, against a corpus median of 1.01. And every absorbed
+passage whose entry still exists upstream carries its own translation on its own
+entry, checked against the source database for all 119 that survive the reseed.
+
+```
+$ scripts/export-commentary.py --source ...
+exported 20705 entries, 2 clamped, 244 cut at a leaked marker
+```
+
+The build refuses any body that still holds a marker, so a future export cannot
+ship the same thing silently, and a test over the published file is the third
+gate. The committed review sample was redrawn from the corrected corpus, same
+seed, same rows.
 
 ## Where the code and the plan disagree
 

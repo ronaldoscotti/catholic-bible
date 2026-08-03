@@ -89,3 +89,36 @@ def test_the_only_published_source_is_the_haydock() -> None:
     """The Catena Aurea shares two tables with this and does not ship."""
     assert SOURCES == ("haydock",)
     assert not (DATA_DIR / "commentary" / "catena.json").exists()
+
+
+def test_no_body_carries_a_leaked_pipeline_marker() -> None:
+    """The translation harness wrote its own control markers into 244 bodies.
+
+    `[[[REVIEW:category|reason]]` reached the reader as text, and the
+    `[[[ID:n]]]` after it was followed by the whole translation of another
+    entry. The English side was never touched. The export cuts at the first
+    marker and the build refuses anything that survives, so this is the third
+    place the same contamination has to get past.
+    """
+    for entry in load("haydock").entries:
+        for language, markup in entry.body.items():
+            assert "[[[" not in markup, (entry.start, language)
+    assert PROVENANCE["files"]["haydock.json"]["cut_at_a_leaked_marker"] == 244
+
+
+def test_a_cut_body_is_still_a_whole_translation() -> None:
+    """What the cut kept has to be the note, not the first half of it.
+
+    Measured against the English it came from. Every one of the 244 lands
+    between 0.85 and 1.32 of its source length, which is the ordinary band for
+    English into Portuguese, so the cut removed contamination and not content.
+    """
+    from catholic_bible.storage.build import plain  # noqa: PLC0415
+
+    ratios = [
+        len(plain(entry.body["pt-BR"])) / max(len(plain(entry.body["en-US"])), 1)
+        for entry in load("haydock").entries
+    ]
+    outside = [ratio for ratio in ratios if ratio < 0.6 or ratio > 1.8]
+
+    assert not outside, len(outside)

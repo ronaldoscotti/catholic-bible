@@ -19,6 +19,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -51,6 +52,12 @@ FIXTURE = "storage/app/haydock-translation/done.jsonl"
 PAGE = 2000
 
 LANGUAGES = {"body_html": "en-US", "body_html_translated": "pt-BR"}
+
+# The translation harness wrote its own control markers into 244 Portuguese
+# bodies, `[[[REVIEW:category|reason]]` followed by `[[[ID:n]]]` and then the
+# whole translation of another entry. The English side is clean. Everything from
+# the first marker onward is contamination, so the body is cut there.
+_LEAKED = re.compile(r"\[\[\[")
 
 # Authored here. The source database holds one licence string for the whole
 # source and cannot say that the two languages have different answers.
@@ -112,8 +119,8 @@ def metadata(container: str, credentials: dict[str, str]) -> dict[str, Any]:
     return found
 
 
-def entry_of(row: dict[str, Any]) -> tuple[dict[str, Any], bool]:
-    """One published entry, and whether its end had to be clamped.
+def entry_of(row: dict[str, Any]) -> tuple[dict[str, Any], bool, bool]:
+    """One published entry, whether its end was clamped and whether it was cut.
 
     Two notes are labelled `26-7` and `73-4`, meaning verses 26 to 27 and 73 to
     74. The upstream extraction read the elided second number literally, so the
@@ -133,20 +140,29 @@ def entry_of(row: dict[str, Any]) -> tuple[dict[str, Any], bool]:
     if clamped:
         end, end_order = start, start_order
 
-    body = {
-        language: row[column]
-        for column, language in LANGUAGES.items()
-        if row.get(column)
-    }
-    return {
-        "start": start,
-        "end": end,
-        "start_order": start_order,
-        "end_order": end_order,
-        "label": row["label"],
-        "position": int(row["position"]),
-        "body": body,
-    }, clamped
+    body, cut = {}, False
+    for column, language in LANGUAGES.items():
+        markup = row.get(column)
+        if not markup:
+            continue
+        leak = _LEAKED.search(markup)
+        if leak:
+            markup, cut = markup[: leak.start()].rstrip(), True
+        body[language] = markup
+
+    return (
+        {
+            "start": start,
+            "end": end,
+            "start_order": start_order,
+            "end_order": end_order,
+            "label": row["label"],
+            "position": int(row["position"]),
+            "body": body,
+        },
+        clamped,
+        cut,
+    )
 
 
 def write(path: Path, source: dict[str, Any], rows: list[dict[str, Any]]) -> bytes:
@@ -201,10 +217,11 @@ def main() -> int:
 
     rows: list[dict[str, Any]] = []
     clamped: list[str] = []
+    cut: list[str] = []
     offset = 0
     while page := fetch(args.container, credentials, offset):
         for row in page:
-            entry, was_clamped = entry_of(row)
+            entry, was_clamped, was_cut = entry_of(row)
             # The source language, not merely some language. A translation
             # without the text it was made from is a note with no provenance.
             if "en-US" not in entry["body"]:
@@ -212,6 +229,8 @@ def main() -> int:
             rows.append(entry)
             if was_clamped:
                 clamped.append(entry["start"])
+            if was_cut:
+                cut.append(entry["start"])
         offset += PAGE
         print(f"  {len(rows)} entries")
 
@@ -245,6 +264,7 @@ def main() -> int:
                 "entries": len(rows),
                 "bodies": dict(sorted(languages.items())),
                 "clamped": sorted(clamped),
+                "cut_at_a_leaked_marker": len(cut),
                 "from": "bible_commentary_entries",
                 "translation_from": FIXTURE,
             }
@@ -253,7 +273,10 @@ def main() -> int:
     (dest / "PROVENANCE.json").write_text(
         json.dumps(provenance, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    print(f"exported {len(rows)} entries, {len(clamped)} clamped")
+    print(
+        f"exported {len(rows)} entries, {len(clamped)} clamped,"
+        f" {len(cut)} cut at a leaked marker"
+    )
     return 0
 
 

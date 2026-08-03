@@ -12,7 +12,7 @@ B3 had. Recorded rather than tidied.
 ## What the diff is
 
 20705 Haydock notes in two languages, exported by a committed script, three new
-tables, two routes, and the provenance paragraph that had to be right. 497 tests.
+tables, two routes, and the provenance paragraph that had to be right. 499 tests.
 
 ## The thing worth most attention
 
@@ -110,13 +110,37 @@ span, because the argument is the part that could be wrong.
 said so. Both were measured here twice, before and after the container rebuild,
 and the numbers in `DECISIONS.md` are the second run.
 
+## Found after this document was first written
+
+**244 published Portuguese bodies carried the translation harness's control
+markers**, `[[[REVIEW:category|reason]]` and `[[[ID:n]]]`, with the whole
+translation of an unrelated note behind them. 56 books. The English was clean.
+
+Nothing in the suite could have caught it. Every test asked whether a body
+existed, what language it was in and whether its anchor was right. None asked
+what the body said. The published file test checked a checksum of the
+contamination and passed.
+
+It was found by running the structural half of the epic's own verification,
+which is the half nobody thought needed running because the other half needs a
+person.
+
+The export cuts at the first marker, the build refuses a body that still holds
+one, and a test over the published file is the third gate. That the cut removes
+contamination rather than content was checked two ways rather than asserted:
+what remains measures 0.85 to 1.32 of its English source with a median of 1.01,
+and all 119 absorbed passages whose entries survive the upstream reseed carry
+their own translation on their own entry.
+
 ## What a second reviewer should look at first
 
 The Portuguese. Nobody has read it, the sample is drawn and waiting, and every
 other check in this diff answers a structural question rather than a question
 about meaning. A translation can be perfectly anchored, perfectly checksummed,
-and wrong on the page.
+and wrong on the page, and for 244 entries it was perfectly anchored, perfectly
+checksummed and visibly broken.
 
-Then the two clamped entries, which are the only place in this repository where a
-published value differs from what the source holds, even though it differs by
-being smaller rather than by being invented.
+Then the two clamped anchors and the 244 cut bodies, which are the only places
+in this repository where a published value differs from what the source holds.
+Both differ by removing rather than by inventing, and both are counted in
+`PROVENANCE.json`.

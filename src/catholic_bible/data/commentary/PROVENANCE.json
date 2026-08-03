@@ -7,7 +7,7 @@
   },
   "files": {
     "haydock.json": {
-      "sha256": "77b2b234cb02550f09846eef47729780ef206af9ccddce88dd6a4a2965e5343f",
+      "sha256": "077d9f3e21d2e45d976b5af9c5d70f828f6f9f554148d9712cc8dcd824431def",
       "entries": 20705,
       "bodies": {
         "en-US": 20705,
@@ -17,6 +17,7 @@
         "LUK.1.73",
         "MAT.15.26"
       ],
+      "cut_at_a_leaked_marker": 244,
       "from": "bible_commentary_entries",
       "translation_from": "storage/app/haydock-translation/done.jsonl"
     }

@@ -148,8 +148,55 @@ open.
 column, and a test fails the day someone fills it in without updating this
 section. At that size an observed rate near 5% carries a 95% interval of about
 3 points either way. Until then the honest claim is that a pipeline ran and that
-nobody has checked its output, and this repository will not describe the corpus
+nobody has checked its meaning, and this repository will not describe the corpus
 as reviewed.
+
+**What has been checked is structure, not meaning.** Five mechanical comparisons
+run against the English each entry came from, over the sample and over all
+20705.
+
+| Check | Sample of 200 | All 20705 |
+|---|---|---|
+| Portuguese body empty | 0 | 0 |
+| Portuguese identical to the English | 0 | 0 |
+| Length outside 0.6 to 1.8 of the source | 0 | 0 |
+| `<em>` and `<strong>` counts differ | 1, 0.5% | 181, 0.87% |
+| A digit does not survive | 0 | 84, 0.41% |
+
+The digit check joins thousands groups on both sides first, because English
+writes `400,000` and Portuguese writes `400.000` and a naive comparison reports
+112 differences where 28 of them are punctuation. Of the 84 that remain, reading
+six found a mix of legitimate choices and real losses. `100 fold` rendered as
+`cêntuplo` and `40 years` as `quarenta anos` are correct and count as
+differences here. A chapter number dropped from a citation is a defect.
+**Nothing mechanical can separate those two, which is the whole reason a person
+has to read the sample.**
+
+None of these five answers whether a sentence means what the Latin behind it
+means. They catch a body that was never translated, a body that was truncated
+and a citation that moved. They do not catch a fluent paragraph that says the
+opposite of the original, and that is the failure that would matter most.
+
+### Two hundred and forty four bodies shipped with pipeline markers in them
+
+Found while running the checks above, after the first pull request was open.
+
+The translation harness wrote its own control markers into the Portuguese text
+rather than into the field beside it. A reader of Genesis 35:6 saw the note, then
+`[[[REVIEW:exegese_datada|...]]`, then `[[[ID:484]]]`, and then the entire
+translation of an unrelated note glued on behind it. 244 of 20705 entries across
+56 books. The English was never touched.
+
+The export now cuts each body at the first marker. What that keeps measures
+between 0.85 and 1.32 of its English source, median 1.01, so the cut removes
+contamination rather than content, and every absorbed passage that still exists
+upstream carries its own translation on its own entry. The build refuses any body
+that still contains a marker, and a test over the published file is the third
+place the same contamination would have to get past.
+
+`PROVENANCE.json` records the count. It is the second value in this dataset that
+differs from what the source holds, after the two clamped anchors, and both
+differ by removing rather than by inventing.
 
 ### Two notes lost their second verse
 

@@ -22,8 +22,21 @@ and waiting in `docs/qa/haydock-translation-sample.csv`, 200 entries, and the
 day someone fills in the verdict column this paragraph gets a number in it. The
 English is the 1859 transcription and it was not touched.
 
+What has been checked is structure. No body is empty, none is identical to the
+English it came from, none is wildly shorter or longer, and in the sample of 200
+every digit survives. Across all 20705, one body in 115 differs in emphasis
+markup and one in 245 loses or gains a digit, and reading a handful of those
+shows both real losses and correct choices like `40 years` becoming
+`quarenta anos`. No mechanical check separates the two, which is what the sample
+is for. None of it says whether a sentence means what the Latin behind it means.
+
 There are no cross-references yet, no full text search, no static artifacts on a
 CDN, and nothing is deployed. The API is read only and it always will be.
+
+244 of the 20705 Portuguese bodies shipped with the translation harness's own
+control markers inside the text, and one unrelated note glued on behind each.
+That was found by running those checks and it is fixed. `LIMITS.md` says what
+was cut and how the cut was verified not to remove content.
 
 `ROADMAP.md` says what is coming and why. `docs/epics/` holds one file per epic,
 `docs/method/` records the process that produced them, and `LIMITS.md` says what

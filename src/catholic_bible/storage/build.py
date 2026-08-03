@@ -31,6 +31,11 @@ DEFAULT_VERSION = "matos-soares"
 _TAG = re.compile(r"<[^>]+>")
 _SPACE = re.compile(r"\s+")
 
+# The translation harness leaked its own control markers into 244 bodies once.
+# The export cuts them and this refuses to build if any survive, so the same
+# contamination cannot reach a reader twice.
+_LEAKED = re.compile(r"\[\[\[")
+
 # `texts` keeps its rowid while the other three drop theirs. An FTS5 external
 # content index addresses its content table by rowid, so B9 cannot add search
 # beside a WITHOUT ROWID table without rebuilding this one.
@@ -269,6 +274,12 @@ def build_commentary(
                 )
         if entry.last_order < entry.first_order:
             raise ValueError(f"{entry.start} ends at {entry.end}, before it starts")
+
+        for language, markup in entry.body.items():
+            if _LEAKED.search(markup):
+                raise ValueError(
+                    f"{entry.start} carries a leaked pipeline marker in {language}"
+                )
 
         widest = max(widest, entry.last_order - entry.first_order)
         entries.append(
