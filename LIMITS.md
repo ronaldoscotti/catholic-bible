@@ -153,7 +153,9 @@ as reviewed.
 
 **What has been checked is structure, not meaning.** Five mechanical comparisons
 run against the English each entry came from, over the sample and over all
-20705.
+20705. `make audit-translation` recomputes every number below and a test pins
+them, because a number in this file that nothing recomputes is a number nobody
+can check.
 
 | Check | Sample of 200 | All 20705 |
 |---|---|---|

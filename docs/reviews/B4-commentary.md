@@ -132,6 +132,40 @@ what remains measures 0.85 to 1.32 of its English source with a median of 1.01,
 and all 119 absorbed passages whose entries survive the upstream reseed carry
 their own translation on their own entry.
 
+## A second review, and it found the same blind spot twice
+
+A review agent ran against the stack. It had no shell again, said so at the top
+rather than writing transcripts, and traced one real defect that reproduced
+immediately.
+
+**The overflow guard was asymmetric.** `Path(le=2**63 - 1)` bounds the top and
+nothing bounds the bottom, so a negative chapter of the same magnitude still
+reached `sqlite3` and still raised `OverflowError`.
+
+```
+$ GET /v1/books/GEN/chapters/-99999999999999999999/verses/1/commentary
+500  'Internal Server Error'
+$ GET /v1/versions/matos-soares/books/GEN/chapters/-99999999999999999999
+500  'Internal Server Error'
+```
+
+Four route shapes, two of them B3's and already merged. The body is not even
+JSON, so the one published error shape was absent rather than wrong.
+
+The guard now reads `Path(ge=-(2**63), le=2**63 - 1)` and the comment says both
+ends. A chapter of 0 or of -1 still answers 404 `not_on_spine` as it always did,
+because the bound is the driver's and not the canon's.
+
+**The hostile pass that missed it was mine.** Twenty five requests, and every
+overflow case in it was positive. Three negative cases are now in the
+parameterized test that sends real malformed requests.
+
+**The second finding was a process gap and it was fair.** The two structural
+audit numbers quoted in `README.md` and `LIMITS.md`, 181 and 84, had no committed
+script. Every other number in those tables is recomputed by a test.
+`scripts/audit-translation.py` is now committed, `make audit-translation` runs
+it, and a test asserts both figures so the prose cannot drift from the corpus.
+
 ## What a second reviewer should look at first
 
 The Portuguese. Nobody has read it, the sample is drawn and waiting, and every

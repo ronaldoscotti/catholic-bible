@@ -122,3 +122,35 @@ def test_a_cut_body_is_still_a_whole_translation() -> None:
     outside = [ratio for ratio in ratios if ratio < 0.6 or ratio > 1.8]
 
     assert not outside, len(outside)
+
+
+def test_the_numbers_the_readme_publishes_are_what_the_audit_finds() -> None:
+    """`README.md` and `LIMITS.md` both quote these.
+
+    A number in the README that nothing recomputes is a number nobody can check,
+    which is what a review found against the first version of those tables.
+    """
+    import importlib.util  # noqa: PLC0415
+    import sys  # noqa: PLC0415
+
+    root = DATA_DIR.parent.parent.parent
+    spec = importlib.util.spec_from_file_location(
+        "audit_translation", root / "scripts" / "audit-translation.py"
+    )
+    assert spec is not None and spec.loader is not None
+    audit = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = audit
+    spec.loader.exec_module(audit)
+
+    found = audit.compare(
+        [
+            (str(entry.start), entry.body["en-US"], entry.body["pt-BR"])
+            for entry in load("haydock").entries
+        ]
+    )
+
+    assert found["empty"] == []
+    assert found["identical to the source"] == []
+    assert found["length outside the band"] == []
+    assert len(found["emphasis markup differs"]) == 181
+    assert len(found["a digit does not survive"]) == 84

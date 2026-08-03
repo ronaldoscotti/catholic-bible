@@ -15,7 +15,7 @@ $ make typecheck
 Success: no issues found in 54 source files
 
 $ make test
-499 passed
+500 passed
 ```
 
 ## The epic criteria, walked one by one
@@ -100,7 +100,8 @@ document will not record a number that does not exist.**
 
 **What was run instead, and what it is worth.** Five mechanical comparisons of
 each Portuguese body against the English it came from, over the sample and over
-all 20705.
+all 20705. `scripts/audit-translation.py` is committed and `make
+audit-translation` reruns it, so these are re-derivable rather than reported.
 
 | Check | Sample of 200 | All 20705 |
 |---|---|---|

@@ -29,6 +29,7 @@ markup and one in 245 loses or gains a digit, and reading a handful of those
 shows both real losses and correct choices like `40 years` becoming
 `quarenta anos`. No mechanical check separates the two, which is what the sample
 is for. None of it says whether a sentence means what the Latin behind it means.
+`make audit-translation` recomputes all of it.
 
 There are no cross-references yet, no full text search, no static artifacts on a
 CDN, and nothing is deployed. The API is read only and it always will be.

@@ -41,10 +41,12 @@ CATALOGUE = "public, max-age=3600"
 
 router = APIRouter(prefix="/v1")
 
-# A path number wider than 64 bits reaches `sqlite3` as a bind parameter and
-# raises OverflowError, which is a 500 with a traceback. The bound is the
-# driver's, not the canon's, so it refuses the impossible and nothing real.
-InPath = Annotated[int, Path(le=2**63 - 1)]
+# A path number outside 64 bits reaches `sqlite3` as a bind parameter and raises
+# OverflowError, which is a 500 with a traceback. Both ends, because the driver
+# refuses both and the first version of this guard only bounded the top. The
+# bound is the driver's rather than the canon's, so a chapter of 0 or -1 still
+# answers 404 the way it always has.
+InPath = Annotated[int, Path(ge=-(2**63), le=2**63 - 1)]
 
 
 def database() -> Iterator[sqlite3.Connection]:

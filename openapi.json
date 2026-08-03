@@ -884,6 +884,7 @@
             "required": true,
             "schema": {
               "maximum": 9223372036854775807,
+              "minimum": -9223372036854775808,
               "title": "Chapter",
               "type": "integer"
             }
@@ -894,6 +895,7 @@
             "required": true,
             "schema": {
               "maximum": 9223372036854775807,
+              "minimum": -9223372036854775808,
               "title": "Verse",
               "type": "integer"
             }
@@ -1265,6 +1267,7 @@
             "required": true,
             "schema": {
               "maximum": 9223372036854775807,
+              "minimum": -9223372036854775808,
               "title": "Chapter",
               "type": "integer"
             }
@@ -1333,6 +1336,7 @@
             "required": true,
             "schema": {
               "maximum": 9223372036854775807,
+              "minimum": -9223372036854775808,
               "title": "Chapter",
               "type": "integer"
             }
@@ -1343,6 +1347,7 @@
             "required": true,
             "schema": {
               "maximum": 9223372036854775807,
+              "minimum": -9223372036854775808,
               "title": "Verse",
               "type": "integer"
             }
