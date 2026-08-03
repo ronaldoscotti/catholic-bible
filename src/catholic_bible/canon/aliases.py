@@ -18,7 +18,10 @@ from enum import StrEnum
 
 from catholic_bible.canon import DATA_DIR
 from catholic_bible.canon.authored_names import (
+    ENGLISH_ABBREVIATIONS,
+    ENGLISH_DISPLAY,
     ENGLISH_MODERN,
+    LATIN_ABBREVIATIONS,
     LATIN_ALIASES,
     LATIN_NAMES,
 )
@@ -49,10 +52,16 @@ class Aliases:
 
         for name, code in _douay_names().items():
             self._claim(Language.EN, name, code)
+        for code, name in ENGLISH_DISPLAY.items():
+            self._claim(Language.EN, name, code)
         for code, name in ENGLISH_MODERN.items():
+            self._claim(Language.EN, name, code)
+        for code, name in ENGLISH_ABBREVIATIONS.items():
             self._claim(Language.EN, name, code)
 
         for code, name in LATIN_NAMES.items():
+            self._claim(Language.LA, name, code)
+        for code, name in LATIN_ABBREVIATIONS.items():
             self._claim(Language.LA, name, code)
         for code, names in LATIN_ALIASES.items():
             for name in names:

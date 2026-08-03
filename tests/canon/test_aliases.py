@@ -100,7 +100,7 @@ def test_the_alias_count_is_pinned_so_a_new_one_cannot_arrive_quietly() -> None:
     Adding, removing or renaming any written form moves a number here, which
     forces whoever did it to look at the conformance corpus in the same change.
     """
-    assert ALIASES.size() == {Language.PT: 219, Language.EN: 99, Language.LA: 408}
+    assert ALIASES.size() == {Language.PT: 219, Language.EN: 160, Language.LA: 476}
 
 
 def test_an_unknown_name_resolves_to_nothing_rather_than_raising() -> None:
