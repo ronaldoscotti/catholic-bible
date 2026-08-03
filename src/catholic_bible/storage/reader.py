@@ -159,3 +159,9 @@ def texts_at(
 
 def address(connection: sqlite3.Connection, verse_id: str) -> Row | None:
     return _one(connection.execute("SELECT * FROM spine WHERE id = ?", (verse_id,)))
+
+
+def at_order(connection: sqlite3.Connection, order: int) -> Row | None:
+    return _one(
+        connection.execute("SELECT * FROM spine WHERE canonical_order = ?", (order,))
+    )

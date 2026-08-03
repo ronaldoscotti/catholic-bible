@@ -2,29 +2,9 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterator
-from pathlib import Path
-
-import pytest
 from fastapi.testclient import TestClient
 
-from catholic_bible.api.app import app
-from catholic_bible.api.routes import CATALOGUE, IMMUTABLE, database
-from catholic_bible.storage.database import connect
-
-
-@pytest.fixture
-def client(database_path: Path) -> Iterator[TestClient]:
-    def read() -> Iterator[object]:
-        connection = connect(database_path)
-        try:
-            yield connection
-        finally:
-            connection.close()
-
-    app.dependency_overrides[database] = read
-    yield TestClient(app)
-    app.dependency_overrides.clear()
+from catholic_bible.api.routes import CATALOGUE, IMMUTABLE
 
 
 def test_the_versions_are_listed_with_the_default_first(client: TestClient) -> None:

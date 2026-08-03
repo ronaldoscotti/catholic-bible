@@ -13,7 +13,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Response
 
-from catholic_bible.api import errors, models
+from catholic_bible.api import errors, models, resolving
 from catholic_bible.canon import psalms
 from catholic_bible.canon.aliases import ALIASES, Language
 from catholic_bible.canon.authored_names import (
@@ -295,3 +295,94 @@ def read_verse(
 
     response.headers["Cache-Control"] = IMMUTABLE
     return _verse_out(members[0], language)
+
+
+@router.get(
+    "/resolve",
+    summary="A written reference, resolved to addresses",
+    response_model=models.ResolvedOut,
+    responses=errors.UNPROCESSABLE,
+)
+def resolve(
+    connection: Database,
+    response: Response,
+    ref: str,
+    scheme: resolving.InputScheme = resolving.InputScheme.SPINE,
+) -> models.ResolvedOut:
+    reference, orders = resolving.read(ref, scheme)
+    default = reader.default_version(connection)
+    language = reader.language_of(str(default["language"]))
+
+    members = reader.verses_between(
+        connection, str(default["code"]), orders[0], orders[-1]
+    )
+    wanted = set(orders)
+    covered = [row for row in members if int(row["canonical_order"]) in wanted]
+
+    ids = []
+    for order in orders:
+        found = reader.at_order(connection, order)
+        if found is not None:
+            ids.append(str(found["id"]))
+
+    response.headers["Cache-Control"] = IMMUTABLE
+    return models.ResolvedOut(
+        reference=format_reference(reference, language),
+        book=reference.book,
+        ids=ids,
+        preview=str(covered[0]["text"]) if covered else None,
+    )
+
+
+@router.get(
+    "/passage",
+    summary="A written reference, read in one or more versions",
+    response_model=models.PassageOut,
+    responses={**errors.NOT_FOUND, **errors.UNPROCESSABLE},
+)
+def passage(
+    connection: Database,
+    response: Response,
+    ref: str,
+    versions: str | None = None,
+    scheme: resolving.InputScheme = resolving.InputScheme.SPINE,
+) -> models.PassageOut:
+    reference, orders = resolving.read(ref, scheme)
+    wanted = resolving.versions_named(connection, versions)
+    codes = [str(row["code"]) for row in wanted]
+    language = reader.language_of(str(wanted[0]["language"]))
+
+    held = reader.texts_at(connection, codes, orders)
+
+    verses = []
+    for order in orders:
+        address = reader.at_order(connection, order)
+        if address is None:
+            continue
+        book = str(address["book"])
+        point = (int(address["chapter"]), int(address["verse"]))
+        verses.append(
+            models.AlignedVerse(
+                id=str(address["id"]),
+                book=book,
+                chapter=point[0],
+                verse=point[1],
+                reference=format_reference(Reference(book, (point, point)), language),
+                texts=[
+                    # Every requested version gets a column, and a version
+                    # without the verse gets a null one. A shorter column slides
+                    # two rendered translations against each other with nothing
+                    # to notice.
+                    models.Aligned(version=code, text=held.get((code, order)))
+                    for code in codes
+                ],
+            )
+        )
+
+    response.headers["Cache-Control"] = IMMUTABLE
+    return models.PassageOut(
+        reference=format_reference(reference, language),
+        book=reference.book,
+        versions=codes,
+        verses=verses,
+    )

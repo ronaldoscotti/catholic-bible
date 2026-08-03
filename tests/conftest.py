@@ -1,4 +1,4 @@
-"""The database the suite reads.
+"""The database the suite reads, and the client that reads it.
 
 Built once per machine into the path the application uses, and reused while it
 is newer than everything it was built from. Building the full corpus on every
@@ -12,8 +12,11 @@ from collections.abc import Iterator
 from pathlib import Path
 
 import pytest
+from fastapi.testclient import TestClient
 
 from catholic_bible import storage
+from catholic_bible.api.app import app
+from catholic_bible.api.routes import database as route_database
 from catholic_bible.canon import DATA_DIR
 from catholic_bible.storage.build import build
 from catholic_bible.storage.database import DB_PATH, connect
@@ -61,3 +64,19 @@ def database(database_path: Path) -> Iterator[sqlite3.Connection]:
     connection = connect(database_path)
     yield connection
     connection.close()
+
+
+@pytest.fixture
+def client(database_path: Path) -> Iterator[TestClient]:
+    """One client over the real database. Overridden so tests never build twice."""
+
+    def read() -> Iterator[sqlite3.Connection]:
+        connection = connect(database_path)
+        try:
+            yield connection
+        finally:
+            connection.close()
+
+    app.dependency_overrides[route_database] = read
+    yield TestClient(app)
+    app.dependency_overrides.clear()

@@ -88,3 +88,35 @@ class BookWhole(BaseModel):
     version: str
     book: BookOut
     chapters: list[ChapterOfBook]
+
+
+class Aligned(BaseModel):
+    version: str
+    text: str | None = Field(
+        description="Null where this version does not carry the verse"
+    )
+
+
+class AlignedVerse(BaseModel):
+    id: str
+    book: str
+    chapter: int
+    verse: int
+    reference: str
+    texts: list[Aligned]
+
+
+class PassageOut(BaseModel):
+    reference: str = Field(examples=["Jo 3,16-17"])
+    book: str
+    versions: list[str]
+    verses: list[AlignedVerse]
+
+
+class ResolvedOut(BaseModel):
+    reference: str = Field(examples=["1Cor 13,4-7"])
+    book: str
+    ids: list[str] = Field(examples=[["1CO.13.4", "1CO.13.5"]])
+    preview: str | None = Field(
+        description="The first verse of the span, in the default version"
+    )
