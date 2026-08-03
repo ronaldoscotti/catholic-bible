@@ -39,16 +39,18 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 4  Plan             docs/plans/, B1 B2 B3
 [x] 5  Implement        B0 B1 B2 merged. B3 on a branch, 442 tests
 [x] 6  QA               docs/qa/, B0 B1 B2 B3
-[x] 7  Code review      docs/reviews/, B0 B1 B2, one author
-[ ] 8  PR               B0 B1 B2 merged. B3 open
+[ ] 7  Code review      docs/reviews/, B0 B1 B2. B3 has none
+[x] 8  PR               B0 B1 B2 merged. B3 open as #23
 ```
 
 The checklist advances when the artifact exists and not before. Four epics have
 run. B0 builds the project, B1 builds the addresses, B2 publishes Scripture and
 B3 serves it.
 
-Stage 7 is unchecked for B3 because the review notes do not exist yet. The review
-tool has not run on this branch.
+Stage 7 is unchecked because B3 has no review notes. Three epics have them and
+the fourth does not, and a box ticked on three out of four is a box that reads
+as four. Stage 8 is ticked because the pull request exists, which is the whole
+of what that stage deposits.
 
 The two gates on B1 were not met the same way and the difference is recorded
 rather than averaged.
