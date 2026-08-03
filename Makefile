@@ -1,4 +1,4 @@
-.PHONY: install test lint fmt typecheck run down db export-corpus verify-export
+.PHONY: install test lint fmt typecheck run down db openapi export-corpus verify-export
 
 install:
 	uv sync
@@ -10,6 +10,10 @@ test:
 # because CI already verifies the checksums of everything it is built from.
 db:
 	uv run scripts/build-db.py
+
+# Generated from the routes. CI regenerates it and fails on a difference.
+openapi:
+	uv run scripts/build-openapi.py
 
 lint:
 	uv run ruff check .

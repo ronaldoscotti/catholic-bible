@@ -7,10 +7,14 @@ who asked for the Miserere gets the next psalm with a 200 and nothing said.
 
 from __future__ import annotations
 
+import re
 import sqlite3
+from collections.abc import Callable
 from enum import StrEnum
 
 from catholic_bible.api import errors
+from catholic_bible.canon.aliases import ALIASES
+from catholic_bible.canon.books import CANON
 from catholic_bible.canon.mapping import Mapped, Orphan, Scheme, map_address
 from catholic_bible.canon.reference import (
     Reference,
@@ -36,13 +40,39 @@ class InputScheme(StrEnum):
     DOUAY = "douay"
 
 
+SCHEME_CODE = re.compile(r"^[A-Z0-9]{3}$")
+
+
+def _resolver(scheme: InputScheme) -> Callable[[str], str | None]:
+    """How a book name in the written reference becomes a code.
+
+    On the spine that is the alias table and nothing else. Under another scheme
+    the code space is that scheme's, which includes books the spine has no name
+    for. `SUS` is Susanna in `org` and it lands in Daniel 13, and refusing it
+    would leave half of what `org` can address unreachable.
+    """
+    if scheme is InputScheme.SPINE:
+        return ALIASES.resolve
+
+    def resolve(written: str) -> str | None:
+        found = ALIASES.resolve(written)
+        if found is not None:
+            return found
+        bare = written.strip()
+        # A code nothing declares comes back as an orphan naming that, from the
+        # mapping layer, rather than as a parse failure here.
+        return bare if SCHEME_CODE.match(bare) and CANON.by_code(bare) is None else None
+
+    return resolve
+
+
 def read(text: str, scheme: InputScheme) -> tuple[Reference, list[int]]:
     """A written reference, and the canonical orders it covers.
 
     Raises rather than returning a value, because every caller is an HTTP
     handler and the only thing any of them would do with the value is raise.
     """
-    parsed = parse_reference(text)
+    parsed = parse_reference(text, _resolver(scheme))
     if isinstance(parsed, UnparsedReference):
         raise errors.unprocessable(
             errors.from_unparsed(parsed.reason),

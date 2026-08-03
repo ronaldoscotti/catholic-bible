@@ -12,10 +12,13 @@ The grammar covers what a Portuguese missal and a lectionary actually print.
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import StrEnum
 
 from catholic_bible.canon.aliases import ALIASES
+
+Resolver = Callable[[str], str | None]
 
 Point = tuple[int, int]
 Span = tuple[Point, Point]
@@ -77,16 +80,22 @@ class Reference:
 Parsed = Reference | UnparsedReference
 
 
-def parse_reference(text: str) -> Parsed:
+def parse_reference(text: str, resolve: Resolver = ALIASES.resolve) -> Parsed:
+    """A written reference, read into a book and a verse span.
+
+    The resolver is a seam. Reading a reference written in another scheme needs
+    that scheme's book codes, which are not canon codes and which the alias
+    table has no name for. `SUS` is Susanna in `org` and nothing on the spine.
+    """
     head = _HEAD.match(text)
     if head is not None and "." in head[2]:
-        return _parse_parts(text)
+        return _parse_parts(text, resolve)
 
     match = _SPAN.match(text)
     if match is None:
-        return _parse_whole_chapter(text)
+        return _parse_whole_chapter(text, resolve)
 
-    code = ALIASES.resolve(match[1])
+    code = resolve(match[1])
     if code is None:
         return UnparsedReference(text, UnparsedReason.UNKNOWN_BOOK, match[1])
 
@@ -99,7 +108,7 @@ def parse_reference(text: str) -> Parsed:
     return Reference(code, (start, end))
 
 
-def _parse_parts(text: str) -> Parsed:
+def _parse_parts(text: str, resolve: Resolver) -> Parsed:
     """The lectionary shape, `Mc 5,22-24.35-43`.
 
     A part with no chapter of its own inherits the one before it, which is how
@@ -109,7 +118,7 @@ def _parse_parts(text: str) -> Parsed:
     if match is None:
         return UnparsedReference(text, UnparsedReason.MALFORMED)
 
-    code = ALIASES.resolve(match[1])
+    code = resolve(match[1])
     if code is None:
         return UnparsedReference(text, UnparsedReason.UNKNOWN_BOOK, match[1])
 
@@ -132,13 +141,13 @@ def _parse_parts(text: str) -> Parsed:
     return Reference(code, (parts[0][0], parts[-1][1]), parts=tuple(parts))
 
 
-def _parse_whole_chapter(text: str) -> Parsed:
+def _parse_whole_chapter(text: str, resolve: Resolver) -> Parsed:
     """`Sl 23`, and `Ex 13-14` anchored on the first chapter."""
     match = _CHAPTER.match(text)
     if match is None:
         return UnparsedReference(text, UnparsedReason.MALFORMED)
 
-    code = ALIASES.resolve(match[1])
+    code = resolve(match[1])
     if code is None:
         return UnparsedReference(text, UnparsedReason.UNKNOWN_BOOK, match[1])
 
