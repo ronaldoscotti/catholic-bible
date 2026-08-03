@@ -1,0 +1,15 @@
+{"book":{"abbreviation": "3Jo", "chapters": 1, "code": "3JN", "deuterocanonical": false, "group": "EPISTLES", "name": "3 João", "testament": "NEW"},"version":{"abbreviation": "MS", "code": "matos-soares", "language": "pt-BR", "name": "Matos Soares", "rights": {"fixture": "unstated", "fixture_basis": "The upstream dump states no licence. The text is public domain regardless.", "text": "public-domain", "text_basis": "Brazilian copyright law, article 45. Matos Soares died in 1957 leaving no successors, so the translation is in the public domain."}, "source_url": "https://github.com/Dancrf/biblia-db", "year": 1956},"verses":{
+"3JN.1.1":{"order": 35402, "text": "O Ancião ao caríssimo Gaio, a quem eu amo na verdade."},
+"3JN.1.2":{"order": 35403, "text": "Caríssimo, desejo que prosperes em tudo e tenhas saúde, como a tem ditosamente a tua alma."},
+"3JN.1.4":{"order": 35405, "text": "Eu não tenho maior alegria do que ouvir dizer que os meus filhos andam no caminho da verdade."},
+"3JN.1.5":{"order": 35406, "text": "Caríssimo, tu procedes fielmente (como bom cristão), em tudo o que fazes com os irmãos, e particularmente com os estrangeiros,"},
+"3JN.1.6":{"order": 35407, "text": "os quais deram testemunho da tua caridade diante da Igreja; farás bem em prover às suas viagens de um modo digno de Deus."},
+"3JN.1.7":{"order": 35408, "text": "De fato, foi pelo Nome (do Senhor) que eles partiram, não recebendo nada dos gentios."},
+"3JN.1.8":{"order": 35409, "text": "Nós, pois, devemos receber estes tais, para cooperarmos com eles na (propagação da) verdade."},
+"3JN.1.9":{"order": 35410, "text": "Escrevi uma palavra à Igreja, porém Diótrefes, que gosta de ter a primazia entre eles, não nos recebe;"},
+"3JN.1.10":{"order": 35411, "text": "por isso, se eu lá for, recordar-lhe-ei as obras que ele faz, pairando com palavras más contra nós; como se isto não Ihe bastasse, não só recusa hospedagem aos irmãos, mas proíbe (recebê-los) aqueles que os recebem, e lança-os fora da Igreja."},
+"3JN.1.11":{"order": 35412, "text": "Caríssimo, não imites o mal, mas o bem. Quem faz o bem, é de Deus; quem faz o mal, não viu a Deus."},
+"3JN.1.12":{"order": 35413, "text": "De Demétrío todos dão (bom) testemunho, e a mesma verdade lho dá. Nós lho damos também; e tu sabes que o nosso testemunho é verdadeiro."},
+"3JN.1.13":{"order": 35414, "text": "Eu tinha mais coisas a escrever-te, porém não quero fazê-lo por meio de tinta e pena,"},
+"3JN.1.14":{"order": 35415, "text": "porque espero ver-te, era breve, e falaremos de viva voz. A paz seja contigo. Os amigos saúdam-te. Tu saúda (também) os amigos, cada um em particular."}
+}}

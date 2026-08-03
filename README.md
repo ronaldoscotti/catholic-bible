@@ -35,8 +35,11 @@ Cross-references are here as well. 207636 of them on 26726 addresses, from
 three sources, and the one thing worth knowing about them is in the next
 section.
 
-There is no full text search, no static artifacts on a CDN, and nothing is
-deployed. The API is read only and it always will be.
+All of it is also published as static files on a CDN, which is the cheapest way
+to use any of this and needs no server at all.
+
+There is no full text search and nothing is deployed yet. The API is read only
+and it always will be.
 
 ## The deuterocanonical books are the point
 
@@ -69,6 +72,51 @@ was cut and how the cut was verified not to remove content.
 `docs/method/` records the process that produced them, and `LIMITS.md` says what
 this repo cannot prove.
 
+## The cheapest way in
+
+No install, no key, no account, no server. Paste this into a blank HTML file and
+open it.
+
+```js
+const book = await (await fetch('https://cdn.jsdelivr.net/gh/ronaldoscotti/catholic-bible@v1.0.0/data/versions/matos-soares/books/SIR.json')).json()
+console.log(book.verses['SIR.24.1'].text)
+```
+
+That is Sirach 24:1 in Portuguese, from a book of the canon most free Bible data
+does not carry. 371 files ship this way, 48 MB, covering three translations, the
+Haydock in both languages, the cross-references, the canon, the spine and the
+unfilled address report.
+
+```
+data/index.json                              what exists, and the URL pattern
+data/manifest.json                           sha256 and byte count for all 370
+data/versions/{version}/books/{book}.json    73 books, three translations
+data/commentary/haydock/books/{book}.json    20705 notes, English and Portuguese
+data/cross-references/books/{book}.json      207636 references, three sources
+data/canon.json  data/spine.json             the 73 books, the 35845 addresses
+data/orphans.json  data/coverage.json        what fails to map, and what is unfilled
+```
+
+Every file carries its own rights record. A file copied into somebody's project
+keeps its provenance or loses it forever, and the OpenBible attribution that
+CC BY requires rides inside all 73 cross-reference files rather than only here.
+
+### The version in the URL is the whole contract
+
+`@v1.0.0` is not decoration. Pin it and the bytes behind that URL never change.
+
+Corrections ship as a new tag and the old one keeps answering, because a
+consumer who pinned a version has to be able to trust the pin. A repository
+ruleset blocks deleting or moving any `v*` tag, so this survives the author
+changing his mind rather than resting on him not doing so.
+
+The package version and the dataset version are the same number. `1.0.0`
+governs the shape of these files and the shape of the API. It does not claim the
+API is deployed anywhere, and `LIMITS.md` says plainly that it is not.
+
+Drop the tag and jsDelivr serves the default branch, which moves. Do not do that
+in anything you ship.
+
 ## Quickstart
 
 Docker is the only requirement, and there are no credentials to set up.
@@ -86,7 +134,7 @@ curl http://localhost:8000/health
 ```
 
 ```json
-{"status":"ok","version":"0.0.0"}
+{"status":"ok","version":"1.0.0"}
 ```
 
 Then read a verse. Sirach 24:1, in Portuguese, by reference.

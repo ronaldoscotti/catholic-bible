@@ -1,0 +1,16 @@
+{"book":{"abbreviation": "Bar.", "chapters": 6, "code": "BAR", "deuterocanonical": true, "group": "PROPHETIC", "name": "Baruch", "testament": "OLD"},"sources":{"douay": {"attribution": null, "name": "The Douay-Rheims marginal apparatus", "rights": "CC0", "rights_basis": "The 1582 and 1610 margins. Out of copyright everywhere, and the transcription is dedicated to the public domain.", "url": null}, "na27": {"attribution": null, "name": "New Testament allusions to the deuterocanonical books", "rights": "uncopyrightable-facts", "rights_basis": "292 pairs of addresses and no text of any kind. A bare pair of Scripture references is a fact about Scripture rather than an expression of anyone's editorial work. LIMITS.md carries the reasoning and the fact that it is a reading rather than a ruling.", "url": null}, "openbible": {"attribution": "Cross-references courtesy of OpenBible.info, CC BY 4.0.", "name": "OpenBible.info cross-references", "rights": "CC BY 4.0", "rights_basis": "Published by OpenBible.info under Creative Commons Attribution. Attribution is a condition of the licence and travels with the data.", "url": "https://www.openbible.info/labs/cross-references/"}},"references":{
+"BAR.1.11":[{"source": "na27", "to": "1TI.2.2", "weight": 90}],
+"BAR.2.20":[{"chapter": true, "source": "douay", "to": "JER.2.1", "weight": 100}],
+"BAR.2.29":[{"chapter": true, "source": "douay", "to": "DEU.28.1", "weight": 100}],
+"BAR.2.35":[{"chapter": true, "source": "douay", "to": "JER.31.1", "weight": 100}],
+"BAR.2.5":[{"chapter": true, "source": "douay", "to": "DEU.28.1", "weight": 100}],
+"BAR.3.29":[{"source": "na27", "to": "JHN.3.13", "weight": 90}, {"source": "na27", "to": "ROM.10.6", "weight": 90}],
+"BAR.4.1":[{"source": "na27", "to": "MAT.5.18", "weight": 90}],
+"BAR.4.18":[{"chapter": true, "source": "douay", "to": "DEU.28.1", "weight": 100}, {"chapter": true, "source": "douay", "to": "JER.5.1", "weight": 100}],
+"BAR.4.35":[{"source": "na27", "to": "REV.18.2", "weight": 90}],
+"BAR.4.37":[{"source": "na27", "to": "LUK.13.29", "weight": 90}, {"source": "na27", "to": "MAT.8.11", "weight": 90}],
+"BAR.4.7":[{"source": "na27", "to": "1CO.10.20", "weight": 90}],
+"BAR.6.1":[{"chapter": true, "source": "douay", "to": "JER.25.1", "weight": 100}],
+"BAR.6.2":[{"chapter": true, "source": "douay", "to": "ISA.44.1", "weight": 100}],
+"BAR.6.24":[{"chapter": true, "source": "douay", "to": "ISA.46.1", "weight": 100}]
+}}

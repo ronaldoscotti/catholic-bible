@@ -1,4 +1,4 @@
-.PHONY: install test lint fmt typecheck run down db openapi export-corpus export-commentary review-sample verify-export
+.PHONY: install test lint fmt typecheck run down db openapi artifacts export-corpus export-commentary review-sample verify-export
 
 install:
 	uv sync
@@ -14,6 +14,12 @@ db:
 # Generated from the routes. CI regenerates it and fails on a difference.
 openapi:
 	uv run scripts/build-openapi.py
+
+# The static artifacts served from the CDN, split per book out of the committed
+# corpus. Committed, and CI regenerates them and fails on a difference. Unlike
+# the B2 export this needs nothing private, so a stranger can run it.
+artifacts:
+	uv run scripts/build-artifacts.py
 
 lint:
 	uv run ruff check .

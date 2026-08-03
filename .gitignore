@@ -32,3 +32,6 @@ build/
 .idea/
 .vscode/
 .verify/
+
+# Scratch tree the artifact check builds into and removes.
+/.artifacts-check/
