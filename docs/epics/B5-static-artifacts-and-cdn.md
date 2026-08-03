@@ -23,13 +23,29 @@ Someone building a small page or prototyping in a single HTML file has no way to
 
 ## Acceptance criteria
 
-- [ ] JSON artifacts are produced per translation and per book by the B2 export
-- [ ] Artifacts are served over a CDN with no signup and no key
-- [ ] A one-line `fetch()` copied out of the README works from a blank HTML file
+- [x] JSON artifacts are produced per translation and per book by the B2 export
+- [x] Artifacts are served over a CDN with no signup and no key
+- [x] A one-line `fetch()` copied out of the README works from a blank HTML file
 - [ ] Artifacts are versioned, and a published version is immutable
-- [ ] The canon, the spine and `orphans.json` ship as artifacts too, not only the text
-- [ ] A checksum manifest lets a consumer verify what it downloaded
-- [ ] The README documents the artifact URL pattern and the versioning rule
+- [x] The canon, the spine and `orphans.json` ship as artifacts too, not only the text
+- [x] A checksum manifest lets a consumer verify what it downloaded
+- [x] The README documents the artifact URL pattern and the versioning rule
+
+Two of those need their wording qualified rather than ticked in silence.
+
+**The artifacts do not come out of the B2 export.** They come out of a generator
+reading what B2 already committed. The export needs the private source, so an
+artifact produced that way would be one more file a stranger has to take on
+trust. Splitting downstream means anyone with a clone regenerates all 371 files
+and diffs them. `DECISIONS.md` carries the trade and `LIMITS.md` carries what it
+costs.
+
+**The immutability box stays empty until the tag is pushed.** The mechanism is
+built and measured. A ruleset on `refs/tags/v*` blocks deletion and update with
+no bypass actors, and jsDelivr was measured serving a semver tag as `immutable`
+for a year while serving a non-semver tag exactly like a moving branch. None of
+that is a published version until `v1.0.0` exists and has been seen to refuse
+being moved.
 
 ## Constraints
 
