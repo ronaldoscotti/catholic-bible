@@ -1,0 +1,24 @@
+{
+  "source": {
+    "repository": "meu-feed-catolico-api",
+    "commit": "0494a69e66657a16d822898e71f4eb3b2bc4ae80",
+    "commit_date": "2026-08-02T00:02:18-03:00",
+    "private": true
+  },
+  "files": {
+    "haydock.json": {
+      "sha256": "77b2b234cb02550f09846eef47729780ef206af9ccddce88dd6a4a2965e5343f",
+      "entries": 20705,
+      "bodies": {
+        "en-US": 20705,
+        "pt-BR": 20705
+      },
+      "clamped": [
+        "LUK.1.73",
+        "MAT.15.26"
+      ],
+      "from": "bible_commentary_entries",
+      "translation_from": "storage/app/haydock-translation/done.jsonl"
+    }
+  }
+}

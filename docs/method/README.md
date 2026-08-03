@@ -35,22 +35,31 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 0  Understand       docs/method/00-understand.md
 [x] 1  Context          docs/method/01-context.md
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
-[x] 3  Spec             docs/specs/, B1 B2 B3
-[x] 4  Plan             docs/plans/, B1 B2 B3
-[x] 5  Implement        B0 B1 B2 merged. B3 on a branch, 449 tests
-[x] 6  QA               docs/qa/, B0 B1 B2 B3
-[x] 7  Code review      docs/reviews/, B0 B1 B2 B3, one author
-[x] 8  PR               B0 B1 B2 merged. B3 open as #23
+[x] 3  Spec             docs/specs/, B1 B2 B3 B4
+[x] 4  Plan             docs/plans/, B1 B2 B3 B4
+[x] 5  Implement        B0 B1 B2 B3 merged. B4 slice one on a branch, 493 tests
+[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4
+[ ] 7  Code review      docs/reviews/, B0 B1 B2 B3. B4 has not been reviewed
+[ ] 8  PR               B0 B1 B2 B3 merged. B4 slice one not opened yet
 ```
 
-The checklist advances when the artifact exists and not before. Four epics have
-run. B0 builds the project, B1 builds the addresses, B2 publishes Scripture and
-B3 serves it.
+The checklist advances when the artifact exists and not before. Five epics have
+run. B0 builds the project, B1 builds the addresses, B2 publishes Scripture, B3
+serves it and B4 hangs commentary off the same verse ids.
 
 Stage 7 ran on B3 after the pull request opened rather than before, which is the
 wrong order and is recorded rather than tidied. It found ten things, nine of them
 real, and the first broke an acceptance criterion the walk had already marked
 met. The walk carries the correction.
+
+**Both gates were waived on B4, in writing, before either document existed.** The
+author said to run the pipeline to the end and review at the end. The spec and
+the plan are real artifacts written before any code, and the git history shows
+that order, but nobody stopped and read them first. They are waived rather than
+met and both documents say so on their first screen.
+
+B4 ships in two slices. The first carries the commentary and the second carries
+the cross-references, and the epic is not closed until both have run.
 
 The two gates on B1 were not met the same way and the difference is recorded
 rather than averaged.

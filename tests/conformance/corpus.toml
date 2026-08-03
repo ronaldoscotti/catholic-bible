@@ -443,3 +443,36 @@ English and Latin abbreviation ends in one while no Portuguese abbreviation
 does. Reading the whole string sends most English references down the disjoint
 parser, where they come back malformed. The period only means a disjoint
 reading after the numbers start."""
+
+[[case]]
+id = "a-note-anchored-on-a-range-answers-from-either-end"
+kind = "anchor"
+input = "JHN.3.16"
+expect = "JHN.3.16-JHN.3.17"
+provenance = "Ported from the Haydock entry labelled 16-17."
+why_hard = """
+Most notes cover one address and a few cover up to fifteen. A coverage query
+that only matches the first address loses every spanning note from the second
+verse onward, and nothing about the response says a note is missing."""
+
+[[case]]
+id = "a-note-whose-range-ran-backwards-upstream"
+kind = "anchor"
+input = "MAT.15.26"
+expect = "MAT.15.26-MAT.15.26"
+provenance = "Found in B4 by asserting every published entry runs forwards."
+why_hard = """
+The printed label is 26-7, meaning 26 to 27, and the upstream extraction read
+the second number literally. The entry claimed to run from 26 to 7, which no
+coverage test can match, so the note was invisible rather than wrong. The export
+clamps the end onto the start rather than inventing the 27."""
+
+[[case]]
+id = "the-other-note-whose-range-ran-backwards"
+kind = "anchor"
+input = "LUK.1.73"
+expect = "LUK.1.73-LUK.1.73"
+provenance = "Found in B4 alongside the Matthew one. Both are the only two."
+why_hard = """
+Labelled 73-4 for 73 to 74. Same elision, same silent disappearance, and the
+Benedictus is not a passage a Catholic commentary should be silent on."""

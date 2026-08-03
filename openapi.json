@@ -68,6 +68,34 @@
         "title": "AlignedVerse",
         "type": "object"
       },
+      "Body": {
+        "properties": {
+          "html": {
+            "description": "Carries <em> and <strong> and no other markup",
+            "title": "Html",
+            "type": "string"
+          },
+          "language": {
+            "examples": [
+              "pt-BR"
+            ],
+            "title": "Language",
+            "type": "string"
+          },
+          "text": {
+            "description": "The same body with the markup removed",
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "language",
+          "html",
+          "text"
+        ],
+        "title": "Body",
+        "type": "object"
+      },
       "BookOut": {
         "properties": {
           "abbreviation": {
@@ -239,6 +267,194 @@
           "verses"
         ],
         "title": "ChapterOut",
+        "type": "object"
+      },
+      "CommentaryEntry": {
+        "properties": {
+          "bodies": {
+            "description": "One per language. The source language is always present.",
+            "items": {
+              "$ref": "#/components/schemas/Body"
+            },
+            "title": "Bodies",
+            "type": "array"
+          },
+          "end": {
+            "description": "Equal to start for most notes",
+            "examples": [
+              "JHN.3.17"
+            ],
+            "title": "End",
+            "type": "string"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "How the printed edition labelled the note, where it did",
+            "title": "Label"
+          },
+          "reference": {
+            "examples": [
+              "Jo 3,16-17"
+            ],
+            "title": "Reference",
+            "type": "string"
+          },
+          "start": {
+            "examples": [
+              "JHN.3.16"
+            ],
+            "title": "Start",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start",
+          "end",
+          "reference",
+          "label",
+          "bodies"
+        ],
+        "title": "CommentaryEntry",
+        "type": "object"
+      },
+      "CommentaryOut": {
+        "properties": {
+          "ids": {
+            "examples": [
+              [
+                "JHN.3.16"
+              ]
+            ],
+            "items": {
+              "type": "string"
+            },
+            "title": "Ids",
+            "type": "array"
+          },
+          "reference": {
+            "examples": [
+              "Jo 3,16"
+            ],
+            "title": "Reference",
+            "type": "string"
+          },
+          "sources": {
+            "description": "Empty where no source comments on this address, which is 14803 of the 35845 addresses on the spine. Absence is an answer here.",
+            "items": {
+              "$ref": "#/components/schemas/CommentarySource"
+            },
+            "title": "Sources",
+            "type": "array"
+          }
+        },
+        "required": [
+          "reference",
+          "ids",
+          "sources"
+        ],
+        "title": "CommentaryOut",
+        "type": "object"
+      },
+      "CommentaryRights": {
+        "description": "The text and its translation get separate answers.\n\nThe Haydock is public domain and the Portuguese was produced by a language\nmodel, which is a different claim about a different artifact and does not\nfit in one field.",
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "text_basis": {
+            "title": "Text Basis",
+            "type": "string"
+          },
+          "translation": {
+            "examples": [
+              "machine"
+            ],
+            "title": "Translation",
+            "type": "string"
+          },
+          "translation_basis": {
+            "title": "Translation Basis",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "text_basis",
+          "translation",
+          "translation_basis"
+        ],
+        "title": "CommentaryRights",
+        "type": "object"
+      },
+      "CommentarySource": {
+        "properties": {
+          "author": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author"
+          },
+          "code": {
+            "examples": [
+              "haydock"
+            ],
+            "title": "Code",
+            "type": "string"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/CommentaryEntry"
+            },
+            "title": "Entries",
+            "type": "array"
+          },
+          "language": {
+            "description": "The language the notes were written in",
+            "title": "Language",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "rights": {
+            "$ref": "#/components/schemas/CommentaryRights"
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "author",
+          "description",
+          "language",
+          "rights",
+          "entries"
+        ],
+        "title": "CommentarySource",
         "type": "object"
       },
       "ErrorResponse": {
@@ -646,6 +862,122 @@
           }
         },
         "summary": "Whether the service can answer"
+      }
+    },
+    "/v1/books/{book}/chapters/{chapter}/verses/{verse}/commentary": {
+      "get": {
+        "description": "Version agnostic, so no version segment.\n\nA note on John 3:16 is the same note whichever translation is on screen, and\na version in the path would be a claim about what the answer depends on.",
+        "operationId": "read_commentary_v1_books__book__chapters__chapter__verses__verse__commentary_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "book",
+            "required": true,
+            "schema": {
+              "title": "Book",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "chapter",
+            "required": true,
+            "schema": {
+              "title": "Chapter",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "verse",
+            "required": true,
+            "schema": {
+              "title": "Verse",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentaryOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "No such resource"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The reference cannot be resolved"
+          }
+        },
+        "summary": "Commentary on one verse"
+      }
+    },
+    "/v1/commentary": {
+      "get": {
+        "operationId": "commentary_for_v1_commentary_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ref",
+            "required": true,
+            "schema": {
+              "title": "Ref",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scheme",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/InputScheme",
+              "default": "spine"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentaryOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The reference cannot be resolved"
+          }
+        },
+        "summary": "Commentary on a written reference"
       }
     },
     "/v1/passage": {

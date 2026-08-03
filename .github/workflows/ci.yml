@@ -45,5 +45,12 @@ jobs:
           echo "live   $actual"
           [ "$expected" = "$actual" ]
           curl -sS --fail "http://localhost:8000/v1/resolve?ref=Eclo%2024,1" | grep -q SIR.24.1
+      - name: The commentary answers in both languages and says who translated it
+        run: |
+          body=$(curl -sS --fail \
+            http://localhost:8000/v1/books/JHN/chapters/3/verses/16/commentary)
+          echo "$body" | grep -q '"language":"en-US"'
+          echo "$body" | grep -q '"language":"pt-BR"'
+          echo "$body" | grep -q '"translation":"machine"'
       - if: always()
         run: docker compose down

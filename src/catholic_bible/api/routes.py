@@ -305,6 +305,147 @@ def read_verse(
     return _verse_out(members[0], language)
 
 
+def _commentary_out(
+    connection: sqlite3.Connection,
+    reference: Reference,
+    orders: list[int],
+    language: Language,
+) -> models.CommentaryOut:
+    """The notes covering a span, grouped by source and then by note.
+
+    The reader returns one row per note and language, in the order the response
+    wants them, so grouping is a walk rather than a sort.
+    """
+    rows = reader.commentary_covering(connection, orders[0], orders[-1])
+
+    # One range query for every address either the span or a note reaches. A
+    # note can start before the span and end after it, so the window is widened
+    # rather than assumed, and asking per note would be a round trip per note.
+    reached = [
+        order for row in rows for order in (row["first_order"], row["last_order"])
+    ]
+    addresses = reader.addresses_between(
+        connection,
+        min([orders[0], *reached]),
+        max([orders[-1], *reached]),
+    )
+
+    entries: dict[str, list[models.CommentaryEntry]] = {}
+    seen: dict[int, models.CommentaryEntry] = {}
+    for row in rows:
+        entry = seen.get(int(row["id"]))
+        if entry is None:
+            start = addresses[int(row["first_order"])]
+            end = addresses[int(row["last_order"])]
+            span = (
+                (int(start["chapter"]), int(start["verse"])),
+                (int(end["chapter"]), int(end["verse"])),
+            )
+            entry = models.CommentaryEntry(
+                start=str(start["id"]),
+                end=str(end["id"]),
+                reference=format_reference(
+                    Reference(str(start["book"]), span), language
+                ),
+                label=row["label"],
+                bodies=[],
+            )
+            seen[int(row["id"])] = entry
+            entries.setdefault(str(row["source"]), []).append(entry)
+        entry.bodies.append(
+            models.Body(
+                language=str(row["language"]),
+                html=str(row["html"]),
+                text=str(row["text"]),
+            )
+        )
+
+    return models.CommentaryOut(
+        reference=format_reference(reference, language),
+        ids=[str(addresses[order]["id"]) for order in orders if order in addresses],
+        sources=[
+            models.CommentarySource(
+                code=str(source["code"]),
+                name=str(source["name"]),
+                author=source["author"],
+                description=source["description"],
+                language=str(source["language"]),
+                rights=models.CommentaryRights.model_validate_json(
+                    str(source["rights"])
+                ),
+                entries=entries[str(source["code"])],
+            )
+            for source in reader.commentary_sources(connection)
+            if str(source["code"]) in entries
+        ],
+    )
+
+
+@router.get(
+    "/books/{book}/chapters/{chapter}/verses/{verse}/commentary",
+    summary="Commentary on one verse",
+    response_model=models.CommentaryOut,
+    responses={**errors.NOT_FOUND, **errors.UNPROCESSABLE},
+)
+def read_commentary(
+    book: str,
+    chapter: int,
+    verse: int,
+    connection: Database,
+    response: Response,
+) -> models.CommentaryOut:
+    """Version agnostic, so no version segment.
+
+    A note on John 3:16 is the same note whichever translation is on screen, and
+    a version in the path would be a claim about what the answer depends on.
+    """
+    row = _book_or_404(connection, book)
+    code = str(row["code"])
+    _chapter_or_404(connection, code, chapter)
+
+    address = reader.address(connection, f"{code}.{chapter}.{verse}")
+    if address is None:
+        raise errors.not_found(
+            errors.Reason.NOT_ON_SPINE,
+            f"the spine has no verse {verse} in {code} {chapter}",
+            f"{code}.{chapter}.{verse}",
+        )
+
+    order = int(address["canonical_order"])
+    point = (chapter, verse)
+    language = reader.language_of(str(reader.default_version(connection)["language"]))
+
+    # Not immutable, for the same reason `/v1/resolve` is not. Every reference
+    # in the answer is written in the default version's notation, and which
+    # version is the default is not in the URL.
+    response.headers["Cache-Control"] = CATALOGUE
+    return _commentary_out(
+        connection, Reference(code, (point, point)), [order], language
+    )
+
+
+@router.get(
+    "/commentary",
+    summary="Commentary on a written reference",
+    response_model=models.CommentaryOut,
+    responses=errors.UNPROCESSABLE,
+)
+def commentary_for(
+    connection: Database,
+    response: Response,
+    ref: str,
+    scheme: resolving.InputScheme = resolving.InputScheme.SPINE,
+) -> models.CommentaryOut:
+    reference, orders = resolving.read(ref, scheme)
+    language = reader.language_of(str(reader.default_version(connection)["language"]))
+
+    # Not immutable, for the same reason `/v1/resolve` is not. Every reference
+    # in the answer is written in the default version's notation, and which
+    # version is the default is not in the URL.
+    response.headers["Cache-Control"] = CATALOGUE
+    return _commentary_out(connection, reference, orders, language)
+
+
 @router.get(
     "/resolve",
     summary="A written reference, resolved to addresses",

@@ -294,3 +294,139 @@ worse than an absent one, which is the rule B1 was built on.
 
 **What it costs.** A caller pasting a chapter reference into `passage` gets an
 error where a helpful API would guess. Guessing is what this repo does not do.
+
+## Commentary hangs off the verse id and the schema did not move
+
+Decided 2026-08-02, in B4.
+
+Two new tables plus a source table, anchored on the same `canonical_order` the
+spine already publishes. No column was added to `spine` and no column was added
+to `texts`.
+
+**What lost.** Nothing was seriously proposed against it, and that is the point.
+The claim B1 made was that a dense integer is a usable anchor for anything that
+attaches to a verse, and a claim like that is worth exactly as much as the first
+thing built on it. Two independent layers arriving without the addressing moving
+is the evidence, and if the schema had needed a column, this section would be
+recording that instead.
+
+**What it costs.** A coverage query rather than an equality. A note spans a range
+of addresses and finding the notes on a verse is a range test in both directions,
+which is a different index and a different cost from reading a verse.
+
+## The commentary route takes no version
+
+Decided 2026-08-02, in B4.
+
+`/v1/books/{book}/chapters/{chapter}/verses/{verse}/commentary` sits beside the
+reading routes and not underneath a version segment.
+
+**What lost.** Nesting it under `/v1/versions/{version}/...` for symmetry with
+everything else. The symmetry would have been a lie. A Haydock note on John 3:16
+is the same note whichever translation is on screen, and putting a version in the
+path claims the answer depends on one. It would also have multiplied the cache
+surface by the number of published versions for identical bytes.
+
+**What it costs.** Two route shapes on one API, and a reader who has learned the
+version prefix has to notice this one does not take it.
+
+## The body is a row per language rather than a column per language
+
+Decided 2026-08-02, in B4.
+
+`commentary_body` is keyed on the entry and a language tag. The private original
+carries `body_html` and `body_html_translated` side by side.
+
+**What lost.** The simpler two column shape, which is one fewer table and one
+fewer join. It also encodes today's two languages into the schema, so a Spanish
+Haydock or an English Catena would arrive as a migration rather than as rows.
+
+**What it costs.** A join on every commentary read, and a response assembler that
+groups rows instead of reading fields.
+
+## Plain text is derived at build time and never published
+
+Decided 2026-08-02, in B4.
+
+The published file carries HTML only. The build strips the markup and stores both.
+
+**What lost.** Publishing what the source database holds, which is both columns
+already computed. That would have been 15.5 MB of a file that is already 20 MB,
+for a column any consumer can compute from the one beside it with a regular
+expression.
+
+**What it costs.** A consumer reading the published JSON rather than the API has
+to strip the tags. `LIMITS.md` records that the stripping is a regular expression
+over a corpus known to contain two tags, and that a third tag would survive it.
+
+## The coverage query carries a floor, and the floor was measured
+
+Decided 2026-08-02, in B4.
+
+Finding the notes covering an address is `first_order <= wanted AND last_order >=
+wanted`, plus `first_order >= wanted - widest`, where `widest` is the widest
+published entry and is computed at build time.
+
+The floor changes no result, because no entry is wider than the widest entry. The
+private repository added it because MySQL abandoned the composite index without
+it. Whether SQLite behaved the same way was left open in the plan and measured
+rather than assumed, at the last address in Revelation.
+
+```
+bare    0.9213 ms   SEARCH commentary USING COVERING INDEX commentary_coverage (source=? AND first_order<?)
+floor   0.0065 ms   SEARCH commentary USING COVERING INDEX commentary_coverage (source=? AND first_order>? AND first_order<?)
+```
+
+**What lost.** Dropping the floor as MySQL specific, which is what the plan
+expected to happen. SQLite uses the index either way and still walks it from the
+first entry of the source, so the open range is 140 times slower at the end of
+the canon and free at the start.
+
+**What it costs.** A second query to read `widest`, and a bound that a reader has
+to be told does not change the answer. A test compares the floored result against
+the unbounded one over a thousand addresses rather than arguing it.
+
+## The two backwards notes are clamped and not repaired
+
+Decided 2026-08-02, in B4.
+
+Two entries run from a higher address to a lower one, because the printed labels
+`26-7` and `73-4` elide the second number and the extraction read them literally.
+The export sets the end equal to the start.
+
+**What lost.** Reading `27` and `74` out of the label, which is what the source
+means and which would restore the note on both verses. It is also this repository
+producing a value no source holds, in a dataset whose whole claim is that no
+value here was authored by hand. A rule that bends for a guess this good does not
+hold for a guess that is merely good.
+
+**What it costs.** Matthew 15:27 and Luke 1:74 read as having no note. Two
+conformance cases pin the addresses so the day the extraction is fixed upstream
+the suite says which side moved.
+
+## The build runs ANALYZE, because the planner was guessing wrong
+
+Decided 2026-08-02, in B4.
+
+`build()` ends with `ANALYZE` before the commit.
+
+Without statistics SQLite chose to scan all 41410 commentary bodies, 16 MB of
+text, as the outer loop of the coverage join, rather than driving it off the
+index the schema exists to provide.
+
+```
+without   SCAN commentary_body                                          9.548 ms
+with      SEARCH commentary USING INDEX commentary_coverage             0.027 ms
+          SEARCH commentary_body USING PRIMARY KEY (commentary=?)
+```
+
+Over HTTP that is a commentary read at 15 ms falling to 4.4 ms, which is where
+the B3 verse read already sat.
+
+**What lost.** Hinting the join order with `CROSS JOIN`, which fixes this one
+query and leaves every future query guessing. And doing nothing, which was the
+state this was found in, by measuring rather than by a complaint.
+
+**What it costs.** A second of build time and a `sqlite_stat1` table in a file
+that is derived anyway. The corpus is static, so the statistics are computed once
+and cannot go stale.

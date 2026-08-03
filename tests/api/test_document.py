@@ -51,7 +51,7 @@ def identify(route: APIRoute) -> str:
 
 def test_there_are_routes_to_check() -> None:
     """A walk over an empty list passes and proves nothing."""
-    assert len(PUBLIC) == 7
+    assert len(PUBLIC) == 9
 
 
 @pytest.mark.parametrize("route", ROUTES, ids=identify)

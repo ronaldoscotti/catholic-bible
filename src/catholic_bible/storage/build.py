@@ -11,16 +11,25 @@ own would prove nothing those do not.
 
 from __future__ import annotations
 
+import html
 import json
+import re
 import sqlite3
 from collections.abc import Mapping
 
+from catholic_bible import commentary
 from catholic_bible.canon.books import CANON
 from catholic_bible.canon.spine import SPINE
 from catholic_bible.canon.verse import VerseId
 from catholic_bible.corpus import VERSIONS, Verse, load
 
 DEFAULT_VERSION = "matos-soares"
+
+# The published bodies carry `<em>` and `<strong>` and nothing else, counted over
+# all 41410 of them. A parser would be the right tool against unknown HTML and
+# this is not unknown HTML.
+_TAG = re.compile(r"<[^>]+>")
+_SPACE = re.compile(r"\s+")
 
 # `texts` keeps its rowid while the other three drop theirs. An FTS5 external
 # content index addresses its content table by rowid, so B9 cannot add search
@@ -78,6 +87,41 @@ CREATE TABLE texts (
 );
 
 CREATE UNIQUE INDEX texts_address ON texts(version, canonical_order);
+
+CREATE TABLE commentary_sources (
+    code TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    author TEXT,
+    description TEXT,
+    language TEXT NOT NULL,
+    rights TEXT NOT NULL,
+    widest INTEGER NOT NULL,
+    position INTEGER NOT NULL
+) WITHOUT ROWID;
+
+-- Keeps its rowid. `commentary_body` addresses it by that rowid, and B9 may want
+-- an FTS5 index over the notes for the same reason `texts` keeps its own.
+CREATE TABLE commentary (
+    id INTEGER PRIMARY KEY,
+    source TEXT NOT NULL REFERENCES commentary_sources(code),
+    first_order INTEGER NOT NULL,
+    last_order INTEGER NOT NULL,
+    label TEXT,
+    position INTEGER NOT NULL
+);
+
+CREATE INDEX commentary_coverage ON commentary(source, first_order, last_order);
+
+-- A row per language rather than a `pt` column. Two languages are in the data
+-- today and a column named after one of them is a schema that has to change the
+-- day a third arrives.
+CREATE TABLE commentary_body (
+    commentary INTEGER NOT NULL REFERENCES commentary(id),
+    language TEXT NOT NULL,
+    html TEXT NOT NULL,
+    text TEXT NOT NULL,
+    PRIMARY KEY (commentary, language)
+) WITHOUT ROWID;
 """
 
 
@@ -90,6 +134,14 @@ def build(connection: sqlite3.Connection) -> None:
         published = load(code)
         build_version(connection, code, published.metadata)
         build_texts(connection, code, published.verses)
+    for position, code in enumerate(commentary.SOURCES):
+        build_commentary(connection, commentary.load(code), position)
+
+    # Without statistics the planner guesses, and it guessed that scanning all
+    # 41410 commentary bodies was cheaper than driving the join off the coverage
+    # index. That is 9.5 ms a request against 0.027 ms. The corpus is static, so
+    # the statistics are computed once here and never go stale.
+    connection.execute("ANALYZE")
     connection.commit()
 
 
@@ -183,3 +235,71 @@ def build_texts(
 
     rows.sort(key=lambda row: row[1])
     connection.executemany("INSERT INTO texts VALUES (?, ?, ?)", rows)
+
+
+def plain(markup: str) -> str:
+    """The body without its markup, for search and for a client that wants none."""
+    return _SPACE.sub(" ", html.unescape(_TAG.sub("", markup))).strip()
+
+
+def build_commentary(
+    connection: sqlite3.Connection, source: commentary.Source, position: int
+) -> None:
+    """One commentary source, its entries and their bodies.
+
+    Both ends of every anchor are checked against the spine rather than trusted,
+    the way `build_texts` checks the corpus. A note whose anchor drifted by one
+    reads as a note about the neighbouring verse and nothing downstream can tell.
+
+    An entry running backwards stops the build. The export clamps the two that
+    do, so reaching here means the export was bypassed or a new one appeared.
+    """
+    widest = 0
+    entries: list[tuple[object, ...]] = []
+    bodies: list[tuple[object, ...]] = []
+    for index, entry in enumerate(source.entries, start=1):
+        for address, order in (
+            (entry.start, entry.first_order),
+            (entry.end, entry.last_order),
+        ):
+            walked = SPINE.order_of(address)
+            if walked != order:
+                raise ValueError(
+                    f"{address} carries order {order} and the spine walks {walked}"
+                )
+        if entry.last_order < entry.first_order:
+            raise ValueError(f"{entry.start} ends at {entry.end}, before it starts")
+
+        widest = max(widest, entry.last_order - entry.first_order)
+        entries.append(
+            (
+                index,
+                source.code,
+                entry.first_order,
+                entry.last_order,
+                entry.label,
+                entry.position,
+            )
+        )
+        bodies.extend(
+            (index, language, markup, plain(markup))
+            for language, markup in sorted(entry.body.items())
+        )
+
+    metadata = source.metadata
+    connection.execute(
+        "INSERT INTO commentary_sources (code, name, author, description, language,"
+        " rights, widest, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        (
+            source.code,
+            metadata["name"],
+            metadata.get("author"),
+            metadata.get("description"),
+            metadata["language"],
+            json.dumps(metadata.get("rights", {}), ensure_ascii=False, sort_keys=True),
+            widest,
+            position,
+        ),
+    )
+    connection.executemany("INSERT INTO commentary VALUES (?, ?, ?, ?, ?, ?)", entries)
+    connection.executemany("INSERT INTO commentary_body VALUES (?, ?, ?, ?)", bodies)

@@ -1,4 +1,4 @@
-.PHONY: install test lint fmt typecheck run down db openapi export-corpus verify-export
+.PHONY: install test lint fmt typecheck run down db openapi export-corpus export-commentary review-sample verify-export
 
 install:
 	uv sync
@@ -31,6 +31,12 @@ run:
 
 down:
 	docker compose down
+
+export-commentary:
+	./scripts/export-commentary.py --source $(SOURCE)
+
+review-sample:
+	uv run scripts/draw-review-sample.py
 
 export-corpus:
 	./scripts/export-spine.py --source $(SOURCE)

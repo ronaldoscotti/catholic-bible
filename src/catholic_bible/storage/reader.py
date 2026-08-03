@@ -158,6 +158,59 @@ def texts_at(
     }
 
 
+def widest_commentary_span(connection: sqlite3.Connection) -> int:
+    """How far the widest note reaches, in canonical order.
+
+    Computed at build time and read back rather than derived per request. It is
+    the exact margin `commentary_covering` needs and nothing else.
+    """
+    found = _one(
+        connection.execute("SELECT MAX(widest) AS widest FROM commentary_sources")
+    )
+    return 0 if found is None or found["widest"] is None else int(found["widest"])
+
+
+def commentary_covering(
+    connection: sqlite3.Connection, first: int, last: int
+) -> list[Row]:
+    """Every note covering any address in a range, with its bodies.
+
+    Covering is `first_order <= last AND last_order >= first`. The extra floor
+    changes no result, because no note is wider than the widest note, and it is
+    what keeps the query bounded: without it the index is walked from the start
+    of the source, which is 0.92 ms at the end of Revelation against 0.0065 ms
+    with it.
+
+    One row per note and language. A note is one to four entries for a verse, so
+    the repeated columns are cheaper than a second round trip.
+    """
+    floor = first - widest_commentary_span(connection)
+    return _all(
+        connection.execute(
+            """
+        SELECT commentary.id, commentary.source, commentary.first_order,
+               commentary.last_order, commentary.label, commentary.position,
+               commentary_body.language, commentary_body.html, commentary_body.text
+        FROM commentary
+        JOIN commentary_sources ON commentary_sources.code = commentary.source
+        JOIN commentary_body ON commentary_body.commentary = commentary.id
+        WHERE commentary.first_order >= ?
+          AND commentary.first_order <= ?
+          AND commentary.last_order >= ?
+        ORDER BY commentary_sources.position, commentary.first_order,
+                 commentary.position, commentary.id, commentary_body.language
+        """,
+            (floor, last, first),
+        )
+    )
+
+
+def commentary_sources(connection: sqlite3.Connection) -> list[Row]:
+    return _all(
+        connection.execute("SELECT * FROM commentary_sources ORDER BY position")
+    )
+
+
 def address(connection: sqlite3.Connection, verse_id: str) -> Row | None:
     return _one(connection.execute("SELECT * FROM spine WHERE id = ?", (verse_id,)))
 
