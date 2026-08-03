@@ -33,14 +33,14 @@ A reader who reaches a hard verse has nowhere to go. Catholic commentary in Port
 
 ## Acceptance criteria
 
-- [ ] Haydock commentary in English is addressable by verse for all 73 books
-- [ ] Haydock commentary in Portuguese is addressable by verse for all 73 books
-- [ ] Cross-references resolve to spine addresses in both directions, and entries that cannot resolve are reported as orphans
-- [ ] Commentary and cross-references attach to the same verse id used by B1, with no change to the verse schema
-- [ ] The API exposes commentary and cross-references for a given address
-- [ ] OpenBible attribution appears in the README and in the dataset metadata
-- [ ] How the Portuguese translation was produced is stated on the first screen of the README, including what a human reviewed and what a human did not
-- [ ] Cross-references derived from a copyrighted apparatus are excluded, and the exclusion is recorded in `LIMITS.md`
+- [x] Haydock commentary in English is addressable by verse for all 73 books
+- [x] Haydock commentary in Portuguese is addressable by verse for all 73 books
+- [x] Cross-references resolve to spine addresses in both directions, and entries that cannot resolve are reported as orphans
+- [x] Commentary and cross-references attach to the same verse id used by B1, with no change to the verse schema
+- [x] The API exposes commentary and cross-references for a given address
+- [x] OpenBible attribution appears in the README and in the dataset metadata
+- [x] How the Portuguese translation was produced is stated on the first screen of the README, including what a human reviewed and what a human did not
+- [x] Cross-references derived from a copyrighted apparatus are excluded, and the exclusion is recorded in `LIMITS.md`
 
 ## Constraints
 
@@ -55,3 +55,5 @@ Doré illustrations. Maps. Patristic texts beyond Haydock. The Catechism and mag
 ## Verification
 
 Test-driven on anchor resolution and on the orphan path for unresolvable cross-references. The Portuguese Haydock gets a human review sample with the sample size and the error rate written down, because a quality claim without a denominator is not a claim.
+
+**Every criterion above is met and this epic does not close.** The sample is drawn, seeded and committed at `docs/qa/haydock-translation-sample.csv`, 200 entries with an empty verdict column. The size is written down and the error rate is not, because nobody has read it. An epic closes when its criteria are checked and its verification ran, and one of the two verifications did not.

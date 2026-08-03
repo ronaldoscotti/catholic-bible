@@ -26,6 +26,7 @@ INPUTS = (
     DATA_DIR / "versification.json",
     DATA_DIR / "corpus",
     DATA_DIR / "commentary",
+    DATA_DIR / "cross-references",
     Path(storage.__file__).parent / "build.py",
 )
 

@@ -31,8 +31,34 @@ shows both real losses and correct choices like `40 years` becoming
 is for. None of it says whether a sentence means what the Latin behind it means.
 `make audit-translation` recomputes all of it.
 
-There are no cross-references yet, no full text search, no static artifacts on a
-CDN, and nothing is deployed. The API is read only and it always will be.
+Cross-references are here as well. 207636 of them on 26726 addresses, from
+three sources, and the one thing worth knowing about them is in the next
+section.
+
+There is no full text search, no static artifacts on a CDN, and nothing is
+deployed. The API is read only and it always will be.
+
+## The deuterocanonical books are the point
+
+The largest free cross-reference set in existence is OpenBible, 204601 entries,
+and **not one of them touches Tobit, Judith, Wisdom, Sirach, Baruch or the
+Maccabees**, in either direction. That is not an accident and it is not a
+complaint about anyone. The set was built by and for readers whose canon has 66
+books.
+
+So the passages a Catholic reader most needs connected are the ones every
+available set leaves unconnected. Matthew 4:4 quotes Wisdom 16:26 and no amount
+of consensus voting will tell you so.
+
+What closes the gap here is 292 authored pairs of addresses, expanded in both
+directions, carrying no text from any source. They are 665 of the 920 surviving
+deuterocanonical links. `LIMITS.md` says where they came from and on what
+reading they ship.
+
+Cross-references from OpenBible are used under CC BY 4.0.
+**Cross-references courtesy of OpenBible.info.** The same notice travels inside
+every API response that draws on them, and inside the published dataset, because
+an attribution only in a README is an attribution a consumer never sees.
 
 244 of the 20705 Portuguese bodies shipped with the translation harness's own
 control markers inside the text, and one unrelated note glued on behind each.
@@ -87,7 +113,7 @@ request, because a quickstart nobody executes rots within a month.
 
 ## Reading it
 
-Nine routes, all `GET`, all under `/v1`.
+Eleven routes, all `GET`, all under `/v1`.
 
 ```
 GET /v1/versions
@@ -96,14 +122,17 @@ GET /v1/versions/{version}/books/{book}
 GET /v1/versions/{version}/books/{book}/chapters/{chapter}
 GET /v1/versions/{version}/books/{book}/chapters/{chapter}/verses/{verse}
 GET /v1/books/{book}/chapters/{chapter}/verses/{verse}/commentary
+GET /v1/books/{book}/chapters/{chapter}/verses/{verse}/cross-references
 GET /v1/passage?ref=&versions=&scheme=
 GET /v1/resolve?ref=&scheme=
 GET /v1/commentary?ref=&scheme=
+GET /v1/cross-references?ref=&scheme=
 ```
 
-Commentary takes no version, because a note on John 3:16 is the same note
-whichever translation is on screen. Both languages come back together and the
-rights block on each source says which one a machine produced.
+Commentary and cross-references take no version, because a note on John 3:16 is
+the same note whichever translation is on screen. Both languages of a note come
+back together and the rights block on each source says which one a machine
+produced.
 
 A book is named by its USX code or by any name that resolves, in Portuguese,
 English or Latin. `Jo` is John and `Jó` is Job, and the accent is never folded.

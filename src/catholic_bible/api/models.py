@@ -162,6 +162,46 @@ class CommentaryOut(BaseModel):
     )
 
 
+class CrossReferenceSource(BaseModel):
+    code: str = Field(examples=["openbible"])
+    name: str
+    rights: str = Field(examples=["CC BY 4.0"])
+    rights_basis: str
+    attribution: str | None = Field(
+        description="Where a licence requires it, this is the notice that satisfies it"
+    )
+    url: str | None
+
+
+class CrossReference(BaseModel):
+    id: str = Field(examples=["GEN.1.1"], description="The address it hangs on")
+    to: str = Field(examples=["JHN.1.1"])
+    end: int | None = Field(
+        description="The last verse of the target range, where the target is one"
+    )
+    reference: str = Field(examples=["Jo 1,1"])
+    whole_chapter: bool
+    primary: bool = Field(
+        description=(
+            "A curated Catholic reference or a strong consensus, rather than the "
+            "weak tail. The weight it derives from is not published, because it "
+            "is a vote count for one source and a constant for the others."
+        )
+    )
+    source: str = Field(examples=["douay"])
+
+
+class CrossReferencesOut(BaseModel):
+    reference: str = Field(examples=["Gn 1,1"])
+    ids: list[str] = Field(examples=[["GEN.1.1"]])
+    sources: list[CrossReferenceSource] = Field(
+        description="Only the sources this answer drew on, with their attribution"
+    )
+    references: list[CrossReference] = Field(
+        description="At most 30 per address, highest weight first"
+    )
+
+
 class ResolvedOut(BaseModel):
     reference: str = Field(examples=["1Cor 13,4-7"])
     book: str

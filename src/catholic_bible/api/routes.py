@@ -14,6 +14,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Path, Response
 
+from catholic_bible import cross_references
 from catholic_bible.api import errors, models, resolving
 from catholic_bible.canon import psalms
 from catholic_bible.canon.aliases import ALIASES, Language
@@ -47,6 +48,11 @@ router = APIRouter(prefix="/v1")
 # bound is the driver's rather than the canon's, so a chapter of 0 or -1 still
 # answers 404 the way it always has.
 InPath = Annotated[int, Path(ge=-(2**63), le=2**63 - 1)]
+
+# Cross-references per address at read time. Genesis 1:1 carries more than
+# sixty strong ones and a client rendering all of them renders noise. Ported
+# rather than derived, and DECISIONS.md says so.
+PER_ADDRESS = 30
 
 
 def database() -> Iterator[sqlite3.Connection]:
@@ -475,6 +481,125 @@ def commentary_for(
     # version is the default is not in the URL.
     response.headers["Cache-Control"] = CATALOGUE
     return _commentary_out(connection, reference, orders, language)
+
+
+def _cross_references_out(
+    connection: sqlite3.Connection,
+    reference: Reference,
+    orders: list[int],
+    language: Language,
+) -> models.CrossReferencesOut:
+    rows = [
+        row
+        for row in reader.cross_references_from(
+            connection, orders[0], orders[-1], PER_ADDRESS
+        )
+        if int(row["from_order"]) in set(orders)
+    ]
+
+    # Addressed one by one rather than as a range. Targets run from Genesis to
+    # Revelation, so the range covering them is the whole spine.
+    addresses = reader.addresses_at(
+        connection,
+        [
+            *orders,
+            *(int(row["from_order"]) for row in rows),
+            *(int(row["to_order"]) for row in rows),
+        ],
+    )
+
+    found = []
+    for row in rows:
+        anchor = addresses[int(row["from_order"])]
+        target = addresses[int(row["to_order"])]
+        book = str(target["book"])
+        chapter, verse = int(target["chapter"]), int(target["verse"])
+        end = row["to_end"]
+        span = ((chapter, verse), (chapter, int(end) if end is not None else verse))
+        found.append(
+            models.CrossReference(
+                id=str(anchor["id"]),
+                to=str(target["id"]),
+                end=None if end is None else int(end),
+                reference=format_reference(Reference(book, span), language),
+                whole_chapter=bool(row["whole_chapter"]),
+                primary=int(row["weight"]) >= cross_references.PRIMARY,
+                source=str(row["source"]),
+            )
+        )
+
+    drawn = {row.source for row in found}
+    return models.CrossReferencesOut(
+        reference=format_reference(reference, language),
+        ids=[str(addresses[order]["id"]) for order in orders if order in addresses],
+        sources=[
+            models.CrossReferenceSource(
+                code=str(source["code"]),
+                name=str(source["name"]),
+                rights=str(source["rights"]),
+                rights_basis=str(source["rights_basis"]),
+                attribution=source["attribution"],
+                url=source["url"],
+            )
+            for source in reader.cross_reference_sources(connection)
+            if str(source["code"]) in drawn
+        ],
+        references=found,
+    )
+
+
+@router.get(
+    "/books/{book}/chapters/{chapter}/verses/{verse}/cross-references",
+    summary="The passages one verse points at",
+    response_model=models.CrossReferencesOut,
+    responses={**errors.NOT_FOUND, **errors.UNPROCESSABLE},
+)
+def read_cross_references(
+    book: str,
+    chapter: InPath,
+    verse: InPath,
+    connection: Database,
+    response: Response,
+) -> models.CrossReferencesOut:
+    row = _book_or_404(connection, book)
+    code = str(row["code"])
+    _chapter_or_404(connection, code, chapter)
+
+    address = reader.address(connection, f"{code}.{chapter}.{verse}")
+    if address is None:
+        raise errors.not_found(
+            errors.Reason.NOT_ON_SPINE,
+            f"the spine has no verse {verse} in {code} {chapter}",
+            f"{code}.{chapter}.{verse}",
+        )
+
+    order = int(address["canonical_order"])
+    point = (chapter, verse)
+    language = reader.language_of(str(reader.default_version(connection)["language"]))
+
+    response.headers["Cache-Control"] = CATALOGUE
+    return _cross_references_out(
+        connection, Reference(code, (point, point)), [order], language
+    )
+
+
+@router.get(
+    "/cross-references",
+    summary="The passages a written reference points at",
+    response_model=models.CrossReferencesOut,
+    responses=errors.UNPROCESSABLE,
+)
+def cross_references_for(
+    connection: Database,
+    response: Response,
+    ref: str,
+    scheme: resolving.InputScheme = resolving.InputScheme.SPINE,
+) -> models.CrossReferencesOut:
+    reference, orders = resolving.read(ref, scheme)
+    language = reader.language_of(str(reader.default_version(connection)["language"]))
+
+    response.headers["Cache-Control"] = CATALOGUE
+    return _cross_references_out(connection, reference, orders, language)
 
 
 @router.get(

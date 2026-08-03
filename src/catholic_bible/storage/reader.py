@@ -211,6 +211,69 @@ def commentary_sources(connection: sqlite3.Connection) -> list[Row]:
     )
 
 
+def addresses_at(connection: sqlite3.Connection, orders: list[int]) -> dict[int, Row]:
+    """Spine addresses for a scattered set, keyed by order.
+
+    Not `addresses_between`. A cross-reference target set runs from Genesis to
+    Revelation, so the range covering it is the whole spine and reading it costs
+    35845 rows to answer 30. Chunked because a bind parameter list has a limit
+    and a passage at the cap can want fifteen thousand of them.
+    """
+    found: dict[int, Row] = {}
+    wanted = sorted(set(orders))
+    for start in range(0, len(wanted), 900):
+        chunk = wanted[start : start + 900]
+        marks = ",".join("?" * len(chunk))
+        found.update(
+            {
+                int(row["canonical_order"]): row
+                for row in _all(
+                    connection.execute(
+                        f"SELECT * FROM spine WHERE canonical_order IN ({marks})",
+                        chunk,
+                    )
+                )
+            }
+        )
+    return found
+
+
+def cross_references_from(
+    connection: sqlite3.Connection, first: int, last: int, cap: int
+) -> list[Row]:
+    """The references hanging off a range of addresses, best first per address.
+
+    Ordered by weight descending inside each anchor, canonical order as the tie
+    break, and cut at `cap` per anchor. Genesis 1:1 carries more than sixty
+    strong references and a client rendering all of them renders noise. The
+    table keeps everything and only the read cuts, so a consumer who disagrees
+    can read the published file instead.
+    """
+    return _all(
+        connection.execute(
+            """
+        SELECT from_order, to_order, to_end, whole_chapter, weight, source
+        FROM (
+            SELECT *, ROW_NUMBER() OVER (
+                PARTITION BY from_order ORDER BY weight DESC, to_order
+            ) AS rank
+            FROM cross_references
+            WHERE from_order BETWEEN ? AND ?
+        )
+        WHERE rank <= ?
+        ORDER BY from_order, weight DESC, to_order
+        """,
+            (first, last, cap),
+        )
+    )
+
+
+def cross_reference_sources(connection: sqlite3.Connection) -> list[Row]:
+    return _all(
+        connection.execute("SELECT * FROM cross_reference_sources ORDER BY code")
+    )
+
+
 def address(connection: sqlite3.Connection, verse_id: str) -> Row | None:
     return _one(connection.execute("SELECT * FROM spine WHERE id = ?", (verse_id,)))
 

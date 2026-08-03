@@ -1,0 +1,29 @@
+{
+  "source": {
+    "repository": "meu-feed-catolico-api",
+    "commit": "0494a69e66657a16d822898e71f4eb3b2bc4ae80",
+    "commit_date": "2026-08-02T00:02:18-03:00",
+    "private": true
+  },
+  "fixtures": {
+    "database/data/douay-cross-references.json.gz": "4c4b9d07e9b00376803f6342b6153947445bcdbefbbbb19d281c602dc66ba9e6",
+    "database/data/na27-cross-references.json.gz": "97b5e6362f5635461eca2cb350c67b67b464c9069b575ebca680eba62eea3f4a",
+    "database/data/openbible-cross-references.json.gz": "024d13dc13c221e516f860aafb15a1e43252adc7b09b305c3d3348ef5241473a"
+  },
+  "files": {
+    "references.json": {
+      "sha256": "64310ace969ddce34260f8c32629ac629565ea1f2cc03120dbf985531a47fc13",
+      "anchors": 26726,
+      "references": 207636,
+      "by_source": {
+        "douay": 2362,
+        "na27": 673,
+        "openbible": 204601
+      },
+      "excluded": {
+        "ave-maria": "Scraped from the Ave Maria apparatus, the same protected 1957 edition whose text this repository refuses. 879 rows."
+      },
+      "from": "bible_cross_references"
+    }
+  }
+}

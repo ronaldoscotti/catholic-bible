@@ -52,5 +52,15 @@ jobs:
           echo "$body" | grep -q '"language":"en-US"'
           echo "$body" | grep -q '"language":"pt-BR"'
           echo "$body" | grep -q '"translation":"machine"'
+      - name: The OpenBible attribution travels with the data, which CC BY requires
+        run: |
+          body=$(curl -sS --fail \
+            http://localhost:8000/v1/books/GEN/chapters/1/verses/1/cross-references)
+          echo "$body" | grep -q 'OpenBible.info'
+          echo "$body" | grep -q '"rights":"CC BY 4.0"'
+      - name: Matthew quoting Wisdom, which no free set outside this one carries
+        run: |
+          curl -sS --fail "http://localhost:8000/v1/cross-references?ref=Mt%204,4" \
+            | grep -q 'WIS.16.26'
       - if: always()
         run: docker compose down

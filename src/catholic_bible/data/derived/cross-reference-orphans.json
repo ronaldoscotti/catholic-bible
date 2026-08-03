@@ -1,0 +1,50 @@
+{
+  "douay": {
+    "fixture_anchors": 1913,
+    "fixture_pairs": null,
+    "exported": 2362,
+    "unaccounted": null,
+    "why": "The fixture holds reference strings rather than addresses. Splitting them needs the parser, and a second parser here would be a second set of bugs rather than a check."
+  },
+  "na27": {
+    "fixture_anchors": 292,
+    "fixture_pairs": 341,
+    "exported": 673,
+    "unaccounted": 5,
+    "worst": {
+      "MAT -> WIS": 1,
+      "MRK -> JDT": 1,
+      "JAS -> SIR": 1,
+      "1JN -> BAR": 1,
+      "JUD -> WIS": 1
+    }
+  },
+  "openbible": {
+    "fixture_anchors": 26648,
+    "fixture_pairs": 211804,
+    "exported": 204601,
+    "unaccounted": 7203,
+    "worst": {
+      "DAN -> DAN": 655,
+      "DAN -> PSA": 225,
+      "PSA -> DAN": 200,
+      "DAN -> ISA": 175,
+      "DAN -> REV": 174,
+      "REV -> DAN": 154,
+      "ISA -> DAN": 129,
+      "DAN -> JER": 93,
+      "JER -> DAN": 90,
+      "MAT -> DAN": 86,
+      "LUK -> DAN": 82,
+      "MAT -> LUK": 81,
+      "ACT -> DAN": 79,
+      "EZK -> DAN": 77,
+      "LUK -> MAT": 73,
+      "GEN -> DAN": 71,
+      "DAN -> LUK": 68,
+      "DAN -> ACT": 66,
+      "MRK -> MAT": 66,
+      "JOB -> DAN": 65
+    }
+  }
+}
