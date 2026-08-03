@@ -146,28 +146,8 @@ open.
 
 **Human review is pending and wanted.** The sample is drawn, seeded and committed
 at `docs/qa/haydock-translation-sample.csv`, 200 entries with their English
-beside them, ready for a person to work through.
-
-What exists in the meantime is a machine reading of that sample, entry by entry
-against the English, recorded in `docs/qa/haydock-translation-review.md`.
-
-| | |
-|---|---|
-| Sample | 200 of 20705 |
-| Entries carrying a defect | 5 |
-| Observed error rate | 2.5% |
-| 95% Wilson interval | 1.1% to 5.7% |
-| Of those five, meaning inverted | 2 |
-
-Two say the opposite of the English, one moves a note from Challoner to Calmet,
-one turns the words being commented on into `et cetera`, and one leaves an
-English article in a Portuguese sentence. **All five pass every mechanical check
-in the table below**, and a test asserts that, because an inversion carries the
-same length, markup and digits as a faithful rendering.
-
-That is one model grading another. It is not the human read this section is
-named for, 20505 entries remain unread by anyone, and the lower bound of the
-interval is not zero.
+beside them, ready for a person to work through. `docs/qa/` holds the record of
+what has been checked so far.
 
 **What has been checked is structure, not meaning.** Five mechanical comparisons
 run against the English each entry came from, over the sample and over all
