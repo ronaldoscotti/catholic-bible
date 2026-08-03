@@ -124,10 +124,10 @@ def test_a_cut_body_is_still_a_whole_translation() -> None:
     assert not outside, len(outside)
 
 
-def test_the_numbers_the_readme_publishes_are_what_the_audit_finds() -> None:
-    """`README.md` and `LIMITS.md` both quote these.
+def test_the_numbers_the_prose_publishes_are_what_the_audit_finds() -> None:
+    """`LIMITS.md` quotes these in its structural audit table.
 
-    A number in the README that nothing recomputes is a number nobody can check,
+    A number in the prose that nothing recomputes is a number nobody can check,
     which is what a review found against the first version of those tables.
     """
     import importlib.util  # noqa: PLC0415

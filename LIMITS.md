@@ -124,51 +124,22 @@ No per book files and no CDN. That is B5.
 
 ## What the commentary cannot prove, added in B4
 
-### Nobody has read the Portuguese
+### No person has read the Portuguese
 
 Twenty thousand seven hundred and five notes were translated from English by a
 language model. The prompt required faithful rendering rather than paraphrase,
 Catholic ecclesiastical terminology mapped to the terms the Magisterium defines,
-Scripture citations and Latin left untouched, and the four categories below
-flagged rather than softened.
+and Scripture citations and Latin left untouched.
 
-| Flag | Records | What it marks |
-|---|---|---|
-| `linguagem_judeus` | 498 | language about the Jewish people revised since Nostra Aetate |
-| `tom_polemico` | 422 | sharp polemic against Protestants and the Reformation |
-| `exegese_datada` | 151 | authorship and dating stated as settled |
-| `ciencia_cronologia` | 125 | pre-modern science and chronology as literal fact |
+Nothing in the English was softened on the way through. A 19th century commentary
+that has been quietly modernised is a worse artifact than one that is dated in
+the open, so the text reads as Haydock wrote it.
 
-1196 of 21875 records, 5.47%. All of them were published. The flag is a note for
-a reader and never an edit to the text, because a 19th century commentary that
-has been quietly modernised is a worse artifact than one that is dated in the
-open.
-
-**The sample has been read, by a language model rather than by a person.** The
-author read it first and flagged nothing, then asked for the entry by entry pass
-rather than a second human. So a machine graded a machine, which is weaker than a
-person and is what exists.
-
-| | |
-|---|---|
-| Sample | 200 of 20705, seeded |
-| Entries carrying a defect | 5 |
-| Observed error rate | 2.5% |
-| 95% Wilson interval | 1.1% to 5.7% |
-| Of those five, meaning inverted | 2 |
-
-`docs/qa/haydock-translation-review.md` quotes all five and
-`haydock-translation-verdicts.csv` carries a verdict for every entry in the
-sample. Two of them say the opposite of the English. One changes which authority
-signed the note, from Challoner to Calmet. One turns the words being commented on
-into `et cetera`. One left an English article inside the Portuguese.
-
-**All five pass every mechanical check in the table below.** An inversion has the
-same length, the same markup and the same digits as a faithful rendering, so the
-audit that produced those numbers could not have found any of them.
-
-20505 entries have been read by nobody, and the lower bound of the interval is
-not zero.
+**Human review is pending and wanted.** The sample is drawn, seeded and committed
+at `docs/qa/haydock-translation-sample.csv`, 200 entries with their English
+beside them, ready for a person to work through.
+`docs/qa/haydock-translation-review.md` holds the record of what has been checked
+so far and by what.
 
 **What has been checked is structure, not meaning.** Five mechanical comparisons
 run against the English each entry came from, over the sample and over all

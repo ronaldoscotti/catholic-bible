@@ -37,11 +37,15 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
 [x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5
 [x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5
-[x] 5  Implement        B0 B1 B2 B3 B4 B5 merged, 562 tests
+[x] 5  Implement        B0 B1 B2 B3 B4 B5 merged, 565 tests
 [x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5
 [x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4 B5, one author
 [x] 8  PR               B0 B1 B2 B3 B4 B5 merged. v1.0.0 released
 ```
+
+1.0.1 is open and is neither merged nor tagged. The 565 on row 5 is the count on
+that branch rather than on `main`, and B5 has a criterion unticked until the tag
+lands.
 
 The checklist advances when the artifact exists and not before. Six epics have
 run. B0 builds the project, B1 builds the addresses, B2 publishes Scripture, B3
@@ -103,9 +107,13 @@ and found 5 defects. 2.5%, with a 95% interval of 1.1% to 5.7%, and two of the
 five say the opposite of the English.
 
 That is a machine grading a machine and it is weaker than the criterion imagined.
-`README.md`, `LIMITS.md` and the epic all say so in those words. Recording it as
-met with the weakness named beats leaving a box unticked forever, and it beats
-calling it a human review.
+`docs/qa/haydock-translation-review.md` says so in those words and carries the
+verdicts it was drawn from. Recording it as met with the weakness named beats
+leaving a box unticked forever, and it beats calling it a human review.
+
+The author later took the rate out of `README.md` and `LIMITS.md`, which now ask
+for a human reading instead of publishing what a machine found. The record moved
+rather than disappeared, and this paragraph is the pointer to where it went.
 
 The two gates on B1 were not met the same way and the difference is recorded
 rather than averaged.
