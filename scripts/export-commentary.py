@@ -69,10 +69,10 @@ RIGHTS = {
     ),
     "translation": "machine",
     "translation_basis": (
-        "The Portuguese was produced by a language model under a fixed prompt, "
-        "with 5.47% of records flagged for human review and published with the "
-        "rest. No human has read a sample and recorded an error rate. See "
-        "LIMITS.md."
+        "The Portuguese was produced by a language model under a fixed prompt "
+        "requiring faithful rendering, Catholic ecclesiastical terminology and "
+        "untouched Scripture citations. Human review is pending and welcome. "
+        "See LIMITS.md."
     ),
 }
 

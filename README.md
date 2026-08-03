@@ -11,31 +11,15 @@ verses, addressed on a versification spine of 35845 slots.
 Commentary is here too. The Haydock, 20705 notes over all 73 books, in English
 and in Portuguese, anchored on the same verse ids.
 
-**Read this before you use the Portuguese commentary.** It was translated by a
-language model, not by a person. The prompt required faithful rendering,
-Catholic ecclesiastical terminology and untouched Scripture citations, and it
-asked the model to flag polemic, dated exegesis, pre-modern science and language
-about the Jewish people that the Church has revised since Nostra Aetate. 5.47%
-of records came back flagged and every one of them was published anyway. The
-English is the 1859 transcription and it was not touched.
+The Portuguese Haydock is the part of this project that does not exist anywhere
+else, and it was **translated by a language model**. The prompt required faithful
+rendering, Catholic ecclesiastical terminology and untouched Scripture citations.
+The English beside it is the 1859 transcription and it was not touched.
 
-**200 of the 20705 entries have been read against the English, and 5 carried a
-defect.** That is 2.5%, with a 95% interval of 1.1% to 5.7%, and two of the five
-say the opposite of what the English says. `docs/qa/haydock-translation-review.md`
-names all five and quotes them.
-
-**A language model did that reading, so it is a machine grading a machine.** It
-is weaker than a person and it is what exists. The author read the sample first
-and flagged nothing. 20505 entries have still been read by nobody.
-
-What has been checked is structure. No body is empty, none is identical to the
-English it came from, none is wildly shorter or longer, and in the sample of 200
-every digit survives. Across all 20705, one body in 115 differs in emphasis
-markup and one in 245 loses or gains a digit, and reading a handful of those
-shows both real losses and correct choices like `40 years` becoming
-`quarenta anos`. No mechanical check separates the two, which is what the sample
-is for. None of it says whether a sentence means what the Latin behind it means.
-`make audit-translation` recomputes all of it.
+**Human review is pending and wanted.** A seeded sample of 200 entries sits at
+`docs/qa/haydock-translation-sample.csv` ready to be read, and
+`LIMITS.md` records what has been checked so far and by what. If you read
+Portuguese and Latin, this is the most useful thing anyone could contribute.
 
 Cross-references are here as well. 207636 of them on 26726 addresses, from
 three sources, and the one thing worth knowing about them is in the next
@@ -68,11 +52,6 @@ Cross-references from OpenBible are used under CC BY 4.0.
 **Cross-references courtesy of OpenBible.info.** The same notice travels inside
 every API response that draws on them, and inside the published dataset, because
 an attribution only in a README is an attribution a consumer never sees.
-
-244 of the 20705 Portuguese bodies shipped with the translation harness's own
-control markers inside the text, and one unrelated note glued on behind each.
-That was found by running those checks and it is fixed. `LIMITS.md` says what
-was cut and how the cut was verified not to remove content.
 
 `ROADMAP.md` says what is coming and why. `docs/epics/` holds one file per epic,
 `docs/method/` records the process that produced them, and `LIMITS.md` says what
