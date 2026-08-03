@@ -37,10 +37,20 @@ jobs:
           echo "path=$path" >> "$GITHUB_OUTPUT"
           echo "documented $url"
 
+      # jsDelivr resolves a new tag on its own schedule, so the run triggered by
+      # the tag push can arrive before the ref exists on their side and get a
+      # 404 for a perfectly good release. Retried rather than trusted.
       - name: The bytes on the CDN are the bytes in the tag
         run: |
+          for attempt in 1 2 3 4 5 6; do
+            if curl -sS --fail --max-time 120 "${{ steps.url.outputs.url }}" -o served.json; then
+              break
+            fi
+            echo "attempt $attempt did not resolve, waiting"
+            sleep 30
+          done
+          test -s served.json
           git show "${{ steps.url.outputs.tag }}:${{ steps.url.outputs.path }}" > expected.json
-          curl -sS --fail --max-time 120 "${{ steps.url.outputs.url }}" -o served.json
           cmp expected.json served.json
           echo "identical, $(wc -c < served.json) bytes"
 
@@ -63,7 +73,11 @@ jobs:
       - name: The manifest still describes what is served
         run: |
           url="${{ steps.url.outputs.url }}"
-          curl -sS --fail --max-time 120 "${url%%/data/*}/data/manifest.json" -o manifest.json
+          for attempt in 1 2 3; do
+            curl -sS --fail --max-time 120 "${url%%/data/*}/data/manifest.json" -o manifest.json && break
+            sleep 30
+          done
+          test -s manifest.json
           node -e "
             const {createHash} = require('crypto'), fs = require('fs')
             const manifest = JSON.parse(fs.readFileSync('manifest.json', 'utf8'))

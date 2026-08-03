@@ -23,7 +23,7 @@ Someone building a small page or prototyping in a single HTML file has no way to
 
 ## Acceptance criteria
 
-- [x] JSON artifacts are produced per translation and per book by the B2 export
+- [x] JSON artifacts are produced per translation and per book, by a committed generator reading what B2 published
 - [x] Artifacts are served over a CDN with no signup and no key
 - [ ] A one-line `fetch()` copied out of the README works from a blank HTML file
 - [ ] Artifacts are versioned, and a published version is immutable
@@ -33,12 +33,16 @@ Someone building a small page or prototyping in a single HTML file has no way to
 
 Three of those need saying out loud rather than being ticked or left in silence.
 
-**The artifacts do not come out of the B2 export.** They come out of a generator
-reading what B2 already committed. The export needs the private source, so an
-artifact produced that way would be one more file a stranger has to take on
-trust. Splitting downstream means anyone with a clone regenerates all 371 files
-and diffs them. `DECISIONS.md` carries the trade and `LIMITS.md` carries what it
-costs.
+**The first criterion had its wording changed rather than being ticked against
+text it contradicts.** It originally said the artifacts come out of the B2
+export. They come out of a generator reading what B2 already committed, and a
+ticked box whose sentence the rest of the document denies is the drift that
+keeping the epic file as the source of truth exists to prevent.
+
+The export needs the private source, so an artifact produced that way would be
+one more file a stranger has to take on trust. Splitting downstream means anyone
+with a clone regenerates all 371 files and diffs them. `DECISIONS.md` carries the
+trade and `LIMITS.md` carries what it costs.
 
 **The immutability box stays empty until the tag is pushed.** The mechanism is
 built and measured. A ruleset on `refs/tags/v*` blocks deletion and update with

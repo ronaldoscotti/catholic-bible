@@ -7,12 +7,16 @@ rather than summarised.
 
 ## The acceptance criteria, walked
 
-**1. JSON artifacts are produced per translation and per book by the B2 export.**
-Met on the substance, and the wording is wrong in a way worth naming. 371 files,
-219 of them a translation split per book. They are produced by
-`scripts/build-artifacts.py` reading the committed corpus, not by the B2 export,
-which needs the private source. `DECISIONS.md` carries why. The change makes the
-artifacts reproducible on a clean checkout, which the export is not.
+**1. JSON artifacts are produced per translation and per book, by a committed
+generator reading what B2 published.** Met. 371 files, 219 of them a translation
+split per book.
+
+The criterion originally said the artifacts come out of the B2 export and this
+document hedged that as met on the substance with the wording wrong. Hedging is
+not the fix. The criterion text was amended in the epic file, which is the source
+of truth for the issue, and the reason is recorded there. The export needs the
+private source. `scripts/build-artifacts.py` needs nothing, which is what makes
+the artifacts reproducible on a clean checkout.
 
 ```
 $ make artifacts
@@ -143,7 +147,7 @@ generated tree and asserts the exact difference is reported.
 `git show 806be05:data/.../SIR.json` and what jsDelivr returned.
 
 ```
-IDENTICO, 227872 bytes
+identical, 227872 bytes
 ```
 
 ## The suite
@@ -186,5 +190,5 @@ catch is a partial publish, which the `--check` gate already catches before the
 tag exists.
 
 Nobody has measured what the artifacts cost a consumer on a slow connection. The
-median book is 48 KB and Psalms in the Haydock is 2135 KB, and those are file
+median book is 48 KB and Psalms in the Haydock is 2187332 bytes, and those are file
 sizes rather than a measurement of anything.

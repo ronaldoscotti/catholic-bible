@@ -391,7 +391,7 @@ artifact, and it is served today because the repository is public and everything
 in it is reachable.
 
 The per-book split is what keeps the published surface clear of the limit. The
-largest published file is Psalms in the Haydock at 2135 KB. Nothing warns when
+largest published file is Psalms in the Haydock at 2187332 bytes. Nothing warns when
 the monolith crosses the line, and what breaks is somebody else's browser.
 
 ### A clone costs 98 MB now

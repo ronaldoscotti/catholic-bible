@@ -35,3 +35,6 @@ build/
 
 # Scratch tree the artifact check builds into and removes.
 /.artifacts-check/
+
+# Scratch tree the artifact build writes into before moving it into place.
+/.data-build/

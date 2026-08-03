@@ -42,10 +42,17 @@ Every number is a command that ran on 2026-08-03 against what is committed at
 | Largest corpus book | `PSA` in Douay-Rheims, 329 KB | same |
 | Commentary split per book | 73 files, 19.1 MB | measured |
 | Median commentary book | 149 KB | same |
-| Largest commentary book | `PSA`, 2135 KB | same |
+| Largest commentary book | `PSA`, 2135 KB | same, and see below |
 | CORS header from the CDN | `access-control-allow-origin: *` | response |
 | Cache header at a pinned commit | `immutable`, `max-age=31536000` | response |
 | Edge that answered from here | Curitiba | `x-served-by` |
+
+*Corrected 2026-08-03, after the review. The two per book size rows were
+measured by grouping the sources in memory, before the emitter existed, so they
+miss the metadata block and the newlines every published file carries. Psalms in
+the Haydock is 2187332 bytes on disk rather than the 2135 KB written here, which
+is 1187 KB under the limit instead of 1189. Nothing that follows changes.
+`LIMITS.md` carries the measured figure.*
 
 The headroom row is the one that decides the shape of this epic. The commentary
 is served today and is one commit from not being served, and no error would

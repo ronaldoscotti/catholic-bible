@@ -192,6 +192,10 @@ def index(dest: Path) -> str:
     corpus = load("corpus/PROVENANCE.json")
     entry = {
         "dataset": "catholic-bible",
+        # The entry point has to answer the question it poses. `url_pattern`
+        # carries a {version} placeholder and a consumer who fetched only this
+        # file had no way to fill it in.
+        "dataset_version": version(),
         "books": len(BOOKS),
         "book_codes": list(BOOKS),
         "url_pattern": URL + "{path}",
@@ -289,10 +293,22 @@ def main() -> int:
         return 0
 
     dest = Path(args.dest).resolve() if args.dest else DEST
-    shutil.rmtree(dest, ignore_errors=True)
-    build(dest)
-    written = sorted(dest.rglob("*.json"))
+    # Built beside the target and moved into place, because the sources are read
+    # lazily as the tree is written. Deleting first and building second meant a
+    # missing source left 219 of 371 files on disk and the committed tree gone,
+    # which is the state `make artifacts` is supposed to repair.
+    scratch = dest.parent / f".{dest.name}-build"
+    shutil.rmtree(scratch, ignore_errors=True)
+    try:
+        build(scratch)
+    except Exception:
+        shutil.rmtree(scratch, ignore_errors=True)
+        raise
+
+    written = sorted(scratch.rglob("*.json"))
     total = sum(path.stat().st_size for path in written)
+    shutil.rmtree(dest, ignore_errors=True)
+    scratch.rename(dest)
     print(f"wrote {len(written)} files, {total / 1048576:.1f} MB, to {dest}")
     return 0
 

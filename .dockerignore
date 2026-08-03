@@ -25,3 +25,9 @@ __pycache__/
 
 # scratch from make verify-export
 .verify/
+
+# The published artifacts. 48 MB of static files served from a CDN, which no
+# code path under src/ opens, and COPY . /app would bake them into both stages.
+/data/
+/.data-build/
+/.artifacts-check/

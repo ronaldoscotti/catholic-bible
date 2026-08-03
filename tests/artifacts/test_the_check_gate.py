@@ -54,6 +54,32 @@ def test_the_gate_fails_on_an_edited_verse(tmp_path: Path) -> None:
     ]
 
 
+def test_a_missing_source_leaves_the_committed_tree_alone(tmp_path: Path) -> None:
+    """The plan required this and the first version did the opposite.
+
+    Sources are read lazily as the tree is written, so deleting the destination
+    first meant a source that vanished mid-run left 219 of 371 files on disk with
+    the committed tree already gone.
+    """
+    hidden = tmp_path / "haydock.json"
+    source = ROOT / "src" / "catholic_bible" / "data" / "commentary" / "haydock.json"
+    before = sorted(p.relative_to(ROOT) for p in (ROOT / "data").rglob("*.json"))
+
+    source.rename(hidden)
+    try:
+        finished = subprocess.run(
+            [sys.executable, str(SCRIPT)], capture_output=True, text=True, cwd=ROOT
+        )
+    finally:
+        hidden.rename(source)
+
+    assert finished.returncode != 0
+    assert "FileNotFoundError" in finished.stderr
+    after = sorted(p.relative_to(ROOT) for p in (ROOT / "data").rglob("*.json"))
+    assert after == before
+    assert not (ROOT / ".data-build").exists()
+
+
 def test_the_gate_fails_on_a_missing_file(tmp_path: Path) -> None:
     module = generator()
     built = tmp_path / "built"
