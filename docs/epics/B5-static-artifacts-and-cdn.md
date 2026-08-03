@@ -25,7 +25,7 @@ Someone building a small page or prototyping in a single HTML file has no way to
 
 - [x] JSON artifacts are produced per translation and per book, by a committed generator reading what B2 published
 - [x] Artifacts are served over a CDN with no signup and no key
-- [x] A one-line `fetch()` copied out of the README works from a blank HTML file
+- [ ] A one-line `fetch()` copied out of the README works from a blank HTML file
 - [x] Artifacts are versioned, and a published version is immutable
 - [x] The canon, the spine and `orphans.json` ship as artifacts too, not only the text
 - [x] A checksum manifest lets a consumer verify what it downloaded
@@ -98,6 +98,17 @@ A sabedoria faz o seu próprio elogio, honra-se em Deus, ...
 
 It runs again every Monday, which is the run that matters, because a check that
 fires only at release time proves the URL worked once.
+
+**Unticked again on 2026-08-03, and it is the release process rather than the
+artifact.** The 1.0.1 release moved the README to `@v1.0.1` before that tag
+exists, so the documented line returns 404 while `@v1.0.0` still returns 200.
+Running it is the whole verification and it fails, so the box comes down.
+
+The order cannot be reversed. `cdn.yml` reads the tag out of the README, so a
+README left on `@v1.0.0` while `v1.0.1` is pushed would send the workflow to
+verify the previous release and pass without testing anything. The window
+between merging and tagging is the cost, and it closes when the tag lands and
+`cdn.yml` goes green against `@v1.0.1`. Re-tick then, and not before.
 
 ## Constraints
 
