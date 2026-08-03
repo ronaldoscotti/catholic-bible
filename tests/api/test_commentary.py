@@ -84,6 +84,25 @@ def test_a_note_covering_a_range_comes_back_once(client: TestClient) -> None:
     assert len(starts) == len(set(starts))
 
 
+def test_a_lectionary_reference_answers_only_for_the_verses_it_asked_for(
+    client: TestClient,
+) -> None:
+    """`Mc 5,22-24.35-43` leaves a hole and the notes have to leave it too.
+
+    The coverage query reads the whole envelope, which is one query rather than
+    two, so the answer has to be filtered back down. Without that the response
+    contradicts itself: `ids` skips verses 25 to 34 and the notes on 28 and 30
+    come back anyway.
+    """
+    body = client.get("/v1/commentary", params={"ref": "Mc 5,22-24.35-43"}).json()
+
+    assert "MRK.5.28" not in body["ids"]
+    starts = {
+        entry["start"] for source in body["sources"] for entry in source["entries"]
+    }
+    assert not starts - set(body["ids"]), starts
+
+
 def test_the_scheme_parameter_reaches_this_route_too(client: TestClient) -> None:
     """`Sl 51,1` under `org` is the Miserere, which is 50 on this spine."""
     found = client.get("/v1/commentary", params={"ref": "Sl 51,1", "scheme": "org"})

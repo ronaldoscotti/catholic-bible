@@ -37,10 +37,10 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
 [x] 3  Spec             docs/specs/, B1 B2 B3 B4
 [x] 4  Plan             docs/plans/, B1 B2 B3 B4
-[x] 5  Implement        B0 B1 B2 B3 merged. B4 slice one on a branch, 493 tests
+[x] 5  Implement        B0 B1 B2 B3 merged. B4 slice one on a branch, 497 tests
 [x] 6  QA               docs/qa/, B0 B1 B2 B3 B4
-[ ] 7  Code review      docs/reviews/, B0 B1 B2 B3. B4 has not been reviewed
-[ ] 8  PR               B0 B1 B2 B3 merged. B4 slice one not opened yet
+[x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4, one author
+[x] 8  PR               B0 B1 B2 B3 merged. B4 slice one open as #24
 ```
 
 The checklist advances when the artifact exists and not before. Five epics have

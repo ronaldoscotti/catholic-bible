@@ -9,13 +9,13 @@ Reading the diff is not QA. This is what ran and what came back.
 ```
 $ make lint
 All checks passed!
-98 files already formatted
+101 files already formatted
 
 $ make typecheck
 Success: no issues found in 54 source files
 
 $ make test
-493 passed
+497 passed
 ```
 
 ## The epic criteria, walked one by one
@@ -122,6 +122,24 @@ Over HTTP, 15 ms to 4.4 ms, which is where the B3 verse read already sat.
 plan left it open and said to measure. SQLite uses the index either way and still
 walks it from the first entry of the source, so the open range costs 0.92 ms at
 the end of Revelation against 0.0065 ms bounded.
+
+## What stage 7 found after this walk was written
+
+Two defects, and neither was visible to this document as first written.
+
+**A lectionary reference returned notes on verses nobody asked for.**
+`Mc 5,22-24.35-43` skips verses 25 to 34 and the commentary route returned the
+notes anchored there, so `ids` and `sources` in the same response disagreed.
+Fixed and pinned.
+
+**A path integer wider than 64 bits was a 500 with a traceback**, on this route
+and on two B3 routes already merged. `docs/reviews/B4-commentary.md` carries the
+reproduction. Fixed for all four routes with a bound taken from the driver
+rather than from the canon.
+
+Neither was found by reading. The first came from a review agent tracing the
+disjoint path by hand and the second from sending twenty five deliberately
+malformed requests, which is the pass B3 skipped and paid for.
 
 ## Where the code and the plan disagree
 

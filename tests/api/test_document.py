@@ -146,6 +146,18 @@ def test_the_document_publishes_one_error_shape_and_only_one() -> None:
         ("/v1/resolve", "a required query parameter is missing"),
         ("/v1/resolve?ref=Jo 3,16&scheme=bogus", "an enum value is not one of them"),
         ("/v1/versions/matos-soares/books/JHN/chapters/x", "a path integer is not one"),
+        (
+            "/v1/versions/matos-soares/books/JHN/chapters/99999999999999999999",
+            "a path integer is wider than the store can bind",
+        ),
+        (
+            "/v1/books/JHN/chapters/99999999999999999999/verses/1/commentary",
+            "the same number on the commentary route",
+        ),
+        (
+            "/v1/books/JHN/chapters/3/verses/99999999999999999999/commentary",
+            "and in the verse position",
+        ),
     ],
 )
 def test_a_validation_failure_answers_in_the_published_shape(

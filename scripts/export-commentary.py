@@ -205,8 +205,10 @@ def main() -> int:
     while page := fetch(args.container, credentials, offset):
         for row in page:
             entry, was_clamped = entry_of(row)
-            if not entry["body"]:
-                raise RuntimeError(f"{entry['start']} carries no body in any language")
+            # The source language, not merely some language. A translation
+            # without the text it was made from is a note with no provenance.
+            if "en-US" not in entry["body"]:
+                raise RuntimeError(f"{entry['start']} carries no body in en-US")
             rows.append(entry)
             if was_clamped:
                 clamped.append(entry["start"])

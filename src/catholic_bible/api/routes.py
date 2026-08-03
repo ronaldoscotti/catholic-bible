@@ -7,11 +7,12 @@ literals first, which works and needs the care. This does not need it.
 
 from __future__ import annotations
 
+import bisect
 import sqlite3
 from collections.abc import Iterator
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Path, Response
 
 from catholic_bible.api import errors, models, resolving
 from catholic_bible.canon import psalms
@@ -39,6 +40,11 @@ IMMUTABLE = "public, max-age=31536000, immutable"
 CATALOGUE = "public, max-age=3600"
 
 router = APIRouter(prefix="/v1")
+
+# A path number wider than 64 bits reaches `sqlite3` as a bind parameter and
+# raises OverflowError, which is a 500 with a traceback. The bound is the
+# driver's, not the canon's, so it refuses the impossible and nothing real.
+InPath = Annotated[int, Path(le=2**63 - 1)]
 
 
 def database() -> Iterator[sqlite3.Connection]:
@@ -226,7 +232,11 @@ def read_book(
     responses={**errors.NOT_FOUND, **errors.UNPROCESSABLE},
 )
 def read_chapter(
-    version: str, book: str, chapter: int, connection: Database, response: Response
+    version: str,
+    book: str,
+    chapter: InPath,
+    connection: Database,
+    response: Response,
 ) -> models.ChapterOut:
     found = _version_or_404(connection, version)
     language = reader.language_of(str(found["language"]))
@@ -273,8 +283,8 @@ def _neighbour_out(row: reader.Row | None) -> models.Neighbour | None:
 def read_verse(
     version: str,
     book: str,
-    chapter: int,
-    verse: int,
+    chapter: InPath,
+    verse: InPath,
     connection: Database,
     response: Response,
 ) -> models.VerseOut:
@@ -315,8 +325,27 @@ def _commentary_out(
 
     The reader returns one row per note and language, in the order the response
     wants them, so grouping is a walk rather than a sort.
+
+    The query reads the envelope and the answer is filtered back to the
+    addresses that were asked for. A lectionary reference like `Mc 5,22-24.35-43`
+    leaves a hole, and returning the notes on verses 25 to 34 would contradict
+    the `ids` beside them in the same response.
     """
-    rows = reader.commentary_covering(connection, orders[0], orders[-1])
+
+    def asked_for(first: int, last: int) -> bool:
+        """Whether any requested address falls inside a note's span.
+
+        `orders` is sorted, so the first candidate at or after the note's start
+        is the only one worth testing.
+        """
+        index = bisect.bisect_left(orders, first)
+        return index < len(orders) and orders[index] <= last
+
+    rows = [
+        row
+        for row in reader.commentary_covering(connection, orders[0], orders[-1])
+        if asked_for(int(row["first_order"]), int(row["last_order"]))
+    ]
 
     # One range query for every address either the span or a note reaches. A
     # note can start before the span and end after it, so the window is widened
@@ -389,8 +418,8 @@ def _commentary_out(
 )
 def read_commentary(
     book: str,
-    chapter: int,
-    verse: int,
+    chapter: InPath,
+    verse: InPath,
     connection: Database,
     response: Response,
 ) -> models.CommentaryOut:

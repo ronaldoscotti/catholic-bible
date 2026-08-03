@@ -883,6 +883,7 @@
             "name": "chapter",
             "required": true,
             "schema": {
+              "maximum": 9223372036854775807,
               "title": "Chapter",
               "type": "integer"
             }
@@ -892,6 +893,7 @@
             "name": "verse",
             "required": true,
             "schema": {
+              "maximum": 9223372036854775807,
               "title": "Verse",
               "type": "integer"
             }
@@ -1262,6 +1264,7 @@
             "name": "chapter",
             "required": true,
             "schema": {
+              "maximum": 9223372036854775807,
               "title": "Chapter",
               "type": "integer"
             }
@@ -1329,6 +1332,7 @@
             "name": "chapter",
             "required": true,
             "schema": {
+              "maximum": 9223372036854775807,
               "title": "Chapter",
               "type": "integer"
             }
@@ -1338,6 +1342,7 @@
             "name": "verse",
             "required": true,
             "schema": {
+              "maximum": 9223372036854775807,
               "title": "Verse",
               "type": "integer"
             }
