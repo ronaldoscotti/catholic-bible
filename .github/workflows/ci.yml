@@ -14,9 +14,11 @@ jobs:
         with:
           enable-cache: true
       - run: uv sync --locked
+      - run: uv run scripts/build-db.py
       - run: uv run ruff check .
       - run: uv run ruff format --check .
       - run: uv run mypy
+      - run: uv run scripts/build-openapi.py --check
       - run: uv run pytest
 
   # Runs the README quickstart verbatim, minus the detach flags a runner needs,
@@ -34,5 +36,14 @@ jobs:
           echo "README $expected"
           echo "live   $actual"
           [ "$expected" = "$actual" ]
+      - name: A stranger reads Sirach 24:1, which is the v1 gate
+        run: |
+          expected=$(grep -m1 '^{"id":"SIR.24.1"' README.md)
+          actual=$(curl -sS --fail \
+            http://localhost:8000/v1/versions/vulgata-clementina/books/SIR/chapters/24/verses/1)
+          echo "README $expected"
+          echo "live   $actual"
+          [ "$expected" = "$actual" ]
+          curl -sS --fail "http://localhost:8000/v1/resolve?ref=Eclo%2024,1" | grep -q SIR.24.1
       - if: always()
         run: docker compose down

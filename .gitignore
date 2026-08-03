@@ -23,6 +23,8 @@ build/
 # Data work in progress. Generated artifacts are committed; scratch is not.
 /tmp/
 /scratch/
+*.db
+*.sqlite3
 *.sqlite3-journal
 
 # OS / editor

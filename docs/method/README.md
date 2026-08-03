@@ -35,17 +35,22 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 0  Understand       docs/method/00-understand.md
 [x] 1  Context          docs/method/01-context.md
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
-[x] 3  Spec             docs/specs/, B1 and B2
-[x] 4  Plan             docs/plans/, B1 and B2
-[x] 5  Implement        B0 and B1 merged. B2 on a branch, 265 tests
-[x] 6  QA               docs/qa/, B0 B1 B2
-[x] 7  Code review      docs/reviews/, B0 B1 B2, one author
-[x] 8  PR               B0 and B1 merged. B2 open
+[x] 3  Spec             docs/specs/, B1 B2 B3
+[x] 4  Plan             docs/plans/, B1 B2 B3
+[x] 5  Implement        B0 B1 B2 merged. B3 on a branch, 449 tests
+[x] 6  QA               docs/qa/, B0 B1 B2 B3
+[x] 7  Code review      docs/reviews/, B0 B1 B2 B3, one author
+[x] 8  PR               B0 B1 B2 merged. B3 open as #23
 ```
 
-The checklist advances when the artifact exists and not before. Three epics have
-run. B0 builds the project, B1 builds the addresses, and B2 is the first one that
-publishes Scripture.
+The checklist advances when the artifact exists and not before. Four epics have
+run. B0 builds the project, B1 builds the addresses, B2 publishes Scripture and
+B3 serves it.
+
+Stage 7 ran on B3 after the pull request opened rather than before, which is the
+wrong order and is recorded rather than tidied. It found ten things, nine of them
+real, and the first broke an acceptance criterion the walk had already marked
+met. The walk carries the correction.
 
 The two gates on B1 were not met the same way and the difference is recorded
 rather than averaged.
@@ -61,6 +66,13 @@ came after.
 
 Both gates were met on B2. The spec was presented with three open questions and
 approved, then the plan, then the code.
+
+Both were met on B3, and the spec gate fired the way a gate is supposed to. The
+first draft was reviewed by a subagent and did not survive it. Four of its
+numbers did not reproduce, it dropped four ported behaviours without naming
+them, and its psalm numbering field could not represent a mapping that splits and
+merges. The second draft carries a section recording what the first got wrong,
+and it was that draft that was approved.
 
 ## The short route
 

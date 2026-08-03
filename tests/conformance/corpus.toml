@@ -335,3 +335,111 @@ provenance = "BARE_DEFAULTS_TO_FIRST in the Douay apparatus parser."
 why_hard = """
 Bare it means the first epistle, numbered it means whichever the number says.
 Flattening the two tables into one list makes the number index the wrong book."""
+
+# --------------------------------------------------- authored abbreviations, B3
+
+[[case]]
+id = "ecclesiasticus-abbreviated-in-english"
+kind = "alias"
+input = "Ecclus."
+expect = "SIR"
+provenance = "Authored in B3. The Douay margin prints ECCLESIASTICUS for this book."
+why_hard = """
+Ecclus. is Ecclesiasticus and Eccles. is Ecclesiastes, four letters apart and
+different books. It is the pair an English reader mixes up, and the abbreviation
+is a contraction rather than a truncation, so a prefix rule would reject it."""
+
+[[case]]
+id = "ecclesiastes-abbreviated-in-english"
+kind = "alias"
+input = "Eccles."
+expect = "ECC"
+provenance = "Authored in B3, beside its confusable neighbour deliberately."
+why_hard = """
+Carried next to the case above so the two are read together. Either one landing
+in the other's book is a wrong verse the reader has no way to notice."""
+
+[[case]]
+id = "first-kings-abbreviated-in-english"
+kind = "alias"
+input = "1 Kgs."
+expect = "1SA"
+provenance = "Authored in B3, following the Douay reckoning already exported."
+why_hard = """
+In this reckoning 1 Kings is Samuel, so the abbreviation resolves to 1SA and not
+to the book most editions call 1 Kings. Normalising it to the modern name would
+send every reference off by two books."""
+
+[[case]]
+id = "third-kings-abbreviated-in-english"
+kind = "alias"
+input = "3 Kgs."
+expect = "1KI"
+provenance = "Authored in B3, the other half of the Kings reckoning."
+why_hard = """
+There is no third book of Kings outside this reckoning, so an abbreviation that
+resolves to nothing would look like a typo rather than like the tradition."""
+
+[[case]]
+id = "ecclesiasticus-abbreviated-in-latin"
+kind = "alias"
+input = "Eccli."
+expect = "SIR"
+provenance = "Authored in B3. The Vulgate title is Ecclesiasticus."
+why_hard = """
+Latin separates the same two books by one letter, Eccli. against Eccle., which
+is tighter than the English pair and lands in the same trap."""
+
+[[case]]
+id = "ecclesiastes-abbreviated-in-latin"
+kind = "alias"
+input = "Eccle."
+expect = "ECC"
+provenance = "Authored in B3, beside its neighbour for the same reason."
+why_hard = """
+One letter from the case above. Nothing about the strings themselves says which
+book each belongs to, which is why both are written down rather than derived."""
+
+[[case]]
+id = "the-third-letter-of-john-in-latin"
+kind = "alias"
+input = "III Ioan."
+expect = "3JN"
+provenance = "Authored in B3, Roman numerals as the Vulgate prints them."
+why_hard = """
+Roman numerals rather than Arabic, and the stem is shared with the gospel. A
+numeral parser reading only Arabic digits sends all three letters to the fourth
+gospel."""
+
+[[case]]
+id = "james-in-latin-is-not-a-j-word"
+kind = "alias"
+input = "Iac."
+expect = "JAS"
+provenance = "Authored in B3, from Iacobi in the Latin names already here."
+why_hard = """
+Nothing in the English or Portuguese name suggests this string. A reader coming
+from the Latin apparatus writes Iac. and nothing else resolves it."""
+
+[[case]]
+id = "psalms-is-plural-for-display"
+kind = "alias"
+input = "Psalms"
+expect = "PSA"
+provenance = "Authored in B3. The Douay margin prints the singular, PSALM."
+why_hard = """
+The exported name is the margin form and the display name is not the same word.
+Both resolve, which is the point, and only one is printed."""
+
+[[case]]
+id = "an-abbreviation-with-a-period-is-not-a-lectionary-reading"
+kind = "reference"
+input = "Ex. 13:1-14:5"
+expect = "EXO 13:1-14:5"
+provenance = "Found in B3 by round tripping the formatter through the parser."
+why_hard = """
+The lectionary shape `Mc 5,22-24.35-43` is detected by the period, and every
+English and Latin abbreviation ends in one while no Portuguese abbreviation
+does. Reading the whole string sends most English references down the disjoint
+parser, where they come back malformed. The period only means a disjoint
+reading after the numbers start."""

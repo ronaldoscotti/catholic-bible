@@ -1,0 +1,187 @@
+"""Turning a written reference into addresses, and addresses into text.
+
+The one place that decides which numbering an incoming reference is written in.
+Without it `Sl 51,1` resolves onto the spine, returns Psalm 51, and the reader
+who asked for the Miserere gets the next psalm with a 200 and nothing said.
+"""
+
+from __future__ import annotations
+
+import re
+import sqlite3
+from collections.abc import Callable
+from enum import StrEnum
+
+from catholic_bible.api import errors
+from catholic_bible.canon.aliases import ALIASES
+from catholic_bible.canon.books import CANON
+from catholic_bible.canon.mapping import Mapped, Orphan, Scheme, map_address
+from catholic_bible.canon.reference import (
+    Reference,
+    UnparsedReference,
+    parse_reference,
+)
+from catholic_bible.canon.spine import SPINE
+from catholic_bible.canon.verse import VerseId
+from catholic_bible.storage import reader
+
+# Ported as it stands, and it is a span on the dense order rather than a count.
+# A contiguous 501 verse range passes and a two verse disjoint reference whose
+# parts sit 600 orders apart does not.
+MAX_SPAN = 500
+
+
+class InputScheme(StrEnum):
+    """Which numbering the caller wrote the reference in."""
+
+    SPINE = "spine"
+    VULGATE = "vulgate"
+    ORG = "org"
+    DOUAY = "douay"
+
+
+SCHEME_CODE = re.compile(r"^[A-Z0-9]{3}$")
+
+
+def _resolver(scheme: InputScheme) -> Callable[[str], str | None]:
+    """How a book name in the written reference becomes a code.
+
+    On the spine that is the alias table and nothing else. Under another scheme
+    the code space is that scheme's, which includes books the spine has no name
+    for. `SUS` is Susanna in `org` and it lands in Daniel 13, and refusing it
+    would leave half of what `org` can address unreachable.
+    """
+    if scheme is InputScheme.SPINE:
+        return ALIASES.resolve
+
+    def resolve(written: str) -> str | None:
+        found = ALIASES.resolve(written)
+        if found is not None:
+            return found
+        bare = written.strip()
+        # A code nothing declares comes back as an orphan naming that, from the
+        # mapping layer, rather than as a parse failure here.
+        return bare if SCHEME_CODE.match(bare) and CANON.by_code(bare) is None else None
+
+    return resolve
+
+
+def read(text: str, scheme: InputScheme) -> tuple[Reference, list[int]]:
+    """A written reference, and the canonical orders it covers.
+
+    Raises rather than returning a value, because every caller is an HTTP
+    handler and the only thing any of them would do with the value is raise.
+    """
+    parsed = parse_reference(text, _resolver(scheme))
+    if isinstance(parsed, UnparsedReference):
+        raise errors.unprocessable(
+            errors.from_unparsed(parsed.reason),
+            _explain(parsed),
+            text,
+        )
+
+    if parsed.whole_chapter:
+        raise errors.unprocessable(
+            errors.Reason.WHOLE_CHAPTER,
+            f"{text!r} names a chapter rather than a passage. "
+            "read a whole chapter through its own route",
+            text,
+        )
+
+    orders: list[int] = []
+    landed: list[tuple[int, int]] = []
+    for start, end in parsed.spans():
+        first = _order_of(parsed.book, start, scheme, text)
+        last = _order_of(parsed.book, end, scheme, text)
+        orders.extend(range(min(first, last), max(first, last) + 1))
+        landed.append((min(first, last), max(first, last)))
+
+    if scheme is not InputScheme.SPINE:
+        # The reference that comes back names where the addresses landed and
+        # never what was typed. Echoing the input beside spine ids publishes a
+        # document that contradicts itself, `Sl 51,1` over `PSA.50.1`.
+        parsed = _on_the_spine(parsed, landed)
+
+    unique = sorted(set(orders))
+    if unique[-1] - unique[0] > MAX_SPAN:
+        raise errors.unprocessable(
+            errors.Reason.RANGE_TOO_LARGE,
+            f"{text!r} spans {unique[-1] - unique[0]} verses and the limit "
+            f"is {MAX_SPAN}",
+            text,
+        )
+    return parsed, unique
+
+
+def _on_the_spine(parsed: Reference, landed: list[tuple[int, int]]) -> Reference:
+    spans = []
+    for first, last in landed:
+        start, end = SPINE.at_order(first), SPINE.at_order(last)
+        assert start is not None and end is not None
+        spans.append((((start.chapter, start.verse)), ((end.chapter, end.verse))))
+
+    opening = SPINE.at_order(landed[0][0])
+    assert opening is not None
+    return Reference(
+        opening.book,
+        (spans[0][0], spans[-1][1]),
+        parts=tuple(spans) if parsed.parts is not None else None,
+    )
+
+
+def _explain(parsed: UnparsedReference) -> str:
+    if parsed.book is not None:
+        return f"no book named {parsed.book!r}"
+    return f"{parsed.text!r} is not shaped like a reference"
+
+
+def _order_of(
+    book: str, point: tuple[int, int], scheme: InputScheme, given: str
+) -> int:
+    chapter, verse = point
+
+    if scheme is not InputScheme.SPINE:
+        result = map_address(Scheme(str(scheme)), book, chapter, verse)
+        if isinstance(result, Orphan):
+            raise errors.unprocessable(
+                errors.from_orphan(result.reason),
+                f"{book} {chapter}:{verse} in {scheme} reaches no address on the spine",
+                given,
+            )
+        assert isinstance(result, Mapped)
+        chapter, verse = result.verse.chapter, result.verse.verse
+        book = result.verse.book
+
+    order = SPINE.order_of(VerseId(book, chapter, verse))
+    if order is None:
+        raise errors.unprocessable(
+            errors.Reason.NOT_ON_SPINE,
+            f"the spine has no {book} {chapter}:{verse}",
+            given,
+        )
+    return order
+
+
+def versions_named(
+    connection: sqlite3.Connection, written: str | None
+) -> list[reader.Row]:
+    """The versions a passage was asked for, or the default when it was not.
+
+    The original defaults to an empty list and answers with empty columns, which
+    is a silent empty response on a public contract.
+    """
+    named = [part.strip() for part in (written or "").split(",") if part.strip()]
+    if not named:
+        # Guarding the raw string instead lets `,,` and a lone space through as
+        # an empty list, and the caller then indexes it.
+        return [reader.default_version(connection)]
+
+    found = []
+    for code in named:
+        row = reader.version(connection, code)
+        if row is None:
+            raise errors.not_found(
+                errors.Reason.UNKNOWN_VERSION, f"no version named {code!r}", code
+            )
+        found.append(row)
+    return found

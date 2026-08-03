@@ -12,9 +12,13 @@ The grammar covers what a Portuguese missal and a lectionary actually print.
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 from dataclasses import dataclass
+from enum import StrEnum
 
 from catholic_bible.canon.aliases import ALIASES
+
+Resolver = Callable[[str], str | None]
 
 Point = tuple[int, int]
 Span = tuple[Point, Point]
@@ -29,11 +33,28 @@ _PART_WITH_CHAPTER = re.compile(r"^(\d+)[,:](.+)$")
 _PART_VERSES = re.compile(rf"^(\d+)(?:\s*{DASH}\s*(\d+))?$")
 _CHAPTER = re.compile(rf"^\s*(.+?)\s+(\d+)(?:\s*{DASH}\s*\d+)?\s*$")
 
+# Splits the written name off the numbers, so the lectionary shape is detected
+# on the numbers alone. Detecting it on the whole string sends `Ex. 13:1-14:5`
+# down the disjoint parser, because the English and Latin abbreviations end in a
+# period and the Portuguese ones do not.
+_HEAD = re.compile(r"^\s*(.+?)\s+(\d.*?)\s*$")
+
+
+class UnparsedReason(StrEnum):
+    """Why a written reference could not be read. A closed set.
+
+    It was a bare `str` until B3 needed to publish it, and a reason code a
+    caller branches on has to be closed or it is prose wearing a field name.
+    """
+
+    MALFORMED = "malformed"
+    UNKNOWN_BOOK = "unknown_book"
+
 
 @dataclass(frozen=True, slots=True)
 class UnparsedReference:
     text: str
-    reason: str
+    reason: UnparsedReason
     book: str | None = None
 
 
@@ -59,17 +80,24 @@ class Reference:
 Parsed = Reference | UnparsedReference
 
 
-def parse_reference(text: str) -> Parsed:
-    if "." in text:
-        return _parse_parts(text)
+def parse_reference(text: str, resolve: Resolver = ALIASES.resolve) -> Parsed:
+    """A written reference, read into a book and a verse span.
+
+    The resolver is a seam. Reading a reference written in another scheme needs
+    that scheme's book codes, which are not canon codes and which the alias
+    table has no name for. `SUS` is Susanna in `org` and nothing on the spine.
+    """
+    head = _HEAD.match(text)
+    if head is not None and "." in head[2]:
+        return _parse_parts(text, resolve)
 
     match = _SPAN.match(text)
     if match is None:
-        return _parse_whole_chapter(text)
+        return _parse_whole_chapter(text, resolve)
 
-    code = ALIASES.resolve(match[1])
+    code = resolve(match[1])
     if code is None:
-        return UnparsedReference(text, "unknown_book", match[1])
+        return UnparsedReference(text, UnparsedReason.UNKNOWN_BOOK, match[1])
 
     chapter, verse = int(match[2]), int(match[3])
     start = (chapter, verse)
@@ -80,7 +108,7 @@ def parse_reference(text: str) -> Parsed:
     return Reference(code, (start, end))
 
 
-def _parse_parts(text: str) -> Parsed:
+def _parse_parts(text: str, resolve: Resolver) -> Parsed:
     """The lectionary shape, `Mc 5,22-24.35-43`.
 
     A part with no chapter of its own inherits the one before it, which is how
@@ -88,11 +116,11 @@ def _parse_parts(text: str) -> Parsed:
     """
     match = _PARTS.match(text)
     if match is None:
-        return UnparsedReference(text, "malformed")
+        return UnparsedReference(text, UnparsedReason.MALFORMED)
 
-    code = ALIASES.resolve(match[1])
+    code = resolve(match[1])
     if code is None:
-        return UnparsedReference(text, "unknown_book", match[1])
+        return UnparsedReference(text, UnparsedReason.UNKNOWN_BOOK, match[1])
 
     chapter = int(match[2])
     parts: list[Span] = []
@@ -104,7 +132,7 @@ def _parse_parts(text: str) -> Parsed:
 
         verses = _PART_VERSES.match(piece)
         if verses is None:
-            return UnparsedReference(text, "malformed", match[1])
+            return UnparsedReference(text, UnparsedReason.MALFORMED, match[1])
 
         first = int(verses[1])
         last = int(verses[2]) if verses[2] else first
@@ -113,15 +141,15 @@ def _parse_parts(text: str) -> Parsed:
     return Reference(code, (parts[0][0], parts[-1][1]), parts=tuple(parts))
 
 
-def _parse_whole_chapter(text: str) -> Parsed:
+def _parse_whole_chapter(text: str, resolve: Resolver) -> Parsed:
     """`Sl 23`, and `Ex 13-14` anchored on the first chapter."""
     match = _CHAPTER.match(text)
     if match is None:
-        return UnparsedReference(text, "malformed")
+        return UnparsedReference(text, UnparsedReason.MALFORMED)
 
-    code = ALIASES.resolve(match[1])
+    code = resolve(match[1])
     if code is None:
-        return UnparsedReference(text, "unknown_book", match[1])
+        return UnparsedReference(text, UnparsedReason.UNKNOWN_BOOK, match[1])
 
     chapter = int(match[2])
     return Reference(code, ((chapter, 1), (chapter, 1)), whole_chapter=True)

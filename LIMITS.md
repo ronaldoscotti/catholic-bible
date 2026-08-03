@@ -121,4 +121,61 @@ Deutsche Bibelgesellschaft holds, and 879 derived from the Ave Maria apparatus.
 
 No per book files and no CDN. That is B5.
 
-No API over any of this. That is B3.
+## What the read API cannot prove, added in B3
+
+### 219 authored strings were checked for consistency and not for tradition
+
+The English and Latin abbreviations, and the Douay names in ordinary case, are
+authored in this repo. Nothing upstream carries a book name in any language but
+Portuguese, so there was nothing left to export.
+
+Three checks run over all of them. Each resolves back to its own book through
+the alias table, which is built from exported data. Each is a subsequence of a
+name the book actually has, so `Ecclus.` passes against `Ecclesiasticus` and
+fails against `Ecclesiastes`. And no two share a string.
+
+All three answer whether a string is consistent with its book. None answers
+whether it is the form the tradition prints. If the conventional English
+abbreviation for Sirach is `Sir.` and `Ecclus.` was written instead, every check
+passes. That question needs a human reading against a printed Bible, and it is
+the weakest link in every formatted reference this API returns.
+
+Nine of them carry conformance cases, chosen because they are the ones that
+would hurt. The other 210 do not.
+
+### Reading a spine address back into another scheme is wrong in two places
+
+`to_scheme` maps a candidate forward again and keeps it only if it lands where
+it started. That catches a candidate that moved and it cannot catch one that is
+out of range in the target scheme, because this repo holds the Copenhagen remap
+pairs and no `org` verse count table. A book that maps by identity round trips
+trivially.
+
+Two addresses are confirmed wrong. Spine `PSA.15.11` reads back as `org` 15:11
+and spine `PSA.43.27` as `org` 43:27, and both are different psalms. The honest
+answer for each is an orphan.
+
+Whether more exist across the other 72 books is not measurable with what is in
+this repo. Saying that is better than publishing a number nobody can stand
+behind. B3 ships the ported psalm table, which is hand verified, and pins the
+two disagreements so the day B1 is corrected the suite says which one moved.
+
+The psalm counterpart the API publishes comes from the ported table and not from
+`to_scheme`, so no route returns either wrong answer today.
+
+### The published numbering covers the Psalms and nothing else
+
+`numbering` appears on a chapter of the Psalter and nowhere else, because the
+ported table covers the Psalter and nowhere else. Joel and Malachi are numbered
+differently between traditions too, and this API says nothing about that.
+
+### One latency number is not a load test
+
+A 500 verse passage across three versions answers in 5 ms on a laptop, measured
+after the per address point queries became one range query and down from 21 ms
+before it. That is one number, on one machine, with one request at a time.
+
+Nothing here has been load tested, no route has been measured under concurrency,
+and nothing is deployed. The memory side of the store decision is also half
+measured. 34.8 MB retained is the cost of the alternative that lost, and the
+resident cost of a connection per request with a page cache each does not exist.
