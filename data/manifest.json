@@ -1,5 +1,5 @@
 {
- "dataset_version": "1.0.0",
+ "dataset_version": "1.0.1",
  "files": {
   "canon.json": {
    "bytes": 13773,
@@ -595,7 +595,7 @@
   },
   "index.json": {
    "bytes": 4278,
-   "sha256": "2d0eb6d291fa9ad8e37339d1cb37299e013c12a6d4ae64176036578481a48e52"
+   "sha256": "01f79cf60c193b58dca1183ec6141ac48e17d4d6ea54b234f6b7a4d4208ce5f2"
   },
   "orphans.json": {
    "bytes": 2956,

@@ -103,9 +103,13 @@ and found 5 defects. 2.5%, with a 95% interval of 1.1% to 5.7%, and two of the
 five say the opposite of the English.
 
 That is a machine grading a machine and it is weaker than the criterion imagined.
-`README.md`, `LIMITS.md` and the epic all say so in those words. Recording it as
-met with the weakness named beats leaving a box unticked forever, and it beats
-calling it a human review.
+`docs/qa/haydock-translation-review.md` says so in those words and carries the
+verdicts it was drawn from. Recording it as met with the weakness named beats
+leaving a box unticked forever, and it beats calling it a human review.
+
+The author later took the rate out of `README.md` and `LIMITS.md`, which now ask
+for a human reading instead of publishing what a machine found. The record moved
+rather than disappeared, and this paragraph is the pointer to where it went.
 
 The two gates on B1 were not met the same way and the difference is recorded
 rather than averaged.

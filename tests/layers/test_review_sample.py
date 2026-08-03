@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import csv
 import importlib.util
+import re
 import sys
 from pathlib import Path
 from types import ModuleType
@@ -16,6 +17,7 @@ from types import ModuleType
 REPO = Path(__file__).resolve().parent.parent.parent
 SAMPLE = REPO / "docs" / "qa" / "haydock-translation-sample.csv"
 VERDICTS = REPO / "docs" / "qa" / "haydock-translation-verdicts.csv"
+RECORD = REPO / "docs" / "qa" / "haydock-translation-review.md"
 
 
 def _script() -> ModuleType:
@@ -84,27 +86,34 @@ def test_every_sampled_entry_has_a_verdict() -> None:
     assert set(judged.values()) <= {"faithful", "drifted", "wrong", "untranslated"}
 
 
-def test_the_error_rate_the_prose_publishes_is_the_one_recorded() -> None:
-    """README.md and LIMITS.md both carry 2.5% and five entries.
+def test_the_error_rate_the_record_publishes_is_the_one_recorded() -> None:
+    """`docs/qa/haydock-translation-review.md` has to agree with the verdicts.
 
-    A rate in the prose that nothing recomputes is a rate nobody can check, which
-    is the same rule the structural audit numbers are held to.
+    Read against the record rather than against a hard-coded five, because the
+    README asks a reader to work the sample and a sixth defect has to be able to
+    land by editing the record and the CSV together.
     """
     with VERDICTS.open(encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
 
     flagged = [row for row in rows if row["verdict"] != "faithful"]
     inverted = [row for row in flagged if row["verdict"] == "wrong"]
+    record = RECORD.read_text(encoding="utf-8")
 
     assert len(rows) == 200
-    assert len(flagged) == 5
-    assert len(inverted) == 2
-    assert round(100 * len(flagged) / len(rows), 1) == 2.5
     assert all(row["note"] for row in flagged), "a flagged entry says why"
+
+    published = {
+        "defects": rf"\| Entries with a defect \| {len(flagged)} \|",
+        "rate": rf"\*\*{round(100 * len(flagged) / len(rows), 1)}%\*\*",
+        "inverted": rf"meaning changed \| {len(inverted)} \|",
+    }
+    for name, pattern in published.items():
+        assert re.search(pattern, record), f"the record does not publish {name}"
 
 
 def test_no_flagged_entry_would_have_been_caught_by_the_audit() -> None:
-    """The claim `LIMITS.md` makes about the boundary between the two checks.
+    """The claim the record makes about the boundary between the two checks.
 
     An inversion has the same length, markup and digits as a faithful rendering,
     so the mechanical audit passes all five. If that ever stops being true the

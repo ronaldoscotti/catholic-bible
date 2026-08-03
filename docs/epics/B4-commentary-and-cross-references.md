@@ -66,6 +66,6 @@ Test-driven on anchor resolution and on the orphan path for unresolvable cross-r
 | 95% Wilson interval | 1.1% to 5.7% |
 | Of those five, meaning inverted | 2 |
 
-**The reading was done by a language model, not by a person.** The author read the sample and flagged nothing, then asked for the entry by entry pass rather than a second human. A machine graded a machine, which is weaker than the criterion imagined and is what happened. `README.md` and `LIMITS.md` both say so in those words rather than describing the corpus as reviewed.
+**The reading was done by a language model, not by a person.** The author read the sample and flagged nothing, then asked for the entry by entry pass rather than a second human. A machine graded a machine, which is weaker than the criterion imagined and is what happened. `docs/qa/haydock-translation-review.md` says so in those words and holds the verdicts. `README.md` and `LIMITS.md` describe the corpus as awaiting a human reading rather than as reviewed.
 
 All five defects pass every check in `audit-translation.py`, and a test asserts that. An inversion carries the same length, markup and digits as a faithful rendering, which is the whole reason this verification could not be a script.

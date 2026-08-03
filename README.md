@@ -63,7 +63,7 @@ No install, no key, no account, no server. Paste this into a blank HTML file and
 open it.
 
 ```js
-const book = await (await fetch('https://cdn.jsdelivr.net/gh/ronaldoscotti/catholic-bible@v1.0.0/data/versions/matos-soares/books/SIR.json')).json()
+const book = await (await fetch('https://cdn.jsdelivr.net/gh/ronaldoscotti/catholic-bible@v1.0.1/data/versions/matos-soares/books/SIR.json')).json()
 console.log(book.verses['SIR.24.1'].text)
 ```
 
@@ -88,14 +88,14 @@ CC BY requires rides inside all 73 cross-reference files rather than only here.
 
 ### The version in the URL is the whole contract
 
-`@v1.0.0` is not decoration. Pin it and the bytes behind that URL never change.
+`@v1.0.1` is not decoration. Pin it and the bytes behind that URL never change.
 
 Corrections ship as a new tag and the old one keeps answering, because a
 consumer who pinned a version has to be able to trust the pin. A repository
 ruleset blocks deleting or moving any `v*` tag, so this survives the author
 changing his mind rather than resting on him not doing so.
 
-The package version and the dataset version are the same number. `1.0.0`
+The package version and the dataset version are the same number. `1.0.1`
 governs the shape of these files and the shape of the API. It does not claim the
 API is deployed anywhere, and `LIMITS.md` says plainly that it is not.
 
@@ -119,7 +119,7 @@ curl http://localhost:8000/health
 ```
 
 ```json
-{"status":"ok","version":"1.0.0"}
+{"status":"ok","version":"1.0.1"}
 ```
 
 Then read a verse. Sirach 24:1, in Portuguese, by reference.

@@ -129,20 +129,11 @@ No per book files and no CDN. That is B5.
 Twenty thousand seven hundred and five notes were translated from English by a
 language model. The prompt required faithful rendering rather than paraphrase,
 Catholic ecclesiastical terminology mapped to the terms the Magisterium defines,
-Scripture citations and Latin left untouched, and the four categories below
-flagged rather than softened.
+and Scripture citations and Latin left untouched.
 
-| Flag | Records | What it marks |
-|---|---|---|
-| `linguagem_judeus` | 498 | language about the Jewish people revised since Nostra Aetate |
-| `tom_polemico` | 422 | sharp polemic against Protestants and the Reformation |
-| `exegese_datada` | 151 | authorship and dating stated as settled |
-| `ciencia_cronologia` | 125 | pre-modern science and chronology as literal fact |
-
-1196 of 21875 records, 5.47%. All of them were published. The flag is a note for
-a reader and never an edit to the text, because a 19th century commentary that
-has been quietly modernised is a worse artifact than one that is dated in the
-open.
+Nothing in the English was softened on the way through. A 19th century commentary
+that has been quietly modernised is a worse artifact than one that is dated in
+the open, so the text reads as Haydock wrote it.
 
 **Human review is pending and wanted.** The sample is drawn, seeded and committed
 at `docs/qa/haydock-translation-sample.csv`, 200 entries with their English
