@@ -487,3 +487,77 @@ the read follows the shape of the data rather than the shape of the code.
 
 **What it costs.** A bind parameter list, chunked at 900, because a passage at
 the 500 verse cap can want fifteen thousand of them.
+
+## The artifacts are split from the corpus and not from the source
+
+The epic said the static files come out of the B2 export. They come out of what
+B2 already committed instead.
+
+The B2 export needs the private source database, so an artifact produced that way
+is one more file a stranger has to take on trust. Splitting downstream of the
+committed corpus means `scripts/build-artifacts.py` runs on a clean checkout with
+no credentials, and anyone can regenerate all 371 files and diff them.
+
+What lost is a single pipeline. There are now two steps where there could have
+been one, and a corpus that moves without `make artifacts` afterwards leaves the
+two trees disagreeing until CI catches it.
+
+## The tag carries the version and the path does not repeat it
+
+`@v1.0.0/data/versions/matos-soares/books/SIR.json` rather than
+`@v1.0.0/data/v1/versions/...`.
+
+Two version numbers in one URL invite the question of what happens when they
+disagree, and the answer would have to be that one of them is decoration. The
+git ref is the pin, it is what jsDelivr caches as immutable, and it is the thing
+a consumer actually controls.
+
+Below the tag the path is the HTTP API's own vocabulary. Someone who learns
+`/v1/versions/{version}/books/{book}` can guess the file, and the reverse holds.
+
+## Rights travel inside every published file
+
+An HTTP response can carry attribution in an envelope the route controls. A
+static file has no envelope. It gets copied into somebody's project, renamed,
+committed, and it keeps whatever it carried at the moment it was downloaded.
+
+So the licence, the basis and the required notice sit inside all 365 book files.
+The OpenBible CC BY attribution is in all 73 cross-reference files even where the
+book draws on no OpenBible reference, because a consumer holding one file should
+not have to fetch a second one to learn the terms.
+
+What it costs is the same few hundred bytes repeated 365 times. That is the
+cheapest insurance in this repository.
+
+## Immutability is enforced by a ruleset rather than promised in prose
+
+A git tag can be moved and a README saying it will not be is worth what the
+author's memory is worth in three years.
+
+A repository ruleset on `refs/tags/v*` blocks deletion and update, with no bypass
+actors, which is the same mechanism protecting `main`. Both were verified by
+attempting the forbidden thing and reading the refusal rather than by trusting
+the API's response.
+
+The alternative was a release checklist. A checklist is a person remembering, and
+the whole point of publishing an immutable URL is that consumers do not have to
+rely on that.
+
+## Granularity stops at the book
+
+Per chapter files would be smaller. Sirach 24 is 3 KB against 106 KB for the
+book.
+
+They would also be roughly four thousand files against three hundred and
+sixty five, and the epic asked for per book. The median book is 48 KB, which is
+a page weight nobody notices, and the gain is real enough that the path shape
+was left able to accommodate it later.
+
+## `versification.json` is published as `spine.json`
+
+The exporter's filename says versification and every document in this repository
+says spine. The published name is the word a reader has already met.
+
+It is the only artifact whose name differs from its source, and the mapping is a
+literal in the generator rather than a transformation, so the file itself is
+byte identical to what it was copied from.

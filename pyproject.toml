@@ -1,6 +1,6 @@
 [project]
 name = "catholic-bible"
-version = "0.0.0"
+version = "1.0.0"
 description = "A read-only API and a published dataset for the Catholic Bible."
 readme = "README.md"
 requires-python = ">=3.13"

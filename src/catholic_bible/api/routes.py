@@ -17,14 +17,12 @@ from fastapi import APIRouter, Depends, Path, Response
 from catholic_bible import cross_references
 from catholic_bible.api import errors, models, resolving
 from catholic_bible.canon import psalms
-from catholic_bible.canon.aliases import ALIASES, Language
-from catholic_bible.canon.authored_names import (
-    ENGLISH_ABBREVIATIONS,
-    ENGLISH_DISPLAY,
-    LATIN_ABBREVIATIONS,
-    LATIN_NAMES,
+from catholic_bible.canon.aliases import (
+    ALIASES,
+    Language,
+    abbreviation_of,
+    name_of,
 )
-from catholic_bible.canon.books import CANON
 from catholic_bible.canon.formatter import format_reference
 from catholic_bible.canon.mapping import Scheme
 from catholic_bible.canon.reference import Reference
@@ -66,30 +64,12 @@ def database() -> Iterator[sqlite3.Connection]:
 Database = Annotated[sqlite3.Connection, Depends(database)]
 
 
-def _name_of(code: str, language: Language) -> str:
-    if language is Language.EN:
-        return ENGLISH_DISPLAY[code]
-    if language is Language.LA:
-        return LATIN_NAMES[code]
-    found = CANON.by_code(code)
-    return code if found is None else found.name
-
-
-def _abbreviation_of(code: str, language: Language) -> str:
-    if language is Language.EN:
-        return ENGLISH_ABBREVIATIONS[code]
-    if language is Language.LA:
-        return LATIN_ABBREVIATIONS[code]
-    found = CANON.by_code(code)
-    return code if found is None else found.abbreviation
-
-
 def _book_out(row: reader.Row, language: Language) -> models.BookOut:
     code = str(row["code"])
     return models.BookOut(
         code=code,
-        name=_name_of(code, language),
-        abbreviation=_abbreviation_of(code, language),
+        name=name_of(code, language),
+        abbreviation=abbreviation_of(code, language),
         testament=str(row["testament"]),
         group=str(row["canon_group"]),
         deuterocanonical=bool(row["deuterocanonical"]),

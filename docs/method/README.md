@@ -35,17 +35,41 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 0  Understand       docs/method/00-understand.md
 [x] 1  Context          docs/method/01-context.md
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
-[x] 3  Spec             docs/specs/, B1 B2 B3 B4
-[x] 4  Plan             docs/plans/, B1 B2 B3 B4
-[x] 5  Implement        B0 B1 B2 B3 merged. B4 on two branches, 532 tests
-[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4
-[x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4, one author
-[x] 8  PR               B0 B1 B2 B3 merged. B4 open as #24 and #25
+[x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5
+[x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5
+[x] 5  Implement        B0 B1 B2 B3 B4 merged. B5 on a branch, 561 tests
+[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5
+[x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4 B5, one author
+[x] 8  PR               B0 B1 B2 B3 B4 merged. B5 open
 ```
 
-The checklist advances when the artifact exists and not before. Five epics have
+The checklist advances when the artifact exists and not before. Six epics have
 run. B0 builds the project, B1 builds the addresses, B2 publishes Scripture, B3
-serves it and B4 hangs commentary off the same verse ids.
+serves it, B4 hangs commentary off the same verse ids and B5 puts all of it on a
+CDN where it costs nothing to read.
+
+**Both gates were met on B5, and the difference from B4 is the point.** The spec
+was written before any code, presented with three open questions, and the answers
+came back before the plan started. The plan was written, presented with three
+more, and the answers came back before the first line of the generator. Nothing
+was waived. The `refactor:` commit that moves book naming into the canon layer
+lands after both documents, and the git history shows that order.
+
+The plan also refused an assumption the spec had made, that jsDelivr treats a tag
+the way it treats a pinned commit. It required a throwaway tag before anything was
+claimed. The assumption was wrong, and finding that out cost one request instead
+of one wrong sentence in a published README.
+
+**B5 has five of seven criteria met and it does not close.** Its named
+verification runs the exact `fetch()` line from the README against the live CDN,
+and that line points at `v1.0.0`, which does not exist until this merges and the
+tag is pushed. Run today it returns `404`.
+
+One of the two unmet boxes had been ticked and came back off. It was marked met
+on a browser run with the tag rewritten to a commit hash, which proves the
+approach and not the documented path. The acceptance walk caught it, which is
+what the walk is for, and `docs/qa/B5-static-artifacts.md` records the correction
+rather than quietly fixing the box.
 
 Stage 7 ran on B3 after the pull request opened rather than before, which is the
 wrong order and is recorded rather than tidied. It found ten things, nine of them

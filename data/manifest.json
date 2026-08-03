@@ -1,0 +1,1491 @@
+{
+ "dataset_version": "1.0.0",
+ "files": {
+  "canon.json": {
+   "bytes": 13773,
+   "sha256": "ac469b3e625861aab4cf8de9340d37dabaaefb2bbd018d5e1ba100ae12a961aa"
+  },
+  "commentary/haydock/books/1CH.json": {
+   "bytes": 388551,
+   "sha256": "4cd3f810e19970c64576f70e47f1bfeca4ac87f56822bf0e85cc379665c18eef"
+  },
+  "commentary/haydock/books/1CO.json": {
+   "bytes": 295310,
+   "sha256": "788b5cafe8bb0cfa01114ad57b6346c27982fe94b5bc47c751468d9242909419"
+  },
+  "commentary/haydock/books/1JN.json": {
+   "bytes": 80463,
+   "sha256": "d16c4fce98169b87c33dd07aef2ea94c45e96b24894cfb6b8b2fa4ce6b99f3df"
+  },
+  "commentary/haydock/books/1KI.json": {
+   "bytes": 490390,
+   "sha256": "1c7ef32562e88374def6d965dda356925546299c5fc6ad207de0d5f22cbf0e52"
+  },
+  "commentary/haydock/books/1MA.json": {
+   "bytes": 238581,
+   "sha256": "54444d28886714bd559a2d794d108d0c52cff4b86a8486b6a13dabf53c7a79e6"
+  },
+  "commentary/haydock/books/1PE.json": {
+   "bytes": 60384,
+   "sha256": "ca434171e8ce64dee7bae3b206872315fc81c78f219f6b2932e513c67a7711dc"
+  },
+  "commentary/haydock/books/1SA.json": {
+   "bytes": 599410,
+   "sha256": "8cc204bcbccb078898eefdce3f0f359966e719ab7c12790f40c06a6defd261a9"
+  },
+  "commentary/haydock/books/1TH.json": {
+   "bytes": 31953,
+   "sha256": "877f68212d09cc3eb772d6afca63f3165aa804516b4a79b400067fdbb23fc81c"
+  },
+  "commentary/haydock/books/1TI.json": {
+   "bytes": 96522,
+   "sha256": "b3a12e8679d388a650044052c0e42c53d708fd184a3f96dfb2eac1c0f841a6f0"
+  },
+  "commentary/haydock/books/2CH.json": {
+   "bytes": 329763,
+   "sha256": "9dbd92f3cf662016f3f69cb7270b2f5cdf506077b7578ee23963b97c8885cf91"
+  },
+  "commentary/haydock/books/2CO.json": {
+   "bytes": 193660,
+   "sha256": "5c50cd45bf2da603271b5799cf06154f3bebb48ac896f68a106a0ce53359278c"
+  },
+  "commentary/haydock/books/2JN.json": {
+   "bytes": 5701,
+   "sha256": "6878d0c9d5a28dda53dd2328b928c9a62b3059c61c06de6e4d5bc1209858a3b8"
+  },
+  "commentary/haydock/books/2KI.json": {
+   "bytes": 481211,
+   "sha256": "42e9febbce0e398b784022781ce8a9d407623ae8e53889f103548d40e18354f7"
+  },
+  "commentary/haydock/books/2MA.json": {
+   "bytes": 186474,
+   "sha256": "ac731cf4971b5099efc31045874642f753bb7b1958e750045ec4e056fdfd7817"
+  },
+  "commentary/haydock/books/2PE.json": {
+   "bytes": 36622,
+   "sha256": "fc818d8c22879edb47a071c859823fd6f74e64fd966f9beee269fdd419ae878e"
+  },
+  "commentary/haydock/books/2SA.json": {
+   "bytes": 460954,
+   "sha256": "343b8c4e5716ac3223631e56f9b85362ae545dbc0493e9bccfc7b55764cb4413"
+  },
+  "commentary/haydock/books/2TH.json": {
+   "bytes": 48383,
+   "sha256": "7a9f532461516dd038954340b304e25480c5bc742827a00c6129b41c1862a724"
+  },
+  "commentary/haydock/books/2TI.json": {
+   "bytes": 76658,
+   "sha256": "20592b225010695396d49d99f9b70734fab63100b82db2cc5e331f7d9074707c"
+  },
+  "commentary/haydock/books/3JN.json": {
+   "bytes": 3498,
+   "sha256": "4dd30038ae987c41d6fa26b78d4aa4e124bdd27fc612b2de9633b4520d3a9a5d"
+  },
+  "commentary/haydock/books/ACT.json": {
+   "bytes": 513936,
+   "sha256": "dfd86af63a798826c3c8de4835402eb7708c04037df9997e2044ba9ddf0ebeb5"
+  },
+  "commentary/haydock/books/AMO.json": {
+   "bytes": 93616,
+   "sha256": "c47e469c2af607680857d22339db87bd4459a69b660447fbf74ea5bd41a33595"
+  },
+  "commentary/haydock/books/BAR.json": {
+   "bytes": 57745,
+   "sha256": "8d567c803707499c2daa28c0729f5fac3572c51ec2f767aaedb7475b8a5d0a91"
+  },
+  "commentary/haydock/books/COL.json": {
+   "bytes": 51774,
+   "sha256": "8234fe6d27b1fe7ad1f14679315335c7e3d0f466a491ddad79e37fc7f05657f6"
+  },
+  "commentary/haydock/books/DAN.json": {
+   "bytes": 243303,
+   "sha256": "61cede8dd22b23039dc934829fa2df93ca1c5e61888640687a64fb7834efc726"
+  },
+  "commentary/haydock/books/DEU.json": {
+   "bytes": 778834,
+   "sha256": "18b0b10b1bc9c03f4c284ca38e340a37edbe6ede62c8515556597278f9c9b024"
+  },
+  "commentary/haydock/books/ECC.json": {
+   "bytes": 120779,
+   "sha256": "14a526e95400fce7d15e6e5eed8ed6fcd8792e3bb8d24d236f29d80b532532c3"
+  },
+  "commentary/haydock/books/EPH.json": {
+   "bytes": 92149,
+   "sha256": "0a035a8d0ae6ba904d3d5d01ac6898694c34e7ecc973b3253efbfcbe5373edd7"
+  },
+  "commentary/haydock/books/EST.json": {
+   "bytes": 166412,
+   "sha256": "50fca74ac654e66633ab01f825eed070286ac0f4a0b4b9577417087a751c7ad9"
+  },
+  "commentary/haydock/books/EXO.json": {
+   "bytes": 499262,
+   "sha256": "56b0e0991728f300277e0e2e952b85d37fb1829f828445f842878aa5ba7c1709"
+  },
+  "commentary/haydock/books/EZK.json": {
+   "bytes": 470894,
+   "sha256": "fb410c7326d7a045c8da52b7528f53952ac25d0775f69d36db77bc8d430fadc9"
+  },
+  "commentary/haydock/books/EZR.json": {
+   "bytes": 118710,
+   "sha256": "ab2d10e999f09c19914284f14700aaa8c6d74bed7628ee1e3422469a547a4e92"
+  },
+  "commentary/haydock/books/GAL.json": {
+   "bytes": 97989,
+   "sha256": "954e526bb62a4186378a35c293be90999aa96863bc110cbd688fe1f7a6d81c98"
+  },
+  "commentary/haydock/books/GEN.json": {
+   "bytes": 708690,
+   "sha256": "0e5c8fa2fb65c55ca8e151deab6ae50db87b57a71487a454c4065149a99701b1"
+  },
+  "commentary/haydock/books/HAB.json": {
+   "bytes": 57885,
+   "sha256": "98a4df0e7aaddc19cacaf5fb9474a69887a9d263d52567b12e7f748ab1240dc0"
+  },
+  "commentary/haydock/books/HAG.json": {
+   "bytes": 27086,
+   "sha256": "380ac5b9a3bc6b13459f54459df3171fbe255722db9781de5d3dbc5e15ef7e02"
+  },
+  "commentary/haydock/books/HEB.json": {
+   "bytes": 299938,
+   "sha256": "58e927ca5584b6db44defdf8b3daf277bc1de4d766c789bcd8a768e1c49045a9"
+  },
+  "commentary/haydock/books/HOS.json": {
+   "bytes": 138848,
+   "sha256": "2477ca5a6215e1e521bbf28f987f1fd9679c907e2de6afbcd89f22947994d0f3"
+  },
+  "commentary/haydock/books/ISA.json": {
+   "bytes": 503982,
+   "sha256": "ae1b57927c0f190795862b07564e9e0cb89099271f25e698366baa9baeea4c61"
+  },
+  "commentary/haydock/books/JAS.json": {
+   "bytes": 118413,
+   "sha256": "1d79ecc4dad75e05b5c99902125a65e37a6c111568dfa04eddb98d14ac050e9d"
+  },
+  "commentary/haydock/books/JDG.json": {
+   "bytes": 610581,
+   "sha256": "d2c09f1838ceecb1537ec24d336f5fa24a870c9a8e724abe802439b6d1d4a816"
+  },
+  "commentary/haydock/books/JDT.json": {
+   "bytes": 178419,
+   "sha256": "016d371492b8353774f365274d552f5add3612a7c3265451d647fea4b433e72d"
+  },
+  "commentary/haydock/books/JER.json": {
+   "bytes": 485438,
+   "sha256": "9f01be40b720dae1d2ba5e70233cdbac1929c9c9b329d1b38e3575ecc31152e9"
+  },
+  "commentary/haydock/books/JHN.json": {
+   "bytes": 550183,
+   "sha256": "40f6c43d6e5f614c0d0e8f657e6d73e0f03d6b166f3ebbbfd14cba5bf0723dd1"
+  },
+  "commentary/haydock/books/JOB.json": {
+   "bytes": 615695,
+   "sha256": "e9d778fe78944b3f0219bbcd0347569352d1e3f4cf0ed3456c0184916e1182fa"
+  },
+  "commentary/haydock/books/JOL.json": {
+   "bytes": 42119,
+   "sha256": "1fd64542f6b3128e5ffdb978ac6d13153625c11c7aa6e760e4feb7b779c5fe3e"
+  },
+  "commentary/haydock/books/JON.json": {
+   "bytes": 32239,
+   "sha256": "441f5924a4adaf394ff5eb4b2c1ac9f786effd9f3919e5050efe5c007f32dc5b"
+  },
+  "commentary/haydock/books/JOS.json": {
+   "bytes": 456118,
+   "sha256": "3e0088480bcf2ba0410823c6756a8a64564281b79eddb1084eb190e936b84f64"
+  },
+  "commentary/haydock/books/JUD.json": {
+   "bytes": 23532,
+   "sha256": "042555501ad87293e0dcc68140fd8bbc863ef2be31f935b7750dbaf6670e2b1e"
+  },
+  "commentary/haydock/books/LAM.json": {
+   "bytes": 56774,
+   "sha256": "1152b3f9d3f506148326c904a737f20e70232f2083a9b06d4089f06070da98bc"
+  },
+  "commentary/haydock/books/LEV.json": {
+   "bytes": 424616,
+   "sha256": "214c6221c0534327d08d415cfb87f5e926ae8d69a28749a71dd039a69f86f1ac"
+  },
+  "commentary/haydock/books/LUK.json": {
+   "bytes": 540545,
+   "sha256": "462f118d5e58faf18467ecdf69769d7ac6c6f0443c3600977a2345b69cf78cef"
+  },
+  "commentary/haydock/books/MAL.json": {
+   "bytes": 45282,
+   "sha256": "d66025df06078a77786b25f7854b847b3f82490cccba8bb1deeb9f7c67dd95e0"
+  },
+  "commentary/haydock/books/MAT.json": {
+   "bytes": 1262813,
+   "sha256": "da16c8b9cd09a86b75e9ebd912de04d651b0b4c06a9e2d225273f4cf1b5c09de"
+  },
+  "commentary/haydock/books/MIC.json": {
+   "bytes": 71515,
+   "sha256": "2b97447b9c19c233b109a38eb59cbc8df483773b5392c7b39bd24bd1d2c02ad5"
+  },
+  "commentary/haydock/books/MRK.json": {
+   "bytes": 228304,
+   "sha256": "28c2dbe9becd07530291961f50bd545c82b5d81ab94bb4c402ffbedbaa7276d0"
+  },
+  "commentary/haydock/books/NAM.json": {
+   "bytes": 27492,
+   "sha256": "ce5d3b9928b013fd1d15dfa6a243d50d3e34b6e0bb4039b674a0250a401ce579"
+  },
+  "commentary/haydock/books/NEH.json": {
+   "bytes": 151117,
+   "sha256": "70af18238f31a600abb70111891bed538ce0f3dbc5909b0607c9ae252a314a76"
+  },
+  "commentary/haydock/books/NUM.json": {
+   "bytes": 592596,
+   "sha256": "f1b7bc97f4bfd1027d1178aaab30a5355ed46c240469b9050a49b4c226260978"
+  },
+  "commentary/haydock/books/OBA.json": {
+   "bytes": 13622,
+   "sha256": "100f13a9afdbd5a709bddcfc9a5a9c1ca77d320aa1a3d4c7038ddc778f304868"
+  },
+  "commentary/haydock/books/PHM.json": {
+   "bytes": 17893,
+   "sha256": "263ead30d24da17a69ee0882239e724d74eb7ef02306bdfe0f8920f0d9a548ee"
+  },
+  "commentary/haydock/books/PHP.json": {
+   "bytes": 50814,
+   "sha256": "918ed2bc8edb7a4a05c7d7388ea3a396ed251d5f58ed9ac910e05a2d4233e108"
+  },
+  "commentary/haydock/books/PRO.json": {
+   "bytes": 314055,
+   "sha256": "ef4d9bcbbe1c4d52755c08a7dcc5df7e4d7568b6f5bb039cf9bfb89f134df123"
+  },
+  "commentary/haydock/books/PSA.json": {
+   "bytes": 2187332,
+   "sha256": "804f043696ba7e24091f1b4cfb5a1939e64ea2dab8c45e0d5707295625bd2da1"
+  },
+  "commentary/haydock/books/REV.json": {
+   "bytes": 371777,
+   "sha256": "6016427e39eaaae32b47c3224823cfff5a5c9a07a6f396ff47482253cb8c66ca"
+  },
+  "commentary/haydock/books/ROM.json": {
+   "bytes": 322112,
+   "sha256": "d6617fe41574706ffaca15197b5890980dfc8aa315d3e7dba8780fb8f53c2c1b"
+  },
+  "commentary/haydock/books/RUT.json": {
+   "bytes": 58621,
+   "sha256": "417527210f12232ce767f21ec2e19ca63c8ea78dfb8e3cf7ab5dde32012544a6"
+  },
+  "commentary/haydock/books/SIR.json": {
+   "bytes": 481930,
+   "sha256": "18b9b9d338b302a3568a914413eec0caafac7cc2d79a88ae6d3a672f56350ca9"
+  },
+  "commentary/haydock/books/SNG.json": {
+   "bytes": 91156,
+   "sha256": "788adcaa565f31126de0239f13fbdd5219f8c1a8b41a033f938262ae9c58ae16"
+  },
+  "commentary/haydock/books/TIT.json": {
+   "bytes": 42285,
+   "sha256": "a09d9a3cf1f808144e58715242cf8fc0901ba6d03bb2c19d86305f1f1a72a3b4"
+  },
+  "commentary/haydock/books/TOB.json": {
+   "bytes": 156762,
+   "sha256": "152fdf8b5f3710cd7269263cd30f9a5a75368085e6db22b63fcbd3be622ed5ba"
+  },
+  "commentary/haydock/books/WIS.json": {
+   "bytes": 127414,
+   "sha256": "c37cfa3052512c8d8e2a544925f784216a4867a0267369f80b4d55fd7fc956e6"
+  },
+  "commentary/haydock/books/ZEC.json": {
+   "bytes": 153073,
+   "sha256": "6668727dbc67f3b3b46f0db6144088e8f1e32c404ae57ddc0ac064bb1cf32310"
+  },
+  "commentary/haydock/books/ZEP.json": {
+   "bytes": 42491,
+   "sha256": "e14fd519fb9edd465765a6cce7a69dac426a3bdc98397b06e83d629ffa1e8700"
+  },
+  "coverage.json": {
+   "bytes": 2480,
+   "sha256": "2ad454e1418bab9d0828059f6548ec483ca03ccadd260578402723c1e72642f2"
+  },
+  "cross-references/books/1CH.json": {
+   "bytes": 131918,
+   "sha256": "1a206f537224f568e6e64ee68488512988888eadee2f604fffc95064e2c5c67a"
+  },
+  "cross-references/books/1CO.json": {
+   "bytes": 263993,
+   "sha256": "2d023f10dab8c6ea1f2ca9cb079f601a550cad93a68144a4799a43204b7d8cad"
+  },
+  "cross-references/books/1JN.json": {
+   "bytes": 111582,
+   "sha256": "7e51b27d010cf2573cb0d6caaf48f3773b91b6b97cbe1ec6f3be27712a694682"
+  },
+  "cross-references/books/1KI.json": {
+   "bytes": 162522,
+   "sha256": "14583582604c564bced203473fbccfb0e7976cde7189f257681f9766bb8cfcf9"
+  },
+  "cross-references/books/1MA.json": {
+   "bytes": 4261,
+   "sha256": "11259d3ca86c6b31094dd75bedc6a55c09b8b7656c4e3e043d6b38d7e699d99f"
+  },
+  "cross-references/books/1PE.json": {
+   "bytes": 125134,
+   "sha256": "18fa56569922bc13bf8da5b4cf8fae10762362d89e9144761c4d143c64667688"
+  },
+  "cross-references/books/1SA.json": {
+   "bytes": 185138,
+   "sha256": "2a95d1ffc33fb5edd6f6f25693b602b25dbde04e54f25ac5228f0d960bcf44d2"
+  },
+  "cross-references/books/1TH.json": {
+   "bytes": 83752,
+   "sha256": "3b6e5a08e74eec12803313eafea83c7f0eea330876eb118832915710585ded23"
+  },
+  "cross-references/books/1TI.json": {
+   "bytes": 107806,
+   "sha256": "2e2f0298220a9952c684ee3cee6c27545f9345dfb665d915063c2dd970a17a20"
+  },
+  "cross-references/books/2CH.json": {
+   "bytes": 164371,
+   "sha256": "553ae4611362361d5e96dda8a5bcd400784120a32c38c41a4861b6d7989abdc4"
+  },
+  "cross-references/books/2CO.json": {
+   "bytes": 173993,
+   "sha256": "7ae0dfc7d9cd7880a9838ebc0daf075728c05de6b6dfe0b7c295d9e1b2e52386"
+  },
+  "cross-references/books/2JN.json": {
+   "bytes": 8818,
+   "sha256": "b45e7f6d892a30ec3881b3f422235ae16b044f7ad0e77b737a6d897700eeff73"
+  },
+  "cross-references/books/2KI.json": {
+   "bytes": 145971,
+   "sha256": "b9884364169d062e543c54062dbf4c5cb3195493d099200a228c9362267f36dc"
+  },
+  "cross-references/books/2MA.json": {
+   "bytes": 4006,
+   "sha256": "eb3044497ef538a658948c887edf5d6db4375dbb6940a15098e8921b2c34f7c3"
+  },
+  "cross-references/books/2PE.json": {
+   "bytes": 52289,
+   "sha256": "99c05c3e8fe86690b1d80faaec82d0d533a8b4b45bf0c51744b331f8b8a11bfc"
+  },
+  "cross-references/books/2SA.json": {
+   "bytes": 142560,
+   "sha256": "f155a0c8176a1ae483f526b8243f8ae9425558938945d1d062212b3f910ad221"
+  },
+  "cross-references/books/2TH.json": {
+   "bytes": 38497,
+   "sha256": "c8c8778507cdf1d1003dea8f0ada8c52d6ccf0bf5718ae4bfe043c03825eded5"
+  },
+  "cross-references/books/2TI.json": {
+   "bytes": 84580,
+   "sha256": "db357031effc58c3b16815260e2b04088ed87baeb52f30c6535590afc2de3609"
+  },
+  "cross-references/books/3JN.json": {
+   "bytes": 8234,
+   "sha256": "041f145ae6c221f3746f7c271c29fa62737299425492c4016ce30843ac827c96"
+  },
+  "cross-references/books/ACT.json": {
+   "bytes": 466548,
+   "sha256": "b7f3969425fb955b51028ff073bc77fad053402d9a8da59db06a8c5a3c80ab95"
+  },
+  "cross-references/books/AMO.json": {
+   "bytes": 68834,
+   "sha256": "a8e08ae773df23bc69d4f1e57e38c907792496027af6775f832ea529800965b6"
+  },
+  "cross-references/books/BAR.json": {
+   "bytes": 2431,
+   "sha256": "1bb844291a370b22e706c2fd6cfc20a27312de4cea887a6e877bcb5b86965edc"
+  },
+  "cross-references/books/COL.json": {
+   "bytes": 109365,
+   "sha256": "1f6be05acc81ff5d7b0b4fce2951edbbb99efcd83a03d28b308290ecb1def152"
+  },
+  "cross-references/books/DAN.json": {
+   "bytes": 21507,
+   "sha256": "3aa1328828b44a61f7ca1cc8d673ee7d36db58f21389d07725684e858b94e18e"
+  },
+  "cross-references/books/DEU.json": {
+   "bytes": 335746,
+   "sha256": "10d12a5d596e8148068d81953553a09aba94609ea39974d6c2635a9c4792c30c"
+  },
+  "cross-references/books/ECC.json": {
+   "bytes": 115279,
+   "sha256": "1505ea31209f85aee527c40f98ddc403aea324015ae1711e2fb24c6d0462edb5"
+  },
+  "cross-references/books/EPH.json": {
+   "bytes": 173657,
+   "sha256": "52cc06509a49c887d697005c07b95e804db227c21b397103fa9db81784176069"
+  },
+  "cross-references/books/EST.json": {
+   "bytes": 37313,
+   "sha256": "a6c9c46603fb692b0a3fc72b23d2efd787adb469597d0492bb7bea0fbfc44595"
+  },
+  "cross-references/books/EXO.json": {
+   "bytes": 336986,
+   "sha256": "e83343c5c90b58713e1e6805ad15b5a35629c58d0154aac215aa5f01781f0b77"
+  },
+  "cross-references/books/EZK.json": {
+   "bytes": 372943,
+   "sha256": "f56327877c8b7020f947e78350491c16b7828dd34b0cae6a584793845558b29d"
+  },
+  "cross-references/books/EZR.json": {
+   "bytes": 47898,
+   "sha256": "f28c31d9982fa52a759b3d6396ce1c67d14370f180ec9441a276e772bd425210"
+  },
+  "cross-references/books/GAL.json": {
+   "bytes": 118991,
+   "sha256": "7f1d04f935a12df570c9a25398274b8067c89467cebd12e028eb6bb0eab44fbd"
+  },
+  "cross-references/books/GEN.json": {
+   "bytes": 465055,
+   "sha256": "ce722435988bdc623c8645dc30236afa7d24c1d1a09bef61856de3bd4f4cb99c"
+  },
+  "cross-references/books/HAB.json": {
+   "bytes": 37046,
+   "sha256": "803878d630cd5e526a587518e50587e5c70a2fcd2cd3249d00bae0a1aa6a2620"
+  },
+  "cross-references/books/HAG.json": {
+   "bytes": 18370,
+   "sha256": "abad356493ed8d186e73f1008ee9487ae6edd2039f30d1ff8465b5af0f355913"
+  },
+  "cross-references/books/HEB.json": {
+   "bytes": 261358,
+   "sha256": "4062a72f08194ed61f924bbf5a35cdee71ab4ce1fc90bc919bdecbed07d031a8"
+  },
+  "cross-references/books/HOS.json": {
+   "bytes": 98910,
+   "sha256": "49e8839fa6429c962f14e3f74614c711b510dcc89455f0ab4e23e330cf2a7917"
+  },
+  "cross-references/books/ISA.json": {
+   "bytes": 764977,
+   "sha256": "799480d25fd512e0092e5a0ec2e00fe336f53a3ed61f24a46e9dac061701864d"
+  },
+  "cross-references/books/JAS.json": {
+   "bytes": 106580,
+   "sha256": "f91a028af660db6f5f72b6294a8e47972a3c952542f5efc08a9857ce4005db9a"
+  },
+  "cross-references/books/JDG.json": {
+   "bytes": 118252,
+   "sha256": "a20db891aecdda15a39291684b9ed8196b79ba275f8a2fd141def00eac90360a"
+  },
+  "cross-references/books/JDT.json": {
+   "bytes": 2836,
+   "sha256": "a5dedb6f6b53837ad33a0610e5915967cb00de04d51ad1c38ded360908c72c7d"
+  },
+  "cross-references/books/JER.json": {
+   "bytes": 572243,
+   "sha256": "c5e523d76d8fc997e353ae45ce9f1aa44867af8b607b107e3d6457ab90067268"
+  },
+  "cross-references/books/JHN.json": {
+   "bytes": 533623,
+   "sha256": "91df99e94f2d8b5f1a4f1703a5ee2267a25aa48e49f30bb7cd7316803a17b9b1"
+  },
+  "cross-references/books/JOB.json": {
+   "bytes": 306546,
+   "sha256": "f4cf0b67993ce68eaaf46786511d797fad6bac20937331a79b682ea1599f0e9e"
+  },
+  "cross-references/books/JOL.json": {
+   "bytes": 33702,
+   "sha256": "47da81c8d120f20fb23b5b6048218520ed2de7d9c00304f330d499b87f9108c0"
+  },
+  "cross-references/books/JON.json": {
+   "bytes": 20722,
+   "sha256": "3b7a4796d4950ad63196566399a9b8d34295529c1099b7286d3e99b33d17f8a8"
+  },
+  "cross-references/books/JOS.json": {
+   "bytes": 125326,
+   "sha256": "0fa8004416204b42364d480bde212a79a9aac581e9b4303766e7d79b604de73b"
+  },
+  "cross-references/books/JUD.json": {
+   "bytes": 27778,
+   "sha256": "fac2677e6bcea0f6804080633068c8a0229ad41e34cd55c4578b044f3004d024"
+  },
+  "cross-references/books/LAM.json": {
+   "bytes": 57406,
+   "sha256": "caf12a5fdc7e75c4b1a843518db4856a5eb361991e142d89e64de10fba1fdc7d"
+  },
+  "cross-references/books/LEV.json": {
+   "bytes": 179145,
+   "sha256": "41cb8f3b49fc8647fa71825ed3c4fcc8d5fde3ef211950913b7312624a62b206"
+  },
+  "cross-references/books/LUK.json": {
+   "bytes": 502140,
+   "sha256": "f187b5508e46419ffd6ef8d6e37cf50d4c80817760a59e5f4edb316401f40d4f"
+  },
+  "cross-references/books/MAL.json": {
+   "bytes": 45021,
+   "sha256": "6e8334327bc098cb3221b64f5c91036cb4041d0b372ec576f73679abbd3f5bf5"
+  },
+  "cross-references/books/MAT.json": {
+   "bytes": 619032,
+   "sha256": "6d22bb8c1656653c90f37816212dc10df5ea906491f1e2921a97f0a1c47de415"
+  },
+  "cross-references/books/MIC.json": {
+   "bytes": 71488,
+   "sha256": "f30146cb3d083678f49cdccd2c81d2f7998a857fe987eca212b1620f08b584ea"
+  },
+  "cross-references/books/MRK.json": {
+   "bytes": 251837,
+   "sha256": "b3f4d698eedef9924d63e6b099ee9e524000a532c0fe8b9962fd6bffa26474d8"
+  },
+  "cross-references/books/NAM.json": {
+   "bytes": 22347,
+   "sha256": "4750469389d0b1bb40e2ce1ba02c43d96d38281a09a8af1e09ac1960e38e0b54"
+  },
+  "cross-references/books/NEH.json": {
+   "bytes": 81606,
+   "sha256": "376fe0bb6a1f408aa80bc7b89be625e4ab77ea4b95e70be543a203e8db399606"
+  },
+  "cross-references/books/NUM.json": {
+   "bytes": 198969,
+   "sha256": "cc7a97025258806dc7dd3e30a5ebe2afb8185dee19168ae0c14fb392f5499921"
+  },
+  "cross-references/books/OBA.json": {
+   "bytes": 9924,
+   "sha256": "072d8ebf492e401d1d678d5ebcd515955b3b01f8a869ffcfda13129fd3a03ec0"
+  },
+  "cross-references/books/PHM.json": {
+   "bytes": 9212,
+   "sha256": "bad606a33cd29d6150e69cd6cf5df87382d7ae38eb120cf65dadae158d0a45d8"
+  },
+  "cross-references/books/PHP.json": {
+   "bytes": 109390,
+   "sha256": "a7377cd3c85828bd1f0488212967a3da532ced7e4d20b1bde39b862f317f1ca2"
+  },
+  "cross-references/books/PRO.json": {
+   "bytes": 440527,
+   "sha256": "c83613438ccb10046d149413f378c9f3a5ff095a2cab565b9c9983163bdbe334"
+  },
+  "cross-references/books/PSA.json": {
+   "bytes": 1427679,
+   "sha256": "4690e1d057cfbdcc14f092b5961e81c1e7fbfe148bd9e3aad4a1de9f83a0c6ce"
+  },
+  "cross-references/books/REV.json": {
+   "bytes": 297709,
+   "sha256": "cbf219e8aa824f9a6cce43e853d1a87367a07125a358786c7a0cfb2c7add1c58"
+  },
+  "cross-references/books/ROM.json": {
+   "bytes": 360627,
+   "sha256": "ab9f912fd48ce548763ea92486db9d3bb400800f8cbd435b2080fcdefbd30fb8"
+  },
+  "cross-references/books/RUT.json": {
+   "bytes": 25901,
+   "sha256": "dd979c0d1e777839b35dfd387510cb2f7a5b1e702a38ff3e25814e8adb019b1d"
+  },
+  "cross-references/books/SIR.json": {
+   "bytes": 20352,
+   "sha256": "c95ed27cae833ffa25745ddc149ac83c2e4284120d44727888dba602d78c6c40"
+  },
+  "cross-references/books/SNG.json": {
+   "bytes": 40851,
+   "sha256": "6c94a43d939a65e36647d243cf7fc38eb226650872c7d3b50e287d1450b99798"
+  },
+  "cross-references/books/TIT.json": {
+   "bytes": 44625,
+   "sha256": "a5cca82aa2ed33a8a92e34d8c1a73237aa6b79874b7b8bb6c0edb5078086bb38"
+  },
+  "cross-references/books/TOB.json": {
+   "bytes": 3088,
+   "sha256": "76dfd8fb3207c604a60d1cc74d244a1781ec2f2d945b0eebcde6404171a0c976"
+  },
+  "cross-references/books/WIS.json": {
+   "bytes": 11267,
+   "sha256": "e524615e2b23630a3c7251a017b03c06c1522409592e706ce87d9e324ca9dab9"
+  },
+  "cross-references/books/ZEC.json": {
+   "bytes": 123346,
+   "sha256": "5eee00bd98e140a9ed562c95c426c8c5d1357807d1913e09f69974f158f8ddc0"
+  },
+  "cross-references/books/ZEP.json": {
+   "bytes": 38611,
+   "sha256": "729e6f27f214420001c3c3f0cfa8f7ceb4de9cfd4151de779d2bc98eb6f78b17"
+  },
+  "index.json": {
+   "bytes": 4272,
+   "sha256": "dde1dfcd3448ec5512f43ed449245b9c97ef5ba1e614e773630d8f3d20ae1b1b"
+  },
+  "orphans.json": {
+   "bytes": 2956,
+   "sha256": "9fb112191bcb00061d4537d96c7fcc5258dcebcc4a7b7a2633d4d038f940621a"
+  },
+  "spine.json": {
+   "bytes": 8891,
+   "sha256": "eaafbf97ebee1f8beec2d0516d8152bc755d24985ef84fa0703acfcd5cef795f"
+  },
+  "versions/douay-rheims/books/1CH.json": {
+   "bytes": 145837,
+   "sha256": "f0e9c070bc2d50ee8cac66aae3e1e3f071b2e1928a65f172faec1640c6cba678"
+  },
+  "versions/douay-rheims/books/1CO.json": {
+   "bytes": 66810,
+   "sha256": "735eab91f073481a2d13dfcc6dd741754a9e607be58a769365673b4f46dfe5a4"
+  },
+  "versions/douay-rheims/books/1JN.json": {
+   "bytes": 17390,
+   "sha256": "031033728ed2e27a6be6a9bd9c7921e6dcc6ecaa4e460a0e0baf768a9e534f3f"
+  },
+  "versions/douay-rheims/books/1KI.json": {
+   "bytes": 157854,
+   "sha256": "f7f012ec9777fd0d5e685f60cff53efd848d71abe22d91fde828813b25c3c0ba"
+  },
+  "versions/douay-rheims/books/1MA.json": {
+   "bytes": 161661,
+   "sha256": "e907d852e35844ab36bc91d63344f40aaaeb3062719b5d38101733d2bb70feac"
+  },
+  "versions/douay-rheims/books/1PE.json": {
+   "bytes": 17725,
+   "sha256": "0eeab53dd2f7172e268e35fe67601794e24a407d3439423c3305bd52ba362825"
+  },
+  "versions/douay-rheims/books/1SA.json": {
+   "bytes": 162436,
+   "sha256": "99762781c84963e170677f3a11b44f7d47a74751e9d4b15660c5dbf4e716f251"
+  },
+  "versions/douay-rheims/books/1TH.json": {
+   "bytes": 13844,
+   "sha256": "7324dfcfa173149963646d998a0f2d5e724ea9f5eaf69da386294a94193e1926"
+  },
+  "versions/douay-rheims/books/1TI.json": {
+   "bytes": 17529,
+   "sha256": "3f14c0d2a167380156e643080c5628a144e3ccf3114f65be1f9db806b7c7cdc6"
+  },
+  "versions/douay-rheims/books/2CH.json": {
+   "bytes": 170458,
+   "sha256": "c9408c8f8108d1ad0d1a773f7d5a18ad493d3c1795a9f8ac29389e424dedf26f"
+  },
+  "versions/douay-rheims/books/2CO.json": {
+   "bytes": 42244,
+   "sha256": "3d80c6a64b60c6c0e751cb0b94f9cfe9e20bd3e1e6a51ecf22656d576ba8f176"
+  },
+  "versions/douay-rheims/books/2JN.json": {
+   "bytes": 2627,
+   "sha256": "fc29248906593a7be2713d24c7e4c51743685efc9b809cf8416400d2cab2e64f"
+  },
+  "versions/douay-rheims/books/2KI.json": {
+   "bytes": 148300,
+   "sha256": "9a5c2765bd2bbc8b26c215c096c1a54fa7f7ece24764fa8b3eda314545478fbc"
+  },
+  "versions/douay-rheims/books/2MA.json": {
+   "bytes": 111662,
+   "sha256": "7962a44cd70f531f52e01fbd2c6bc20949300298fe02f20f273ca03d900fc70b"
+  },
+  "versions/douay-rheims/books/2PE.json": {
+   "bytes": 11515,
+   "sha256": "6aedf10a61029535b58a7fc9578571660ef500b539143028ba490d5e718336b0"
+  },
+  "versions/douay-rheims/books/2SA.json": {
+   "bytes": 133883,
+   "sha256": "b01a9955c6f2bcee5dff8f5d4901fde46366e415857d24acbb42f0bb452d0006"
+  },
+  "versions/douay-rheims/books/2TH.json": {
+   "bytes": 7644,
+   "sha256": "badae6a70284e4f6f90b35c0e52645e2e57e52a80a54f1e2f7ec0d91674c6d11"
+  },
+  "versions/douay-rheims/books/2TI.json": {
+   "bytes": 12785,
+   "sha256": "8d2019820b3c5a41a4209d47e99de7b6e83ffe4eb507328fffd605feecfcce0e"
+  },
+  "versions/douay-rheims/books/3JN.json": {
+   "bytes": 2789,
+   "sha256": "42c81190dfe4b6a219d740ec62f266a79907d33b617b6b3681dd49f738647567"
+  },
+  "versions/douay-rheims/books/ACT.json": {
+   "bytes": 169441,
+   "sha256": "8054bba93db9476028910362b96fa534418e3cde61b39134549dd86079b5445d"
+  },
+  "versions/douay-rheims/books/AMO.json": {
+   "bytes": 27686,
+   "sha256": "d79a321925a5e26eff76596273a177e59e42ece37960734cfaeeedcae5c8b6d5"
+  },
+  "versions/douay-rheims/books/BAR.json": {
+   "bytes": 36228,
+   "sha256": "ac2aeff73e653052c947f23e46a8aa3df322a22a8de427d2122346cd6e3424de"
+  },
+  "versions/douay-rheims/books/COL.json": {
+   "bytes": 15043,
+   "sha256": "23ce42b8b8f60a36ada4961bf83326e23754eada7c9420728715d71c745cd656"
+  },
+  "versions/douay-rheims/books/DAN.json": {
+   "bytes": 104508,
+   "sha256": "36364e938fdeda182aaebe7130b7c6ad96a3e8555b4807cd9e711ab500062f22"
+  },
+  "versions/douay-rheims/books/DEU.json": {
+   "bytes": 177598,
+   "sha256": "147cd62f85f2930b72ab4940cbc8ccb095b21c291d4e73b08209043a47d1ddab"
+  },
+  "versions/douay-rheims/books/ECC.json": {
+   "bytes": 37891,
+   "sha256": "3cf99e2ddcf602783b9b710acef3a623362b54076f4e02494b398951dd1457e6"
+  },
+  "versions/douay-rheims/books/EPH.json": {
+   "bytes": 22960,
+   "sha256": "0e8de246a49e16384f88db84ec28223cdc08b51fd8a7c3b19bf23e7b57a72a8a"
+  },
+  "versions/douay-rheims/books/EST.json": {
+   "bytes": 58202,
+   "sha256": "ffc0aa4805e416dff9a7a2aaa7bac89fa5fe5bf6e71a0946877d2b7db7365a49"
+  },
+  "versions/douay-rheims/books/EXO.json": {
+   "bytes": 206969,
+   "sha256": "abc825f313e11f28aea288180c6a5f7c053a50af67192f8213473e24026015a0"
+  },
+  "versions/douay-rheims/books/EZK.json": {
+   "bytes": 257841,
+   "sha256": "81dea1acef1dd3f6d9e1cf3b8519ad5de27d63a30efa5ad30cd50aa702f3b9e5"
+  },
+  "versions/douay-rheims/books/EZR.json": {
+   "bytes": 51380,
+   "sha256": "ea3fa550d57c4cd56799f90c88f5a29a9ee32bda551e0bc93e45a7700f3b8b1e"
+  },
+  "versions/douay-rheims/books/GAL.json": {
+   "bytes": 22446,
+   "sha256": "526c0ecd1f57ea1469c176e72f363bf31d7f11090def75907b48b33de91e7ae2"
+  },
+  "versions/douay-rheims/books/GEN.json": {
+   "bytes": 247512,
+   "sha256": "0de56466ccce99971b8d1005250fe8304850eae0bcbac5c338b66e9cc71a4b63"
+  },
+  "versions/douay-rheims/books/HAB.json": {
+   "bytes": 10754,
+   "sha256": "c92f6fd854a063312219e893c05d4b8613a9609d0843e4731c7d7256cd926fab"
+  },
+  "versions/douay-rheims/books/HAG.json": {
+   "bytes": 7924,
+   "sha256": "1bfcaf83037c856873cc4b4ba557e07476ae5860c5ed785d56a7c1443de806e7"
+  },
+  "versions/douay-rheims/books/HEB.json": {
+   "bytes": 49170,
+   "sha256": "efdfe0cd7cba612351a8c43d3208e2fe5540fd35b9af76874d716fb7f0f729cd"
+  },
+  "versions/douay-rheims/books/HOS.json": {
+   "bytes": 36003,
+   "sha256": "133c04fb891983fd12b4f65acbf035950c4e525d6f36d3c0c745ed33ae4386d4"
+  },
+  "versions/douay-rheims/books/ISA.json": {
+   "bytes": 247138,
+   "sha256": "c47a311a7838a0a44b2fee45db23bb0f7578a4281097d511606f29a287d89427"
+  },
+  "versions/douay-rheims/books/JAS.json": {
+   "bytes": 17079,
+   "sha256": "8fd11828e27e4f607049bc690a674f4724a4baa84c9b9bba70261a491b1b2678"
+  },
+  "versions/douay-rheims/books/JDG.json": {
+   "bytes": 121812,
+   "sha256": "dd62d4aac65dcb274aa73944a7eaf6967b7f3bca03f02e88feda2a6e8179b281"
+  },
+  "versions/douay-rheims/books/JDT.json": {
+   "bytes": 64467,
+   "sha256": "07b3e52a9bc054c87ee764a1e75b881843425074416986adecd6d2b6a98d4915"
+  },
+  "versions/douay-rheims/books/JER.json": {
+   "bytes": 279645,
+   "sha256": "1dab8e7e01cf5a12dce7a72cee8c1410461ce1c38b2529166f1c2ab24a5e7fe8"
+  },
+  "versions/douay-rheims/books/JHN.json": {
+   "bytes": 133894,
+   "sha256": "38cd4660d754c9c8d1e09a0de5666d9c23293f779f94c76fe39544b762b91880"
+  },
+  "versions/douay-rheims/books/JOB.json": {
+   "bytes": 140132,
+   "sha256": "aa36c6ed86d84a5324b0e5e5dd5839c9b88bed12ab74d2e34c3ccc8264a1cf67"
+  },
+  "versions/douay-rheims/books/JOL.json": {
+   "bytes": 14375,
+   "sha256": "902fe3ea35920a11ab404422749cbdf179cd6924359785b8e9f0c3a98f36f4da"
+  },
+  "versions/douay-rheims/books/JON.json": {
+   "bytes": 9017,
+   "sha256": "6d02ee30e558350f00c63ade71731f4b3a31b88bb98a70a8f8fce49fe131aef1"
+  },
+  "versions/douay-rheims/books/JOS.json": {
+   "bytes": 119914,
+   "sha256": "f1c1db001ae98e6ec0236aa79c71e676e393ae82666da142e98f1e2bb9d35267"
+  },
+  "versions/douay-rheims/books/JUD.json": {
+   "bytes": 5148,
+   "sha256": "25d38261c5984050974d7e552038f6f490380057ba98c601f7b08cd77620bbb2"
+  },
+  "versions/douay-rheims/books/LAM.json": {
+   "bytes": 25867,
+   "sha256": "59a12174ebd53639b68abc8fd431022e4eefee7895c632799b810c19593606b4"
+  },
+  "versions/douay-rheims/books/LEV.json": {
+   "bytes": 147491,
+   "sha256": "0761124558ac7c3a75e54f09bc24a8b50c6dba3bb5eaf53b8413e8fcf1489f94"
+  },
+  "versions/douay-rheims/books/LUK.json": {
+   "bytes": 179213,
+   "sha256": "01df58f694e9d63ebd2ff61bfbe2c09ac4aed4968a60eeb7efc4920ef638f793"
+  },
+  "versions/douay-rheims/books/MAL.json": {
+   "bytes": 11690,
+   "sha256": "769320fdad18662a711566d1efc094260498c4a94eb9f8c0b43fa847e7c85d05"
+  },
+  "versions/douay-rheims/books/MAT.json": {
+   "bytes": 165432,
+   "sha256": "2534817cf103edc688a45ad7598dbe3796d2f8f6d10f801d18dfb970b9c6ff9d"
+  },
+  "versions/douay-rheims/books/MIC.json": {
+   "bytes": 21109,
+   "sha256": "580c314456209163a17ede8aadb6c8e4463011c589904a59322dc67f662945e4"
+  },
+  "versions/douay-rheims/books/MRK.json": {
+   "bytes": 105203,
+   "sha256": "fcc3571e5af629ac38222694e89c0feeb7d3c1736d8168b0297ddf59882586e7"
+  },
+  "versions/douay-rheims/books/NAM.json": {
+   "bytes": 9416,
+   "sha256": "a074dcefaf77d92cc4b3a913009165739d6973aad0b5baa241a3d3de5a917f84"
+  },
+  "versions/douay-rheims/books/NEH.json": {
+   "bytes": 72649,
+   "sha256": "2a44fb1dde31d8f37b46cc4eebff18843430456d11d630a0b961df58eb6fd895"
+  },
+  "versions/douay-rheims/books/NUM.json": {
+   "bytes": 208521,
+   "sha256": "cc3fed41f4b2f9adf44a0e358fb180a7caf839fe972db8784f68ec2b4a07e28e"
+  },
+  "versions/douay-rheims/books/OBA.json": {
+   "bytes": 4840,
+   "sha256": "b7008b7f713f5c38ae1e5c5b4cc4f2be76ee2a9bcc7b95a822a69029c6cd454d"
+  },
+  "versions/douay-rheims/books/PHM.json": {
+   "bytes": 3917,
+   "sha256": "fb4b9aaf77ec1b127e37b2524b67e637fa9d293b671f1c2305b0adf750cde551"
+  },
+  "versions/douay-rheims/books/PHP.json": {
+   "bytes": 16224,
+   "sha256": "48994f9d35b5f176450168c76b5c6175b9564501dfb5707e0fbd1e65cedf9b9c"
+  },
+  "versions/douay-rheims/books/PRO.json": {
+   "bytes": 120321,
+   "sha256": "5aef8caa14a5a4cc6fb88df8c8409de24b1e1782302fb589eaeaf19b32f3b623"
+  },
+  "versions/douay-rheims/books/PSA.json": {
+   "bytes": 335097,
+   "sha256": "2f8b7bf4ab23fb1f0f081d1725e0e9ac2bd84ce04b3e7d087f2258ad6ae94960"
+  },
+  "versions/douay-rheims/books/REV.json": {
+   "bytes": 78708,
+   "sha256": "17b95af8b64dd0866fa08ca5efb0be35e0f16a2320139a5e0c8131fd51992cd2"
+  },
+  "versions/douay-rheims/books/ROM.json": {
+   "bytes": 67741,
+   "sha256": "2dabc799d101b51d1208410038512f370279e9832e8d7c73292aaee54ebd2809"
+  },
+  "versions/douay-rheims/books/RUT.json": {
+   "bytes": 17085,
+   "sha256": "7480e64bddc54fef717a86623fc9216b4f7365654bffa4ee01c12af7db6aae3e"
+  },
+  "versions/douay-rheims/books/SIR.json": {
+   "bytes": 226180,
+   "sha256": "551081295d7812fd817b87051f4f19852d54c1fcbaf81783d2c91587afdbce91"
+  },
+  "versions/douay-rheims/books/SNG.json": {
+   "bytes": 18719,
+   "sha256": "7cfb536e636ce37c3245bc8dd76309619594509ee358471027e0c8392542d168"
+  },
+  "versions/douay-rheims/books/TIT.json": {
+   "bytes": 7466,
+   "sha256": "995d41c59ca832952adc4857fc8305ec50a2503b6033baaaf881f5547bc7079b"
+  },
+  "versions/douay-rheims/books/TOB.json": {
+   "bytes": 48480,
+   "sha256": "3c9e50e5d029723ba0f7f6e09864884f78b36a4d71ff496927f5951539db6f77"
+  },
+  "versions/douay-rheims/books/WIS.json": {
+   "bytes": 74558,
+   "sha256": "960528e4d903a39bac6139291a6a0de7b2ece335bda6062b9b4e9729e8d09bce"
+  },
+  "versions/douay-rheims/books/ZEC.json": {
+   "bytes": 41775,
+   "sha256": "0a2521a5ab17117ca675c2b95e4f4c44da3599d780a3fbc42272e77dff74779a"
+  },
+  "versions/douay-rheims/books/ZEP.json": {
+   "bytes": 11386,
+   "sha256": "6a71bf672749a08aff8a1dc67a0f3be52668b8c27a72f95f92a7037d7e5b5c5c"
+  },
+  "versions/matos-soares/books/1CH.json": {
+   "bytes": 142825,
+   "sha256": "d71f1cf34c8a22077d9338a46cee1466edd92981ffdb0ec41ea9bf4a4be3df78"
+  },
+  "versions/matos-soares/books/1CO.json": {
+   "bytes": 69083,
+   "sha256": "1d503f786d9c804b0bec79dac82cf58fc804a53136a12dc8d80e05b1e3557ea3"
+  },
+  "versions/matos-soares/books/1JN.json": {
+   "bytes": 17628,
+   "sha256": "6a89d62028aa264fa8d9802030da68c102c52faf36c832c999e407de912b8e4c"
+  },
+  "versions/matos-soares/books/1KI.json": {
+   "bytes": 153853,
+   "sha256": "c848764c2a8afd31d0158d5fd1ed0a695790b7fc5d8301f6320fee5fa55bd4ed"
+  },
+  "versions/matos-soares/books/1MA.json": {
+   "bytes": 160364,
+   "sha256": "7e270f8b6fae9750b6e675faeb1ab3e2e22989141dbf314391fba392f420e9cb"
+  },
+  "versions/matos-soares/books/1PE.json": {
+   "bytes": 18689,
+   "sha256": "7b3c9b192497b15162ca5f460ffef6ef94476252d7441006d1590936a3eb23d3"
+  },
+  "versions/matos-soares/books/1SA.json": {
+   "bytes": 157112,
+   "sha256": "4589c8138e608b29cc64607fea96033f4a3103c7028b2160a13b494df3197ac0"
+  },
+  "versions/matos-soares/books/1TH.json": {
+   "bytes": 14756,
+   "sha256": "af53affb5057c9066474aca3ebcbab74b41255f072be6a3a01701ea1867ae69b"
+  },
+  "versions/matos-soares/books/1TI.json": {
+   "bytes": 18483,
+   "sha256": "4e2645a47f04950754d783ad3389566ffce04ba00ad5fcfc76ce4eb93a8e7350"
+  },
+  "versions/matos-soares/books/2CH.json": {
+   "bytes": 167232,
+   "sha256": "215497b1415b99ef63ef8ec191211ba4986e5869a1ac7319fc43343ee4e142fb"
+  },
+  "versions/matos-soares/books/2CO.json": {
+   "bytes": 44722,
+   "sha256": "01817dc20fd124666f6911e7a5aaa8d815a385f052d10fa913ff4b55568cea3a"
+  },
+  "versions/matos-soares/books/2JN.json": {
+   "bytes": 2693,
+   "sha256": "aba30a48ce5ecc8b8b3d6bfe22e5c8aefb12d095457700dcb33acb855550bc47"
+  },
+  "versions/matos-soares/books/2KI.json": {
+   "bytes": 143153,
+   "sha256": "aee9fb2001d6aac88f833637bf05dcef1faee3745d02dee43e0961e09211ee04"
+  },
+  "versions/matos-soares/books/2MA.json": {
+   "bytes": 112645,
+   "sha256": "9dee663c314d93842bd9daf71fc74a8b0f4a02b1145ecb9209031dee012d6c6a"
+  },
+  "versions/matos-soares/books/2PE.json": {
+   "bytes": 11867,
+   "sha256": "3b62f5bffc4179346b99ff6399b098c242b7f74295d47a3a2c4e737b5f99795a"
+  },
+  "versions/matos-soares/books/2SA.json": {
+   "bytes": 130813,
+   "sha256": "c63ec7d31f941c9747ab8f5d90332ec7fb57999f417d371501adde22802af97e"
+  },
+  "versions/matos-soares/books/2TH.json": {
+   "bytes": 8245,
+   "sha256": "9e3b273590e3a75f3a616d173e5a6b7c4d9382d26434817d50652338e0e2aae7"
+  },
+  "versions/matos-soares/books/2TI.json": {
+   "bytes": 13268,
+   "sha256": "0fcf84c2fe4a96aa759f0f683611c736edf55b807ecd9e2522b8a7fd2dd45824"
+  },
+  "versions/matos-soares/books/3JN.json": {
+   "bytes": 2675,
+   "sha256": "66c09e8599c904e67b96be4cc39c925ba55dd07c0516a214a6058346f5e1ee73"
+  },
+  "versions/matos-soares/books/ACT.json": {
+   "bytes": 165737,
+   "sha256": "21100b888c577ffff045f608123430fd985268a6623083f076d4de307e506260"
+  },
+  "versions/matos-soares/books/AMO.json": {
+   "bytes": 27778,
+   "sha256": "d6dbe53de4b79651ad7f5a09febf9ab4dacb467ba8008581f4b73e216d8b87d1"
+  },
+  "versions/matos-soares/books/BAR.json": {
+   "bytes": 34642,
+   "sha256": "1bbbd0376948f237c4e94d8aea3cf486fec2ea6654f99ffe3fd0c26c339d4dcb"
+  },
+  "versions/matos-soares/books/COL.json": {
+   "bytes": 15893,
+   "sha256": "804f54f0a9323a5d41a49434491bb1943c012b19d14122feb253b233027161e7"
+  },
+  "versions/matos-soares/books/DAN.json": {
+   "bytes": 102956,
+   "sha256": "8e06930dde6e6662a6c98c0398cbe70bb2bca8576e54626efd2a31ede6dd853f"
+  },
+  "versions/matos-soares/books/DEU.json": {
+   "bytes": 170268,
+   "sha256": "e7d31a2b53d6ebcbefb5909c9c167d23183d56fe80cfde55ed75535765d08b14"
+  },
+  "versions/matos-soares/books/ECC.json": {
+   "bytes": 38805,
+   "sha256": "980b2e7c727205b81680b655778e6131cc516239b67d053aaffef485172e8b18"
+  },
+  "versions/matos-soares/books/EPH.json": {
+   "bytes": 23573,
+   "sha256": "3da421033a1db7d0a03572be16d7368dc179f0ab2bb498f18f50fa3b3a250cba"
+  },
+  "versions/matos-soares/books/EST.json": {
+   "bytes": 56629,
+   "sha256": "1f23f39d8491da43340de3cb6cab70f2cface0cc7049f88fd8f3f23ab540214c"
+  },
+  "versions/matos-soares/books/EXO.json": {
+   "bytes": 199846,
+   "sha256": "dc2f3d43d17ca892597ec6acec56dd692bfbc73ee9a50d5a9ca1a9f3ca239661"
+  },
+  "versions/matos-soares/books/EZK.json": {
+   "bytes": 248754,
+   "sha256": "454a63925d9cdc6dcacc3bc027588ff5aadb6f69d752d38f4b9dc39519d15751"
+  },
+  "versions/matos-soares/books/EZR.json": {
+   "bytes": 49571,
+   "sha256": "0ac9aa024fe597da3adcd2b5c680ca79b360f3e6703fe9acb6b78124214f859c"
+  },
+  "versions/matos-soares/books/GAL.json": {
+   "bytes": 23576,
+   "sha256": "e900b684104e3347dfcdba4d6950b7dacab1585d0b979fecafd95d1464ed4d35"
+  },
+  "versions/matos-soares/books/GEN.json": {
+   "bytes": 241427,
+   "sha256": "9e115b37321a0af9b4e8f097ab037a6a28c1ce527cecb181b7bcd3fc9dc5b022"
+  },
+  "versions/matos-soares/books/HAB.json": {
+   "bytes": 10905,
+   "sha256": "cd4ff6831ab6a433e92f83b2747cff6c346ccf7eb419b354e7b13a8fc3b148f1"
+  },
+  "versions/matos-soares/books/HAG.json": {
+   "bytes": 8187,
+   "sha256": "1253dee0a60e03c602f10a253526444a9b0beb8a3ffd17024fd2c7076b778924"
+  },
+  "versions/matos-soares/books/HEB.json": {
+   "bytes": 52138,
+   "sha256": "cac894d3602815889a1c11b7f47fe81dc2e81632d2cb65128e75d1a19a268436"
+  },
+  "versions/matos-soares/books/HOS.json": {
+   "bytes": 36236,
+   "sha256": "bf2e908270f392be0e06b2c19a1924b54cc5cba30e71632fc3b7b6756dc5c02c"
+  },
+  "versions/matos-soares/books/ISA.json": {
+   "bytes": 242982,
+   "sha256": "ab312bcca86b872d4f395df732511fdbb08c0a841bb497227301667d0a2c4e5a"
+  },
+  "versions/matos-soares/books/JAS.json": {
+   "bytes": 17879,
+   "sha256": "961cda9ec8363841d97514969342ef645feba12f053831e9312f9888c279bee1"
+  },
+  "versions/matos-soares/books/JDG.json": {
+   "bytes": 117371,
+   "sha256": "31d016b8cd24f84aca6ded10187ebd5319f9ee01db9b50bc2230cb31a44ada27"
+  },
+  "versions/matos-soares/books/JDT.json": {
+   "bytes": 62934,
+   "sha256": "af49e8b4f29c166e4bf438af67096e578443413c9b3ebc1a785e084f2e5c89ec"
+  },
+  "versions/matos-soares/books/JER.json": {
+   "bytes": 267606,
+   "sha256": "b53961abb39982bcbaf07623afec0312be7b125524cd97753452ce98221d54dc"
+  },
+  "versions/matos-soares/books/JHN.json": {
+   "bytes": 130317,
+   "sha256": "8d995e397e53681c984b44b0e8fdc52c53af141c714ada1579a014eccbaf49b8"
+  },
+  "versions/matos-soares/books/JOB.json": {
+   "bytes": 137493,
+   "sha256": "03788838966858c3e60613aaa1048d953f0163d307f2bc38b22c765088ed49f2"
+  },
+  "versions/matos-soares/books/JOL.json": {
+   "bytes": 14121,
+   "sha256": "662dd8c44c289667735c7f878a2a6210dc2bc139075396a5354a045e03eb6adf"
+  },
+  "versions/matos-soares/books/JON.json": {
+   "bytes": 9131,
+   "sha256": "ceb0aded4b8afa13b6c0580a3df7d37e59a756297141899b3ed3db565597301c"
+  },
+  "versions/matos-soares/books/JOS.json": {
+   "bytes": 114652,
+   "sha256": "2430065c2b3232f83a32d04576ae8afe85f08bde21bef26e0d3d981c99574d5a"
+  },
+  "versions/matos-soares/books/JUD.json": {
+   "bytes": 5390,
+   "sha256": "9d81b6cbd4df89f4f60e0c2cf0446ce1307c9932a98e126b7770327a27e1f9e5"
+  },
+  "versions/matos-soares/books/LAM.json": {
+   "bytes": 25345,
+   "sha256": "ff40ca78638c6721cc7a7c8562c346e49b60770bfb48d58a9f34efac5b4d8aa0"
+  },
+  "versions/matos-soares/books/LEV.json": {
+   "bytes": 141141,
+   "sha256": "9bc8334633972e4ec809d04d391d8579d248e8f64bc6491b042c40dd7b7872b1"
+  },
+  "versions/matos-soares/books/LUK.json": {
+   "bytes": 173594,
+   "sha256": "e66cabc59cea9935453205639fdf2d83756780b5403be06b98f43f9cf0679d1e"
+  },
+  "versions/matos-soares/books/MAL.json": {
+   "bytes": 12287,
+   "sha256": "4a5a4f4ff5f1c0866061bb1a3d0e40bcd68319b5e4f42556406e163611e2f690"
+  },
+  "versions/matos-soares/books/MAT.json": {
+   "bytes": 162424,
+   "sha256": "b8cd9d5d6e4e6a3b3719c3135c5941f99d34afd687ee41c53cf3c7fc23d96a23"
+  },
+  "versions/matos-soares/books/MIC.json": {
+   "bytes": 21011,
+   "sha256": "16de69464a72cbfd3bac4513fe07b5152ae94fa0a645fad05fa8990025917b1c"
+  },
+  "versions/matos-soares/books/MRK.json": {
+   "bytes": 101768,
+   "sha256": "a52f05f250e9ccc765cd79746d1468ad5c52433af6142379e7a0fa89c98615ba"
+  },
+  "versions/matos-soares/books/NAM.json": {
+   "bytes": 9453,
+   "sha256": "c662efb68c3d134f7627425c49f4b6a7e313c6c9720a09951984eea3db3afd52"
+  },
+  "versions/matos-soares/books/NEH.json": {
+   "bytes": 71607,
+   "sha256": "0931a16e2ca1b341ee1fb444991da1b05b10196e70c496e62858a5d44b0e0618"
+  },
+  "versions/matos-soares/books/NUM.json": {
+   "bytes": 199871,
+   "sha256": "e0ca93fc23219f89dbbf29f0bb3af9a855ba2b7d0dfc3e71229e969750156241"
+  },
+  "versions/matos-soares/books/OBA.json": {
+   "bytes": 4936,
+   "sha256": "1f4863d2914d633deefa114320a1bff617a057c140ff7b11718016761c6c6861"
+  },
+  "versions/matos-soares/books/PHM.json": {
+   "bytes": 4155,
+   "sha256": "2766423bf83ae9e95174e36f7ae5dc460979155471190ad501cb497c90afaf3e"
+  },
+  "versions/matos-soares/books/PHP.json": {
+   "bytes": 17098,
+   "sha256": "572333104b9afdf66e80df2682651fc5a33d6cd7518c40a0049153a8b6d4ebc6"
+  },
+  "versions/matos-soares/books/PRO.json": {
+   "bytes": 118010,
+   "sha256": "c7d603fe98a2a4b0be5361c30960f4d95e570ea25286cbbe424ea13c2be06875"
+  },
+  "versions/matos-soares/books/PSA.json": {
+   "bytes": 328645,
+   "sha256": "934e5a4b6ab5a859946120f629f09fd2dbd9ff895377a3d0460052ad36ce7d4d"
+  },
+  "versions/matos-soares/books/REV.json": {
+   "bytes": 75786,
+   "sha256": "db05f14bce942769a090468284feb3d56ba5f547a3c0bb8329f6323f9f721119"
+  },
+  "versions/matos-soares/books/ROM.json": {
+   "bytes": 70065,
+   "sha256": "86bfcbe42d0332256d687c97b89da24b4bef9fa990ed7cf6f05917a1ee723a4e"
+  },
+  "versions/matos-soares/books/RUT.json": {
+   "bytes": 16162,
+   "sha256": "adfffec95ec819e3ec7f69d062a91c61cb8dd5054309418fa4b7125e4bae0f51"
+  },
+  "versions/matos-soares/books/SIR.json": {
+   "bytes": 227872,
+   "sha256": "4e0da6dd5de91bd2c3c0b81739915cfe0499d044943aa1e197ee58b0b76220e2"
+  },
+  "versions/matos-soares/books/SNG.json": {
+   "bytes": 19462,
+   "sha256": "6b9e4a2ad08d901341006565f5e09bdbc69a5f02039adbbe81e484bfe98cfdf5"
+  },
+  "versions/matos-soares/books/TIT.json": {
+   "bytes": 7713,
+   "sha256": "2f469c277335628208f3827b7b2b779f2c6c0df38d18dad63dc180bef77c4c73"
+  },
+  "versions/matos-soares/books/TOB.json": {
+   "bytes": 47966,
+   "sha256": "a3057b16ab1812048805bcf3208b6915f419e883d94e15db04c213bdace6318d"
+  },
+  "versions/matos-soares/books/WIS.json": {
+   "bytes": 75340,
+   "sha256": "eeceb20c18b060607fefd53bcf5260f4226ee9856d4e3a2e0f3f376b40e1a06d"
+  },
+  "versions/matos-soares/books/ZEC.json": {
+   "bytes": 40985,
+   "sha256": "45169532433afd4b4cdd4f9513180c8b1d188f09c287ed45cd38ec99b103b8f2"
+  },
+  "versions/matos-soares/books/ZEP.json": {
+   "bytes": 11372,
+   "sha256": "3735fe6952edbf8f02485ea581e9b342283b7f76b7d6abb35f8a425e725f340e"
+  },
+  "versions/vulgata-clementina/books/1CH.json": {
+   "bytes": 134288,
+   "sha256": "0ff3aded283f7067c11e05ae73996a20971bebf0256dcafaab81e4c1b2b70c62"
+  },
+  "versions/vulgata-clementina/books/1CO.json": {
+   "bytes": 60716,
+   "sha256": "83930a4093ada9da3f90afd894ac1c54c6b241b78115be13c8d770971f0d5c6f"
+  },
+  "versions/vulgata-clementina/books/1JN.json": {
+   "bytes": 16138,
+   "sha256": "d4beb7e7617a1222ae38526917c7ce854577103495b75148f3a8c8ad0986beaf"
+  },
+  "versions/vulgata-clementina/books/1KI.json": {
+   "bytes": 144853,
+   "sha256": "4eab45b011382985707c637b80bb64a954e6ce5a448e4ed04843a5ef870776c5"
+  },
+  "versions/vulgata-clementina/books/1MA.json": {
+   "bytes": 145767,
+   "sha256": "c92354fd27ca2941c49bd39f349fdfcff68152d8cdc2af7d4aa451c716a59afd"
+  },
+  "versions/vulgata-clementina/books/1PE.json": {
+   "bytes": 16352,
+   "sha256": "544953b8429ef4a32238b236fac6c61cb80aa934c8d1db072168c98ebc333c12"
+  },
+  "versions/vulgata-clementina/books/1SA.json": {
+   "bytes": 149288,
+   "sha256": "3e531efeb168a280a1b2d10134327a8bb2adbd9dedda219104895180c613437b"
+  },
+  "versions/vulgata-clementina/books/1TH.json": {
+   "bytes": 13154,
+   "sha256": "ec893df60bb41256b114485190378c6c3f9dc836738b8cc6a968e1f4bdbc7c6e"
+  },
+  "versions/vulgata-clementina/books/1TI.json": {
+   "bytes": 16119,
+   "sha256": "22e3a1454b75bf8b4127cac99c32cbcfd64244170966e2f7672a9267d9612116"
+  },
+  "versions/vulgata-clementina/books/2CH.json": {
+   "bytes": 155365,
+   "sha256": "c75374b5b63f7ab512fe0d0f0e619b86f5251251a3e1394dc868753bbc909d1d"
+  },
+  "versions/vulgata-clementina/books/2CO.json": {
+   "bytes": 39248,
+   "sha256": "4c736880b9b288e1521878b099b2f0033b06347fc100d50dc88388c5cd391c8b"
+  },
+  "versions/vulgata-clementina/books/2JN.json": {
+   "bytes": 2431,
+   "sha256": "fb298bfa7d1f98be1da509bc075ac5b18307e04d3f154396285705d8909530b5"
+  },
+  "versions/vulgata-clementina/books/2KI.json": {
+   "bytes": 133653,
+   "sha256": "b2eda70a675ea81a4a0ba0da66291e352961578be6e69b778dc1c3228f854e8b"
+  },
+  "versions/vulgata-clementina/books/2MA.json": {
+   "bytes": 97573,
+   "sha256": "9bfca67ef00f84d59db8233b34a3fbd8867cfdb2ed1f09693fe46d512830c52f"
+  },
+  "versions/vulgata-clementina/books/2PE.json": {
+   "bytes": 10476,
+   "sha256": "5c33edd13ac038cd9a5a694072b48029d5b4bb86f23c41a5225cee17d9ab3883"
+  },
+  "versions/vulgata-clementina/books/2SA.json": {
+   "bytes": 121855,
+   "sha256": "78581407ff45201c3732f17a91a972b5ecdd50de61e774498005c7bfaabfdbc7"
+  },
+  "versions/vulgata-clementina/books/2TH.json": {
+   "bytes": 7199,
+   "sha256": "c121f67f7bf3bc5a47794bd71b22a5b7fc7e5aada9b964b2c0d3de352aab6735"
+  },
+  "versions/vulgata-clementina/books/2TI.json": {
+   "bytes": 11750,
+   "sha256": "e79832ba6731ef2ac3a5a648771df3265903871f26bb0d2d491a14518a65fe25"
+  },
+  "versions/vulgata-clementina/books/3JN.json": {
+   "bytes": 2528,
+   "sha256": "67f130e2ed9cfb5204d2a762de14be5466fd6f23b1e685c00d38f298e770cd9e"
+  },
+  "versions/vulgata-clementina/books/ACT.json": {
+   "bytes": 154306,
+   "sha256": "532a4146ea1687ebd5941d78e5e3290b779056d6319379890614969419c85bca"
+  },
+  "versions/vulgata-clementina/books/AMO.json": {
+   "bytes": 24563,
+   "sha256": "9450f84f9954ff7d41ea2bcdaa5bb39bba01a5640f3cf8afb94ab2a0ca95b3b8"
+  },
+  "versions/vulgata-clementina/books/BAR.json": {
+   "bytes": 32477,
+   "sha256": "c08ae77a8cad43e0b1b513233d8b5aadbbe64c22c6fa29e0bb691afe425891c6"
+  },
+  "versions/vulgata-clementina/books/COL.json": {
+   "bytes": 14092,
+   "sha256": "70b56d54452a8ba98712c6ffe5aa22adf4b90a30a25d37f6f089a84c2e1a56cd"
+  },
+  "versions/vulgata-clementina/books/DAN.json": {
+   "bytes": 93668,
+   "sha256": "0688093d5450c3c4a7d00755c34fc893601286496f1c47c82d5d5fdb5be7ce70"
+  },
+  "versions/vulgata-clementina/books/DEU.json": {
+   "bytes": 159085,
+   "sha256": "0b2256815f736b77665ec16382db9cf275fe1d7669f6f09d030d7d09abccd749"
+  },
+  "versions/vulgata-clementina/books/ECC.json": {
+   "bytes": 34056,
+   "sha256": "910f43d6c916603ae8d0280259a88dacabed3cda968ed28416c9f7d77ff15cfa"
+  },
+  "versions/vulgata-clementina/books/EPH.json": {
+   "bytes": 21264,
+   "sha256": "c17387c970798568e4d79b7157b2d25e212837e7fe055f3227cf8ed62ff8c516"
+  },
+  "versions/vulgata-clementina/books/EST.json": {
+   "bytes": 52229,
+   "sha256": "5000ee98a79f85ca3c9690d2b5ae0a92e981d0135b39ec79ba2c7dc3403efaab"
+  },
+  "versions/vulgata-clementina/books/EXO.json": {
+   "bytes": 184037,
+   "sha256": "f2e45727da1a6b7434f37af3747b2501d6234404374222370366982016aa3bc6"
+  },
+  "versions/vulgata-clementina/books/EZK.json": {
+   "bytes": 226248,
+   "sha256": "2ad43d128c3f1911e68832252e0442c36e0faa3e5ed7a9ecef8e2e43d414afc1"
+  },
+  "versions/vulgata-clementina/books/EZR.json": {
+   "bytes": 45915,
+   "sha256": "8283b1ef7e241e7afb679d67df3b9d098446a4a9b7ffafc1cb51d9f4ec2e7bdc"
+  },
+  "versions/vulgata-clementina/books/GAL.json": {
+   "bytes": 20567,
+   "sha256": "cb5dd3f8e584142fb25da4c4ccca79a965aa56d625d84b1bb2ecfae81113a4b3"
+  },
+  "versions/vulgata-clementina/books/GEN.json": {
+   "bytes": 226311,
+   "sha256": "f459765bc49c3c83f4c75c66737ccd02f75bfd86ac6ba9906af41d6e8465870e"
+  },
+  "versions/vulgata-clementina/books/HAB.json": {
+   "bytes": 9417,
+   "sha256": "190493720271cfb8bccc69dda2b6a1bcbabc42b693feb9be4ed0547355e8ade7"
+  },
+  "versions/vulgata-clementina/books/HAG.json": {
+   "bytes": 7266,
+   "sha256": "309f7ce472bfef61a1406bccbfa9d97b44c24258471e772697528744379ac258"
+  },
+  "versions/vulgata-clementina/books/HEB.json": {
+   "bytes": 44886,
+   "sha256": "e269678761ebb2f47072208079e01f71bb965ec1eef167e3e0e0c0dd5e8df31e"
+  },
+  "versions/vulgata-clementina/books/HOS.json": {
+   "bytes": 31247,
+   "sha256": "17ab4e977f7bb78e80c7293aad5c59c8125c1138b9bcaa3d8d2b3fc939875edf"
+  },
+  "versions/vulgata-clementina/books/ISA.json": {
+   "bytes": 215090,
+   "sha256": "cd80989f024d0c916b356dcaaa35febff8e6607d6591ed1deadbe19dbe937c52"
+  },
+  "versions/vulgata-clementina/books/JAS.json": {
+   "bytes": 16053,
+   "sha256": "48a34f42e129c3a89b8fb73de34db122b69e521ac6fc49468fdc55310b122ad0"
+  },
+  "versions/vulgata-clementina/books/JDG.json": {
+   "bytes": 110031,
+   "sha256": "11d1cac4ca5d3f88f0cf0716eaf77ac2f1267e31cd9ced644fad392233f65a88"
+  },
+  "versions/vulgata-clementina/books/JDT.json": {
+   "bytes": 58800,
+   "sha256": "bf6cd61111f15e6d116ceb44d0d81a483f91dbf27644d5ccb1a3f23a05d0a888"
+  },
+  "versions/vulgata-clementina/books/JER.json": {
+   "bytes": 247351,
+   "sha256": "f3394a637f5728eccc0e37738027e2bc011202b7487ac7620c9c94361305545c"
+  },
+  "versions/vulgata-clementina/books/JHN.json": {
+   "bytes": 122596,
+   "sha256": "c2b736d9904980d9bce5c026bbf79ca23bfb12da9e212e6a53e977938f57ed12"
+  },
+  "versions/vulgata-clementina/books/JOB.json": {
+   "bytes": 126357,
+   "sha256": "cbe3885118a700826db366724fedf2f92b8c28c5534de2c879ac9d11483808da"
+  },
+  "versions/vulgata-clementina/books/JOL.json": {
+   "bytes": 12484,
+   "sha256": "8031a4c1913c07abde0040771ae15325446b1232e6830c6cf8654e543060f894"
+  },
+  "versions/vulgata-clementina/books/JON.json": {
+   "bytes": 8287,
+   "sha256": "5915e104961008e916bbf8c5047587f5d85a5eb92623062406babb7adf3ffa44"
+  },
+  "versions/vulgata-clementina/books/JOS.json": {
+   "bytes": 108653,
+   "sha256": "57badb0538b7bd3166627965d615328557ba82c6197dec851c6c162b6ca090a0"
+  },
+  "versions/vulgata-clementina/books/JUD.json": {
+   "bytes": 4769,
+   "sha256": "742d3f25f4fccd8f8da6c2dbc01daeb2cf8c56569210f9ffa697aa480f9e1539"
+  },
+  "versions/vulgata-clementina/books/LAM.json": {
+   "bytes": 22883,
+   "sha256": "094c86cd691ee46919ac8285d4ebac86efebeeb0ae85d6ee90bfc059957a5cdc"
+  },
+  "versions/vulgata-clementina/books/LEV.json": {
+   "bytes": 128326,
+   "sha256": "fced33063d5525aef2a7c972ea9a3f2bb68ca0023872f043e5eeb2c6e25e7bcc"
+  },
+  "versions/vulgata-clementina/books/LUK.json": {
+   "bytes": 163363,
+   "sha256": "1f9498c80380fda78dda0b3382a993af0ffa5ea8a6b292c9592b118685df3b9a"
+  },
+  "versions/vulgata-clementina/books/MAL.json": {
+   "bytes": 10634,
+   "sha256": "87521b67ddfbbb4b728a506f1b3b0abd3d5d34958ecd15c26b51b1c9c185a83c"
+  },
+  "versions/vulgata-clementina/books/MAT.json": {
+   "bytes": 151340,
+   "sha256": "e68a9cfdb269e97a82b3991a4839d7919c6878245ed631093550072121249c74"
+  },
+  "versions/vulgata-clementina/books/MIC.json": {
+   "bytes": 18303,
+   "sha256": "f5fbd96c19109ca1b142622470ab40ba225add2b82c7efd49a96e914f95e3e26"
+  },
+  "versions/vulgata-clementina/books/MRK.json": {
+   "bytes": 94922,
+   "sha256": "7b4dbed99552ea1072072fd6200512dd2196c4a4d5314d423236303b84f07fee"
+  },
+  "versions/vulgata-clementina/books/NAM.json": {
+   "bytes": 8226,
+   "sha256": "b6eaa3a1b270fd9761927a803aefd950ce14d79b3e7847563cc51d9742a2a55d"
+  },
+  "versions/vulgata-clementina/books/NEH.json": {
+   "bytes": 65420,
+   "sha256": "fc0a71a0c727017bc68214e15bfa8c6d563922f05d7fe7512e93b7b60756054d"
+  },
+  "versions/vulgata-clementina/books/NUM.json": {
+   "bytes": 185251,
+   "sha256": "ebdfaec82e634ef40cc9bbc108964c1f5fc9c48b862a69ba087c00b64ffc8beb"
+  },
+  "versions/vulgata-clementina/books/OBA.json": {
+   "bytes": 4173,
+   "sha256": "7c3257089fa72e77ba9c66f3ce3ae00a0c08ee4379cbb6a47616c9ffe46c9650"
+  },
+  "versions/vulgata-clementina/books/PHM.json": {
+   "bytes": 3533,
+   "sha256": "0cefbdc5f21c69f72b8c35775c067276a2534eb4403bf35ddc3be67d98ff5408"
+  },
+  "versions/vulgata-clementina/books/PHP.json": {
+   "bytes": 14944,
+   "sha256": "fe9883f63f8c9b25f67c1f576245053e41d482d809c9de8b79298a3154a785f4"
+  },
+  "versions/vulgata-clementina/books/PRO.json": {
+   "bytes": 107289,
+   "sha256": "ce7f67c33aa2d83766afe3480d8b0cc1d1dd6432b27013cd5553101e2677ca77"
+  },
+  "versions/vulgata-clementina/books/PSA.json": {
+   "bytes": 305786,
+   "sha256": "0999943d7180ca8a503b356511c40853a28801aba56b66640000098a3e91b0a1"
+  },
+  "versions/vulgata-clementina/books/REV.json": {
+   "bytes": 70147,
+   "sha256": "21128ec3b3c822ad6949a968fe712644df3cc9b9555c562279315bf5c76b5058"
+  },
+  "versions/vulgata-clementina/books/ROM.json": {
+   "bytes": 61655,
+   "sha256": "14d7721ecb8c7d4a4863df2c00db1beea3946a04b5133a07753727da2c3671b9"
+  },
+  "versions/vulgata-clementina/books/RUT.json": {
+   "bytes": 15428,
+   "sha256": "8dbe60cba676de30c65e58fddd5d505cfde5e11e478b25713c52d9f169f70f7a"
+  },
+  "versions/vulgata-clementina/books/SIR.json": {
+   "bytes": 201983,
+   "sha256": "4e1be435a3ead273dd2ed6c6727afd7aabde2aed5a4a64b52ed01696282c762e"
+  },
+  "versions/vulgata-clementina/books/SNG.json": {
+   "bytes": 17502,
+   "sha256": "ec87a31ac94f8f222ca6ddd900fbd54e2ab1a1327eb6c417a2084f713a9649eb"
+  },
+  "versions/vulgata-clementina/books/TIT.json": {
+   "bytes": 7072,
+   "sha256": "930e36ab3fac453e795f2e961117cfb12bd2ba3a5c8d1ed1be00bbb58eac0bff"
+  },
+  "versions/vulgata-clementina/books/TOB.json": {
+   "bytes": 45236,
+   "sha256": "bec855df9fb2288f58478ea111111b4e61aeeafd7bc9b0f5d67212c88bd69f27"
+  },
+  "versions/vulgata-clementina/books/WIS.json": {
+   "bytes": 67904,
+   "sha256": "184c1a97aada1d63a199efbf0e37a69ea25270886acf302a6a75695c53d38e1f"
+  },
+  "versions/vulgata-clementina/books/ZEC.json": {
+   "bytes": 36774,
+   "sha256": "f8efa6a6f42ec254c4f780e2eba7945bbb341fb37b6a93a689ecc5aeefd145c7"
+  },
+  "versions/vulgata-clementina/books/ZEP.json": {
+   "bytes": 9754,
+   "sha256": "10a1228d8eafc16180eb5719090d5b72070e26458bb8b17573f5deea6a3727a2"
+  }
+ },
+ "source": {
+  "commit": "0494a69e66657a16d822898e71f4eb3b2bc4ae80",
+  "commit_date": "2026-08-02T00:02:18-03:00",
+  "private": true,
+  "repository": "meu-feed-catolico-api"
+ }
+}

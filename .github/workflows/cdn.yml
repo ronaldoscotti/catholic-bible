@@ -1,0 +1,111 @@
+name: CDN
+
+# The weekly run is the one that matters. A check that fires only at release
+# time proves the URL worked once, and the failure this guards against is a
+# published URL going quiet months later with nobody watching.
+on:
+  push:
+    tags: ["v*"]
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+
+      # The URL is read out of README.md rather than written here. A README
+      # nobody executes rots within a month, and the quickstart job already
+      # works this way.
+      - name: The README is the source of the URL
+        id: url
+        run: |
+          url=$(grep -o "https://cdn.jsdelivr.net/gh/[^']*" README.md | head -1)
+          test -n "$url"
+          tag=$(printf '%s' "$url" | sed -E 's#.*@([^/]+)/.*#\1#')
+          path=$(printf '%s' "$url" | sed -E 's#.*@[^/]+/(.*)#\1#')
+          echo "url=$url"   >> "$GITHUB_OUTPUT"
+          echo "tag=$tag"   >> "$GITHUB_OUTPUT"
+          echo "path=$path" >> "$GITHUB_OUTPUT"
+          echo "documented $url"
+
+      # jsDelivr resolves a new tag on its own schedule, so the run triggered by
+      # the tag push can arrive before the ref exists on their side and get a
+      # 404 for a perfectly good release. Retried rather than trusted.
+      - name: The bytes on the CDN are the bytes in the tag
+        run: |
+          for attempt in 1 2 3 4 5 6; do
+            if curl -sS --fail --max-time 120 "${{ steps.url.outputs.url }}" -o served.json; then
+              break
+            fi
+            echo "attempt $attempt did not resolve, waiting"
+            sleep 30
+          done
+          test -s served.json
+          git show "${{ steps.url.outputs.tag }}:${{ steps.url.outputs.path }}" > expected.json
+          cmp expected.json served.json
+          echo "identical, $(wc -c < served.json) bytes"
+
+      - name: The line in the README runs
+        run: |
+          grep -A1 '^const book = await' README.md > snippet.mjs
+          cat snippet.mjs
+          node --input-type=module -e "$(cat snippet.mjs)" > printed.txt
+          test -s printed.txt
+          node -e "
+            const fs = require('fs')
+            const book = JSON.parse(fs.readFileSync('expected.json', 'utf8'))
+            const printed = fs.readFileSync('printed.txt', 'utf8').trim()
+            if (printed !== book.verses['SIR.24.1'].text) {
+              throw new Error('the README snippet printed something else')
+            }
+            console.log(printed)
+          "
+
+      - name: The manifest still describes what is served
+        run: |
+          url="${{ steps.url.outputs.url }}"
+          for attempt in 1 2 3; do
+            curl -sS --fail --max-time 120 "${url%%/data/*}/data/manifest.json" -o manifest.json && break
+            sleep 30
+          done
+          test -s manifest.json
+          node -e "
+            const {createHash} = require('crypto'), fs = require('fs')
+            const manifest = JSON.parse(fs.readFileSync('manifest.json', 'utf8'))
+            const name = '${{ steps.url.outputs.path }}'.replace(/^data\//, '')
+            const record = manifest.files[name]
+            if (!record) throw new Error('the manifest does not list ' + name)
+            const digest = createHash('sha256').update(fs.readFileSync('served.json')).digest('hex')
+            if (digest !== record.sha256) throw new Error('checksum mismatch on ' + name)
+            console.log(Object.keys(manifest.files).length + ' files listed, ' + name + ' verified')
+          "
+
+      - name: Say so where somebody will see it
+        if: failure() && github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          title="The published CDN URL stopped answering"
+          open=$(gh issue list --state open --search "$title in:title" --json number --jq 'length')
+          if [ "$open" -gt 0 ]; then
+            echo "already reported"
+            exit 0
+          fi
+          gh issue create --title "$title" \
+            --label "area/distribution" \
+            --body "The weekly CDN check failed against \`${{ steps.url.outputs.url }}\`.
+
+          The published dataset is served from jsDelivr, which this project does not
+          operate. \`LIMITS.md\` says what that costs. The files themselves are in git
+          at the tag and the URL is the part that is borrowed.
+
+          Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

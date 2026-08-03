@@ -359,3 +359,73 @@ The weight is a vote count from OpenBible, a constant of 100 for the Douay
 margins and a constant of 90 for the allusion set. Those three numbers are not
 comparable, so publishing them would invite arithmetic that means nothing. What
 ships is `primary`, true at 20 or above. The threshold is also ported.
+
+## What the static artifacts cannot prove, added in B5
+
+### They are a second copy, and only CI notices when they drift
+
+`data/` holds 371 files split out of the same corpus the API reads. Nothing
+inside either tree points at the other. `scripts/build-artifacts.py --check`
+regenerates and diffs on every push and every pull request, and that is the only
+thing keeping them in agreement.
+
+A local edit to the corpus with no `make artifacts` afterwards leaves the two
+disagreeing until CI runs. The window is a push long. It is not zero.
+
+### The CDN is somebody else's machine
+
+The README says no server that can go down. jsDelivr is a server and it can go
+down, and the honest version is that this repository operates none.
+
+If jsDelivr stops serving GitHub, or the account is suspended, or the repository
+is deleted, every published URL dies with it. The files themselves survive in
+git and in anyone's clone, and the URL is the part that is borrowed. A consumer
+who needs a guarantee stronger than that should mirror the files, and the
+manifest is there so they can prove what they mirrored.
+
+### The commentary file is 4.3% away from being unservable
+
+jsDelivr refuses a single file over 20 MiB. `haydock.json` is 20068650 bytes,
+which leaves 902870 bytes of room. That file is a source rather than a published
+artifact, and it is served today because the repository is public and everything
+in it is reachable.
+
+The per-book split is what keeps the published surface clear of the limit. The
+largest published file is Psalms in the Haydock at 2187332 bytes. Nothing warns when
+the monolith crosses the line, and what breaks is somebody else's browser.
+
+### A clone costs 98 MB now
+
+The tracked tree went from 50.3 MB to roughly 98 MB, and the whole increase is a
+second copy of data already committed. Anyone cloning for the Python package
+pays it too.
+
+The alternative was building the artifacts in CI at tag time and committing
+nothing, which keeps the tree small and produces published files that nobody can
+verify on a clean checkout. That trade was refused deliberately.
+
+### Granularity stops at the book, and a chapter would be cheaper
+
+Sirach 24 is 3 KB and the whole book is 106 KB. A consumer who wants one chapter
+downloads the book.
+
+Per chapter would be roughly four thousand files against jsDelivr's soft limit of
+ten thousand actively accessed, which is affordable. It was cut for scope rather
+than for cost, and the path shape leaves room for it.
+
+### A stranger can now rebuild half of this
+
+The first section of this file says a stranger cannot rebuild the dataset, and
+that stays true of the corpus. It is no longer true of the artifacts.
+
+`scripts/build-artifacts.py` reads only what is committed. Anyone who clones this
+repository regenerates all 371 published files and diffs them byte for byte,
+with no private source and no credentials. What that proves is that the
+artifacts match the corpus. What it still cannot prove is that the corpus matches
+the source it was exported from.
+
+### There is no Portuguese README
+
+`CLAUDE.md` names `README.pt-BR.md` as prose that goes through the voice skill
+and the file does not exist. The audience this project was built for reads
+Portuguese. Writing it is its own piece of work and it has not been done.

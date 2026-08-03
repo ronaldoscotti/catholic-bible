@@ -1,0 +1,15 @@
+{"book":{"abbreviation": "II Ioan.", "chapters": 1, "code": "2JN", "deuterocanonical": false, "group": "EPISTLES", "name": "II Ioannis", "testament": "NEW"},"version":{"abbreviation": "VG", "code": "vulgata-clementina", "language": "la", "name": "Vulgata Clementina", "rights": {"fixture": "MIT", "fixture_basis": "github.com/mborders/vulgata ships under MIT.", "text": "public-domain", "text_basis": "Promulgated by Clement VIII in 1592. Long out of copyright everywhere."}, "source_url": "https://github.com/mborders/vulgata", "year": null},"verses":{
+"2JN.1.1":{"order": 35389, "text": "Senior Electæ dominæ, et natis ejus, quos ego diligo in veritate, et non ego solus, sed et omnes qui cognoverunt veritatem,"},
+"2JN.1.2":{"order": 35390, "text": "propter veritatem, quæ permanet in nobis, et nobiscum erit in æternum."},
+"2JN.1.3":{"order": 35391, "text": "Sit vobiscum gratia, misericordia, pax a Deo Patre, et a Christo Jesu Filio Patris in veritate, et caritate."},
+"2JN.1.4":{"order": 35392, "text": "Gavisus sum valde, quoniam inveni de filiis tuis ambulantes in veritate, sicut mandatum accepimus a Patre."},
+"2JN.1.5":{"order": 35393, "text": "Et nunc rogo te domina, non tamquam mandatum novum scribens tibi, sed quod habuimus ab initio, ut diligamus alterutrum."},
+"2JN.1.6":{"order": 35394, "text": "Et hæc est caritas, ut ambulemus secundum mandata ejus. Hoc est enim mandatum, ut quemadmodum audistis ab initio, in eo ambuletis."},
+"2JN.1.7":{"order": 35395, "text": "Quoniam multi seductores exierunt in mundum, qui non confitentur Jesum Christum venisse in carnem: hic est seductor, et antichristus."},
+"2JN.1.8":{"order": 35396, "text": "Videte vosmetipsos, ne perdatis quæ operati estis: sed ut mercedem plenam accipiatis."},
+"2JN.1.9":{"order": 35397, "text": "Omnis qui recedit, et non permanet in doctrina Christi, Deum non habet: qui permanet in doctrina, hic et Patrem et Filium habet."},
+"2JN.1.10":{"order": 35398, "text": "Si quis venit ad vos, et hanc doctrinam non affert, nolite recipere eum in domum, nec Ave ei dixeritis."},
+"2JN.1.11":{"order": 35399, "text": "Qui enim dicit illi Ave, communicat operibus ejus malignis."},
+"2JN.1.12":{"order": 35400, "text": "Plura habens vobis scribere, nolui per cartam et atramentum: spero enim me futurum apud vos, et os ad os loqui: ut gaudium vestrum plenum sit."},
+"2JN.1.13":{"order": 35401, "text": "Salutant te filii sororis tuæ Electæ."}
+}}

@@ -1,0 +1,962 @@
+[
+ {
+  "abbr": "Gn",
+  "aliases": [
+   "Gn",
+   "Gen",
+   "Gên"
+  ],
+  "canon_group": "PENTATEUCH",
+  "code": "GEN",
+  "deutero": false,
+  "name": "Gênesis",
+  "order": 1,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Ex",
+  "aliases": [
+   "Ex",
+   "Exo",
+   "Êx"
+  ],
+  "canon_group": "PENTATEUCH",
+  "code": "EXO",
+  "deutero": false,
+  "name": "Êxodo",
+  "order": 2,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Lv",
+  "aliases": [
+   "Lv",
+   "Lev"
+  ],
+  "canon_group": "PENTATEUCH",
+  "code": "LEV",
+  "deutero": false,
+  "name": "Levítico",
+  "order": 3,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Nm",
+  "aliases": [
+   "Nm",
+   "Num",
+   "Núm"
+  ],
+  "canon_group": "PENTATEUCH",
+  "code": "NUM",
+  "deutero": false,
+  "name": "Números",
+  "order": 4,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Dt",
+  "aliases": [
+   "Dt",
+   "Deut"
+  ],
+  "canon_group": "PENTATEUCH",
+  "code": "DEU",
+  "deutero": false,
+  "name": "Deuteronômio",
+  "order": 5,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Js",
+  "aliases": [
+   "Js",
+   "Jos"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "JOS",
+  "deutero": false,
+  "name": "Josué",
+  "order": 6,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Jz",
+  "aliases": [
+   "Jz",
+   "Juíz"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "JDG",
+  "deutero": false,
+  "name": "Juízes",
+  "order": 7,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Rt",
+  "aliases": [
+   "Rt",
+   "Rute"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "RUT",
+  "deutero": false,
+  "name": "Rute",
+  "order": 8,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "1Sm",
+  "aliases": [
+   "1Sm",
+   "1Sam",
+   "ISm"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "1SA",
+  "deutero": false,
+  "name": "1 Samuel",
+  "order": 9,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "2Sm",
+  "aliases": [
+   "2Sm",
+   "2Sam",
+   "IISm"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "2SA",
+  "deutero": false,
+  "name": "2 Samuel",
+  "order": 10,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "1Rs",
+  "aliases": [
+   "1Rs",
+   "1Reis",
+   "IRs"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "1KI",
+  "deutero": false,
+  "name": "1 Reis",
+  "order": 11,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "2Rs",
+  "aliases": [
+   "2Rs",
+   "2Reis",
+   "IIRs"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "2KI",
+  "deutero": false,
+  "name": "2 Reis",
+  "order": 12,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "1Cr",
+  "aliases": [
+   "1Cr",
+   "1Cron"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "1CH",
+  "deutero": false,
+  "name": "1 Crônicas",
+  "order": 13,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "2Cr",
+  "aliases": [
+   "2Cr",
+   "2Cron"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "2CH",
+  "deutero": false,
+  "name": "2 Crônicas",
+  "order": 14,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Esd",
+  "aliases": [
+   "Esd",
+   "Esdr"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "EZR",
+  "deutero": false,
+  "name": "Esdras",
+  "order": 15,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Ne",
+  "aliases": [
+   "Ne",
+   "Neem"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "NEH",
+  "deutero": false,
+  "name": "Neemias",
+  "order": 16,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Tb",
+  "aliases": [
+   "Tb",
+   "Tob"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "TOB",
+  "deutero": true,
+  "name": "Tobias",
+  "order": 17,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Jt",
+  "aliases": [
+   "Jt",
+   "Jdt",
+   "Jud"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "JDT",
+  "deutero": true,
+  "name": "Judite",
+  "order": 18,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Est",
+  "aliases": [
+   "Est",
+   "Ester"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "EST",
+  "deutero": false,
+  "name": "Ester",
+  "order": 19,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "1Mc",
+  "aliases": [
+   "1Mc",
+   "1Mac"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "1MA",
+  "deutero": true,
+  "name": "1 Macabeus",
+  "order": 20,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "2Mc",
+  "aliases": [
+   "2Mc",
+   "2Mac"
+  ],
+  "canon_group": "HISTORICAL",
+  "code": "2MA",
+  "deutero": true,
+  "name": "2 Macabeus",
+  "order": 21,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Jó",
+  "aliases": [
+   "Jó",
+   "Job"
+  ],
+  "canon_group": "WISDOM",
+  "code": "JOB",
+  "deutero": false,
+  "name": "Jó",
+  "order": 22,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Sl",
+  "aliases": [
+   "Sl",
+   "Salm",
+   "Sal"
+  ],
+  "canon_group": "WISDOM",
+  "code": "PSA",
+  "deutero": false,
+  "name": "Salmos",
+  "order": 23,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Pr",
+  "aliases": [
+   "Pr",
+   "Prov"
+  ],
+  "canon_group": "WISDOM",
+  "code": "PRO",
+  "deutero": false,
+  "name": "Provérbios",
+  "order": 24,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Ecl",
+  "aliases": [
+   "Ecl",
+   "Ecle",
+   "Qo"
+  ],
+  "canon_group": "WISDOM",
+  "code": "ECC",
+  "deutero": false,
+  "name": "Eclesiastes",
+  "order": 25,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Ct",
+  "aliases": [
+   "Ct",
+   "Cant"
+  ],
+  "canon_group": "WISDOM",
+  "code": "SNG",
+  "deutero": false,
+  "name": "Cântico dos Cânticos",
+  "order": 26,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Sb",
+  "aliases": [
+   "Sb",
+   "Sab"
+  ],
+  "canon_group": "WISDOM",
+  "code": "WIS",
+  "deutero": true,
+  "name": "Sabedoria",
+  "order": 27,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Eclo",
+  "aliases": [
+   "Eclo",
+   "Sir",
+   "Sirácida"
+  ],
+  "canon_group": "WISDOM",
+  "code": "SIR",
+  "deutero": true,
+  "name": "Eclesiástico",
+  "order": 28,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Is",
+  "aliases": [
+   "Is",
+   "Isa"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "ISA",
+  "deutero": false,
+  "name": "Isaías",
+  "order": 29,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Jr",
+  "aliases": [
+   "Jr",
+   "Jer"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "JER",
+  "deutero": false,
+  "name": "Jeremias",
+  "order": 30,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Lm",
+  "aliases": [
+   "Lm",
+   "Lam"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "LAM",
+  "deutero": false,
+  "name": "Lamentações",
+  "order": 31,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Br",
+  "aliases": [
+   "Br",
+   "Bar",
+   "Baruc"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "BAR",
+  "deutero": true,
+  "name": "Baruc",
+  "order": 32,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Ez",
+  "aliases": [
+   "Ez",
+   "Ezeq"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "EZK",
+  "deutero": false,
+  "name": "Ezequiel",
+  "order": 33,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Dn",
+  "aliases": [
+   "Dn",
+   "Dan"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "DAN",
+  "deutero": false,
+  "name": "Daniel",
+  "order": 34,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Os",
+  "aliases": [
+   "Os",
+   "Ose"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "HOS",
+  "deutero": false,
+  "name": "Oseias",
+  "order": 35,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Jl",
+  "aliases": [
+   "Jl",
+   "Joel"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "JOL",
+  "deutero": false,
+  "name": "Joel",
+  "order": 36,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Am",
+  "aliases": [
+   "Am",
+   "Amós"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "AMO",
+  "deutero": false,
+  "name": "Amós",
+  "order": 37,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Ab",
+  "aliases": [
+   "Ab",
+   "Abd"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "OBA",
+  "deutero": false,
+  "name": "Abdias",
+  "order": 38,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Jn",
+  "aliases": [
+   "Jn",
+   "Jon"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "JON",
+  "deutero": false,
+  "name": "Jonas",
+  "order": 39,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Mq",
+  "aliases": [
+   "Mq",
+   "Miq"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "MIC",
+  "deutero": false,
+  "name": "Miqueias",
+  "order": 40,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Na",
+  "aliases": [
+   "Na",
+   "Naum"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "NAM",
+  "deutero": false,
+  "name": "Naum",
+  "order": 41,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Hab",
+  "aliases": [
+   "Hab"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "HAB",
+  "deutero": false,
+  "name": "Habacuc",
+  "order": 42,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Sf",
+  "aliases": [
+   "Sf",
+   "Sof"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "ZEP",
+  "deutero": false,
+  "name": "Sofonias",
+  "order": 43,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Ag",
+  "aliases": [
+   "Ag",
+   "Ageu"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "HAG",
+  "deutero": false,
+  "name": "Ageu",
+  "order": 44,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Zc",
+  "aliases": [
+   "Zc",
+   "Zac"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "ZEC",
+  "deutero": false,
+  "name": "Zacarias",
+  "order": 45,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Ml",
+  "aliases": [
+   "Ml",
+   "Mal"
+  ],
+  "canon_group": "PROPHETIC",
+  "code": "MAL",
+  "deutero": false,
+  "name": "Malaquias",
+  "order": 46,
+  "testament": "OLD"
+ },
+ {
+  "abbr": "Mt",
+  "aliases": [
+   "Mt",
+   "Mat"
+  ],
+  "canon_group": "GOSPELS",
+  "code": "MAT",
+  "deutero": false,
+  "name": "Mateus",
+  "order": 47,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "Mc",
+  "aliases": [
+   "Mc",
+   "Mar"
+  ],
+  "canon_group": "GOSPELS",
+  "code": "MRK",
+  "deutero": false,
+  "name": "Marcos",
+  "order": 48,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "Lc",
+  "aliases": [
+   "Lc",
+   "Luc"
+  ],
+  "canon_group": "GOSPELS",
+  "code": "LUK",
+  "deutero": false,
+  "name": "Lucas",
+  "order": 49,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "Jo",
+  "aliases": [
+   "Jo",
+   "João"
+  ],
+  "canon_group": "GOSPELS",
+  "code": "JHN",
+  "deutero": false,
+  "name": "João",
+  "order": 50,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "At",
+  "aliases": [
+   "At",
+   "Atos"
+  ],
+  "canon_group": "ACTS",
+  "code": "ACT",
+  "deutero": false,
+  "name": "Atos dos Apóstolos",
+  "order": 51,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "Rm",
+  "aliases": [
+   "Rm",
+   "Rom"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "ROM",
+  "deutero": false,
+  "name": "Romanos",
+  "order": 52,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "1Cor",
+  "aliases": [
+   "1Cor",
+   "1Co"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "1CO",
+  "deutero": false,
+  "name": "1 Coríntios",
+  "order": 53,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "2Cor",
+  "aliases": [
+   "2Cor",
+   "2Co"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "2CO",
+  "deutero": false,
+  "name": "2 Coríntios",
+  "order": 54,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "Gl",
+  "aliases": [
+   "Gl",
+   "Gal"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "GAL",
+  "deutero": false,
+  "name": "Gálatas",
+  "order": 55,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "Ef",
+  "aliases": [
+   "Ef",
+   "Efés"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "EPH",
+  "deutero": false,
+  "name": "Efésios",
+  "order": 56,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "Fl",
+  "aliases": [
+   "Fl",
+   "Fil"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "PHP",
+  "deutero": false,
+  "name": "Filipenses",
+  "order": 57,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "Cl",
+  "aliases": [
+   "Cl",
+   "Col"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "COL",
+  "deutero": false,
+  "name": "Colossenses",
+  "order": 58,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "1Ts",
+  "aliases": [
+   "1Ts",
+   "1Tes"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "1TH",
+  "deutero": false,
+  "name": "1 Tessalonicenses",
+  "order": 59,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "2Ts",
+  "aliases": [
+   "2Ts",
+   "2Tes"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "2TH",
+  "deutero": false,
+  "name": "2 Tessalonicenses",
+  "order": 60,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "1Tm",
+  "aliases": [
+   "1Tm",
+   "1Tim"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "1TI",
+  "deutero": false,
+  "name": "1 Timóteo",
+  "order": 61,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "2Tm",
+  "aliases": [
+   "2Tm",
+   "2Tim"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "2TI",
+  "deutero": false,
+  "name": "2 Timóteo",
+  "order": 62,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "Tt",
+  "aliases": [
+   "Tt",
+   "Tito"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "TIT",
+  "deutero": false,
+  "name": "Tito",
+  "order": 63,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "Fm",
+  "aliases": [
+   "Fm",
+   "Filem"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "PHM",
+  "deutero": false,
+  "name": "Filêmon",
+  "order": 64,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "Hb",
+  "aliases": [
+   "Hb",
+   "Heb"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "HEB",
+  "deutero": false,
+  "name": "Hebreus",
+  "order": 65,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "Tg",
+  "aliases": [
+   "Tg",
+   "Tia"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "JAS",
+  "deutero": false,
+  "name": "Tiago",
+  "order": 66,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "1Pd",
+  "aliases": [
+   "1Pd",
+   "1Pe"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "1PE",
+  "deutero": false,
+  "name": "1 Pedro",
+  "order": 67,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "2Pd",
+  "aliases": [
+   "2Pd",
+   "2Pe"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "2PE",
+  "deutero": false,
+  "name": "2 Pedro",
+  "order": 68,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "1Jo",
+  "aliases": [
+   "1Jo",
+   "1João"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "1JN",
+  "deutero": false,
+  "name": "1 João",
+  "order": 69,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "2Jo",
+  "aliases": [
+   "2Jo",
+   "2João"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "2JN",
+  "deutero": false,
+  "name": "2 João",
+  "order": 70,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "3Jo",
+  "aliases": [
+   "3Jo",
+   "3João"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "3JN",
+  "deutero": false,
+  "name": "3 João",
+  "order": 71,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "Jd",
+  "aliases": [
+   "Jd",
+   "Judas"
+  ],
+  "canon_group": "EPISTLES",
+  "code": "JUD",
+  "deutero": false,
+  "name": "Judas",
+  "order": 72,
+  "testament": "NEW"
+ },
+ {
+  "abbr": "Ap",
+  "aliases": [
+   "Ap",
+   "Apoc"
+  ],
+  "canon_group": "REVELATION",
+  "code": "REV",
+  "deutero": false,
+  "name": "Apocalipse",
+  "order": 73,
+  "testament": "NEW"
+ }
+]

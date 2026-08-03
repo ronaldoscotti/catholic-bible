@@ -1,0 +1,21 @@
+{"book":{"abbreviation": "Jdt.", "chapters": 16, "code": "JDT", "deuterocanonical": true, "group": "HISTORICAL", "name": "Judith", "testament": "OLD"},"sources":{"douay": {"attribution": null, "name": "The Douay-Rheims marginal apparatus", "rights": "CC0", "rights_basis": "The 1582 and 1610 margins. Out of copyright everywhere, and the transcription is dedicated to the public domain.", "url": null}, "na27": {"attribution": null, "name": "New Testament allusions to the deuterocanonical books", "rights": "uncopyrightable-facts", "rights_basis": "292 pairs of addresses and no text of any kind. A bare pair of Scripture references is a fact about Scripture rather than an expression of anyone's editorial work. LIMITS.md carries the reasoning and the fact that it is a reading rather than a ruling.", "url": null}, "openbible": {"attribution": "Cross-references courtesy of OpenBible.info, CC BY 4.0.", "name": "OpenBible.info cross-references", "rights": "CC BY 4.0", "rights_basis": "Published by OpenBible.info under Creative Commons Attribution. Attribution is a condition of the licence and travels with the data.", "url": "https://www.openbible.info/labs/cross-references/"}},"references":{
+"JDT.10.13":[{"source": "na27", "to": "ACT.26.25", "weight": 90}],
+"JDT.11.19":[{"source": "na27", "to": "MAT.9.36", "weight": 90}],
+"JDT.12.8":[{"source": "na27", "to": "1TH.3.11", "weight": 90}],
+"JDT.13.18":[{"source": "na27", "to": "LUK.1.42", "weight": 90}],
+"JDT.14.16":[{"source": "na27", "to": "ACT.14.14", "weight": 90}],
+"JDT.16.17":[{"source": "na27", "to": "ACT.12.23", "weight": 90}, {"source": "na27", "to": "JAS.5.3", "weight": 90}, {"source": "na27", "to": "MAT.11.22", "weight": 90}, {"source": "na27", "to": "MRK.9.49", "weight": 90}],
+"JDT.4.13":[{"chapter": true, "source": "douay", "to": "EXO.17.1", "weight": 100}],
+"JDT.4.9":[{"source": "na27", "to": "ACT.12.5", "weight": 90}],
+"JDT.5.10":[{"chapter": true, "source": "douay", "to": "EXO.1.1", "weight": 100}, {"chapter": true, "source": "douay", "to": "EXO.7.1", "weight": 100}],
+"JDT.5.15":[{"chapter": true, "source": "douay", "to": "EXO.15.1", "weight": 100}],
+"JDT.5.17":[{"chapter": true, "source": "douay", "to": "JDG.2.1", "weight": 100}],
+"JDT.5.19":[{"chapter": true, "source": "douay", "to": "NUM.21.1", "weight": 100}],
+"JDT.5.20":[{"chapter": true, "source": "douay", "to": "JOS.21.1", "weight": 100}],
+"JDT.5.22":[{"chapter": true, "source": "douay", "to": "2KI.21.1", "weight": 100}],
+"JDT.5.7":[{"chapter": true, "source": "douay", "to": "GEN.11.1", "weight": 100}],
+"JDT.5.9":[{"chapter": true, "source": "douay", "to": "GEN.12.1", "weight": 100}],
+"JDT.8.26":[{"source": "na27", "to": "ACT.15.4", "weight": 90}],
+"JDT.8.6":[{"source": "na27", "to": "LUK.2.37", "weight": 90}],
+"JDT.9.12":[{"source": "na27", "to": "ACT.4.24", "weight": 90}]
+}}
