@@ -906,6 +906,8 @@
         "enum": [
           "unknown_version",
           "unknown_book",
+          "unknown_source",
+          "unknown_language",
           "not_on_spine",
           "unpublished_in_version",
           "malformed",
@@ -1710,6 +1712,7 @@
             "required": true,
             "schema": {
               "description": "Words, or a phrase in double quotes",
+              "maxLength": 500,
               "title": "Q",
               "type": "string"
             }
@@ -1851,6 +1854,7 @@
             "required": true,
             "schema": {
               "description": "Words, or a phrase in double quotes",
+              "maxLength": 500,
               "title": "Q",
               "type": "string"
             }

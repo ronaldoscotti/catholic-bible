@@ -24,6 +24,13 @@ _TOKEN = re.compile(r'"([^"]*)"|(\S+)')
 # search rather than a syntax error.
 _WORD = re.compile(r"\w+", re.UNICODE)
 
+# FTS5 intersects a doclist once per term, and repeating a broad term never
+# shrinks the set being intersected. 300 copies of `a*` cost 8.5 seconds of CPU
+# on the built corpus, in an 899 character query the rate limiter counts as one
+# request. Deduplication answers that, and the cap bounds what it cannot: a
+# reader with 32 distinct words has a different problem from a search box.
+TERM_CAP = 32
+
 
 def compile_query(raw: str) -> str | None:
     """The expression for `MATCH`, or `None` when nothing searchable is left.
@@ -31,7 +38,7 @@ def compile_query(raw: str) -> str | None:
     `None` is a refusal rather than an empty result, because an empty result
     says the corpus does not hold the word.
     """
-    terms = [term for term in _terms(raw) if term]
+    terms = list(dict.fromkeys(term for term in _terms(raw) if term))[:TERM_CAP]
     return " AND ".join(terms) if terms else None
 
 

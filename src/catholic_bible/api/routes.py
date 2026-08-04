@@ -681,12 +681,21 @@ def passage(
 SEARCHED = "public, max-age=300"
 
 # Ranking sorts every match before it can page, so the cost grows with the
-# offset rather than with the page. Measured on 2026-08-04: the first page of
-# the worst one letter query is 39 ms and the same page at offset 1000 is 79 ms.
-# LIMITS.md carries the numbers and the reason.
+# offset rather than with the page. The three ceilings here bound the offset,
+# the page and the query, and the term cap in `search.py` bounds the work one
+# query can ask for. LIMITS.md carries the measurements.
 DEEPEST = 1000
 WIDEST = 100
 
+# A search box, not a document. The compiler already deduplicates and caps the
+# terms it builds, and this is the ceiling under it so the parse itself is
+# bounded too.
+LONGEST = 500
+
+Query_ = Annotated[
+    str,
+    Query(max_length=LONGEST, description="Words, or a phrase in double quotes"),
+]
 Offset = Annotated[int, Query(ge=0, le=DEEPEST)]
 Limit = Annotated[int, Query(ge=1, le=WIDEST)]
 Testament = Annotated[Literal["OLD", "NEW"] | None, Query()]
@@ -723,6 +732,38 @@ def _searched_book(connection: sqlite3.Connection, asked: str | None) -> str | N
     return None if asked is None else str(_book_or_404(connection, asked)["code"])
 
 
+def _commentary_languages(connection: sqlite3.Connection) -> set[str]:
+    """Read off the bodies rather than off the sources.
+
+    A source declares the language it was written in. A body exists per
+    translation, and the Portuguese Haydock is a body without being a source.
+    """
+    return {
+        str(row["language"])
+        for row in connection.execute(
+            "SELECT DISTINCT language FROM commentary_body"
+        ).fetchall()
+    }
+
+
+def _one_of_or_404(
+    asked: str | None, published: set[str], reason: errors.Reason, what: str
+) -> str | None:
+    """A filter nobody publishes is a 404, the way an unknown book already is.
+
+    Passing it through answers `total: 0`, which reads as the corpus having
+    nothing to say. `source=haydok` is a typo and not a question about the
+    corpus. The empty string is refused for the same reason rather than
+    treated as no filter, because a client rendering an unset value would get
+    everything back while its interface claimed one.
+    """
+    if asked is None:
+        return None
+    if asked not in published:
+        raise errors.not_found(reason, f"no {what} named {asked!r}", asked)
+    return asked
+
+
 @router.get(
     "/search",
     summary="Verses carrying a word or a phrase",
@@ -732,7 +773,7 @@ def _searched_book(connection: sqlite3.Connection, asked: str | None) -> str | N
 def search(
     connection: Database,
     response: Response,
-    q: Annotated[str, Query(description="Words, or a phrase in double quotes")],
+    q: Query_,
     version: Annotated[str | None, Query(description="A code, or all")] = None,
     book: Annotated[
         str | None, Query(description="A code or any name that resolves")
@@ -789,7 +830,7 @@ def _verse_hit(row: reader.Row, languages: dict[str, Language]) -> models.VerseH
 def search_commentary(
     connection: Database,
     response: Response,
-    q: Annotated[str, Query(description="Words, or a phrase in double quotes")],
+    q: Query_,
     source: Annotated[str | None, Query(examples=["haydock"])] = None,
     language: Annotated[str | None, Query(examples=["pt-BR"])] = None,
     book: Annotated[
@@ -800,14 +841,26 @@ def search_commentary(
 ) -> models.CommentarySearchOut:
     expression = _expression_or_422(q)
     code = _searched_book(connection, book)
+    named = _one_of_or_404(
+        source,
+        {str(row["code"]) for row in reader.commentary_sources(connection)},
+        errors.Reason.UNKNOWN_SOURCE,
+        "commentary source",
+    )
+    written = _one_of_or_404(
+        language,
+        _commentary_languages(connection),
+        errors.Reason.UNKNOWN_LANGUAGE,
+        "commentary language",
+    )
     rows = reader.search_commentary(
-        connection, expression, source, language, code, limit, offset
+        connection, expression, named, written, code, limit, offset
     )
 
     response.headers["Cache-Control"] = SEARCHED
     return models.CommentarySearchOut(
         query=q,
-        total=reader.count_commentary(connection, expression, source, language, code),
+        total=reader.count_commentary(connection, expression, named, written, code),
         offset=offset,
         limit=limit,
         hits=[_commentary_hit(row) for row in rows],

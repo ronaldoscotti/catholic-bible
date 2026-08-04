@@ -626,6 +626,41 @@ A reader cannot walk past result 1000 of 29007. Beyond the cap the answer is a
 `422` rather than a slow `200`, because a request that takes a fifth of a second
 to say what the first page already said is not worth serving.
 
+### That table was not the ceiling until the review found the query that beat it
+
+*Written 2026-08-04, after a review of this branch and before it merged.*
+
+The numbers above are honest measurements of ordinary queries and they were
+published as the worst case. They were not. FTS5 intersects a document list once
+per term, and repeating one broad term never shrinks the set being intersected,
+so the cost is linear in how many times a reader writes the same word.
+
+```
+    1 x 'a*'  q=  2 chars    0.13 s
+   20 x 'a*'  q= 59 chars    0.55 s
+  100 x 'a*'  q=299 chars    2.67 s
+  300 x 'a*'  q=899 chars    8.46 s
+```
+
+One unauthenticated `GET` of 899 characters, counted by the rate limiter as one
+request out of sixty. Sixty a minute is inside the published allowance and pins
+every worker in the pool, and the reader asking for a verse waits behind it.
+
+Three things bound it now. Repeated terms are searched once, the number of
+distinct terms caps at 32, and `q` caps at 500 characters. The same 300 term
+query costs 0.11 seconds and 5000 distinct terms cost 0.004, because a set that
+collapses after the first intersection was never the expensive case.
+
+Distinct terms were never the problem and the fix says so rather than treating
+every long query as an attack.
+
+### A commentary source or language nobody publishes is a 404, not an empty page
+
+`source=haydok` used to answer `200` with `total: 0`, which reads as Haydock
+having nothing to say about the query. It is a typo, and a typo is not a question
+about the corpus. The same held for an empty value, where a client rendering an
+unset filter got everything back while its interface claimed one source.
+
 ### A search answer is not cached the way a verse is
 
 A verse carries a year of immutable caching. A result list depends on what is

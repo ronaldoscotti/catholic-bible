@@ -14,7 +14,7 @@ from collections.abc import Iterator
 
 import pytest
 
-from catholic_bible.search import compile_query
+from catholic_bible.search import TERM_CAP, compile_query
 
 
 @pytest.fixture(scope="module")
@@ -125,3 +125,36 @@ def test_nothing_a_person_can_type_reaches_sqlite_as_a_syntax_error(
             runs(fts, expression)
         except sqlite3.OperationalError as broken:  # pragma: no cover
             pytest.fail(f"{typed!r} compiled to {expression!r} and {broken}")
+
+
+def test_a_term_repeated_is_searched_once() -> None:
+    """A repeated term is free to write and expensive to run.
+
+    FTS5 intersects the doclist once per term, and an identical broad term
+    never shrinks the set it is intersecting with. 300 copies of `a*` in an 899
+    character query cost 8.5 seconds of CPU on the built corpus, on one
+    unauthenticated GET that the rate limiter counts as one request.
+    """
+    assert compile_query("Deus Deus Deus") == '"Deus"'
+    assert compile_query("a* " * 300) == '"a"*'
+
+
+def test_the_number_of_distinct_terms_is_capped() -> None:
+    """Deduplication answers the cheap attack and a cap answers the other one.
+
+    600 distinct short prefixes are fast, because the set collapses after the
+    first intersection. The cap is the floor under what dedupe cannot bound.
+    """
+    typed = " ".join(f"w{index}" for index in range(200))
+    built = compile_query(typed)
+
+    assert built is not None
+    assert built.count(" AND ") + 1 == TERM_CAP
+
+
+def test_the_cap_keeps_the_terms_the_reader_wrote_first() -> None:
+    typed = " ".join(f"w{index}" for index in range(200))
+    built = compile_query(typed)
+
+    assert built is not None
+    assert built.startswith('"w0" AND "w1" AND')

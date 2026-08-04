@@ -37,7 +37,7 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
 [x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5 B8 B9
 [x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8 B9
-[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 merged, B9 open, 741 tests
+[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 merged, B9 open, 754 tests
 [x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8 B9
 [x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4 B5 B7 B8 B9, one author
 [x] 8  PR               B0 B1 B2 B3 B4 B5 B7 B8 merged. v1.0.0 and v1.0.1 released
@@ -56,6 +56,20 @@ The first attempt at that check proved nothing. The string being replaced did no
 match what was in the file, so the mutation never happened and the suite went
 green on unmutated code. Reading the grep output rather than the exit status is
 what caught it.
+
+**Both gates were met on B9 and the review still found the worst thing in it.**
+A repeated term turned one unauthenticated `GET` into eight seconds of CPU, in
+899 characters the rate limiter counts as one request out of sixty. The spec was
+written first, the plan carried three refusals and two of them paid, and none of
+that was asking what a hostile reader would type. The plan asked whether the
+measurements were real and made them real. It did not ask what the worst
+reachable query is.
+
+The review also found that a docstring in this branch claimed a test defended
+the paging tie break, and deleting the tie break left the suite green. The
+claim was confident, wrong, and written by the author who then cited it as
+evidence. `docs/reviews/B9-full-text-search.md` carries it, along with three
+other tests that passed against code that had been deleted.
 
 **B9's QA found a bug that belongs to B8.** The container would not start, and
 the immediate cause was a full disk on this laptop. Underneath it,

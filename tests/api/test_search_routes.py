@@ -204,3 +204,58 @@ def test_a_search_is_not_cached_forever_the_way_a_verse_is(
     headers = client.get(SEARCH, params={"q": "Deus"}).headers
 
     assert "immutable" not in headers.get("cache-control", "")
+
+
+@pytest.mark.parametrize("value", ["haydok", "catena", ""])
+def test_a_commentary_source_nobody_has_says_so(client: TestClient, value: str) -> None:
+    """An empty result here would be a false statement about the corpus.
+
+    This route already refuses an unknown book and an unknown version, and its
+    own document declares a 404. Answering `source=haydok` with `total: 0` says
+    Haydock has nothing on the query, which is not what happened.
+
+    The empty string is in the list because an SPA rendering `&source=${sel}`
+    with `sel` unset used to silently drop the filter and return everything
+    while the interface claimed one source.
+    """
+    answer = client.get(NOTES, params={"q": "Deus", "source": value})
+
+    assert answer.status_code == 404
+    assert answer.json()["detail"]["reason"] == "unknown_source"
+
+
+@pytest.mark.parametrize("value", ["fr-FR", "pt", ""])
+def test_a_commentary_language_nobody_publishes_says_so(
+    client: TestClient, value: str
+) -> None:
+    answer = client.get(NOTES, params={"q": "Deus", "language": value})
+
+    assert answer.status_code == 404
+    assert answer.json()["detail"]["reason"] == "unknown_language"
+
+
+def test_a_repeated_term_costs_what_one_term_costs(client: TestClient) -> None:
+    """The query that turned one GET into eight seconds of CPU.
+
+    FTS5 intersects a doclist per term and an identical broad term never
+    shrinks the set. 300 copies of `a*` fit in an 899 character URL, cost 8.46
+    seconds against the built corpus, and the rate limiter counts them as one
+    request. Sixty a minute is inside the published limit and pins the pool.
+
+    166 copies here rather than 300, because the length ceiling now refuses
+    900 characters outright. Both defences are real and this one is the floor
+    under the other.
+    """
+    answer = client.get(SEARCH, params={"q": "a* " * 166})
+
+    assert answer.status_code == 200
+    assert (
+        answer.json()["total"] == client.get(SEARCH, params={"q": "a*"}).json()["total"]
+    )
+
+
+def test_a_query_longer_than_a_search_box_is_refused(client: TestClient) -> None:
+    """A ceiling under the compiler rather than only inside it."""
+    answer = client.get(SEARCH, params={"q": "palavra " * 300})
+
+    assert answer.status_code == 422

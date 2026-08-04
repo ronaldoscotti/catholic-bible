@@ -55,11 +55,20 @@ def counted(connection: sqlite3.Connection, table: str) -> int:
 
 
 def test_every_verse_reached_the_index(database: sqlite3.Connection) -> None:
-    assert counted(database, "verse_search") == counted(database, "texts")
+    """Read off the index, not through it.
+
+    `COUNT(*)` on an external content table reads the content table, so it
+    answers the same number whether the index holds anything or not. The
+    shadow table carries one row per document actually indexed, and it reads
+    zero on an index nobody rebuilt.
+    """
+    assert counted(database, "verse_search_docsize") == counted(database, "texts")
 
 
 def test_every_note_reached_the_index(database: sqlite3.Connection) -> None:
-    assert counted(database, "note_search") == counted(database, "commentary_body")
+    assert counted(database, "note_search_docsize") == counted(
+        database, "commentary_body"
+    )
 
 
 def test_the_tokenizer_is_the_one_that_folds_accents(
@@ -214,11 +223,12 @@ def test_a_word_the_corpus_does_not_hold_answers_nothing(
 
 
 def test_paging_neither_repeats_nor_skips(database: sqlite3.Connection) -> None:
-    """bm25 ties are ordinary and a tie has no order of its own.
+    """Three pages compose into the single answer they are pages of.
 
-    Without a deterministic tie break, two pages of the same query can hand back
-    the same verse twice and never show another. Nothing else in the suite would
-    catch that, because each page on its own looks right.
+    This does not defend the tie break. Dropping it leaves this green, because
+    SQLite happens to sort equal keys the same way on every run against this
+    file. `test_both_orderings_are_total` is what holds the tie break, and it
+    is structural for the reason written there.
     """
 
     def key(hit: sqlite3.Row) -> tuple[str, str]:
@@ -285,10 +295,42 @@ def test_the_machine_translation_is_searched_like_any_other_text(
 def test_a_commentary_source_filter_bounds_the_answer(
     database: sqlite3.Connection,
 ) -> None:
+    """Pinned against something that can fail while one source is loaded.
+
+    Asserting the set of sources in the answer is `{"haydock"}` passes whether
+    the clause runs or not, because Haydock is the only source there is. This
+    counts a source nobody has instead, which is zero only if the filter is
+    reaching the query.
+    """
     hits = reader.search_commentary(database, expression("coracao"), source="haydock")
 
     assert hits
     assert {hit["source"] for hit in hits} == {"haydock"}
+    assert reader.count_commentary(database, expression("coracao"), source="none") == 0
+
+
+def test_commentary_paging_neither_repeats_nor_skips(
+    database: sqlite3.Connection,
+) -> None:
+    """The commentary equivalent, which the suite did not have at all.
+
+    A note has two bodies at one address, so bm25 ties here are the ordinary
+    case rather than the rare one.
+    """
+
+    def key(hit: sqlite3.Row) -> tuple[str, str, str]:
+        return str(hit["start"]), str(hit["language"]), str(hit["source"])
+
+    found = expression("Deus")
+    whole = [key(hit) for hit in reader.search_commentary(database, found, limit=60)]
+    paged = [
+        key(hit)
+        for start in range(0, 60, 20)
+        for hit in reader.search_commentary(database, found, limit=20, offset=start)
+    ]
+
+    assert whole == paged
+    assert len(set(paged)) == len(paged)
 
 
 def test_a_commentary_book_filter_bounds_the_answer(
@@ -298,3 +340,25 @@ def test_a_commentary_book_filter_bounds_the_answer(
 
     assert hits
     assert {hit["book"] for hit in hits} == {"PSA"}
+
+
+def test_both_orderings_are_total(database: sqlite3.Connection) -> None:
+    """The tie break, asserted on the text of the query rather than its output.
+
+    SQLite does not promise an order for rows with equal sort keys, and bm25
+    ties are the ordinary case here. It happens to be deterministic against
+    this file, which means both paging tests above stay green with the tie
+    break deleted. Verified by deleting it.
+
+    So the guarantee is asserted where it lives. The same call was made for the
+    tokenizer argument, and for the same reason: the behaviour that would break
+    cannot be provoked, and the thing that prevents it can be read.
+    """
+    import inspect
+
+    source = inspect.getsource(reader)
+
+    assert "ORDER BY bm25(verse_search), texts.canonical_order, texts.version" in source
+    assert (
+        "ORDER BY bm25(note_search), commentary.id, commentary_body.language" in source
+    )
