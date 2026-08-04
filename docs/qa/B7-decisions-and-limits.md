@@ -181,12 +181,12 @@ epic exists to prevent.
 
 ```
 $ uv run pytest -q
-593 passed in 22.76s
+596 passed in 22.53s
 
 $ uv run ruff check . && uv run ruff format --check . && uv run mypy
 All checks passed!
-126 files already formatted
-Success: no issues found in 62 source files
+127 files already formatted
+Success: no issues found in 76 source files
 
 $ uv run scripts/build-openapi.py --check
 the committed document matches the routes
@@ -195,5 +195,10 @@ $ uv run scripts/build-artifacts.py --check
 the committed artifacts match the sources
 ```
 
-565 before this epic and 593 after, which is 28 new tests. 16 on the voice lint
-and 12 on the numbers `LIMITS.md` and `DECISIONS.md` publish.
+565 before this epic and 596 after, which is 31 new tests. 16 on the voice lint,
+12 on the numbers `LIMITS.md` and `DECISIONS.md` publish, and 3 on what the
+wheel has to carry.
+
+62 source files were type checked before and 76 are now. `scripts/` was outside
+the configured set, which put two CI gates where the type checker could not see
+them.

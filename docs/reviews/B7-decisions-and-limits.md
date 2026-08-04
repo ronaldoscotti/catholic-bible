@@ -110,12 +110,33 @@ reason and this document does not tick it.
 come from a private skill that is not in this checkout and they will drift from
 it. The alternative is a lint that cannot run on a fork, which is worse.
 
-**The type checker does not read `scripts/`.** `mypy` is configured over `src`
-and `tests`, and this epic makes a script into a CI gate. The new one passes
-`mypy --strict` on its own and that was checked by hand. Widening the
-configuration lights up thirteen pre-existing errors in nine other scripts,
-which is its own piece of work, so it is written into `LIMITS.md` rather than
-half done here.
+**The type checker did not read `scripts/`, and this epic makes a script into a
+CI gate.** Written into `LIMITS.md` first, on a measurement that said widening
+the configuration lights up thirteen errors in nine files. The author read that
+sentence and said fix it, which was the right call, because the measurement was
+taken the wrong way.
+
+Eleven of the thirteen came from running `mypy scripts` on its own, where this
+package resolves as an installed dependency rather than from the source tree.
+Adding `scripts` to the configured set puts `src` and `scripts` in the same
+pass, the imports resolve from source, and eleven of them stop existing. Two
+were real and are fixed. `provenance['source']['commit']` indexes twice into a
+`dict[str, object]` in both exporters, and both now hold the commit in a local
+instead, which calls git once and reads better.
+
+75 files checked where there were 62. `LIMITS.md` loses the section, because a
+limit that has been fixed is not a limit.
+
+**The PEP 561 marker was missing and that is a separate bug.** `py.typed` did
+not exist, so anything installing this package and running a type checker got
+`import-untyped` on every module. It was found while chasing the above and it
+is not what fixed it. With `src` in the same mypy pass the marker is never
+consulted, which was proved by deleting it and watching the suite stay green.
+
+That makes it unenforced by anything, so `tests/test_packaging.py` asserts it
+exists and sits inside the packaged tree. Packaging belongs to B10 and this is
+one empty file against a defect that would have shipped with the first release
+to PyPI, so it lands here rather than waiting.
 
 **The QA document went stale inside its own pull request.** It pasted 586
 passing tests and concluded 21 new ones, while the branch ran 588 and the method

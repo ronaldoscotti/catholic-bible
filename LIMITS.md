@@ -197,21 +197,6 @@ them onto Matos Soares at import time, in the `heading` column of the same row
 as the public domain verse text. The export names its columns and never selects
 that one, and a test fails if a heading reaches a published file.
 
-## The type checker does not see the scripts, added in B7
-
-`CLAUDE.md` says type hints throughout, checked in CI. `mypy` is configured over
-`src` and `tests`, and `scripts/` is outside it. Thirteen errors are sitting in
-nine of those files right now, mostly untyped imports of this project's own
-modules, which is why widening the configuration is its own piece of work rather
-than a line in this epic.
-
-It matters more than it did, because B7 puts `scripts/lint-voice.py` in the CI
-pipeline as a gate. A gate the type checker never reads is a gate that can break
-on a rename and fail loudly at the wrong moment.
-
-The new script passes `mypy --strict` on its own and that was checked by hand.
-The other twelve do not.
-
 ## What is not here yet
 
 No per book files and no CDN. That is B5.

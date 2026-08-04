@@ -215,10 +215,11 @@ def main() -> int:
 
     # The commit date rather than the run date, so re-exporting at the same
     # source commit is byte for byte identical.
+    commit = git(source, "rev-parse", "HEAD")
     provenance = {
         "source": {
             "repository": "meu-feed-catolico-api",
-            "commit": git(source, "rev-parse", "HEAD"),
+            "commit": commit,
             "commit_date": git(source, "log", "-1", "--format=%cI"),
             "private": True,
         },
@@ -233,7 +234,7 @@ def main() -> int:
 
     for name in sorted(written):
         print(f"  {name}  {written[name][:12]}")
-    print(f"exported from {provenance['source']['commit'][:12]}")
+    print(f"exported from {commit[:12]}")
     return 0
 
 

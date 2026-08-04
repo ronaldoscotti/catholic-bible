@@ -249,10 +249,11 @@ def main() -> int:
     # code at this commit plus these fixtures, so both are recorded. What that
     # cannot see is a database built at an older commit, which only the
     # re-import job catches. LIMITS.md says so.
+    commit = git(source, "rev-parse", "HEAD")
     provenance = {
         "source": {
             "repository": "meu-feed-catolico-api",
-            "commit": git(source, "rev-parse", "HEAD"),
+            "commit": commit,
             "commit_date": git(source, "log", "-1", "--format=%cI"),
             "private": True,
         },
@@ -265,7 +266,7 @@ def main() -> int:
     (dest / "PROVENANCE.json").write_text(
         json.dumps(provenance, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    print(f"exported from {provenance['source']['commit'][:12]}")
+    print(f"exported from {commit[:12]}")
     return 0
 
 
