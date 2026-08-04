@@ -56,10 +56,10 @@ def test_a_banned_phrase_is_caught_across_a_line_break() -> None:
     somewhere else, which makes the rule depend on the paragraph's width.
     """
     assert _reasons("It's worth noting that the table is inverted.") == [
-        "banned phrase \"it's worth noting that\""
+        'banned phrase "it\'s worth noting that"'
     ]
     assert _reasons("It's worth\nnoting that the table is inverted.") == [
-        "banned phrase \"it's worth noting that\""
+        'banned phrase "it\'s worth noting that"'
     ]
 
 
