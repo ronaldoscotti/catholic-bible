@@ -40,12 +40,12 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 5  Implement        B0 B1 B2 B3 B4 B5 merged, 565 tests
 [x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5
 [x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4 B5, one author
-[x] 8  PR               B0 B1 B2 B3 B4 B5 merged. v1.0.0 released
+[x] 8  PR               B0 B1 B2 B3 B4 B5 merged. v1.0.0 and v1.0.1 released
 ```
 
-1.0.1 is open and is neither merged nor tagged. The 565 on row 5 is the count on
-that branch rather than on `main`, and B5 has a criterion unticked until the tag
-lands.
+v1.0.1 corrects what the artifact says about the Portuguese translation. B5's
+fetch criterion came down while the README pinned a tag that did not exist yet
+and went back up once the tag was pushed and the line was run against it.
 
 The checklist advances when the artifact exists and not before. Six epics have
 run. B0 builds the project, B1 builds the addresses, B2 publishes Scripture, B3
