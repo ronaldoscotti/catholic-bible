@@ -42,11 +42,40 @@ def test_a_banned_word_in_portuguese_is_caught() -> None:
     assert _reasons("Um relatório abrangente.") == ["banned word 'abrangente'"]
 
 
+def test_an_inflection_is_caught_and_not_only_the_listed_form() -> None:
+    """The listed form is the one that almost never appears in running prose.
+
+    Nobody writes `leverage` as a bare infinitive in a sentence, and the whole
+    Portuguese list was infinitives, which is the form a document never uses.
+    """
+    assert _reasons("The API leverages the spine.") == ["banned word 'leverages'"]
+    assert _reasons("Utilizing the table.") == ["banned word 'utilizing'"]
+    assert _reasons("A meticulously checked audit.") == ["banned word 'meticulously'"]
+    assert _reasons("O time alavanca a tabela.") == ["banned word 'alavanca'"]
+    assert _reasons("Isso viabiliza o dataset.") == ["banned word 'viabiliza'"]
+
+
 def test_a_signposting_opener_is_caught_and_only_as_an_opener() -> None:
     assert _reasons("Moreover, the table is inverted.") == [
         "signposting opener 'Moreover'"
     ]
     assert _reasons("The table is moreover inverted.") == []
+
+
+def test_an_opener_is_caught_behind_a_bullet_or_a_heading() -> None:
+    """Most prose in these documents sits behind a marker of some kind.
+
+    A rule that only sees the start of a bare line is blind exactly where the
+    acceptance criteria, `CONTRIBUTING.md` and `LIMITS.md` put their text.
+    """
+    for line in (
+        "- Moreover, the table is inverted.",
+        "## Furthermore, the spine holds.",
+        "1. Additionally, the rule stops.",
+        "> Ultimately, the answer is no.",
+        "**Notably, the count moved.**",
+    ):
+        assert len(_reasons(line)) == 1, line
 
 
 def test_a_banned_phrase_is_caught_across_a_line_break() -> None:
@@ -102,6 +131,22 @@ def test_every_published_document_passes() -> None:
 
     assert findings == []
     assert len(paths) >= 6, [p.name for p in paths]
+
+
+def test_the_two_readmes_link_to_each_other_from_the_top() -> None:
+    """Criterion 4 of the epic, which nothing else pins.
+
+    Deleting either link leaves the suite and the voice lint green, and a
+    Portuguese README nobody can reach from the English one is a file rather
+    than a door.
+    """
+    pairs = (
+        ("README.md", "[Português](README.pt-BR.md)"),
+        ("README.pt-BR.md", "[English](README.md)"),
+    )
+    for name, link in pairs:
+        head = (REPO / name).read_text(encoding="utf-8").splitlines()[:5]
+        assert link in head, (name, head)
 
 
 def test_the_two_readmes_publish_the_same_fetch_line() -> None:

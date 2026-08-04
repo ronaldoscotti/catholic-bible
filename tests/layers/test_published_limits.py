@@ -12,7 +12,10 @@ import json
 import re
 from pathlib import Path
 
+from catholic_bible.canon.spine import SPINE
+
 REPO = Path(__file__).resolve().parent.parent.parent
+ON_SPINE = set(SPINE.books())
 LIMITS = (REPO / "LIMITS.md").read_text(encoding="utf-8")
 ORPHANS = json.loads((REPO / "data" / "orphans.json").read_text(encoding="utf-8"))
 COVERAGE = json.loads((REPO / "data" / "coverage.json").read_text(encoding="utf-8"))
@@ -111,14 +114,11 @@ def test_the_published_book_table_leaves_no_off_spine_book_out() -> None:
     A book the table omits would be an orphan concentration the reader never
     sees, which is the one thing this document promises not to do.
     """
-    from catholic_bible.canon.spine import SPINE  # noqa: PLC0415
-
-    on_spine = set(SPINE.books())
     for scheme in ("vulgate", "org"):
         off = {
             book
             for book, count in orphans_by_book(scheme).items()
-            if book not in on_spine and count
+            if book not in ON_SPINE and count
         }
         assert off <= set(BOOKS.values()), (scheme, off - set(BOOKS.values()))
 
@@ -136,13 +136,11 @@ def test_the_nine_named_addresses_are_the_ones_that_orphan() -> None:
         map_address,
     )
     from catholic_bible.canon.orphans import declared_addresses  # noqa: PLC0415
-    from catholic_bible.canon.spine import SPINE  # noqa: PLC0415
 
-    on_spine = set(SPINE.books())
     found = {
         f"{book}.{chapter}.{verse}"
         for book, chapter, verse in declared_addresses(Scheme.VULGATE)
-        if book in on_spine
+        if book in ON_SPINE
         and isinstance(
             result := map_address(Scheme.VULGATE, book, chapter, verse), Orphan
         )
@@ -177,3 +175,47 @@ def test_the_source_verse_orphan_rate_is_still_declared_unmeasurable() -> None:
     """`coverage.json` says it and `LIMITS.md` has to keep saying it too."""
     assert COVERAGE["orphans"]["measurable_here"] is False
     assert "not measurable from inside this repository" in LIMITS
+
+
+DECISIONS = (REPO / "DECISIONS.md").read_text(encoding="utf-8")
+
+# The prose splits the off-spine orphans in two and the split is a judgement no
+# code can make. These books are not received as Scripture by the Catholic
+# Church. The rest of the off-spine books are canonical text the spine carries
+# inside Esther, Daniel or Baruch rather than as a book of their own.
+NOT_RECEIVED = ("2ES", "4MA", "1ES", "3MA", "6EZ", "LAO", "MAN", "PS2")
+
+
+def test_the_orphan_counts_in_decisions_are_the_measured_ones() -> None:
+    """`DECISIONS.md` quotes four numbers that no test held.
+
+    The lesson this epic recorded is that prose and data drift when nothing
+    holds them together, and the entry stating that lesson was itself four
+    unpinned literals. A spine extension moves all four.
+    """
+    entry = DECISIONS.split(
+        "## An address with no slot is dropped and reported, not accommodated", 1
+    )[1].split("\n## ", 1)[0]
+
+    by_book = orphans_by_book("vulgate")
+    off_spine = {book: count for book, count in by_book.items() if book not in ON_SPINE}
+    not_received = sum(off_spine[book] for book in NOT_RECEIVED)
+
+    published = {
+        "total": SCHEMES["vulgate"]["orphans"],
+        "off the spine": sum(off_spine.values()),
+        "not received as Scripture": not_received,
+        "canonical, inside another book": sum(off_spine.values()) - not_received,
+    }
+    for label, number in published.items():
+        assert re.search(rf"\b{number}\b", entry), f"{label} is not {number}"
+
+
+def test_the_split_covers_every_off_spine_book() -> None:
+    """A book in neither group would sit in the total and in no explanation."""
+    by_book = orphans_by_book("vulgate")
+    off_spine = {book for book, count in by_book.items() if book not in ON_SPINE}
+
+    assert set(NOT_RECEIVED) <= off_spine, set(NOT_RECEIVED) - off_spine
+    canonical = off_spine - set(NOT_RECEIVED)
+    assert canonical == {"ESG", "DAG", "LJE", "S3Y", "SUS", "BEL"}, canonical

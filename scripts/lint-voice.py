@@ -35,52 +35,57 @@ GLOBS = ("docs/epics/*.md",)
 
 EM_DASH = "—"
 
-# `testament` is on the voice skill's English list and is deliberately not here.
-# A repository about the Catholic canon has to be able to write Old Testament.
-BANNED_WORDS_EN = (
-    "delve",
-    "tapestry",
+# Stems, not words. A trailing `\w*` is appended to each, so `leverag` catches
+# leverage, leverages and leveraging, and the Portuguese `alavanc` catches the
+# conjugations rather than only the infinitive nobody writes. The leading word
+# boundary stays, so `realm` still does not fire inside `overwhelmed`.
+#
+# `testament` is on the voice skill's English list and is deliberately absent. A
+# repository about the Catholic canon has to be able to write Old Testament.
+BANNED_STEMS_EN = (
+    "delv",
+    "tapestr",
     "realm",
-    "leverage",
-    "utilize",
+    "leverag",
+    "utiliz",
     "unveil",
     "embark",
     "foster",
-    "underscore",
-    "illuminate",
+    "underscor",
+    "illuminat",
     "empower",
     "garner",
-    "showcase",
-    "streamline",
+    "showcas",
+    "streamlin",
     "seamless",
-    "multifaceted",
+    "multifacet",
     "pivotal",
     "meticulous",
-    "intricate",
+    "intricat",
     "vibrant",
     "transformative",
     "cutting-edge",
     "holistic",
     "paradigm",
-    "cornerstone",
+    "cornerston",
 )
 
-BANNED_WORDS_PT = (
+BANNED_STEMS_PT = (
     "primordial",
-    "robusto",
-    "multifacetado",
-    "abrangente",
-    "holístico",
-    "intricado",
-    "meticuloso",
+    "robust",
+    "multifacetad",
+    "abrangent",
+    "holístic",
+    "intricad",
+    "meticulos",
     "transformador",
-    "disruptivo",
-    "tapeçaria",
-    "alavancar",
-    "potencializar",
-    "fomentar",
-    "viabilizar",
-    "desbravar",
+    "disruptiv",
+    "tapeçari",
+    "alavanc",
+    "potencializ",
+    "foment",
+    "viabiliz",
+    "desbrav",
 )
 
 BANNED_PHRASES = (
@@ -152,11 +157,15 @@ def check(name: str, text: str) -> list[Finding]:
             findings.append((name, number, "em-dash"))
 
         lowered = line.lower()
-        for word in BANNED_WORDS_EN + BANNED_WORDS_PT:
-            if re.search(rf"\b{re.escape(word)}\b", lowered):
-                findings.append((name, number, f"banned word {word!r}"))
+        for stem in BANNED_STEMS_EN + BANNED_STEMS_PT:
+            found = re.search(rf"\b{re.escape(stem)}\w*", lowered)
+            if found:
+                findings.append((name, number, f"banned word {found.group()!r}"))
 
-        stripped = line.lstrip("*_> ")
+        # Emphasis, blockquote, bullet, ordered list and heading markers. These
+        # documents put most of their prose behind one of them, so stripping
+        # only emphasis left the rule blind where it was most needed.
+        stripped = line.lstrip("*_># -+0123456789.")
         for opener in BANNED_OPENERS:
             if re.match(rf"{re.escape(opener)}\b,", stripped):
                 findings.append((name, number, f"signposting opener {opener!r}"))

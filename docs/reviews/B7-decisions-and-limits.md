@@ -20,12 +20,39 @@ openers and em-dashes on the line, since those are genuinely line local. Two
 tests, one for each side of the break, plus one proving a blank line still
 separates two paragraphs so the phrase is not manufactured across a gap.
 
-**The opener rule requires the comma and that is deliberate.** `Ultimately, the`
-is caught and `Ultimately the` is not. Dropping the comma from the pattern would
-fire on a line that merely starts with the word because the sentence above it
-wrapped, and a lint that cries wolf on correct prose gets disabled within a
-week. It is a narrower rule than the voice skill states and this is where that
-is written down.
+**The word rule matched one inflection and the prose uses the others.** Found in
+a second pass. `\bleverage\b` catches a form nobody writes and misses
+`leverages` and `leveraging`, `utilize` misses `utilizing`, `meticulous` misses
+`meticulously`. Worse on the Portuguese side, where every entry was an
+infinitive, so `alavancar` was listed and `alavanca` was what a document would
+actually contain. The lists are stems now with a trailing `\w*`, the leading
+word boundary stays so `overwhelmed` still does not trip `realm`, and the
+widened rules report the same 18 documents clean.
+
+**The opener rule was blind wherever these documents put prose.** It stripped
+emphasis and blockquote markers and nothing else, so `- Moreover,`,
+`## Furthermore,` and `1. Additionally,` all passed. The acceptance criteria in
+every epic file, most of `CONTRIBUTING.md` and half of `LIMITS.md` sit behind
+one of those markers, which makes this the common case rather than the edge.
+
+**The opener rule still requires the comma and that is deliberate.**
+`Ultimately, the` is caught and `Ultimately the` is not. Dropping the comma from
+the pattern would fire on a line that merely starts with the word because the
+sentence above it wrapped, and a lint that cries wolf on correct prose gets
+disabled within a week. It is a narrower rule than the voice skill states and
+this is where that is written down.
+
+**`DECISIONS.md` quoted four numbers that nothing held.** 3208, 3039, 2286 and
+753, in the entry whose neighbours in `LIMITS.md` are all pinned to
+`orphans.json`. The document recording the lesson about prose drifting from data
+was itself the example. `test_the_orphan_counts_in_decisions_are_the_measured_ones`
+derives all four, including the split between books not received as Scripture
+and canonical text carried inside another book, which is a judgement encoded as
+two sets rather than a number typed twice.
+
+**Criterion 4 was met and unpinned.** Deleting either cross-link left the suite
+and the lint green. Two assertions on the first five lines of each README close
+it.
 
 **`testament` is off the English banned list.** The voice skill bans it and a
 repository about the Catholic canon has to be able to write Old Testament. The
@@ -82,3 +109,17 @@ reason and this document does not tick it.
 **The banned lists are a subset, committed here rather than imported.** They
 come from a private skill that is not in this checkout and they will drift from
 it. The alternative is a lint that cannot run on a fork, which is worse.
+
+**The type checker does not read `scripts/`.** `mypy` is configured over `src`
+and `tests`, and this epic makes a script into a CI gate. The new one passes
+`mypy --strict` on its own and that was checked by hand. Widening the
+configuration lights up thirteen pre-existing errors in nine other scripts,
+which is its own piece of work, so it is written into `LIMITS.md` rather than
+half done here.
+
+**The QA document went stale inside its own pull request.** It pasted 586
+passing tests and concluded 21 new ones, while the branch ran 588 and the method
+record in the same diff said so. Two tests had landed after the paste. It is
+re-run rather than hand corrected, because a hand corrected paste is not output.
+The rule this repo already had, that a number nobody recomputes is a number
+nobody can check, applies to its own process documents too.

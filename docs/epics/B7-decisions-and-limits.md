@@ -31,26 +31,21 @@ A developer choosing between this dataset and another one on GitHub has nothing 
 - [x] A diagram shows schemes entering, the spine in the middle, and the layers hanging off it
 - [x] Every prose document passes the voice check, including zero em-dashes
 
-**The second criterion was nearly abandoned on a misreading.** It was called
-unmeetable earlier in the session, because `LIMITS.md` said the orphan rate is
-not measured here and that sentence was taken at face value. Two failures share
-the word. A source verse the import dropped is not measurable from inside this
-repository. A scheme address that reaches no slot on the spine has been measured
-since B1 and sits in `orphans.json` with a breakdown by book and by reason. The
-old section answered only with the unfilled counts, which are the other
-question. It is split in two now and the measurable half is published.
+Two of those need a word here, because a reader of this issue would otherwise
+read them as easier than they were.
 
-**The diagram box was held back until somebody looked at it.** Valid mermaid
-syntax is not a rendered diagram, and the first render proved the difference. It
-put `orphans.json` on the main rank, so the arrow into the translations read as
-coming out of the orphan report and the spine was not in the middle. A test
-would have passed. Reordering two lines fixed it, the second render was checked
-the same way, and the box went up after that.
+**The second was nearly abandoned.** It was reported unmeetable, on the strength
+of a sentence in `LIMITS.md` that turned out to be answering a different
+question. The measurement had been in `orphans.json` since B1.
 
-**The seventh is ticked on the half a machine can answer.** `make lint-voice`
-runs clean over 18 documents and a test keeps it that way. The human read named
+**The seventh is ticked on the half a machine can answer.** The human read named
 in the verification below is the author's, at the review gate on the pull
-request, and no document here ticks that on his behalf.
+request, and no document ticks that on his behalf.
+
+`docs/reviews/B7-decisions-and-limits.md` carries what the review found,
+including why the diagram box stayed empty until somebody had looked at a
+render. `docs/qa/B7-decisions-and-limits.md` walks every criterion with the
+output pasted.
 
 ## Constraints
 

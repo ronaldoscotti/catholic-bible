@@ -129,6 +129,18 @@ backticks is a filename rather than a voice, and `Old Testament` is allowed
 because `testament` is on the voice skill's English list and a repository about
 the Catholic canon has to be able to write it.
 
+**Two of the three rules were weaker than this document first claimed, and the
+review found both.** The word rule matched the listed form only, so `leverages`,
+`utilizing` and `meticulously` all passed, and the entire Portuguese list was
+infinitives, which is the one form running prose never uses. The opener rule
+stripped emphasis and blockquote markers but not bullets, numbers or headings,
+so `- Moreover,` and `## Furthermore,` passed, and those are where these
+documents actually put text.
+
+Both are fixed and both have cases now. The lists became stems with a trailing
+`\w*`, and the widened rules still report 18 documents clean, which says the
+existing prose was not relying on the holes.
+
 ## The number tests, proved the same way
 
 Every table in the orphan section is read out of the markdown and compared to
@@ -163,13 +175,17 @@ the checkout being wrong.
 
 ## The full suite
 
+Re-run after the review round, because the first paste in this document went
+stale the moment two more tests landed and a stale paste is the defect this
+epic exists to prevent.
+
 ```
 $ uv run pytest -q
-586 passed in 22.45s
+593 passed in 22.76s
 
 $ uv run ruff check . && uv run ruff format --check . && uv run mypy
 All checks passed!
-124 files already formatted
+126 files already formatted
 Success: no issues found in 62 source files
 
 $ uv run scripts/build-openapi.py --check
@@ -179,5 +195,5 @@ $ uv run scripts/build-artifacts.py --check
 the committed artifacts match the sources
 ```
 
-565 before this epic and 586 after, which is 21 new tests. 11 on the voice lint
-and 10 on the numbers `LIMITS.md` publishes.
+565 before this epic and 593 after, which is 28 new tests. 16 on the voice lint
+and 12 on the numbers `LIMITS.md` and `DECISIONS.md` publish.
