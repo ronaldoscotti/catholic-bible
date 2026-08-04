@@ -68,16 +68,14 @@ def test_the_entry_point_builds_before_it_serves(
     the 503 an installed copy was already giving, which reads as working
     because the process is up.
     """
+    import uvicorn  # noqa: PLC0415
+
     from catholic_bible.api import app as application  # noqa: PLC0415
 
     wanted = tmp_path / "bible.db"
     monkeypatch.setenv(database.OVERRIDE, str(wanted))
     served: list[bool] = []
-    monkeypatch.setattr(
-        application.uvicorn,
-        "run",
-        lambda *a, **k: served.append(wanted.is_file()),
-    )
+    monkeypatch.setattr(uvicorn, "run", lambda *a, **k: served.append(wanted.is_file()))
 
     application.main()
 

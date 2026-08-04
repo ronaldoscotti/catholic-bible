@@ -27,6 +27,7 @@ import hashlib
 import json
 import shutil
 import sys
+import tomllib
 from pathlib import Path
 from typing import Any
 
@@ -41,6 +42,7 @@ from catholic_bible.canon.aliases import (  # noqa: E402
 
 SOURCE = ROOT / "src" / "catholic_bible" / "data"
 DEST = ROOT / "data"
+PACKAGE = ROOT / "package.json"
 
 REPOSITORY = "ronaldoscotti/catholic-bible"
 URL = f"https://cdn.jsdelivr.net/gh/{REPOSITORY}@{{version}}/data/"
@@ -250,10 +252,44 @@ def manifest(dest: Path) -> str:
 
 
 def version() -> str:
-    for line in (ROOT / "pyproject.toml").read_text(encoding="utf-8").splitlines():
-        if line.startswith("version = "):
-            return line.split('"')[1]
-    raise RuntimeError("pyproject.toml carries no version")
+    return str(pyproject()["version"])
+
+
+def pyproject() -> dict[str, Any]:
+    raw = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    return dict(raw["project"])
+
+
+def package_json() -> str:
+    """The npm manifest, which is data only and carries no JavaScript.
+
+    Generated for the same reason every other JSON here is. Build metadata is
+    not an exception to a repository where nothing is authored by hand, and the
+    version has to come from the one place that holds it.
+    """
+    project = pyproject()
+    record = {
+        "name": project["name"],
+        "version": project["version"],
+        "description": project["description"],
+        # The file that says what exists and how the URLs are shaped, which is
+        # the question a consumer holding only the entry point has.
+        "main": "data/index.json",
+        # Without this npm ships the whole checkout. The licence travels
+        # because the corpus is not MIT and CC BY 4.0 wants its notice present
+        # wherever the bytes go.
+        "files": ["data", "LICENSE", "README.md"],
+        "license": "SEE LICENSE IN LICENSE",
+        "repository": {
+            "type": "git",
+            "url": f"git+https://github.com/{REPOSITORY}.git",
+        },
+        "homepage": f"https://github.com/{REPOSITORY}#readme",
+        "bugs": {"url": f"https://github.com/{REPOSITORY}/issues"},
+        "keywords": ["bible", "catholic", "deuterocanonical", "vulgate", "dataset"],
+        "publishConfig": {"access": "public", "provenance": True},
+    }
+    return json.dumps(record, ensure_ascii=False, indent=1, sort_keys=True) + "\n"
 
 
 def differences(built: Path, committed: Path) -> list[str]:
@@ -284,6 +320,10 @@ def main() -> int:
             return 1
         found = differences(scratch, DEST)
         shutil.rmtree(scratch, ignore_errors=True)
+        if not PACKAGE.is_file():
+            found.append("missing: package.json")
+        elif PACKAGE.read_text(encoding="utf-8") != package_json():
+            found.append("differs: package.json")
         if found:
             print(f"{DEST} is not what the sources produce. run `make artifacts`")
             for line in found[:20]:
@@ -310,6 +350,12 @@ def main() -> int:
     shutil.rmtree(dest, ignore_errors=True)
     scratch.rename(dest)
     print(f"wrote {len(written)} files, {total / 1048576:.1f} MB, to {dest}")
+
+    # Outside the tree above, because npm reads it from the repository root and
+    # the `--dest` flag is for inspecting a build rather than relocating one.
+    if dest == DEST:
+        PACKAGE.write_text(package_json(), encoding="utf-8")
+        print(f"wrote {PACKAGE.name}")
     return 0
 
 

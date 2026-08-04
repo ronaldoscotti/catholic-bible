@@ -7,6 +7,7 @@ so it is not in the wheel and `site-packages` is not reliably writable.
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 import pytest
@@ -77,7 +78,7 @@ def test_the_cache_path_carries_the_version(
 
 def test_the_cache_root_follows_the_platform(monkeypatch: pytest.MonkeyPatch) -> None:
     """`XDG_CACHE_HOME` is the one a container or a CI runner actually sets."""
-    monkeypatch.setattr(database.sys, "platform", "linux")
+    monkeypatch.setattr(sys, "platform", "linux")
     monkeypatch.setenv("XDG_CACHE_HOME", "/somewhere/cache")
 
     assert database.cache_root() == Path("/somewhere/cache")
