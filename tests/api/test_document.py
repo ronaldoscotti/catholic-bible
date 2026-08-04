@@ -8,6 +8,7 @@ FastAPI publishes without complaining, so nothing else notices.
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -179,12 +180,18 @@ def test_health_fails_when_the_store_is_unreadable(tmp_path: Path) -> None:
     """
     from catholic_bible.storage import database  # noqa: PLC0415
 
-    original = database.DB_PATH
-    database.DB_PATH = tmp_path / "absent.db"
+    # The override rather than the packaged path. Emptying that one only moves
+    # resolution down to the per-user cache, so on a machine that has ever run
+    # an installed copy this passed for the wrong reason.
+    original = os.environ.get(database.OVERRIDE)
+    os.environ[database.OVERRIDE] = str(tmp_path / "absent.db")
     try:
         found = TestClient(app, raise_server_exceptions=False).get("/health")
     finally:
-        database.DB_PATH = original
+        if original is None:
+            del os.environ[database.OVERRIDE]
+        else:
+            os.environ[database.OVERRIDE] = original
 
     assert found.status_code == 503
     assert found.json()["detail"]["reason"] == "store_unavailable"

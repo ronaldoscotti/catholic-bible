@@ -1,8 +1,11 @@
 [project]
-name = "catholic-bible"
+name = "the-catholic-bible"
 version = "1.0.1"
 description = "A read-only API and a published dataset for the Catholic Bible."
 readme = "README.md"
+# The files rather than an SPDX expression. The code is MIT and the corpus is
+# not, so a field that holds one identifier holds none of them honestly.
+license-files = ["LICENSE"]
 requires-python = ">=3.13"
 dependencies = [
     "fastapi",
