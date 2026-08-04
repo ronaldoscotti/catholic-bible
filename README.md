@@ -1,5 +1,7 @@
 # catholic-bible
 
+[Português](README.pt-BR.md)
+
 A read-only API and a published dataset for the Catholic Bible. 73 books,
 Portuguese, English and Latin, public domain throughout.
 
@@ -206,3 +208,28 @@ src/catholic_bible/
 Dependencies run one way. The canon knows nothing about storage and storage
 knows nothing about HTTP. A module that imports upward is a bug rather than a
 shortcut.
+
+## The shape of it
+
+Numbering schemes come in from the left, the spine is the only thing in the
+middle, and everything published hangs off a spine address rather than off a
+translation.
+
+```mermaid
+flowchart LR
+  V["Clementine Vulgate"] --> M{{"map_address"}}
+  O["org, the Copenhagen table"] --> M
+  D["Douay"] --> M
+  M -->|"no slot on the spine"| ORPH["orphans.json<br>3208 Vulgate, 2873 org"]
+  M --> S[["the spine<br>73 books, 35845 addresses"]]
+  S --> T["three translations<br>107103 verses"]
+  S --> C["Haydock commentary<br>20705 notes, English and Portuguese"]
+  S --> X["cross-references<br>207636 links on 26726 addresses"]
+```
+
+That is why commentary and cross-references take no version. They are anchored
+on the address, so the same note answers whichever translation is on screen.
+
+An address a scheme declares and the spine cannot hold does not get
+accommodated. It gets counted and published, and `LIMITS.md` breaks all 3208 of
+them down by book and by cause.

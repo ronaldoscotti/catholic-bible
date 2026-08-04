@@ -48,16 +48,95 @@ database says when it was filled.
 Only the reimport half of the export check closes that, and it lives where the
 private source lives.
 
-## The orphan rate is not measured here
+## Two things are called the orphan rate and only one of them is measured here
 
-The B2 epic asks for the per book orphan rate. This repo cannot produce it.
+The word covers two different failures and this repo can answer for one.
 
-An orphan is a source verse that reached no address on the spine. The import
-dropped those before the corpus was written, so nothing that crossed over
-remembers them. Publishing a zero would read as clean when it means unmeasured.
+**A scheme address that reaches no slot on the spine.** Measured, published in
+`orphans.json`, and the rest of this section is that number. Every address the
+Copenhagen table declares is run through the mapping function and the misses are
+counted by book and by reason.
 
-What is measurable here is the other side of the same coin, and it is published
-in `orphans.json` and `coverage.json`.
+**A source verse the import dropped before the corpus was written.** Not
+measured, and not measurable from inside this repository. The import runs where
+the private source lives and it discards what it could not place, so nothing
+that crossed over remembers what did not. Publishing a zero would read as clean
+when it means unmeasured.
+
+### Orphans per scheme
+
+| Scheme | Addresses examined | Resolved | Orphans |
+|---|---|---|---|
+| Clementine Vulgate | 39046 | 35838 | 3208 |
+| `org` | 38371 | 35498 | 2873 |
+| Douay | not reportable | | |
+
+Douay has no declared coordinate space here. It arrives with the text in B2, and
+a zero in that row would be a claim rather than a measurement.
+
+| Cause | Vulgate | `org` |
+|---|---|---|
+| The book has no counterpart on the spine | 3039 | 2705 |
+| A Vulgate psalm title, addressed at verse 0 | 147 | 147 |
+| The chapter is past the end of the book | 13 | 13 |
+| The verse is past the end of the chapter | 9 | 8 |
+
+### Where the concentration is, and why
+
+Almost all of it is one thing. The Copenhagen table names books this canon does
+not carry as books, and 3039 Vulgate addresses are pointed at them.
+
+| Book | Vulgate | `org` |
+|---|---|---|
+| 2 Esdras | 942 | 942 |
+| 4 Maccabees | 482 | 482 |
+| 1 Esdras | 451 | 426 |
+| Greek Esther | 267 | 267 |
+| Greek Daniel | 241 | 175 |
+| 3 Maccabees | 228 | 228 |
+| 6 Ezra | 141 | 141 |
+| Letter of Jeremiah | 72 | 0 |
+| Song of the Three | 67 | 1 |
+| Susanna | 64 | 0 |
+| Bel and the Dragon | 42 | 1 |
+| Laodiceans | 20 | 20 |
+| Prayer of Manasseh | 15 | 15 |
+| Psalm 151 | 7 | 7 |
+
+Two different causes sit in that table. 2 Esdras, 4 Maccabees, 1 Esdras, 3
+Maccabees, 6 Ezra, Laodiceans, the Prayer of Manasseh and Psalm 151 are not
+received as Scripture by the Catholic Church, and holding them would make the
+canon larger than the 73 books this dataset claims. The rest is canonical text
+that has no book of its own here, because Greek Esther lives inside Esther,
+Susanna and Bel and the Song of the Three live inside Daniel, and the Letter of
+Jeremiah is Baruch 6. Four of those fall to nearly zero in the `org` column,
+which is the table doing its job and folding them back where they belong.
+
+That leaves 169 orphans in books the spine does carry, and each has a name.
+
+147 are Vulgate psalm titles addressed at verse 0, which the spine does not
+number. 13 are Sirach 52, the Prayer of Solomon that the Vulgate appends. The
+last 9 are single verses falling one past the end of a chapter.
+
+`MAT.14.36` `ACT.3.26` `ACT.15.41` `GAL.1.24` `2TH.2.17` `HEB.12.29` `1PE.1.25`
+`REV.7.17` `JON.1.17`
+
+Eight of those nine are in the New Testament, and they are the only orphans this
+project chose rather than inherited. The superset rule stops at the Old
+Testament, so a Vulgate New Testament chapter carrying one verse more than `org`
+orphans instead of extending the spine. `DECISIONS.md` says why the eight slots
+are not worth the numbering, and the short version is that liturgy,
+cross-references and the Catechism all cite the modern New Testament and this
+spine has to keep answering them.
+
+`JON.1.17` is the ninth and it is a different animal. Jonah 1:17 in the English
+reckoning is Jonah 2:1 in the Hebrew and in the Vulgate, the spine follows `org`
+and ends Jonah 1 at verse 16, and the Vulgate map reads Jonah untouched. So the
+address exists in one tradition, means chapter 2 verse 1 in another, and the
+mapping refuses rather than guessing. It is the same refusal the reverse
+direction makes, and for the same reason.
+
+### Unfilled, which is the same question from the other side
 
 **Unfilled** counts spine addresses no version reached.
 
@@ -69,7 +148,7 @@ in `orphans.json` and `coverage.json`.
 
 The spine holds 35845 addresses. Proverbs and Sirach carry most of the
 Portuguese gap, 86 and 73 verses, and the Psalter carries most of the Latin and
-English one.
+English one. `coverage.json` breaks all three down by book.
 
 The epic said the Vulgate would demonstrate the spine with zero orphans and
 called it a live proof inside the release. It is 69 unfilled addresses, the epic

@@ -1,4 +1,4 @@
-.PHONY: install test lint fmt typecheck run down db openapi artifacts export-corpus export-commentary review-sample verify-export
+.PHONY: install test lint lint-voice fmt typecheck run down db openapi artifacts export-corpus export-commentary review-sample verify-export
 
 install:
 	uv sync
@@ -24,6 +24,11 @@ artifacts:
 lint:
 	uv run ruff check .
 	uv run ruff format --check .
+
+# The floor under the published prose, not the voice itself. The epic's
+# verification is a human read and this only catches what a machine can.
+lint-voice:
+	uv run scripts/lint-voice.py
 
 fmt:
 	uv run ruff format .
