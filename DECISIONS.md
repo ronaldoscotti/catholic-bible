@@ -52,6 +52,119 @@ quietly deleted.
 The cost goes in `LIMITS.md` when that file lands in B7. A stranger can verify
 integrity and cannot verify authorship, and that is the honest shape of it.
 
+## The spine is a superset of the schemes rather than their intersection
+
+Decided 2026-08-02, while implementing B1, and inherited from the working
+implementation rather than invented here.
+
+Editions disagree about how many verses a chapter has. The Vulgate numbers
+genealogies and psalm titles the modern editions fold away, so any single
+numbering used as the backbone silently loses whatever the others carry.
+
+The rule is one line. For each chapter of the Old Testament the spine holds the
+larger of what `org` has and what the Vulgate has. It never reduces. The New
+Testament is left exactly as `org` numbers it.
+
+**What lost.** The intersection, meaning only the addresses every scheme agrees
+on. It is the safe-sounding option and it is the one that throws away data. A
+verse that exists in the Vulgate and not in a modern edition has nowhere to
+live, so the Latin corpus arrives and the backbone refuses it. This project
+exists to carry the books other datasets drop, and starting from the smallest
+common shape would repeat that at the level of the verse.
+
+**What also lost, and it is the subtler one.** Extending from the raw Vulgate
+count instead of the remapped one. The Vulgate and `org` disagree about
+boundaries as well as cardinality, Genesis 31:55 being Genesis 32:1 in the
+other, and a raw extension reads that as Genesis 31 needing an extra verse. The
+spine would grow a slot nothing means, and the per book mode detection below
+would then measure against a chapter that was bumped for no reason. So the
+Vulgate maximum is taken after mapping onto the spine, which leaves only genuine
+cardinality to extend anything.
+
+**What it costs.** The spine is mixed rather than uniform, and nobody can point
+at one edition and say the numbering follows it. The Psalter ends up in Vulgate
+numbering and Joel and Malachi end up in `org`, both as results of the rule and
+neither as a rule of its own. It also means a version can leave addresses
+unfilled, and three of them do. 69 for the Clementine Vulgate, 81 for the
+Douay-Rheims, 282 for Matos Soares, against 35845 slots. An intersection would
+have reported zero unfilled by having refused the verses in the first place.
+
+Append-only from here. A published address never changes meaning.
+
+## The remapping mode is decided per book by counting, not by a fixed table
+
+Decided 2026-08-02, while implementing B1.
+
+The Copenhagen table maps Vulgate coordinates to `org`. Applying it everywhere
+is wrong, because the spine is mixed and the Psalter already stands in Vulgate
+numbering. Applying it nowhere is wrong for the same reason from the other side.
+
+So each book is asked rather than told. Run every verse the Vulgate declares for
+that book both ways, count how many land on a real spine address untouched and
+how many land there after the table is applied, and keep whichever loses less. A
+tie keeps the identity, because the table is the intervention and an
+intervention that buys nothing should not happen.
+
+**What lost.** A committed list naming which books remap. It reads better, it is
+one file a reader can check, and it is a second source of truth that goes stale
+the first time the spine moves. The spine is append-only and the mode is derived
+from it, so a list would have to be re-derived by hand on every extension and
+would be wrong quietly rather than loudly.
+
+**What it costs.** Which books remap is not visible by reading. It has to be run.
+The conformance corpus pins the modes that matter so the counting cannot drift
+without a test saying so, and the psalm mapping, which is the case anyone will
+actually hit, is published rather than left to be inferred.
+
+## An address with no slot is dropped and reported, not accommodated
+
+Decided 2026-08-02, while implementing B1.
+
+The mapping function can always be made to succeed. Widen the spine until every
+declared address fits and the orphan count goes to zero.
+
+It goes to zero by changing what the dataset claims to be. 3208 Vulgate
+addresses have no slot, and 3039 of them are addressed to a book the spine does
+not carry as a book. Two groups, and the difference matters.
+
+2286 belong to books the Church does not receive as Scripture at all. Second
+Esdras contributes 942, Fourth Maccabees 482, First Esdras 451, Third Maccabees
+228, then Sixth Ezra, the Letter to the Laodiceans, the Prayer of Manasseh and
+Psalm 151. Holding those means publishing a canon of more than 73 books inside a
+dataset whose first sentence says 73.
+
+The other 753 are canonical text with no book of its own here. Greek Esther,
+Greek Daniel, Susanna, Bel and the Dragon, the Song of the Three and the Letter
+of Jeremiah are Scripture, and the spine carries them inside Esther, Daniel and
+Baruch, which is where the Catholic canon puts them. Giving them separate books
+would match the Copenhagen table and contradict the canon the project is named
+after.
+
+The remaining 169 are the honest ones and each has a cause. 147 are Vulgate
+psalm titles addressed at verse 0, which the spine does not number. 13 are
+Sirach 52, the Prayer of Solomon that the Vulgate appends and the Catholic canon
+does not carry. 1 is Jonah 1:17, which is Jonah 2:1 in the Hebrew and in the
+Vulgate and which the mapping refuses rather than guesses. The last 8 are single
+verses at the end of a New Testament chapter, and those are the sharpest thing
+in this entry.
+
+**Those 8 are the cost, stated exactly.** Matthew 14:36, Acts 3:26, Acts 15:41,
+Galatians 1:24, 2 Thessalonians 2:17, Hebrews 12:29, 1 Peter 1:25 and
+Revelation 7:17. The superset rule stops at the Old Testament, so a Vulgate New
+Testament chapter carrying one more verse than `org` orphans instead of
+extending the spine by one slot.
+
+**What lost.** Extending the spine to hold them, which is eight slots and would
+read as a rounding error. The New Testament numbering in this spine is the one
+liturgy, cross-references and the Catechism cite. Bending it to the Vulgate for
+eight verses breaks every citation arriving from outside, in exchange for eight
+addresses that the Latin can reach through its own scheme anyway.
+
+**What it costs.** A Latin apparatus pointing at one of those eight gets an
+orphan back rather than a verse. `orphans.json` publishes all of it by book and
+by reason, and `LIMITS.md` carries the table, because a failure mode counted and
+published is worth more than a zero that was bought.
+
 ## Inverting the scheme table prefers the origin the spine can hold
 
 Decided 2026-08-02, while implementing B1.
