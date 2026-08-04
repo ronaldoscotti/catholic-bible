@@ -278,7 +278,11 @@ def package_json() -> str:
         # Without this npm ships the whole checkout. The licence travels
         # because the corpus is not MIT and CC BY 4.0 wants its notice present
         # wherever the bytes go.
-        "files": ["data", "LICENSE", "README.md"],
+        #
+        # Both READMEs are listed because npm ships every `README*` whatever
+        # this field says, so leaving the Portuguese one out would make the
+        # manifest describe a tarball npm does not produce.
+        "files": ["data", "LICENSE", "README.md", "README.pt-BR.md"],
         "license": "SEE LICENSE IN LICENSE",
         "repository": {
             "type": "git",

@@ -23,6 +23,90 @@ jobs:
       - run: uv run scripts/build-artifacts.py --check
       - run: uv run pytest
 
+  # What a stranger gets from `pip install`, which is a different question from
+  # what the source tree does. Hatchling selects files through the VCS ignore
+  # rules, so a file can leave the wheel without leaving the repository and
+  # nothing in the suite would notice.
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          enable-cache: true
+
+      - run: uv build --out-dir dist
+
+      - name: Install it the way a stranger would
+        run: |
+          python -m venv /tmp/probe
+          /tmp/probe/bin/pip install --quiet dist/*.whl pytest
+
+      # The point of the job. A source tree on the path would answer for the
+      # repository and the whole check would prove nothing.
+      - name: The import resolves to site-packages and not to this checkout
+        run: |
+          found=$(/tmp/probe/bin/python -c "import catholic_bible; print(catholic_bible.__file__)")
+          echo "$found"
+          case "$found" in
+            *site-packages*) ;;
+            *) echo "resolved outside the installed package"; exit 1 ;;
+          esac
+
+      # Copied out of the checkout so no sibling conftest can reach it. The
+      # corpus is read relative to the test file, so the two directories keep
+      # their shape and nothing else comes along.
+      - name: The B1 conformance corpus runs against the installed package
+        run: |
+          mkdir -p /tmp/installed/tests/canon /tmp/installed/tests/conformance
+          cp tests/canon/test_conformance.py /tmp/installed/tests/canon/
+          cp tests/conformance/corpus.toml   /tmp/installed/tests/conformance/
+          cd /tmp/installed
+          /tmp/probe/bin/pytest tests/canon/test_conformance.py -q
+
+      - name: The database builds on a first boot, which is what an install has
+        run: |
+          start=$(date +%s)
+          /tmp/probe/bin/catholic-bible-build-db | tee /tmp/built.txt
+          echo "cold build took $(( $(date +%s) - start ))s"
+          grep -q "107103 verses" /tmp/built.txt
+
+      - name: The documented responses come out of the installed package
+        run: |
+          /tmp/probe/bin/catholic-bible-api &
+          for attempt in $(seq 1 30); do
+            curl -sS --fail -m 2 http://localhost:8000/health -o /dev/null && break
+            sleep 1
+          done
+          expected=$(grep -m1 '^{"status"' README.md)
+          actual=$(curl -sS --fail http://localhost:8000/health)
+          echo "README $expected"
+          echo "live   $actual"
+          [ "$expected" = "$actual" ]
+          expected=$(grep -m1 '^{"id":"SIR.24.1"' README.md)
+          actual=$(curl -sS --fail \
+            http://localhost:8000/v1/versions/vulgata-clementina/books/SIR/chapters/24/verses/1)
+          echo "README $expected"
+          echo "live   $actual"
+          [ "$expected" = "$actual" ]
+
+      # The allowlist is `package.json` itself rather than a copy of it here,
+      # so a file added to one and not the other fails instead of passing.
+      - name: npm packs what package.json says and nothing else
+        run: |
+          cp package.json /tmp/manifest.json
+          npm pack --dry-run --json > /tmp/packed.json
+          node -e "
+            const packed = require('/tmp/packed.json')[0]
+            const allowed = require('/tmp/manifest.json').files.concat('package.json')
+            const stray = packed.files.filter(f =>
+              !f.path.startsWith('data/') && !allowed.includes(f.path))
+            if (stray.length) throw new Error('unexpected in the tarball: ' +
+              stray.map(f => f.path).join(', '))
+            console.log(packed.entryCount + ' files, ' +
+              (packed.unpackedSize/1048576).toFixed(1) + ' MB unpacked')
+          "
+
   # Runs the README quickstart verbatim, minus the detach flags a runner needs,
   # and asserts against the response the README publishes rather than a subset
   # of it. A quickstart nobody executes rots within a month.

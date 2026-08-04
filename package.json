@@ -6,7 +6,8 @@
  "files": [
   "data",
   "LICENSE",
-  "README.md"
+  "README.md",
+  "README.pt-BR.md"
  ],
  "homepage": "https://github.com/ronaldoscotti/catholic-bible#readme",
  "keywords": [

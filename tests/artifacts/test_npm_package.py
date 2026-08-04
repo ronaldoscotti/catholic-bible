@@ -44,11 +44,17 @@ def test_the_tarball_carries_the_data_and_the_terms() -> None:
 
     The licence has to travel because the corpus is not MIT and CC BY 4.0
     wants its notice present wherever the bytes go.
+
+    Both READMEs are listed because npm ships every `README*` whatever this
+    field says. `npm pack --dry-run` put the Portuguese one in a tarball the
+    manifest did not mention, which is a manifest describing something else.
     """
     files = manifest()["files"]
 
     assert "data" in files  # type: ignore[operator]
     assert "LICENSE" in files  # type: ignore[operator]
+    assert "README.md" in files  # type: ignore[operator]
+    assert "README.pt-BR.md" in files  # type: ignore[operator]
 
 
 def test_it_does_not_claim_one_licence_over_a_mixed_bundle() -> None:

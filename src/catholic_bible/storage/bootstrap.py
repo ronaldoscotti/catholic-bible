@@ -4,8 +4,9 @@ Inside a checkout and inside the Docker image it already does, so nothing here
 runs. Installed from a registry the file cannot ship, because it is derived and
 carries no checksum, and every published file here carries one.
 
-Four point nine seconds on the machine this was written on, from bytes the
-reader already downloaded when they installed the package.
+Ten seconds cold on the machine this was written on, from bytes the reader
+already downloaded when they installed the package. A warm rebuild inside a
+checkout is half that, which is why the message below promises no number.
 """
 
 from __future__ import annotations
@@ -47,7 +48,7 @@ def ensure() -> Path:
     if target.is_file():
         return target
 
-    print(f"building the read database at {target}, once, about five seconds")
+    print(f"building the read database at {target}, once, this takes a moment")
     materialise(target)
     return target
 
