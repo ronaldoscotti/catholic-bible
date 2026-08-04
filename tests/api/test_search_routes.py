@@ -6,6 +6,9 @@ FTS5 unchanged, and one of them is how half the world writes a reference.
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -259,3 +262,29 @@ def test_a_query_longer_than_a_search_box_is_refused(client: TestClient) -> None
     answer = client.get(SEARCH, params={"q": "palavra " * 300})
 
     assert answer.status_code == 422
+
+
+def test_the_readme_example_is_a_response_this_api_produces() -> None:
+    """The rule is no number in the README that has not been measured.
+
+    That block was hand-written and wrong. It showed the rank two verse as the
+    first hit, with the verse cut mid-sentence and a full stop added that
+    `snippet()` cannot produce. `docs/qa/` in the same branch carried the real
+    answer, so the README was the only place holding the invented one.
+
+    The same mechanism already guards the `/health` line, and nothing had
+    guarded this one.
+    """
+    from fastapi.testclient import TestClient
+
+    from catholic_bible.api.app import app
+
+    published = Path("README.md").read_text(encoding="utf-8")
+    start = published.index('{\n  "query": "coracao"')
+    example = json.loads(published[start : published.index("```", start)])
+
+    with TestClient(app) as client:
+        answer = client.get("/v1/search", params={"q": example["query"]}).json()
+
+    assert example["total"] == answer["total"]
+    assert example["hits"] == answer["hits"][: len(example["hits"])]

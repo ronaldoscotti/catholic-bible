@@ -853,12 +853,16 @@ Measured on the built database.
 | As B8 left it | 93.1 MB |
 | The same file, vacuumed | 91.5 MB |
 | With `commentary_body` keeping its rowid | 68.2 MB |
-| With both search indexes on top | 86.1 MB |
+| With both search indexes on top | 88.0 MB |
 
 A `WITHOUT ROWID` table stores the whole row inside the primary key B-tree, and
 this row carries two large text columns. That cost 23 MB. Both indexes cost 18.
 B9 adds full-text search over Scripture and over 41410 commentary bodies and
 leaves the file smaller than it found it.
+
+*The last row said 86.1 MB until a review checked it. That figure came from a
+vacuumed scratch copy and the build does not vacuum, so it was 1.9 MB under a
+number the argument rests on. `scripts/build-db.py` produces 87965696 bytes.*
 
 **What lost.** Nothing. The address every reader uses is still
 `(commentary, language)`, still unique and still indexed, and no query above the

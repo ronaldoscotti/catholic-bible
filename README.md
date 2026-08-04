@@ -208,13 +208,13 @@ carries rather than the one you typed.
   "limit": 20,
   "hits": [
     {
-      "id": "PSA.56.8",
-      "book": "PSA",
-      "chapter": 56,
-      "verse": 8,
-      "reference": "Sl 56,8",
+      "id": "SIR.25.31",
+      "book": "SIR",
+      "chapter": 25,
+      "verse": 31,
+      "reference": "Eclo 25,31",
       "version": "matos-soares",
-      "snippet": "O meu <em>coração</em>, ó Deus, está firme."
+      "snippet": "<em>Coração</em> abatido, rosto triste e chaga do <em>coração</em>, eis (o que produz) uma mulher má."
     }
   ]
 }

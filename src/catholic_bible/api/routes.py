@@ -737,6 +737,10 @@ def _commentary_languages(connection: sqlite3.Connection) -> set[str]:
 
     A source declares the language it was written in. A body exists per
     translation, and the Portuguese Haydock is a body without being a source.
+
+    Called only when a language was asked for. As an argument it ran on every
+    request, scanning all 41410 bodies to validate a filter nobody sent, which
+    was a third of an ordinary commentary search.
     """
     return {
         str(row["language"])
@@ -847,11 +851,15 @@ def search_commentary(
         errors.Reason.UNKNOWN_SOURCE,
         "commentary source",
     )
-    written = _one_of_or_404(
-        language,
-        _commentary_languages(connection),
-        errors.Reason.UNKNOWN_LANGUAGE,
-        "commentary language",
+    written = (
+        None
+        if language is None
+        else _one_of_or_404(
+            language,
+            _commentary_languages(connection),
+            errors.Reason.UNKNOWN_LANGUAGE,
+            "commentary language",
+        )
     )
     rows = reader.search_commentary(
         connection, expression, named, written, code, limit, offset

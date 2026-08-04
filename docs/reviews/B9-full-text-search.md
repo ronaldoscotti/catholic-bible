@@ -153,3 +153,55 @@ instead.
 That is the same shape as B8, where a mechanism nobody had written down was the
 thing that broke a criterion. Here the mechanism was written down, measured and
 published, and the measurement was of the wrong query.
+
+## Third pass, on the open pull request
+
+*2026-08-04. A review agent read the diff against the epic after the pull
+request opened. Six findings, all six real, all six reproduced before anything
+was changed.*
+
+**The defence the second pass added had a door in it.** Deduplication and the
+cap counted *terms*, and a quoted run is one term however many words it holds.
+A 497 character phrase, inside the 500 character ceiling, compiled to a single
+term and met neither defence. 269 ms against 49 ms for an ordinary query, and
+`routes.py` was asserting the opposite in a comment beside the constant.
+
+The cap counts words now and the phrase shares the budget with the bare words.
+The same query is 28.7 ms, below an ordinary one.
+
+That is two rounds in a row where the fix for an availability problem was
+narrower than the problem. The first bounded repetition and left phrases open.
+Naming the quantity being bounded, in the constant and in the comment, is the
+part that generalises.
+
+**An underscore ate whole queries silently.** `\w` keeps it and `unicode61` does
+not, so `___` survived as a phrase that tokenizes to nothing. `Deus ___`
+answered `200` with `total: 0` and hid the 6463 verses `Deus` reaches, with no
+error and no hint. Exactly the claim about the corpus this module refuses to
+make for `!!!`.
+
+The fuzz test that exists to catch this had no underscore in its alphabet, so
+2000 seeded inputs never reached it. It is in the alphabet now.
+
+**The README published a response the API does not produce.** The search example
+showed the rank two verse as the first hit, cut mid-sentence, with a full stop
+`snippet()` cannot emit. `docs/qa/` in the same branch carried the real answer,
+so the README was the only place holding the invented one, and the repo's own
+rule is that no number in it goes unmeasured.
+
+It is generated from a live response now and pinned by a test, which is the
+mechanism that already guarded the `/health` line and had not been extended
+here.
+
+**Three smaller ones.** The commentary language scan ran on every request,
+including the ones sending no language filter, scanning 41410 bodies to validate
+nothing. The size table in `DECISIONS.md` said 86.1 MB against a build that
+produces 88.0, because the figure came from a vacuumed scratch copy and the
+build does not vacuum. And `test_both_orderings_are_total` read the module with
+`inspect.getsource`, which fails on a reflowed line and passes on a string
+surviving in a docstring; it reads the constants the queries are built from now.
+
+**One process note taken rather than argued.** Commentary search was half the
+surface of this work and answered to a criteria list that spoke only of
+Scripture. There is a sixth criterion now. Written after the code, which is
+weaker than written before it, and better than work that no criterion counts.

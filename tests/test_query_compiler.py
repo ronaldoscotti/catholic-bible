@@ -14,7 +14,7 @@ from collections.abc import Iterator
 
 import pytest
 
-from catholic_bible.search import TERM_CAP, compile_query
+from catholic_bible.search import TOKEN_CAP, compile_query
 
 
 @pytest.fixture(scope="module")
@@ -104,7 +104,7 @@ def test_the_phrase_and_the_conjunction_are_different_questions(
     assert runs(fts, compile_query('"Deus cordeiro"') or "") == 0, row
 
 
-ALPHABET = "abcçé 12\"*()-:.,;!?'“”…/\\[]{}^~&|+=<>#@%$AND ORNEAR"
+ALPHABET = "abcçé 12\"*()-:.,;!?'“”…/\\[]{}^~&|+=<>#@%$_AND ORNEAR"
 
 
 def test_nothing_a_person_can_type_reaches_sqlite_as_a_syntax_error(
@@ -139,7 +139,7 @@ def test_a_term_repeated_is_searched_once() -> None:
     assert compile_query("a* " * 300) == '"a"*'
 
 
-def test_the_number_of_distinct_terms_is_capped() -> None:
+def test_the_number_of_words_is_capped() -> None:
     """Deduplication answers the cheap attack and a cap answers the other one.
 
     600 distinct short prefixes are fast, because the set collapses after the
@@ -149,7 +149,49 @@ def test_the_number_of_distinct_terms_is_capped() -> None:
     built = compile_query(typed)
 
     assert built is not None
-    assert built.count(" AND ") + 1 == TERM_CAP
+    assert built.count(" AND ") + 1 == TOKEN_CAP
+
+
+def test_a_long_phrase_is_bounded_the_same_way_a_long_query_is() -> None:
+    """The cap counts words, because counting terms let a phrase walk past it.
+
+    A quoted run is one term however many words it holds, so a 497 character
+    phrase compiled to a single term and met neither the dedupe nor the cap.
+    It cost 269 ms against 49 ms for an ordinary query, inside the 500
+    character ceiling and inside the published rate limit.
+    """
+    built = compile_query('"' + " ".join(["a"] * 248) + '"')
+
+    assert built is not None
+    assert len(built.strip('"').split()) == TOKEN_CAP
+
+
+def test_a_phrase_and_bare_words_share_one_budget() -> None:
+    """Otherwise the phrase is a way of buying more words than the cap allows."""
+    built = compile_query('"um dois tres" ' + " ".join(f"w{n}" for n in range(60)))
+
+    assert built is not None
+    assert (
+        sum(len(term.strip('"*').split()) for term in built.split(" AND ")) == TOKEN_CAP
+    )
+
+
+@pytest.mark.parametrize(
+    ("typed", "expected"),
+    [("___", None), ("Deus ___", '"Deus"'), ("a_b", '"a b"')],
+)
+def test_an_underscore_is_not_a_word_to_the_tokenizer(
+    typed: str, expected: str | None
+) -> None:
+    """`\\w` keeps the underscore and `unicode61` does not, and the gap ate queries.
+
+    `___` survived as the phrase `"___"`, which tokenizes to nothing and
+    matches nothing, so it answered 200 with an empty result. That is the claim
+    about the corpus this module refuses to make for `!!!`. Worse in company:
+    `Deus ___` returned zero and hid the 6463 verses `Deus` reaches, with no
+    error and no hint.
+    """
+    assert compile_query(typed) == expected
 
 
 def test_the_cap_keeps_the_terms_the_reader_wrote_first() -> None:

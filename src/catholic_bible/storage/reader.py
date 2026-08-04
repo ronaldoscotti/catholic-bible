@@ -319,6 +319,12 @@ NOTE_COLUMNS = """
     snippet(note_search, 0, '<em>', '</em>', '…', 64) AS snippet
 """
 
+# The tie break is the second half of each. bm25 ties are ordinary and SQLite
+# promises no order for equal keys, so without it two pages of one query can
+# repeat a row and hide another.
+VERSE_ORDER = "bm25(verse_search), texts.canonical_order, texts.version"
+NOTE_ORDER = "bm25(note_search), commentary.id, commentary_body.language"
+
 NOTE_FROM = """
     FROM note_search
     JOIN commentary_body ON commentary_body.id = note_search.rowid
@@ -364,8 +370,7 @@ def search_verses(
     return _all(
         connection.execute(
             f"SELECT {VERSE_COLUMNS} {VERSE_FROM} {tail}"
-            " ORDER BY bm25(verse_search), texts.canonical_order, texts.version"
-            " LIMIT ? OFFSET ?",
+            f" ORDER BY {VERSE_ORDER} LIMIT ? OFFSET ?",
             (*params, limit, offset),
         )
     )
@@ -409,8 +414,7 @@ def search_commentary(
     return _all(
         connection.execute(
             f"SELECT {NOTE_COLUMNS} {NOTE_FROM} {tail}"
-            " ORDER BY bm25(note_search), commentary.id, commentary_body.language"
-            " LIMIT ? OFFSET ?",
+            f" ORDER BY {NOTE_ORDER} LIMIT ? OFFSET ?",
             (*params, limit, offset),
         )
     )

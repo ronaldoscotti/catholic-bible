@@ -22,14 +22,23 @@ _TOKEN = re.compile(r'"([^"]*)"|(\S+)')
 # What survives into the expression. Everything else is punctuation the reader
 # did not mean as an operator, and dropping it is what makes `Deus (pai)` a
 # search rather than a syntax error.
-_WORD = re.compile(r"\w+", re.UNICODE)
+#
+# `\w` minus the underscore, because `unicode61` does not tokenise one. Plain
+# `\w` let `___` through as a phrase that matches nothing, so `Deus ___` came
+# back empty and hid every verse `Deus` reaches.
+_WORD = re.compile(r"[^\W_]+", re.UNICODE)
 
-# FTS5 intersects a doclist once per term, and repeating a broad term never
+# FTS5 intersects a doclist once per token, and repeating a broad one never
 # shrinks the set being intersected. 300 copies of `a*` cost 8.5 seconds of CPU
 # on the built corpus, in an 899 character query the rate limiter counts as one
 # request. Deduplication answers that, and the cap bounds what it cannot: a
 # reader with 32 distinct words has a different problem from a search box.
-TERM_CAP = 32
+#
+# Words rather than terms. A quoted run is one term however many words it holds,
+# so counting terms let a 497 character phrase past both defences at 269 ms
+# against 49 ms for an ordinary query. The phrase and the bare words share one
+# budget, or the quotes are a way of buying more words than the cap allows.
+TOKEN_CAP = 32
 
 
 def compile_query(raw: str) -> str | None:
@@ -38,8 +47,22 @@ def compile_query(raw: str) -> str | None:
     `None` is a refusal rather than an empty result, because an empty result
     says the corpus does not hold the word.
     """
-    terms = list(dict.fromkeys(term for term in _terms(raw) if term))[:TERM_CAP]
+    terms = []
+    budget = TOKEN_CAP
+    for term in dict.fromkeys(term for term in _terms(raw) if term):
+        if budget <= 0:
+            break
+        terms.append(_truncated(term, budget))
+        budget -= len(term.strip('"*').split())
     return " AND ".join(terms) if terms else None
+
+
+def _truncated(term: str, budget: int) -> str:
+    """The term, cut to what is left of the budget, keeping its prefix star."""
+    words = term.strip('"*').split()
+    if len(words) <= budget:
+        return term
+    return f'"{" ".join(words[:budget])}"' + ("*" if term.endswith("*") else "")
 
 
 def _terms(raw: str) -> list[str]:

@@ -353,15 +353,16 @@ def test_both_orderings_are_total(database: sqlite3.Connection) -> None:
     So the guarantee is asserted where it lives. The same call was made for the
     tokenizer argument, and for the same reason: the behaviour that would break
     cannot be provoked, and the thing that prevents it can be read.
+
+    Against the constants the queries are built from, not against the text of
+    the module. Reading the source with `inspect` passed on a string surviving
+    in a docstring and failed on the clause being reflowed across two lines,
+    which is coupling to layout rather than to behaviour.
     """
-    import inspect
-
-    source = inspect.getsource(reader)
-
-    assert "ORDER BY bm25(verse_search), texts.canonical_order, texts.version" in source
-    assert (
-        "ORDER BY bm25(note_search), commentary.id, commentary_body.language" in source
-    )
+    assert reader.VERSE_ORDER.endswith("texts.canonical_order, texts.version")
+    assert reader.NOTE_ORDER.endswith("commentary.id, commentary_body.language")
+    assert "bm25(verse_search)" in reader.VERSE_ORDER
+    assert "bm25(note_search)" in reader.NOTE_ORDER
 
 
 def test_the_answer_is_ranked_and_not_merely_ordered(
