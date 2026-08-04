@@ -674,3 +674,125 @@ says spine. The published name is the word a reader has already met.
 It is the only artifact whose name differs from its source, and the mapping is a
 literal in the generator rather than a transformation, so the file itself is
 byte identical to what it was copied from.
+
+## The rate limit counter is a file, not a dictionary
+
+Decided 2026-08-04, while implementing B8.
+
+Counting per address in memory is one line and it is wrong the moment the
+service runs more than one worker. Each process gets its own tally, so four
+workers enforce four times the configured limit, and the effective number is
+whatever the deployment happens to be running.
+
+So the counter is SQLite, in its own file, shared by every process on the box.
+
+**What lost.** A dictionary. It is faster, it needs no file and no cleanup, and
+the number it enforces is unknowable without reading the deployment. A limit
+nobody can state is not a limit.
+
+**What it costs.** 15.5 microseconds per counted hit, measured, against a verse
+read that costs 1.94 milliseconds. Two windows are 31 microseconds, which is
+1.6% of work the request was already doing. That is what made this the boring
+choice rather than the expensive one.
+
+**It is not the corpus database.** That one is opened read only and nothing
+writes to it, which is a claim `CLAUDE.md` makes about this whole repository.
+The limiter has its own file, its own connection and its own schema, so the
+read only claim about published Scripture stays literally true.
+
+## The window is fixed rather than sliding
+
+Decided 2026-08-04, while implementing B8.
+
+A fixed window is one integer per address per window. A sliding window needs the
+timestamp of every request in the period, which for 1000 an hour is a thousand
+rows per address instead of one.
+
+**What lost.** Correctness at the boundary. 60 requests at 11:00:59 and 60 more
+at 11:01:00 is 120 in two seconds and breaks no rule.
+
+**What it costs.** Exactly that, and `LIMITS.md` publishes it rather than hoping
+nobody notices. The limit exists to stop a loop with no sleep in it, and such a
+loop is refused within the first second either way. Paying a thousandfold in
+storage to close a hole that only a deliberate attacker would aim at, on a free
+read only dataset, is buying the wrong thing.
+
+## No proxy is trusted until one is configured
+
+Decided 2026-08-04, while implementing B8.
+
+Behind a reverse proxy, the socket address is the proxy and every caller in the
+world lands in one bucket. The fix is `X-Forwarded-For` and that header is
+written by whoever is calling.
+
+Reading it unconditionally is worse than having no limit at all. Anyone sending
+a fresh value per request gets a fresh bucket every time and walks straight
+through, while an honest client stays counted. That is a limiter that only
+limits people who are not attacking you.
+
+So the header is read only when the connection itself came from an address
+configured as a trusted proxy, and the default configuration trusts nothing.
+
+**What lost.** Defaulting to the first entry of the header, which is what most
+examples show and what makes the limiter work out of the box behind a proxy. It
+works by being bypassable.
+
+**What it costs.** B8 ships enforcing on the socket address, which is correct
+without a proxy and wrong behind one. B6 sets the value when Caddy lands, and
+until then the setting is empty rather than guessed. A limiter that is briefly
+too strict for proxied callers is recoverable. One that was never enforcing is
+found out later.
+
+Within the header, the answer is the rightmost entry that is not itself a
+trusted hop, because each hop appends and the left end is the client's own
+claim. An entry that is not an address stops the walk, since anything a trusted
+proxy appended is a real address, and stepping over garbage to reach a value the
+client supplied is the same hole through a side door.
+
+## The middleware is raw ASGI rather than BaseHTTPMiddleware
+
+Decided 2026-08-04, while implementing B8, on a measurement rather than a
+preference.
+
+Starlette's `BaseHTTPMiddleware` is the documented way and it wraps each request
+in a task group and a streaming response. Interleaved against the bare
+application it added a repeatable 330 microseconds. The raw ASGI version was
+indistinguishable from zero, showing negative in one run, which is the harness
+noise rather than a speedup.
+
+**What lost.** The readable one. `dispatch` with a request object beats reading
+byte tuples out of a scope, and the 429 would have been a `JSONResponse` return
+instead of two hand written send calls.
+
+**What it costs.** The middleware speaks ASGI, so headers are byte pairs and the
+refusal is assembled by hand. It also sits outside the application, which means
+the exception handlers never see it and a `raise ApiError` up there would escape
+as a 500. The refusal is therefore built rather than raised, and a comment in
+the code says why so nobody helpfully refactors it.
+
+The number that decided it: 330 microseconds of wrapper around 15.5 microseconds
+of work is the wrapper costing twenty times what it wraps.
+
+## Keys come only when per address limiting has visibly failed
+
+Decided 2026-08-04, while implementing B8, and the trigger is written down so
+the decision is not remade from mood.
+
+No key, no account, no signup. The epic is explicit and this records what would
+have to be true to change it.
+
+**The trigger.** Sustained abuse that per address limiting cannot see, which in
+practice means one of two things. A distributed source, where thousands of
+addresses each stay under the limit and the aggregate still saturates the box.
+Or a shared exit, where a university or a carrier NAT puts real readers behind
+one address and the limit stops the wrong people.
+
+**What happens then, and only then.** A key issued self service against an
+email, with no password and no session, used to raise a limit rather than to
+grant access. Everything stays readable without one.
+
+**What lost.** Issuing keys now, which is the ordinary shape of a public API and
+which would let the limits be generous. It is an identity, an identity needs a
+store, a store of emails needs a policy, and this project has no users and no
+login. Building all of it against a threat nobody has observed is the gold
+plating `CLAUDE.md` exists to refuse.

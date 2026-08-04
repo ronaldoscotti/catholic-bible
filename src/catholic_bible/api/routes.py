@@ -38,7 +38,7 @@ IMMUTABLE = "public, max-age=31536000, immutable"
 # nothing can invalidate.
 CATALOGUE = "public, max-age=3600"
 
-router = APIRouter(prefix="/v1")
+router = APIRouter(prefix="/v1", responses=errors.TOO_MANY)
 
 # A path number outside 64 bits reaches `sqlite3` as a bind parameter and raises
 # OverflowError, which is a 500 with a traceback. Both ends, because the driver

@@ -38,6 +38,7 @@ class Reason(StrEnum):
     WHOLE_CHAPTER = "whole_chapter"
     RANGE_TOO_LARGE = "range_too_large"
     STORE_UNAVAILABLE = "store_unavailable"
+    RATE_LIMITED = "rate_limited"
 
     NO_COUNTERPART = "no_counterpart"
     CHAPTER_OUT_OF_RANGE = "chapter_out_of_range"
@@ -114,4 +115,10 @@ NOT_FOUND: Responses = {
 }
 UNPROCESSABLE: Responses = {
     422: {"model": ErrorResponse, "description": "The reference cannot be resolved"}
+}
+
+# Declared on the router rather than on each route. Rate limiting happens in
+# middleware, in front of everything, so it is not a property of any one route.
+TOO_MANY: Responses = {
+    429: {"model": ErrorResponse, "description": "Too many requests from this address"}
 }

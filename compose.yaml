@@ -1,6 +1,13 @@
 services:
   api:
     build: .
+    # The limits, overridable from the shell without editing this file, which is
+    # what the epic means by configurable without a code change. Empty trusted
+    # proxies is the safe default and B6 fills it in when Caddy exists.
+    environment:
+      RATE_LIMIT_PER_MINUTE: "${RATE_LIMIT_PER_MINUTE:-60}"
+      RATE_LIMIT_PER_HOUR: "${RATE_LIMIT_PER_HOUR:-1000}"
+      RATE_LIMIT_TRUSTED_PROXIES: "${RATE_LIMIT_TRUSTED_PROXIES:-}"
     ports:
       # Loopback rather than every interface. Docker writes its own iptables
       # rules and a bare "8000:8000" would publish this to the local network.

@@ -642,8 +642,22 @@
       },
       "Health": {
         "properties": {
+          "limiter": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Limiter"
+          },
           "status": {
-            "const": "ok",
+            "enum": [
+              "ok",
+              "degraded"
+            ],
             "title": "Status",
             "type": "string"
           },
@@ -785,6 +799,7 @@
           "whole_chapter",
           "range_too_large",
           "store_unavailable",
+          "rate_limited",
           "no_counterpart",
           "chapter_out_of_range",
           "verse_out_of_range",
@@ -1021,6 +1036,16 @@
             },
             "description": "Successful Response"
           },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Rate limited"
+          },
           "503": {
             "content": {
               "application/json": {
@@ -1102,6 +1127,16 @@
               }
             },
             "description": "The reference cannot be resolved"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too many requests from this address"
           }
         },
         "summary": "Commentary on one verse"
@@ -1173,6 +1208,16 @@
               }
             },
             "description": "The reference cannot be resolved"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too many requests from this address"
           }
         },
         "summary": "The passages one verse points at"
@@ -1221,6 +1266,16 @@
               }
             },
             "description": "The reference cannot be resolved"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too many requests from this address"
           }
         },
         "summary": "Commentary on a written reference"
@@ -1269,6 +1324,16 @@
               }
             },
             "description": "The reference cannot be resolved"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too many requests from this address"
           }
         },
         "summary": "The passages a written reference points at"
@@ -1343,6 +1408,16 @@
               }
             },
             "description": "The reference cannot be resolved"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too many requests from this address"
           }
         },
         "summary": "A written reference, read in one or more versions"
@@ -1391,6 +1466,16 @@
               }
             },
             "description": "The reference cannot be resolved"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too many requests from this address"
           }
         },
         "summary": "A written reference, resolved to addresses"
@@ -1413,6 +1498,16 @@
               }
             },
             "description": "Successful Response"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too many requests from this address"
           }
         },
         "summary": "Every published translation"
@@ -1466,6 +1561,16 @@
               }
             },
             "description": "The reference cannot be resolved"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too many requests from this address"
           }
         },
         "summary": "The books one translation reaches"
@@ -1524,6 +1629,16 @@
               }
             },
             "description": "The reference cannot be resolved"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too many requests from this address"
           }
         },
         "summary": "A whole book, grouped by chapter"
@@ -1593,6 +1708,16 @@
               }
             },
             "description": "The reference cannot be resolved"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too many requests from this address"
           }
         },
         "summary": "One chapter, with its neighbours"
@@ -1673,6 +1798,16 @@
               }
             },
             "description": "The reference cannot be resolved"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too many requests from this address"
           }
         },
         "summary": "One verse"

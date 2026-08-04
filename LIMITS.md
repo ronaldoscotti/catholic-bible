@@ -197,6 +197,76 @@ them onto Matos Soares at import time, in the `heading` column of the same row
 as the public domain verse text. The export names its columns and never selects
 that one, and a test fails if a heading reaches a published file.
 
+## What the rate limiter cannot do, added in B8
+
+### It is abuse control and it is not DDoS protection
+
+The epic's own framing invites this confusion, so it gets said plainly. Per
+address limits stop one careless script. A distributed flood arrives from
+thousands of addresses, each one comfortably under 60 a minute, and this
+middleware answers every one of them politely and on time.
+
+Stopping that needs something in front of the box that can drop a packet without
+a Python process waking up. Nothing here is that, and nothing here will be.
+
+### It counts the request after it has already arrived
+
+The connection was accepted, TLS was done, the ASGI scope was built and the
+middleware ran. What a refusal saves is the database read and the
+serialisation, measured at 1.94 ms, and it saves nothing below that. A flood
+large enough to fill the accept queue is not affected by any of this.
+
+### A restart forgives a window
+
+The counter lives in a file under the system temporary directory and it is
+deliberately not persisted. Restarting the service resets every window, so a
+caller who was three seconds from being unblocked and a caller who just spent
+their hour are treated the same.
+
+The alternative is a volume, a backup and a migration for data whose whole value
+expires in sixty minutes. This is the cheaper wrong answer and it is chosen
+knowingly.
+
+### A fixed window admits up to double the limit across a boundary
+
+60 requests at 11:00:59 and 60 more at 11:01:00 is 120 requests in two seconds
+and none of it breaks a rule. A sliding window would catch it and needs a
+timestamp per request instead of one integer per bucket.
+
+For a limit that exists to stop a runaway loop rather than to meter a paid
+product, the boundary is the cheapest thing to give away. `DECISIONS.md` carries
+the trade.
+
+### The limiter can stop working and the API keeps answering
+
+Fail open, by decision. A disk error, a read only filesystem or a corrupt file
+leaves the counter unusable, and the request is served rather than refused. The
+posture before B8 was unlimited, so this is a return to it rather than a new
+hole.
+
+What makes it survivable is that it says so. `/health` reports `degraded` with
+the reason and the log fires at error level. A limiter that quietly stopped
+limiting is the classic hole in security middleware, and the only defence
+against it is the report.
+
+### A refused request still spends the other window, on purpose
+
+A request the minute window turned away is still counted against the hour. A
+caller who reads `Retry-After` and waits never meets this. A caller who ignores
+the 429 and keeps hammering spends the hourly budget on refusals and is locked
+out for the rest of it.
+
+A review called this a defect and it is a decision. Escalating a client that
+ignores the answer is what the second window is for, and the request was
+answered, logged and paid for whatever its status code said.
+
+### An address behind a shared exit is one caller
+
+A university, an office or a mobile carrier NAT puts thousands of people behind
+one address, and they share one budget. There is no way to tell them apart
+without an identity, and an identity is an account, which this project does not
+have. `DECISIONS.md` records what would have to happen before that changes.
+
 ## What is not here yet
 
 No per book files and no CDN. That is B5.

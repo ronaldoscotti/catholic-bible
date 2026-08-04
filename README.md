@@ -180,6 +180,29 @@ numbers 50. Both answers are correct and only one of them is yours.
 Names, abbreviations and notation follow the language of the version being read,
 so the same verse comes back as `Eclo 24,1`, `Ecclus. 24:1` and `Eccli. 24,1`.
 
+### What you are allowed to ask for
+
+**60 requests a minute and 1000 an hour, per address.** No key, no account, no
+signup, and nothing to apply for. Both windows are counted at once, so the
+minute stops a loop with no sleep in it and the hour stops the polite crawler
+that walks the whole corpus overnight at one request a second.
+
+Every response carries where you stand, so nothing has to be discovered by being
+refused.
+
+```
+RateLimit-Limit: 60
+RateLimit-Remaining: 41
+RateLimit-Reset: 23
+```
+
+Going over returns `429` with `Retry-After` in seconds and the same error body
+every other refusal here uses. Waiting that long is enough.
+
+If the limits are a problem for something you are building, the static files on
+the CDN have no limit at all and never will, because they cost nothing to serve.
+Fetch those instead of looping over the API.
+
 ## Development
 
 `uv` manages dependencies and the lockfile is committed, so a clean checkout

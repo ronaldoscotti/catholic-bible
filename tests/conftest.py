@@ -7,6 +7,7 @@ red green cycle costs seconds that nobody would pay twice.
 
 from __future__ import annotations
 
+import os
 import sqlite3
 from collections.abc import Iterator
 from pathlib import Path
@@ -14,12 +15,19 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
-from catholic_bible import storage
-from catholic_bible.api.app import app
-from catholic_bible.api.routes import database as route_database
-from catholic_bible.canon import DATA_DIR
-from catholic_bible.storage.build import build
-from catholic_bible.storage.database import DB_PATH, connect
+# Before the application is imported, because the limiter reads its settings
+# once at import. The whole suite arrives from one address and would spend the
+# real budget partway through. The tests that care build their own limiter with
+# their own numbers, and `tests/test_deployment.py` asserts that this default
+# cannot reach a running container.
+os.environ.setdefault("RATE_LIMIT_ENABLED", "false")
+
+from catholic_bible import storage  # noqa: E402
+from catholic_bible.api.app import app  # noqa: E402
+from catholic_bible.api.routes import database as route_database  # noqa: E402
+from catholic_bible.canon import DATA_DIR  # noqa: E402
+from catholic_bible.storage.build import build  # noqa: E402
+from catholic_bible.storage.database import DB_PATH, connect  # noqa: E402
 
 INPUTS = (
     DATA_DIR / "canon.json",
