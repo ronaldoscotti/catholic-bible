@@ -7,6 +7,7 @@ from pydantic import BaseModel
 
 from catholic_bible import __version__
 from catholic_bible.api import errors, routes
+from catholic_bible.api.ratelimit import RateLimiter, State
 from catholic_bible.storage.database import connect
 
 app = FastAPI(
@@ -21,18 +22,26 @@ app.add_exception_handler(errors.ApiError, errors.handle)
 app.add_exception_handler(RequestValidationError, errors.handle_validation)
 app.include_router(routes.router)
 
+# Shared with the middleware so `/health` can say the limiter stopped working.
+# A limiter that silently stopped limiting is the hole this is here to avoid.
+LIMITER = State()
+app.add_middleware(RateLimiter, state=LIMITER)
+
 
 class Health(BaseModel):
-    status: Literal["ok"]
+    status: Literal["ok", "degraded"]
     version: str
+    limiter: str | None = None
 
 
 @app.get(
     "/health",
     summary="Whether the service can answer",
     response_model=Health,
+    response_model_exclude_none=True,
     responses={
-        503: {"model": errors.ErrorResponse, "description": "The store is unreadable"}
+        429: {"model": errors.ErrorResponse, "description": "Rate limited"},
+        503: {"model": errors.ErrorResponse, "description": "The store is unreadable"},
     },
 )
 def health() -> Health:
@@ -53,6 +62,9 @@ def health() -> Health:
         connection.execute("SELECT 1 FROM versions LIMIT 1").fetchone()
     finally:
         connection.close()
+
+    if LIMITER.degraded is not None:
+        return Health(status="degraded", version=__version__, limiter=LIMITER.degraded)
     return Health(status="ok", version=__version__)
 
 

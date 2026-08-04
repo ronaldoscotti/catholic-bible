@@ -4,9 +4,11 @@
 |---|---|
 | Milestone | v1.1 |
 | Labels | `epic` `area/api` `milestone-spec` |
-| Depends on | B6 |
+| Depends on | nothing. B6 configures one setting |
 
-*Milestone spec. Expanded against the code that exists when it is reached, rather than guessed now.*
+*Expanded against the code that existed when it was reached, on 2026-08-04. The spec is `docs/specs/2026-08-04-b8-rate-limiting.md` and the plan is beside it.*
+
+**The dependency line used to say B6 and it was wrong.** Nothing in the five criteria needs a deploy, and all five were met without one. What B6 actually owns is the value of `RATE_LIMIT_TRUSTED_PROXIES`, which stays empty until a reverse proxy exists, because trusting a forwarded header from nobody in particular is worse than not reading it at all. B8 ships enforcing on the socket address, which is correct without a proxy, and B6 sets the trusted address when Caddy lands.
 
 **As** the person paying for the server
 **I need** a public endpoint that cannot be turned into someone else's free compute
@@ -24,11 +26,15 @@ An unlimited public API on a single box can be saturated by one careless script,
 
 ## Acceptance criteria
 
-- [ ] Per-IP request limits are enforced
-- [ ] Exceeding the limit returns `429` with `Retry-After`
-- [ ] Limits are configurable without a code change
-- [ ] Current limits are documented in the README
-- [ ] Static CDN artifacts stay unlimited, since they cost nothing to serve
+- [x] Per-IP request limits are enforced
+- [x] Exceeding the limit returns `429` with `Retry-After`
+- [x] Limits are configurable without a code change
+- [x] Current limits are documented in the README
+- [x] Static CDN artifacts stay unlimited, since they cost nothing to serve
+
+**The fifth is met by architecture rather than by work.** jsDelivr serves the static files and never reaches this service, so nothing here could limit them. It is recorded as a non-action instead of being dressed up as a task, and the README points a caller who hits the limit at those files.
+
+**The verification was run against a container, not only against the suite.** The window was waited out by trusting `Retry-After` and being readmitted, and a forged `X-Forwarded-For` was proved not to buy a fresh budget. `docs/qa/B8-rate-limiting.md` pastes both.
 
 ## Constraints
 

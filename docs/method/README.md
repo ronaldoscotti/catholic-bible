@@ -35,13 +35,27 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 0  Understand       docs/method/00-understand.md
 [x] 1  Context          docs/method/01-context.md
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
-[x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5
-[x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5
-[x] 5  Implement        B0 B1 B2 B3 B4 B5 merged, B7 open, 596 tests
-[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7
-[x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4 B5 B7, one author
-[x] 8  PR               B0 B1 B2 B3 B4 B5 merged. v1.0.0 and v1.0.1 released
+[x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5 B8
+[x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8
+[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 merged, B8 open, 654 tests
+[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8
+[x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4 B5 B7 B8, one author
+[x] 8  PR               B0 B1 B2 B3 B4 B5 B7 merged. v1.0.0 and v1.0.1 released
 ```
+
+**B8 is the first epic whose review ran before the pull request.** B3, B4, B5 and
+B7 all reviewed after it was up and each recorded that as the wrong order rather
+than tidying it. This one ran first, and it found that the gate chain used in
+this session had been printing green over a real type error, because a shell
+pipeline reports the exit code of its last command. CI was never fooled, since it
+runs each step on its own line, so what was at risk was the claim rather than the
+build.
+
+Both gates were met on B8. The spec was presented with five design questions
+answered before it was written and three left open at the bottom, the answers
+came back, the plan followed, and the first line of code came after that. The
+epic's `Depends on B6` was wrong and is corrected in the file rather than worked
+around.
 
 B7 took the short route. It writes prose, one lint script and the tests that
 keep the prose honest, and it touches no canon, no spine, no data model and no
