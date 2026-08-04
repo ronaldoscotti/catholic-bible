@@ -220,11 +220,11 @@ flowchart LR
   V["Clementine Vulgate"] --> M{{"map_address"}}
   O["org, the Copenhagen table"] --> M
   D["Douay"] --> M
-  M -->|"no slot on the spine"| ORPH["orphans.json<br>3208 Vulgate, 2873 org"]
   M --> S[["the spine<br>73 books, 35845 addresses"]]
   S --> T["three translations<br>107103 verses"]
   S --> C["Haydock commentary<br>20705 notes, English and Portuguese"]
   S --> X["cross-references<br>207636 links on 26726 addresses"]
+  M -->|"no slot on the spine"| ORPH["orphans.json<br>3208 Vulgate, 2873 org"]
 ```
 
 That is why commentary and cross-references take no version. They are anchored
