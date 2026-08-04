@@ -49,6 +49,24 @@ def test_a_signposting_opener_is_caught_and_only_as_an_opener() -> None:
     assert _reasons("The table is moreover inverted.") == []
 
 
+def test_a_banned_phrase_is_caught_across_a_line_break() -> None:
+    """The prose is hard wrapped, so a four word phrase straddles breaks often.
+
+    A per line search would find this one only when the wrap happened to fall
+    somewhere else, which makes the rule depend on the paragraph's width.
+    """
+    assert _reasons("It's worth noting that the table is inverted.") == [
+        "banned phrase \"it's worth noting that\""
+    ]
+    assert _reasons("It's worth\nnoting that the table is inverted.") == [
+        "banned phrase \"it's worth noting that\""
+    ]
+
+
+def test_a_phrase_split_by_a_blank_line_is_two_paragraphs_and_not_a_finding() -> None:
+    assert _reasons("It's worth\n\nnoting that the table is inverted.") == []
+
+
 def test_a_word_that_merely_contains_a_banned_one_is_left_alone() -> None:
     """`realm` inside `overwhelmed` is not a finding."""
     assert _reasons("The importer was overwhelmed.") == []

@@ -37,11 +37,35 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
 [x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5
 [x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5
-[x] 5  Implement        B0 B1 B2 B3 B4 B5 merged, 565 tests
-[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5
-[x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4 B5, one author
+[x] 5  Implement        B0 B1 B2 B3 B4 B5 merged, B7 open, 588 tests
+[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7
+[x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4 B5 B7, one author
 [x] 8  PR               B0 B1 B2 B3 B4 B5 merged. v1.0.0 and v1.0.1 released
 ```
+
+B7 took the short route. It writes prose, one lint script and the tests that
+keep the prose honest, and it touches no canon, no spine, no data model and no
+public seam, so stages 3 and 4 are skipped under the rule below rather than
+waived.
+
+**B7 nearly lost a criterion to this project's own documentation.** The epic
+asks for the orphan rate per book and per scheme. `LIMITS.md` said the orphan
+rate is not measured here, that sentence was taken at face value, and the
+criterion was reported to the author as unmeetable.
+
+Two different failures share the word. A source verse the import dropped is
+genuinely not countable from inside this repo. A scheme address that reaches no
+spine slot has been measured since B1 and published in `orphans.json` the whole
+time. One heading covered both and answered only for the second. The section is
+split now and every number in it is compared to the JSON by a test, which is the
+part that generalises. A limit was wrong for two epics and nothing failed,
+because the prose and the data had no mechanism holding them together.
+
+**The diagram criterion is the one a test could not have closed.** The mermaid
+was valid on the first attempt and drew the wrong picture, putting the orphan
+report on the main rank where the spine belongs. It was caught by opening the
+pushed branch and looking at it. The box stayed empty until then, and
+`docs/qa/B7-decisions-and-limits.md` carries both renders.
 
 v1.0.1 corrects what the artifact says about the Portuguese translation. B5's
 fetch criterion came down while the README pinned a tag that did not exist yet

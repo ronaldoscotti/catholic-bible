@@ -145,7 +145,9 @@ def prose_lines(text: str) -> list[str]:
 
 def check(name: str, text: str) -> list[Finding]:
     findings: list[Finding] = []
-    for number, line in enumerate(prose_lines(text), start=1):
+    lines = prose_lines(text)
+
+    for number, line in enumerate(lines, start=1):
         if EM_DASH in line:
             findings.append((name, number, "em-dash"))
 
@@ -153,15 +155,42 @@ def check(name: str, text: str) -> list[Finding]:
         for word in BANNED_WORDS_EN + BANNED_WORDS_PT:
             if re.search(rf"\b{re.escape(word)}\b", lowered):
                 findings.append((name, number, f"banned word {word!r}"))
-        for phrase in BANNED_PHRASES:
-            if phrase in lowered:
-                findings.append((name, number, f"banned phrase {phrase!r}"))
 
         stripped = line.lstrip("*_> ")
         for opener in BANNED_OPENERS:
             if re.match(rf"{re.escape(opener)}\b,", stripped):
                 findings.append((name, number, f"signposting opener {opener!r}"))
-    return findings
+
+    # Phrases are checked against the whole paragraph rather than the line. The
+    # prose here is hard wrapped at 80 columns, so a four word phrase is about
+    # as likely to straddle a line break as to sit inside one, and a per line
+    # search would miss exactly the half that got wrapped.
+    for start, paragraph in paragraphs(lines):
+        joined = re.sub(r"\s+", " ", paragraph.lower())
+        for phrase in BANNED_PHRASES:
+            if phrase in joined:
+                findings.append((name, start, f"banned phrase {phrase!r}"))
+
+    return sorted(findings, key=lambda finding: finding[1])
+
+
+def paragraphs(lines: list[str]) -> list[tuple[int, str]]:
+    """Runs of non-blank lines, each with the line number it starts on."""
+    found: list[tuple[int, str]] = []
+    start = 0
+    buffer: list[str] = []
+    for number, line in enumerate(lines, start=1):
+        if line.strip():
+            if not buffer:
+                start = number
+            buffer.append(line)
+            continue
+        if buffer:
+            found.append((start, " ".join(buffer)))
+            buffer = []
+    if buffer:
+        found.append((start, " ".join(buffer)))
+    return found
 
 
 def targets() -> list[Path]:

@@ -28,7 +28,7 @@ A developer choosing between this dataset and another one on GitHub has nothing 
 - [x] `LIMITS.md` records the rights audit per asset, with the legal basis and what was excluded
 - [x] `README.md` and `README.pt-BR.md` both exist and link to each other from the top
 - [x] `CONTRIBUTING.md` states that no alias and no scheme enters without a conformance case
-- [ ] A diagram shows schemes entering, the spine in the middle, and the layers hanging off it
+- [x] A diagram shows schemes entering, the spine in the middle, and the layers hanging off it
 - [x] Every prose document passes the voice check, including zero em-dashes
 
 **The second criterion was nearly abandoned on a misreading.** It was called
@@ -40,10 +40,12 @@ since B1 and sits in `orphans.json` with a breakdown by book and by reason. The
 old section answered only with the unfilled counts, which are the other
 question. It is split in two now and the measurable half is published.
 
-**The diagram box is empty on purpose.** The mermaid block is written and its
-syntax is valid, which is not the same as a diagram anyone has looked at.
-`docs/qa/B7-decisions-and-limits.md` says it gets ticked after it has been seen
-rendering on the pushed branch, and not before.
+**The diagram box was held back until somebody looked at it.** Valid mermaid
+syntax is not a rendered diagram, and the first render proved the difference. It
+put `orphans.json` on the main rank, so the arrow into the translations read as
+coming out of the orphan report and the spine was not in the middle. A test
+would have passed. Reordering two lines fixed it, the second render was checked
+the same way, and the box went up after that.
 
 **The seventh is ticked on the half a machine can answer.** `make lint-voice`
 runs clean over 18 documents and a test keeps it that way. The human read named

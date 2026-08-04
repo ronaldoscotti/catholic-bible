@@ -81,12 +81,21 @@ conformance case.** Met, and it says why with the case that makes it concrete.
 reference to Job into John without failing anything a reader would notice.
 
 **6. A diagram shows schemes entering, the spine in the middle, and the layers
-hanging off it.** Not ticked yet. Mermaid in `README.md`, so it needs no image
-binary and no build step, and GitHub renders it natively.
+hanging off it.** Met, and looking at it is what met it. Mermaid in `README.md`,
+so it needs no image binary and no build step, and GitHub renders it natively.
 
-Valid syntax is not a rendered diagram. The criterion says the diagram shows
-something, and that is answered by looking at it on the pushed branch. Ticked
-below once it has been.
+Valid syntax is not a rendered diagram, so the branch was pushed and the file
+opened at `?plain=0`. The first render was wrong. Mermaid put `orphans.json` on
+the main rank between `map_address` and the layers, which left the arrow into
+the translations reading as though it came out of the orphan report. The
+criterion says the spine is in the middle and the spine was not.
+
+Declaring the spine edge before the orphan edge fixed it. The second render puts
+the three schemes on the left, the spine on the main rank, the three published
+layers hanging off it, and `orphans.json` as a labelled dead end off the mapping
+function, which is what it is.
+
+Nothing in the syntax was invalid either time. A test would have passed on both.
 
 **7. Every prose document passes the voice check, including zero em-dashes.**
 Met on the half a machine can answer.
