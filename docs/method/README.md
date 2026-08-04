@@ -35,13 +35,51 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 0  Understand       docs/method/00-understand.md
 [x] 1  Context          docs/method/01-context.md
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
-[x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5 B8
-[x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8
-[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 merged, B8 open, 661 tests
-[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8
-[x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4 B5 B7 B8, one author
-[x] 8  PR               B0 B1 B2 B3 B4 B5 B7 merged. v1.0.0 and v1.0.1 released
+[x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5 B8 B9
+[x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8 B9
+[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 merged, B9 open, 761 tests
+[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8 B9
+[x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4 B5 B7 B8 B9, one author
+[x] 8  PR               B0 B1 B2 B3 B4 B5 B7 B8 merged. v1.0.0 and v1.0.1 released
 ```
+
+**B9 is the first epic where the plan's refusals were the thing that paid.** It
+listed three assumptions it would not make and required each to be measured
+before anything was claimed. Two of the three mattered. The spec's timings came
+from the bare index with no join and no filter, and the real query is roughly
+twice as slow, so the paging cap was chosen against the honest number instead of
+the flattering one. The third refusal, that nothing proved the routes were
+installed, closed the same hole B8 had left open, and the test was checked by
+commenting out `include_router` and watching it fail.
+
+The first attempt at that check proved nothing. The string being replaced did not
+match what was in the file, so the mutation never happened and the suite went
+green on unmutated code. Reading the grep output rather than the exit status is
+what caught it.
+
+**Both gates were met on B9 and the review still found the worst thing in it.**
+A repeated term turned one unauthenticated `GET` into eight seconds of CPU, in
+899 characters the rate limiter counts as one request out of sixty. The spec was
+written first, the plan carried three refusals and two of them paid, and none of
+that was asking what a hostile reader would type. The plan asked whether the
+measurements were real and made them real. It did not ask what the worst
+reachable query is.
+
+The review also found that a docstring in this branch claimed a test defended
+the paging tie break, and deleting the tie break left the suite green. The
+claim was confident, wrong, and written by the author who then cited it as
+evidence. `docs/reviews/B9-full-text-search.md` carries it, along with three
+other tests that passed against code that had been deleted.
+
+**B9's QA found a bug that belongs to B8.** The container would not start, and
+the immediate cause was a full disk on this laptop. Underneath it,
+`default_store()` creates a directory inside `Settings.from_env()` inside
+`RateLimiter.__init__`, and nothing catches it. B8 fails open when the store
+cannot be opened and has a test holding that. When the directory cannot be
+created it takes the whole API down instead, on every request including
+`/health`. Reproduced away from the full disk. It is recorded in
+`docs/qa/B9-full-text-search.md` and it is not fixed in B9, because one epic per
+pull request is the rule.
 
 **B8 is the first epic whose review ran before the pull request.** B3, B4, B5 and
 B7 all reviewed after it was up and each recorded that as the wrong order rather

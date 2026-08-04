@@ -796,3 +796,90 @@ which would let the limits be generous. It is an identity, an identity needs a
 store, a store of emails needs a policy, and this project has no users and no
 login. Building all of it against a threat nobody has observed is the gold
 plating `CLAUDE.md` exists to refuse.
+
+## The query is compiled here rather than handed to FTS5
+
+Decided 2026-08-04, while implementing B9.
+
+`MATCH` takes an expression language with operators, column filters and its own
+quoting. Passing what a reader typed straight into it is the shortest possible
+implementation and it turns ordinary input into a 500. Ten realistic queries went
+in raw and six came back a syntax error, including `Deus (pai)`, `o Senhor's` and
+`Jo 3:16`, which is how half the world writes a reference.
+
+So `src/catholic_bible/search.py` parses the query and builds the expression.
+Double quotes mean a phrase, bare words are all required, a trailing star is a
+prefix, and every other character is punctuation the reader did not mean as an
+operator.
+
+**What lost.** The full FTS5 grammar. `NEAR`, boolean `OR` and column filters are
+real tools and every one of their failure modes would have become a public error
+on an endpoint with no authentication and no support channel. `NEAR` is also a
+word in this corpus, and a bare `NEAR` reaches 217 verses.
+
+**What it costs.** A reader who knows FTS5 cannot use it. Nobody has asked, and
+the reverse cost was measured.
+
+**A query that survives parsing with nothing left is a 422.** `!!!` is not a
+question about the corpus, so answering it with an empty result would claim the
+corpus lacks a word that was never a word.
+
+## The highlight marks the token, not the string the reader typed
+
+Decided 2026-08-04, while implementing B9.
+
+The ported implementation highlights by replacing the literal term in the text
+after the match is found, and `BIBLE_API.md` warns that the tags may be absent
+when the match came from accent folding. Search `coracao`, find the verse that
+holds "coração", get no `<em>`.
+
+`snippet()` marks the token the index actually matched, so the accented spelling
+is highlighted by an unaccented query. This is a divergence from the port in the
+reader's favour and it is written down rather than absorbed, because a client
+built against the documented caveat is a client built to expect worse.
+
+## `commentary_body` gave up WITHOUT ROWID and the file got smaller
+
+Decided 2026-08-04, while implementing B9.
+
+An FTS5 external content index addresses its content table by rowid. `texts` and
+`commentary` keep theirs for exactly that reason, written into `build.py` during
+B2. `commentary_body` was `WITHOUT ROWID` and out of reach.
+
+Measured on the built database.
+
+| Database | Size |
+|---|---|
+| As B8 left it | 93.1 MB |
+| The same file, vacuumed | 91.5 MB |
+| With `commentary_body` keeping its rowid | 68.2 MB |
+| With both search indexes on top | 88.0 MB |
+
+A `WITHOUT ROWID` table stores the whole row inside the primary key B-tree, and
+this row carries two large text columns. That cost 23 MB. Both indexes cost 18.
+B9 adds full-text search over Scripture and over 41410 commentary bodies and
+leaves the file smaller than it found it.
+
+*The last row said 86.1 MB until a review checked it. That figure came from a
+vacuumed scratch copy and the build does not vacuum, so it was 1.9 MB under a
+number the argument rests on. `scripts/build-db.py` produces 87965696 bytes.*
+
+**What lost.** Nothing. The address every reader uses is still
+`(commentary, language)`, still unique and still indexed, and no query above the
+storage layer changed. The existing commentary tests were the regression test.
+
+## Two search routes rather than one ranked list
+
+Decided 2026-08-04, while implementing B9.
+
+Scripture and commentary are searched at `/v1/search` and
+`/v1/search/commentary`.
+
+A single merged endpoint would rank a `bm25` score computed over 107103 verses
+against one computed over 41410 notes. Those numbers share a name and not a
+meaning, and paging through the result would page through an order nobody can
+explain.
+
+**What lost.** One request instead of two for a reader who wants both. Two
+answers are also two cache entries with different lifetimes and different
+filters, which is the shape a client wants anyway.

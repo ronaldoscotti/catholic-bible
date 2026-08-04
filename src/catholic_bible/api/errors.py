@@ -32,6 +32,8 @@ class Reason(StrEnum):
 
     UNKNOWN_VERSION = "unknown_version"
     UNKNOWN_BOOK = "unknown_book"
+    UNKNOWN_SOURCE = "unknown_source"
+    UNKNOWN_LANGUAGE = "unknown_language"
     NOT_ON_SPINE = "not_on_spine"
     UNPUBLISHED_IN_VERSION = "unpublished_in_version"
     MALFORMED = "malformed"

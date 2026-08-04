@@ -10,9 +10,9 @@ from __future__ import annotations
 import bisect
 import sqlite3
 from collections.abc import Iterator
-from typing import Annotated
+from typing import Annotated, Literal
 
-from fastapi import APIRouter, Depends, Path, Response
+from fastapi import APIRouter, Depends, Path, Query, Response
 
 from catholic_bible import cross_references
 from catholic_bible.api import errors, models, resolving
@@ -26,6 +26,7 @@ from catholic_bible.canon.aliases import (
 from catholic_bible.canon.formatter import format_reference
 from catholic_bible.canon.mapping import Scheme
 from catholic_bible.canon.reference import Reference
+from catholic_bible.search import compile_query
 from catholic_bible.storage import reader
 from catholic_bible.storage.database import connect
 
@@ -671,4 +672,228 @@ def passage(
         book=reference.book,
         versions=codes,
         verses=verses,
+    )
+
+
+# A result list depends on what is published, so it cannot carry the immutable
+# year a verse carries. Short enough that a reader paging through a query pays
+# for the scan once.
+SEARCHED = "public, max-age=300"
+
+# Ranking sorts every match before it can page, so the cost grows with the
+# offset rather than with the page. The three ceilings here bound the offset,
+# the page and the query, and the term cap in `search.py` bounds the work one
+# query can ask for. LIMITS.md carries the measurements.
+DEEPEST = 1000
+WIDEST = 100
+
+# A search box, not a document. The compiler already deduplicates and caps the
+# terms it builds, and this is the ceiling under it so the parse itself is
+# bounded too.
+LONGEST = 500
+
+Query_ = Annotated[
+    str,
+    Query(max_length=LONGEST, description="Words, or a phrase in double quotes"),
+]
+Offset = Annotated[int, Query(ge=0, le=DEEPEST)]
+Limit = Annotated[int, Query(ge=1, le=WIDEST)]
+Testament = Annotated[Literal["OLD", "NEW"] | None, Query()]
+
+# Every translation rather than one. A word, because a reader types it, and it
+# cannot collide with a version code while every code carries a hyphen.
+EVERY = "all"
+
+
+def _expression_or_422(q: str) -> str:
+    """What a person typed, compiled into something FTS5 will run.
+
+    A refusal rather than an empty result. An empty result set is an answer
+    about the corpus, and `!!!` is not a question about the corpus.
+    """
+    built = compile_query(q)
+    if built is None:
+        raise errors.unprocessable(
+            errors.Reason.MALFORMED, "the query carries no searchable word", q
+        )
+    return built
+
+
+def _searched_version(connection: sqlite3.Connection, asked: str | None) -> str:
+    if asked is None:
+        return str(reader.default_version(connection)["code"])
+    if asked == EVERY:
+        return EVERY
+    _version_or_404(connection, asked)
+    return asked
+
+
+def _searched_book(connection: sqlite3.Connection, asked: str | None) -> str | None:
+    return None if asked is None else str(_book_or_404(connection, asked)["code"])
+
+
+def _commentary_languages(connection: sqlite3.Connection) -> set[str]:
+    """Read off the bodies rather than off the sources.
+
+    A source declares the language it was written in. A body exists per
+    translation, and the Portuguese Haydock is a body without being a source.
+
+    Called only when a language was asked for. As an argument it ran on every
+    request, scanning all 41410 bodies to validate a filter nobody sent, which
+    was a third of an ordinary commentary search.
+    """
+    return {
+        str(row["language"])
+        for row in connection.execute(
+            "SELECT DISTINCT language FROM commentary_body"
+        ).fetchall()
+    }
+
+
+def _one_of_or_404(
+    asked: str | None, published: set[str], reason: errors.Reason, what: str
+) -> str | None:
+    """A filter nobody publishes is a 404, the way an unknown book already is.
+
+    Passing it through answers `total: 0`, which reads as the corpus having
+    nothing to say. `source=haydok` is a typo and not a question about the
+    corpus. The empty string is refused for the same reason rather than
+    treated as no filter, because a client rendering an unset value would get
+    everything back while its interface claimed one.
+    """
+    if asked is None:
+        return None
+    if asked not in published:
+        raise errors.not_found(reason, f"no {what} named {asked!r}", asked)
+    return asked
+
+
+@router.get(
+    "/search",
+    summary="Verses carrying a word or a phrase",
+    response_model=models.SearchOut,
+    responses={**errors.NOT_FOUND, **errors.UNPROCESSABLE},
+)
+def search(
+    connection: Database,
+    response: Response,
+    q: Query_,
+    version: Annotated[str | None, Query(description="A code, or all")] = None,
+    book: Annotated[
+        str | None, Query(description="A code or any name that resolves")
+    ] = None,
+    testament: Testament = None,
+    offset: Offset = 0,
+    limit: Limit = 20,
+) -> models.SearchOut:
+    expression = _expression_or_422(q)
+    asked = _searched_version(connection, version)
+    code = _searched_book(connection, book)
+    scoped = None if asked == EVERY else asked
+
+    languages = {
+        str(row["code"]): reader.language_of(str(row["language"]))
+        for row in reader.versions(connection)
+    }
+    rows = reader.search_verses(
+        connection, expression, scoped, code, testament, limit, offset
+    )
+
+    response.headers["Cache-Control"] = SEARCHED
+    return models.SearchOut(
+        query=q,
+        version=asked,
+        total=reader.count_verses(connection, expression, scoped, code, testament),
+        offset=offset,
+        limit=limit,
+        hits=[_verse_hit(row, languages) for row in rows],
+    )
+
+
+def _verse_hit(row: reader.Row, languages: dict[str, Language]) -> models.VerseHit:
+    book, chapter, verse = str(row["book"]), int(row["chapter"]), int(row["verse"])
+    point = (chapter, verse)
+    version = str(row["version"])
+    return models.VerseHit(
+        id=str(row["id"]),
+        book=book,
+        chapter=chapter,
+        verse=verse,
+        reference=format_reference(Reference(book, (point, point)), languages[version]),
+        version=version,
+        snippet=str(row["snippet"]),
+    )
+
+
+@router.get(
+    "/search/commentary",
+    summary="Commentary carrying a word or a phrase",
+    response_model=models.CommentarySearchOut,
+    responses={**errors.NOT_FOUND, **errors.UNPROCESSABLE},
+)
+def search_commentary(
+    connection: Database,
+    response: Response,
+    q: Query_,
+    source: Annotated[str | None, Query(examples=["haydock"])] = None,
+    language: Annotated[str | None, Query(examples=["pt-BR"])] = None,
+    book: Annotated[
+        str | None, Query(description="A code or any name that resolves")
+    ] = None,
+    offset: Offset = 0,
+    limit: Limit = 20,
+) -> models.CommentarySearchOut:
+    expression = _expression_or_422(q)
+    code = _searched_book(connection, book)
+    named = _one_of_or_404(
+        source,
+        {str(row["code"]) for row in reader.commentary_sources(connection)},
+        errors.Reason.UNKNOWN_SOURCE,
+        "commentary source",
+    )
+    written = (
+        None
+        if language is None
+        else _one_of_or_404(
+            language,
+            _commentary_languages(connection),
+            errors.Reason.UNKNOWN_LANGUAGE,
+            "commentary language",
+        )
+    )
+    rows = reader.search_commentary(
+        connection, expression, named, written, code, limit, offset
+    )
+
+    response.headers["Cache-Control"] = SEARCHED
+    return models.CommentarySearchOut(
+        query=q,
+        total=reader.count_commentary(connection, expression, named, written, code),
+        offset=offset,
+        limit=limit,
+        hits=[_commentary_hit(row) for row in rows],
+    )
+
+
+def _commentary_hit(row: reader.Row) -> models.CommentaryHit:
+    """The anchor, formatted in the language the note is written in.
+
+    A note has one span and two languages, so the reference is written the way
+    the body a reader is looking at would write it.
+    """
+    book = str(row["book"])
+    span = (
+        (int(row["start_chapter"]), int(row["start_verse"])),
+        (int(row["end_chapter"]), int(row["end_verse"])),
+    )
+    language = reader.language_of(str(row["language"]))
+    return models.CommentaryHit(
+        source=str(row["source"]),
+        language=str(row["language"]),
+        start=str(row["start"]),
+        end=str(row["end"]),
+        book=book,
+        reference=format_reference(Reference(book, span), language),
+        label=row["label"],
+        snippet=str(row["snippet"]),
     )

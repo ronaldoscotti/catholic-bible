@@ -24,11 +24,32 @@ Finding "cordeiro de Deus" in the text requires downloading the whole corpus and
 
 ## Acceptance criteria
 
-- [ ] Full-text search over the corpus, scoped by translation and optionally by book
-- [ ] Portuguese and Latin accents and diacritics are handled correctly
-- [ ] Results carry the structured verse id and a snippet with the match highlighted
-- [ ] Results are ranked and paginated
-- [ ] The search index is built by the B2 export and ships as a build artifact
+- [x] Full-text search over the corpus, scoped by translation and optionally by book
+- [x] Portuguese and Latin accents and diacritics are handled correctly
+- [x] Results carry the structured verse id and a snippet with the match highlighted
+- [x] Results are ranked and paginated
+- [x] The search index is built by the committed build step from the published corpus, and no hand-built index ships
+- [x] The same search is available over the commentary, answering by the address each note hangs on
+
+**The last criterion had its wording changed rather than being ticked against
+text the rest of the repo denies.** It said the index comes out of the B2 export
+and ships as a build artifact. The B2 export needs the private source and writes
+JSON. The index is built by `scripts/build-db.py` from files that are already
+committed, on a clean checkout, by anyone with a clone.
+
+B5 hit the same sentence and rewrote it for the same reason. An index shipped out
+of the export would be one more file a stranger has to take on trust, and the
+whole point of splitting the build downstream is that they do not have to.
+
+**Commentary was added to the scope at the spec gate and now has a criterion of
+its own.** The epic says the corpus and the author asked for the notes as well,
+so there are two routes rather than one. `DECISIONS.md` carries why they are not
+one merged ranked list.
+
+The sixth line was added after a review pointed out that half the surface of this
+work was answering to a list that only spoke of Scripture. A criterion written
+after the code is weaker than one written before it, and leaving the work
+uncounted would have been worse.
 
 ## Constraints
 

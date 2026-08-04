@@ -120,13 +120,20 @@ CREATE INDEX commentary_coverage ON commentary(source, first_order, last_order);
 -- A row per language rather than a `pt` column. Two languages are in the data
 -- today and a column named after one of them is a schema that has to change the
 -- day a third arrives.
+--
+-- Keeps its rowid, and the address the readers use is a unique index instead.
+-- This was `WITHOUT ROWID`, which stores the whole row inside the primary key
+-- B-tree, and this row carries two large text columns. That cost 23 MB on a
+-- 91.5 MB file, measured, which is more than both search indexes together.
 CREATE TABLE commentary_body (
+    id INTEGER PRIMARY KEY,
     commentary INTEGER NOT NULL REFERENCES commentary(id),
     language TEXT NOT NULL,
     html TEXT NOT NULL,
-    text TEXT NOT NULL,
-    PRIMARY KEY (commentary, language)
-) WITHOUT ROWID;
+    text TEXT NOT NULL
+);
+
+CREATE UNIQUE INDEX commentary_body_address ON commentary_body(commentary, language);
 
 CREATE TABLE cross_reference_sources (
     code TEXT PRIMARY KEY,
@@ -149,6 +156,31 @@ CREATE TABLE cross_references (
     source TEXT NOT NULL REFERENCES cross_reference_sources(code),
     PRIMARY KEY (from_order, to_order)
 ) WITHOUT ROWID;
+
+-- External content, so the index holds postings and the text stays where it
+-- already lives. A contentless index would be smaller and cannot produce a
+-- snippet, and the snippet is an acceptance criterion.
+--
+-- `remove_diacritics 2` is where accents are handled, once, at tokenisation.
+-- Nothing on the request path folds anything, and no column is stored twice.
+--
+-- No stemmer. FTS5 ships `porter`, which only knows English, and this index
+-- holds Portuguese, English and Latin together. A stemmer right for one of
+-- three is worse than none, because being wrong is invisible. The prefix
+-- operator replaces it, under the reader's control.
+CREATE VIRTUAL TABLE verse_search USING fts5(
+    text,
+    content='texts',
+    content_rowid='rowid',
+    tokenize="unicode61 remove_diacritics 2"
+);
+
+CREATE VIRTUAL TABLE note_search USING fts5(
+    text,
+    content='commentary_body',
+    content_rowid='id',
+    tokenize="unicode61 remove_diacritics 2"
+);
 """
 
 
@@ -164,6 +196,7 @@ def build(connection: sqlite3.Connection) -> None:
     for position, code in enumerate(commentary.SOURCES):
         build_commentary(connection, commentary.load(code), position)
     build_cross_references(connection, cross_references.load())
+    build_indexes(connection)
 
     # Without statistics the planner guesses, and it guessed that scanning all
     # 41410 commentary bodies was cheaper than driving the join off the coverage
@@ -171,6 +204,12 @@ def build(connection: sqlite3.Connection) -> None:
     # the statistics are computed once here and never go stale.
     connection.execute("ANALYZE")
     connection.commit()
+
+
+def build_indexes(connection: sqlite3.Connection) -> None:
+    """The search indexes, after everything they read has been written."""
+    for table in ("verse_search", "note_search"):
+        connection.execute(f"INSERT INTO {table}({table}) VALUES ('rebuild')")
 
 
 def build_canon(connection: sqlite3.Connection) -> None:
@@ -336,7 +375,11 @@ def build_commentary(
         ),
     )
     connection.executemany("INSERT INTO commentary VALUES (?, ?, ?, ?, ?, ?)", entries)
-    connection.executemany("INSERT INTO commentary_body VALUES (?, ?, ?, ?)", bodies)
+    connection.executemany(
+        "INSERT INTO commentary_body (commentary, language, html, text)"
+        " VALUES (?, ?, ?, ?)",
+        bodies,
+    )
 
 
 def build_cross_references(
