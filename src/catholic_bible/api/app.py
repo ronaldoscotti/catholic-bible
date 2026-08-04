@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from catholic_bible import __version__
 from catholic_bible.api import errors, routes
 from catholic_bible.api.ratelimit import RateLimiter, State
+from catholic_bible.storage import bootstrap
 from catholic_bible.storage.database import connect
 
 app = FastAPI(
@@ -69,4 +70,10 @@ def health() -> Health:
 
 
 def main() -> None:
+    """Serve, building the store first if an installed copy has none yet.
+
+    Before uvicorn rather than on the first request, so a boot that cannot
+    build fails where somebody is watching instead of inside a 500.
+    """
+    bootstrap.ensure()
     uvicorn.run(app, host="0.0.0.0", port=8000)

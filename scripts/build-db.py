@@ -4,6 +4,10 @@
 Derived and never authored. The inputs are committed and CI verifies their
 checksums, so this file carries no checksum of its own and is not committed.
 
+The work lives in `catholic_bible.storage.bootstrap`, which is also what the
+installed `catholic-bible-build-db` runs and what the API calls on a first
+boot. Three callers, one implementation.
+
 Usage:
     scripts/build-db.py [--dest path/to/bible.db]
 """
@@ -13,10 +17,11 @@ from __future__ import annotations
 import argparse
 import sqlite3
 import sys
+from contextlib import closing
 from pathlib import Path
 
-from catholic_bible.storage.build import build
-from catholic_bible.storage.database import DB_PATH
+from catholic_bible.storage.bootstrap import main as build_where_it_belongs
+from catholic_bible.storage.bootstrap import materialise
 
 
 def main() -> int:
@@ -24,22 +29,12 @@ def main() -> int:
     parser.add_argument("--dest", default=None)
     args = parser.parse_args()
 
-    dest = Path(args.dest).resolve() if args.dest else DB_PATH
-    dest.parent.mkdir(parents=True, exist_ok=True)
+    if args.dest is None:
+        return build_where_it_belongs()
 
-    # Built beside the target and moved into place, so an interrupted run leaves
-    # the previous database readable rather than a half written one.
-    scratch = dest.with_suffix(".building")
-    scratch.unlink(missing_ok=True)
-
-    connection = sqlite3.connect(scratch)
-    try:
-        build(connection)
-    finally:
-        connection.close()
-    scratch.replace(dest)
-
-    with sqlite3.connect(f"file:{dest}?mode=ro", uri=True) as check:
+    dest = Path(args.dest).resolve()
+    materialise(dest)
+    with closing(sqlite3.connect(f"file:{dest}?mode=ro", uri=True)) as check:
         verses = check.execute("SELECT COUNT(*) FROM texts").fetchone()[0]
         addresses = check.execute("SELECT COUNT(*) FROM spine").fetchone()[0]
     print(f"built {dest} with {verses} verses over {addresses} spine addresses")

@@ -14,6 +14,9 @@ dependencies = [
 
 [project.scripts]
 catholic-bible-api = "catholic_bible.api.app:main"
+# For an image that wants the store in a layer rather than rebuilt on every
+# container start. `catholic-bible-api` does it on its own otherwise.
+catholic-bible-build-db = "catholic_bible.storage.bootstrap:main"
 
 [build-system]
 requires = ["hatchling"]
