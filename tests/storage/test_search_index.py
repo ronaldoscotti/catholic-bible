@@ -362,3 +362,33 @@ def test_both_orderings_are_total(database: sqlite3.Connection) -> None:
     assert (
         "ORDER BY bm25(note_search), commentary.id, commentary_body.language" in source
     )
+
+
+def test_the_answer_is_ranked_and_not_merely_ordered(
+    database: sqlite3.Connection,
+) -> None:
+    """Criterion 4's first word, which nothing else here was proving.
+
+    Deleting `bm25(...)` from both queries and leaving the tie breaks failed
+    only the assertion that reads the query text. Every behavioural test still
+    passed, because they check what is in the answer and not what is at the top
+    of it.
+
+    Two things separate a ranked answer from a sorted one. The order is not the
+    address order, and the verses at the top carry the word more than once,
+    which is what bm25 rewards.
+    """
+    hits = reader.search_verses(
+        database, expression("coracao"), version="matos-soares", limit=20
+    )
+    orders = [
+        int(
+            database.execute(
+                "SELECT canonical_order AS o FROM spine WHERE id = ?", (hit["id"],)
+            ).fetchone()["o"]
+        )
+        for hit in hits
+    ]
+
+    assert orders != sorted(orders), "an address ordering is not a ranking"
+    assert all(hit["snippet"].lower().count("<em>") >= 2 for hit in hits[:5])
