@@ -10,9 +10,9 @@ from __future__ import annotations
 import bisect
 import sqlite3
 from collections.abc import Iterator
-from typing import Annotated
+from typing import Annotated, Literal
 
-from fastapi import APIRouter, Depends, Path, Response
+from fastapi import APIRouter, Depends, Path, Query, Response
 
 from catholic_bible import cross_references
 from catholic_bible.api import errors, models, resolving
@@ -26,6 +26,7 @@ from catholic_bible.canon.aliases import (
 from catholic_bible.canon.formatter import format_reference
 from catholic_bible.canon.mapping import Scheme
 from catholic_bible.canon.reference import Reference
+from catholic_bible.search import compile_query
 from catholic_bible.storage import reader
 from catholic_bible.storage.database import connect
 
@@ -671,4 +672,167 @@ def passage(
         book=reference.book,
         versions=codes,
         verses=verses,
+    )
+
+
+# A result list depends on what is published, so it cannot carry the immutable
+# year a verse carries. Short enough that a reader paging through a query pays
+# for the scan once.
+SEARCHED = "public, max-age=300"
+
+# Ranking sorts every match before it can page, so the cost grows with the
+# offset rather than with the page. Measured on 2026-08-04: the first page of
+# the worst one letter query is 39 ms and the same page at offset 1000 is 79 ms.
+# LIMITS.md carries the numbers and the reason.
+DEEPEST = 1000
+WIDEST = 100
+
+Offset = Annotated[int, Query(ge=0, le=DEEPEST)]
+Limit = Annotated[int, Query(ge=1, le=WIDEST)]
+Testament = Annotated[Literal["OLD", "NEW"] | None, Query()]
+
+# Every translation rather than one. A word, because a reader types it, and it
+# cannot collide with a version code while every code carries a hyphen.
+EVERY = "all"
+
+
+def _expression_or_422(q: str) -> str:
+    """What a person typed, compiled into something FTS5 will run.
+
+    A refusal rather than an empty result. An empty result set is an answer
+    about the corpus, and `!!!` is not a question about the corpus.
+    """
+    built = compile_query(q)
+    if built is None:
+        raise errors.unprocessable(
+            errors.Reason.MALFORMED, "the query carries no searchable word", q
+        )
+    return built
+
+
+def _searched_version(connection: sqlite3.Connection, asked: str | None) -> str:
+    if asked is None:
+        return str(reader.default_version(connection)["code"])
+    if asked == EVERY:
+        return EVERY
+    _version_or_404(connection, asked)
+    return asked
+
+
+def _searched_book(connection: sqlite3.Connection, asked: str | None) -> str | None:
+    return None if asked is None else str(_book_or_404(connection, asked)["code"])
+
+
+@router.get(
+    "/search",
+    summary="Verses carrying a word or a phrase",
+    response_model=models.SearchOut,
+    responses={**errors.NOT_FOUND, **errors.UNPROCESSABLE},
+)
+def search(
+    connection: Database,
+    response: Response,
+    q: Annotated[str, Query(description="Words, or a phrase in double quotes")],
+    version: Annotated[str | None, Query(description="A code, or all")] = None,
+    book: Annotated[
+        str | None, Query(description="A code or any name that resolves")
+    ] = None,
+    testament: Testament = None,
+    offset: Offset = 0,
+    limit: Limit = 20,
+) -> models.SearchOut:
+    expression = _expression_or_422(q)
+    asked = _searched_version(connection, version)
+    code = _searched_book(connection, book)
+    scoped = None if asked == EVERY else asked
+
+    languages = {
+        str(row["code"]): reader.language_of(str(row["language"]))
+        for row in reader.versions(connection)
+    }
+    rows = reader.search_verses(
+        connection, expression, scoped, code, testament, limit, offset
+    )
+
+    response.headers["Cache-Control"] = SEARCHED
+    return models.SearchOut(
+        query=q,
+        version=asked,
+        total=reader.count_verses(connection, expression, scoped, code, testament),
+        offset=offset,
+        limit=limit,
+        hits=[_verse_hit(row, languages) for row in rows],
+    )
+
+
+def _verse_hit(row: reader.Row, languages: dict[str, Language]) -> models.VerseHit:
+    book, chapter, verse = str(row["book"]), int(row["chapter"]), int(row["verse"])
+    point = (chapter, verse)
+    version = str(row["version"])
+    return models.VerseHit(
+        id=str(row["id"]),
+        book=book,
+        chapter=chapter,
+        verse=verse,
+        reference=format_reference(Reference(book, (point, point)), languages[version]),
+        version=version,
+        snippet=str(row["snippet"]),
+    )
+
+
+@router.get(
+    "/search/commentary",
+    summary="Commentary carrying a word or a phrase",
+    response_model=models.CommentarySearchOut,
+    responses={**errors.NOT_FOUND, **errors.UNPROCESSABLE},
+)
+def search_commentary(
+    connection: Database,
+    response: Response,
+    q: Annotated[str, Query(description="Words, or a phrase in double quotes")],
+    source: Annotated[str | None, Query(examples=["haydock"])] = None,
+    language: Annotated[str | None, Query(examples=["pt-BR"])] = None,
+    book: Annotated[
+        str | None, Query(description="A code or any name that resolves")
+    ] = None,
+    offset: Offset = 0,
+    limit: Limit = 20,
+) -> models.CommentarySearchOut:
+    expression = _expression_or_422(q)
+    code = _searched_book(connection, book)
+    rows = reader.search_commentary(
+        connection, expression, source, language, code, limit, offset
+    )
+
+    response.headers["Cache-Control"] = SEARCHED
+    return models.CommentarySearchOut(
+        query=q,
+        total=reader.count_commentary(connection, expression, source, language, code),
+        offset=offset,
+        limit=limit,
+        hits=[_commentary_hit(row) for row in rows],
+    )
+
+
+def _commentary_hit(row: reader.Row) -> models.CommentaryHit:
+    """The anchor, formatted in the language the note is written in.
+
+    A note has one span and two languages, so the reference is written the way
+    the body a reader is looking at would write it.
+    """
+    book = str(row["book"])
+    span = (
+        (int(row["start_chapter"]), int(row["start_verse"])),
+        (int(row["end_chapter"]), int(row["end_verse"])),
+    )
+    language = reader.language_of(str(row["language"]))
+    return models.CommentaryHit(
+        source=str(row["source"]),
+        language=str(row["language"]),
+        start=str(row["start"]),
+        end=str(row["end"]),
+        book=book,
+        reference=format_reference(Reference(book, span), language),
+        label=row["label"],
+        snippet=str(row["snippet"]),
     )

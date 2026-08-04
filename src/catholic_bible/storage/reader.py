@@ -296,3 +296,141 @@ def addresses_between(
             )
         )
     }
+
+
+VERSE_COLUMNS = """
+    spine.id, spine.book, spine.chapter, spine.verse, texts.version,
+    snippet(verse_search, 0, '<em>', '</em>', '…', 64) AS snippet
+"""
+
+VERSE_FROM = """
+    FROM verse_search
+    JOIN texts ON texts.rowid = verse_search.rowid
+    JOIN spine ON spine.canonical_order = texts.canonical_order
+    JOIN books ON books.code = spine.book
+    WHERE verse_search MATCH ?
+"""
+
+NOTE_COLUMNS = """
+    commentary.source, commentary_body.language, commentary.label,
+    anchor.id AS start, ending.id AS end, anchor.book AS book,
+    anchor.chapter AS start_chapter, anchor.verse AS start_verse,
+    ending.chapter AS end_chapter, ending.verse AS end_verse,
+    snippet(note_search, 0, '<em>', '</em>', '…', 64) AS snippet
+"""
+
+NOTE_FROM = """
+    FROM note_search
+    JOIN commentary_body ON commentary_body.id = note_search.rowid
+    JOIN commentary ON commentary.id = commentary_body.commentary
+    JOIN spine AS anchor ON anchor.canonical_order = commentary.first_order
+    JOIN spine AS ending ON ending.canonical_order = commentary.last_order
+    WHERE note_search MATCH ?
+"""
+
+
+def _filtered(expression: str, filters: dict[str, str | None]) -> tuple[str, list[str]]:
+    """The `AND` tail and its parameters, skipping what was not asked for.
+
+    Written out rather than `(? IS NULL OR column = ?)`, which hands the planner
+    a condition it cannot use an index for and makes every query pay for the
+    filters nobody applied.
+    """
+    clauses = [f" AND {column} = ?" for column, value in filters.items() if value]
+    return "".join(clauses), [expression, *(v for v in filters.values() if v)]
+
+
+def search_verses(
+    connection: sqlite3.Connection,
+    expression: str,
+    version: str | None = None,
+    book: str | None = None,
+    testament: str | None = None,
+    limit: int = 20,
+    offset: int = 0,
+) -> list[Row]:
+    """One page of verses, best first.
+
+    `version` of `None` searches every translation, which is what the route's
+    `all` rests on. Ordering falls back to the canonical order and then the
+    version code, because bm25 ties are ordinary and a tie carries no order of
+    its own. Without that, two pages of one query can repeat a verse and hide
+    another, and each page on its own looks right.
+    """
+    tail, params = _filtered(
+        expression,
+        {"texts.version": version, "spine.book": book, "books.testament": testament},
+    )
+    return _all(
+        connection.execute(
+            f"SELECT {VERSE_COLUMNS} {VERSE_FROM} {tail}"
+            " ORDER BY bm25(verse_search), texts.canonical_order, texts.version"
+            " LIMIT ? OFFSET ?",
+            (*params, limit, offset),
+        )
+    )
+
+
+def count_verses(
+    connection: sqlite3.Connection,
+    expression: str,
+    version: str | None = None,
+    book: str | None = None,
+    testament: str | None = None,
+) -> int:
+    """How many verses the query reaches, under the same filters."""
+    tail, params = _filtered(
+        expression,
+        {"texts.version": version, "spine.book": book, "books.testament": testament},
+    )
+    row = _one(connection.execute(f"SELECT COUNT(*) AS n {VERSE_FROM} {tail}", params))
+    assert row is not None
+    return int(row["n"])
+
+
+def search_commentary(
+    connection: sqlite3.Connection,
+    expression: str,
+    source: str | None = None,
+    language: str | None = None,
+    book: str | None = None,
+    limit: int = 20,
+    offset: int = 0,
+) -> list[Row]:
+    """One page of notes, best first, addressed by the verse they hang on."""
+    tail, params = _filtered(
+        expression,
+        {
+            "commentary.source": source,
+            "commentary_body.language": language,
+            "anchor.book": book,
+        },
+    )
+    return _all(
+        connection.execute(
+            f"SELECT {NOTE_COLUMNS} {NOTE_FROM} {tail}"
+            " ORDER BY bm25(note_search), commentary.id, commentary_body.language"
+            " LIMIT ? OFFSET ?",
+            (*params, limit, offset),
+        )
+    )
+
+
+def count_commentary(
+    connection: sqlite3.Connection,
+    expression: str,
+    source: str | None = None,
+    language: str | None = None,
+    book: str | None = None,
+) -> int:
+    tail, params = _filtered(
+        expression,
+        {
+            "commentary.source": source,
+            "commentary_body.language": language,
+            "anchor.book": book,
+        },
+    )
+    row = _one(connection.execute(f"SELECT COUNT(*) AS n {NOTE_FROM} {tail}", params))
+    assert row is not None
+    return int(row["n"])

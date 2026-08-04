@@ -149,7 +149,7 @@ request, because a quickstart nobody executes rots within a month.
 
 ## Reading it
 
-Eleven routes, all `GET`, all under `/v1`.
+Thirteen routes, all `GET`, all under `/v1`.
 
 ```
 GET /v1/versions
@@ -163,6 +163,8 @@ GET /v1/passage?ref=&versions=&scheme=
 GET /v1/resolve?ref=&scheme=
 GET /v1/commentary?ref=&scheme=
 GET /v1/cross-references?ref=&scheme=
+GET /v1/search?q=&version=&book=&testament=&offset=&limit=
+GET /v1/search/commentary?q=&source=&language=&book=&offset=&limit=
 ```
 
 Commentary and cross-references take no version, because a note on John 3:16 is
@@ -179,6 +181,59 @@ numbers 50. Both answers are correct and only one of them is yours.
 
 Names, abbreviations and notation follow the language of the version being read,
 so the same verse comes back as `Eclo 24,1`, `Ecclus. 24:1` and `Eccli. 24,1`.
+
+### Searching it
+
+Type what you would type into a search box. Words mean all of them, in any
+order. Double quotes mean a phrase. A trailing star matches a prefix, which is
+how you reach an inflection, because there is no stemmer and there is a good
+reason for that below.
+
+```
+GET /v1/search?q=cordeiro de Deus
+GET /v1/search?q="cordeiro de Deus"
+GET /v1/search?q=amar*
+```
+
+**Accents are optional and the answer still shows them.** `coracao` finds
+`coração`, and the `<em>` in the snippet wraps the word the text actually
+carries rather than the one you typed.
+
+```json
+{
+  "query": "coracao",
+  "version": "matos-soares",
+  "total": 914,
+  "offset": 0,
+  "limit": 20,
+  "hits": [
+    {
+      "id": "PSA.56.8",
+      "book": "PSA",
+      "chapter": 56,
+      "verse": 8,
+      "reference": "Sl 56,8",
+      "version": "matos-soares",
+      "snippet": "O meu <em>coração</em>, ó Deus, está firme."
+    }
+  ]
+}
+```
+
+Searches run against Matos Soares unless you say otherwise. `version=all` reads
+every translation, which brings the same address back once per translation
+carrying the word, so each hit names its own. `book` takes a code or any name
+that resolves, the same as everywhere else here.
+
+`/v1/search/commentary` asks the same question of the Haydock notes and answers
+with the address each note hangs on, so you open it through the commentary route
+you already have. Both languages of the commentary are searched, and every hit
+says which one it is.
+
+**This is lexical.** It matches words, not meaning, so it will not tell you that
+`misericórdia` and `piedade` answer the same question. `LIMITS.md` says what else
+it cannot do, including why there is no typo tolerance and why paging stops at
+1000.
 
 ### What you are allowed to ask for
 

@@ -562,8 +562,72 @@ with no private source and no credentials. What that proves is that the
 artifacts match the corpus. What it still cannot prove is that the corpus matches
 the source it was exported from.
 
-### There is no Portuguese README
+### The Portuguese README is a door and not a mirror
 
-`CLAUDE.md` names `README.pt-BR.md` as prose that goes through the voice skill
-and the file does not exist. The audience this project was built for reads
-Portuguese. Writing it is its own piece of work and it has not been done.
+*This section said there was no Portuguese README at all. B7 wrote one and left
+the limit standing, so the file published something untrue for two epics. Found
+while writing B9 and corrected here rather than quietly deleted.*
+
+`README.pt-BR.md` exists and it is deliberately short. It carries the argument
+and points at the English document for the endpoint list, the quickstart and the
+versioning rule. A reader who only reads Portuguese gets the reasoning and then
+has to cross over for the reference material.
+
+## What full-text search cannot do, added in B9
+
+### It is lexical, and that word is doing real work
+
+The index matches words. It does not know that `misericórdia` and `piedade`
+answer the same question, and it never will, because that is a different
+technique living in a different repository. `concordantia` consumes what is
+published here and owns the comparison.
+
+### There is no typo tolerance
+
+The ported implementation runs on Meilisearch, which corrects a misspelling for
+free. FTS5 does not, and building an edit distance over 107103 rows here would be
+a second search engine nobody asked for.
+
+What covers half of it is the prefix operator. `amar*` reaches the inflections
+that a stemmer would have reached, and a reader who types `corcao` gets nothing.
+
+### There is no stemmer, and that is a choice about three languages
+
+FTS5 ships `porter`, which only knows English. One index holds Portuguese,
+English and Latin. A stemmer correct for one and wrong for two is worse than
+none, because the wrongness never surfaces as an error.
+
+### Ranking under `version=all` compares scores from different languages
+
+`bm25` weighs a term against how common it is in the corpus. Under `version=all`
+the corpus is Portuguese, English and Latin at once, so a Latin verse and a
+Portuguese verse are ranked by scores computed over different vocabularies. The
+list is useful and the order across languages does not mean what an order inside
+one language means.
+
+The same address also comes back once per translation carrying the word. Every
+hit names its own version, which makes the repetition visible rather than
+confusing, and it is why `version` defaults to one translation.
+
+### Paging stops at 1000
+
+Ranking sorts every match before it can page, so the cost grows with the offset.
+Measured on 2026-08-04, warm, median of seven runs, on the built database.
+
+| Query | Hits | Count | First page | Page at offset 1000 |
+|---|---|---|---|---|
+| `coracao`, one translation | 914 | 1.0 ms | 2.1 ms | 6.2 ms |
+| `Deus`, one translation | 4539 | 5.0 ms | 16.7 ms | 21.5 ms |
+| `a`, one translation | 18904 | 13.4 ms | 30.4 ms | 44.9 ms |
+| `a`, `version=all` | 29007 | 14.8 ms | 38.7 ms | 54.3 ms |
+| `a`, commentary | 22393 | 18.2 ms | 36.3 ms | 78.7 ms |
+
+A reader cannot walk past result 1000 of 29007. Beyond the cap the answer is a
+`422` rather than a slow `200`, because a request that takes a fifth of a second
+to say what the first page already said is not worth serving.
+
+### A search answer is not cached the way a verse is
+
+A verse carries a year of immutable caching. A result list depends on what is
+published and carries five minutes. Nothing here is per reader, so a proxy in
+front is free to share it.

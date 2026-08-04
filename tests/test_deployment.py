@@ -120,3 +120,37 @@ def test_the_readme_publishes_the_limits_it_enforces() -> None:
     assert f"{settings.per_minute} requests a minute" in readme
     assert f"{settings.per_hour} an hour" in readme
     assert "RateLimit-Remaining" in readme
+
+
+def test_the_application_the_service_starts_actually_searches() -> None:
+    """That `app` carries the search routes, not just that searching works.
+
+    B8 shipped a limiter no test could see the application install, and
+    deleting one line from `app.py` left 654 tests green. The same hole is open
+    for a route: every search test in this epic reaches the app through the
+    suite's own client, and a router that stopped being included would fail
+    those tests for the right reason only by luck.
+
+    A subprocess and the real import, asking the running application for a
+    search and reading the answer.
+    """
+    script = textwrap.dedent(
+        """
+        from fastapi.testclient import TestClient
+        from catholic_bible.api.app import app
+
+        with TestClient(app) as client:
+            answer = client.get("/v1/search", params={"q": "coracao"})
+        body = answer.json()
+        print(answer.status_code, body["total"], "<em>" in body["hits"][0]["snippet"])
+        """
+    )
+    finished = subprocess.run(
+        [sys.executable, "-c", script],
+        env={**os.environ, "RATE_LIMIT_ENABLED": "false"},
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    assert finished.stdout.strip() == "200 914 True", finished.stderr

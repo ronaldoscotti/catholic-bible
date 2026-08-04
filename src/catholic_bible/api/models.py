@@ -213,3 +213,62 @@ class ResolvedOut(BaseModel):
             "addresses the span covers."
         )
     )
+
+
+class VerseHit(BaseModel):
+    id: str = Field(examples=["PSA.56.8"], description="The published verse id")
+    book: str = Field(examples=["PSA"])
+    chapter: int
+    verse: int
+    reference: str = Field(examples=["Sl 56,8"])
+    version: str = Field(
+        examples=["matos-soares"],
+        description=(
+            "The translation this hit came from. Under version=all the same "
+            "address appears once per translation carrying the word, and this "
+            "is what tells them apart."
+        ),
+    )
+    snippet: str = Field(
+        description=(
+            "The verse with the match wrapped in <em>. The tag marks the word "
+            "the text carries, so an unaccented query still highlights the "
+            "accented spelling."
+        )
+    )
+
+
+class SearchOut(BaseModel):
+    query: str = Field(description="What was asked, echoed back for display")
+    version: str = Field(examples=["matos-soares"], description="Or all")
+    total: int = Field(description="Hits under these filters, not hits on this page")
+    offset: int
+    limit: int
+    hits: list[VerseHit]
+
+
+class CommentaryHit(BaseModel):
+    source: str = Field(examples=["haydock"])
+    language: str = Field(
+        examples=["pt-BR"],
+        description=(
+            "The language of this body. The Portuguese Haydock was produced by "
+            "a language model and LIMITS.md says what that is worth."
+        ),
+    )
+    start: str = Field(examples=["JHN.3.16"])
+    end: str = Field(examples=["JHN.3.17"], description="Equal to start for most notes")
+    book: str = Field(examples=["JHN"])
+    reference: str = Field(examples=["Jo 3,16-17"])
+    label: str | None = Field(
+        description="How the printed edition labelled the note, where it did"
+    )
+    snippet: str = Field(description="The note with the match wrapped in <em>")
+
+
+class CommentarySearchOut(BaseModel):
+    query: str
+    total: int
+    offset: int
+    limit: int
+    hits: list[CommentaryHit]
