@@ -37,7 +37,7 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
 [x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5 B8
 [x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8
-[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 merged, B8 open, 654 tests
+[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 merged, B8 open, 661 tests
 [x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8
 [x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4 B5 B7 B8, one author
 [x] 8  PR               B0 B1 B2 B3 B4 B5 B7 merged. v1.0.0 and v1.0.1 released
@@ -50,6 +50,20 @@ this session had been printing green over a real type error, because a shell
 pipeline reports the exit code of its last command. CI was never fooled, since it
 runs each step on its own line, so what was at risk was the claim rather than the
 build.
+
+**B8 also shows what the gates do not catch.** A review agent read the diff after
+the pull request opened and found that the hourly limit was never enforced.
+Housekeeping deleted counter rows by time alone, so pruning the minute window
+wiped every hourly bucket on the box, and 6000 requests in ten minutes left the
+hourly tally reading 100 against a limit of 1000. It also found that nothing
+tested the limiter the application installs: deleting `add_middleware` from
+`app.py` left all 654 tests green.
+
+The mechanism that broke the criterion appears in no spec, no plan and no QA
+document. It arrived during implementation and passed through no gate. Both human
+gates were met here and the review ran before the pull request, which is the best
+this repository has managed, and none of it was looking at a mechanism nobody had
+written down. A second reader with no stake in the answer is what found it.
 
 Both gates were met on B8. The spec was presented with five design questions
 answered before it was written and three left open at the bottom, the answers

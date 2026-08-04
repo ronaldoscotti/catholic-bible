@@ -18,24 +18,29 @@ from __future__ import annotations
 import sqlite3
 from pathlib import Path
 
+# The window is a column rather than part of the bucket string. It used to be
+# glued into the key, which left housekeeping unable to tell a minute row from
+# an hourly one, so pruning the minute deleted every hourly bucket on the box.
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS hits (
   bucket       TEXT    NOT NULL,
+  window       INTEGER NOT NULL,
   window_start INTEGER NOT NULL,
   count        INTEGER NOT NULL,
-  PRIMARY KEY (bucket, window_start)
+  PRIMARY KEY (bucket, window, window_start)
 ) WITHOUT ROWID
 """
 
 COUNT = """
-INSERT INTO hits (bucket, window_start, count) VALUES (?, ?, 1)
-ON CONFLICT (bucket, window_start) DO UPDATE SET count = count + 1
+INSERT INTO hits (bucket, window, window_start, count) VALUES (?, ?, ?, 1)
+ON CONFLICT (bucket, window, window_start) DO UPDATE SET count = count + 1
 RETURNING count
 """
 
-# One window of grace. The window before this one is what a `Retry-After` handed
-# out a moment ago still refers to, so it is dropped only once it is two old.
-PRUNE = "DELETE FROM hits WHERE window_start < ?"
+# Scoped to one window. One window of grace beyond that, because the window
+# before this one is what a `Retry-After` handed out a moment ago still refers
+# to, so it is dropped only once it is two old.
+PRUNE = "DELETE FROM hits WHERE window = ? AND window_start < ?"
 
 
 class Counter:
@@ -59,9 +64,8 @@ class Counter:
 
     def hit(self, bucket: str, window: int, now: int) -> int:
         """Record one request and return how many are in this window so far."""
-        key = f"{bucket}:{window}"
         row = self._connection.execute(
-            COUNT, (key, self._start(window, now))
+            COUNT, (bucket, window, self._start(window, now))
         ).fetchone()
         return int(row[0])
 
@@ -70,7 +74,11 @@ class Counter:
         return self._start(window, now) + window - now
 
     def prune(self, window: int, now: int) -> None:
-        self._connection.execute(PRUNE, (self._start(window, now) - window,))
+        """Drop dead rows of this window only.
+
+        Deleting across windows is what made the hourly limit unenforceable.
+        """
+        self._connection.execute(PRUNE, (window, self._start(window, now) - window))
 
     def rows(self) -> int:
         row = self._connection.execute("SELECT count(*) FROM hits").fetchone()

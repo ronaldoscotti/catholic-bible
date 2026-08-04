@@ -249,6 +249,17 @@ the reason and the log fires at error level. A limiter that quietly stopped
 limiting is the classic hole in security middleware, and the only defence
 against it is the report.
 
+### A refused request still spends the other window, on purpose
+
+A request the minute window turned away is still counted against the hour. A
+caller who reads `Retry-After` and waits never meets this. A caller who ignores
+the 429 and keeps hammering spends the hourly budget on refusals and is locked
+out for the rest of it.
+
+A review called this a defect and it is a decision. Escalating a client that
+ignores the answer is what the second window is for, and the request was
+answered, logged and paid for whatever its status code said.
+
 ### An address behind a shared exit is one caller
 
 A university, an office or a mobile carrier NAT puts thousands of people behind

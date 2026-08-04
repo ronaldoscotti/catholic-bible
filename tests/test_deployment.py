@@ -7,7 +7,11 @@ is how it ends up off everywhere, so this is the file that stops that.
 
 from __future__ import annotations
 
+import os
 import re
+import subprocess
+import sys
+import textwrap
 from pathlib import Path
 
 from catholic_bible.api.ratelimit import Settings
@@ -27,6 +31,45 @@ OFF = re.compile(
 def test_the_shipped_default_is_on() -> None:
     """With nothing configured at all, the limiter limits."""
     assert Settings.from_env({}).enabled is True
+
+
+def test_the_application_the_service_starts_actually_refuses(tmp_path: Path) -> None:
+    """That `app` installs the limiter, not just that a limiter works.
+
+    Every other test in this epic wraps `RateLimiter` around the app by hand,
+    and `conftest.py` disables the one the app installs. Deleting
+    `add_middleware` from `app.py` left the whole suite green, which means
+    criterion 1 was verified against a limiter the service does not run.
+
+    A subprocess rather than a reload, because the settings are read once at
+    import and this has to be the real import. The path is one that does not
+    exist, so the limiter is proved to run in front of routing and no corpus
+    database has to be built for it.
+    """
+    script = textwrap.dedent(
+        """
+        from fastapi.testclient import TestClient
+        from catholic_bible.api.app import app
+
+        client = TestClient(app, client=("203.0.113.9", 1))
+        print([client.get("/nothing-here").status_code for _ in range(4)])
+        """
+    )
+    finished = subprocess.run(
+        [sys.executable, "-c", script],
+        env={
+            **os.environ,
+            "RATE_LIMIT_ENABLED": "true",
+            "RATE_LIMIT_PER_MINUTE": "2",
+            "RATE_LIMIT_PER_HOUR": "0",
+            "RATE_LIMIT_DB": str(tmp_path / "rl.db"),
+        },
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    assert finished.stdout.strip() == "[404, 404, 429, 429]", finished.stderr
 
 
 def test_nothing_that_ships_turns_the_limiter_off() -> None:

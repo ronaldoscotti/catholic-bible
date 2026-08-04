@@ -89,3 +89,63 @@ One thing did arrive that the plan did not name. `compose.yaml` gained an
 `environment` block passing the limits through from the shell. It is how
 criterion 3 was demonstrated against a real container rather than asserted, the
 defaults in it are the shipped defaults, and a test pins the three lines.
+
+## Second pass, after the pull request opened
+
+*2026-08-04. A review agent run against the diff, the epic and the conventions.
+Eight findings, seven fixed and one refused with a reason. The first two are the
+kind that make a pull request worth reviewing at all.*
+
+**The hourly limit was never enforced.** Housekeeping deleted rows by time
+alone, while the window lived glued into the bucket string, so pruning the
+minute bucket wiped every hourly bucket for every address on the box. Reproduced
+against the real counter: 6000 requests over ten minutes left the hourly tally
+reading 100 against a limit of 1000. One abusive client also handed every other
+address a free reset.
+
+`README.md`, `LIMITS.md`, the epic and the pull request body all sold the hour as
+the defence against the polite crawler. It was decoration. The window is a column
+now, housekeeping is scoped to it, and two tests hold it, one on the mechanism
+and one replaying the run that found it. Criterion 1 came down and went back up
+the same day.
+
+**Nothing tested the limiter the application installs.** Every middleware test
+wrapped `RateLimiter` around the app by hand and `tests/conftest.py` disables the
+one `app.py` adds. Deleting `add_middleware` from `app.py` left all 654 tests
+green. The service could ship with rate limiting entirely absent and every gate
+would pass.
+
+That is the more frightening of the two, because the first was a bug and this was
+a hole in the proof. `test_the_application_the_service_starts_actually_refuses`
+boots the real import in a subprocess and asserts a 429, verified to fail with
+the line commented out.
+
+**Three more that were real.** `degraded` latched forever and the dead connection
+was kept, so a two second lock past the busy timeout meant a permanent alarm and
+permanent fail open. The loopback exemption covered every path rather than the
+health route, which would have become a silent total bypass the moment B6 put
+Caddy on the same box before filling in the trusted proxy setting. `_forwarded`
+read only the first `X-Forwarded-For` line, and the field may repeat, which would
+have let a caller control the chain on a proxy that appends rather than joins.
+
+**Two smaller ones.** The unauthenticated `/health` published the server path and
+the raw sqlite error, and the store lived at a fixed world known name in a shared
+temp directory, which combined with fail open is a one command local off switch.
+
+**One refused.** A request the minute window turned away still counts against the
+hour, and the review called it a defect. It is a decision. A caller who reads
+`Retry-After` never meets it, and escalating a caller who ignores the answer is
+what the second window is for. `LIMITS.md` now says so in those words rather than
+leaving it undocumented, which was the fair half of the finding.
+
+## The process finding, which is worth more than the eight
+
+The prune mechanism was never specced. `PRUNE_EVERY` and the housekeeping delete
+do not appear in the spec, the plan, the QA document or the first review. They
+arrived during implementation, passed through no gate, and were the one thing
+that broke an acceptance criterion.
+
+Both human gates were met on this epic and the review still ran before the pull
+request, which was the improvement this epic was proud of. None of that caught
+it, because none of it was looking at a mechanism nobody had written down. What
+caught it was a second reader with no stake in the answer.

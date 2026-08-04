@@ -41,6 +41,10 @@ PRUNE_EVERY = 250
 
 UNATTRIBUTABLE = "unknown"
 
+# What `/health` publishes when the store is unusable. Deliberately says
+# nothing about paths or drivers, because that route needs no credentials.
+UNAVAILABLE = "rate limiting is unavailable"
+
 TRUE = frozenset({"1", "true", "yes", "on"})
 FALSE = frozenset({"0", "false", "no", "off"})
 
@@ -125,6 +129,19 @@ def _flag(environ: Mapping[str, str], name: str, fallback: bool) -> bool:
     raise ValueError(f"{name} is not a yes or a no, got {raw!r}")
 
 
+def default_store() -> Path:
+    """A private directory rather than a guessable name in a shared temp.
+
+    The path used to be one fixed world known name. On a shared host any local
+    user could pre-create or symlink it, `Counter` would raise, and the limiter
+    would fail open permanently. That is a one command way to switch off the
+    thing this module exists for.
+    """
+    home = Path(tempfile.gettempdir()) / f"catholic-bible-{os.getuid()}"
+    home.mkdir(mode=0o700, exist_ok=True)
+    return home / "ratelimit.db"
+
+
 @dataclass(frozen=True)
 class Settings:
     """Read once at startup. A typo fails there rather than at the first hit."""
@@ -144,7 +161,11 @@ class Settings:
             per_hour=_positive(source, "RATE_LIMIT_PER_HOUR", default.per_hour),
             enabled=_flag(source, "RATE_LIMIT_ENABLED", default.enabled),
             trusted=trusted_set(source.get("RATE_LIMIT_TRUSTED_PROXIES", "")),
-            db_path=Path(source.get("RATE_LIMIT_DB", default.db_path)),
+            db_path=(
+                Path(source["RATE_LIMIT_DB"])
+                if "RATE_LIMIT_DB" in source
+                else default_store()
+            ),
         )
 
     def windows(self) -> tuple[tuple[int, int], ...]:
@@ -197,7 +218,6 @@ class RateLimiter:
     def _store(self) -> Counter:
         if self._counter is None:
             self._counter = Counter(self.settings.db_path)
-            self.state.degraded = None
         return self._counter
 
     def _fail_open(self, error: Exception) -> None:
@@ -206,11 +226,25 @@ class RateLimiter:
         The posture before this middleware existed was unlimited, so serving is
         a return to it rather than a new hole. Being quiet about it is the hole,
         which is why `/health` reads this and why the log fires once.
+
+        The connection is dropped rather than kept. A lock past the timeout is
+        ordinary with several workers on one file, and holding a connection
+        that failed once turns a blip into permanent fail open.
         """
-        reason = f"{self.settings.db_path}: {error}"
-        if self.state.degraded != reason:
-            log.error("rate limiting is off, the store is unusable. %s", reason)
-        self.state.degraded = reason
+        if self.state.degraded is None:
+            log.error(
+                "rate limiting is off, %s is unusable. %s", self.settings.db_path, error
+            )
+        # No path and no driver text. `/health` is unauthenticated and this
+        # field is served on it, so the log keeps the detail and the body does
+        # not.
+        self.state.degraded = UNAVAILABLE
+        if self._counter is not None:
+            try:
+                self._counter.close()
+            except sqlite3.Error:
+                pass
+            self._counter = None
 
     def check(self, address: str) -> Verdict | None:
         """Count this request against every window. `None` means unmeasured."""
@@ -227,6 +261,10 @@ class RateLimiter:
         except (sqlite3.Error, OSError) as unusable:
             self._fail_open(unusable)
             return None
+
+        if self.state.degraded is not None:
+            log.info("rate limiting recovered")
+            self.state.degraded = None
 
         spent = [
             (window, limit, count) for window, limit, count in counted if count > limit
@@ -274,7 +312,10 @@ class RateLimiter:
         peer = None if client is None else str(client[0])
         address = resolve(peer, _forwarded(scope), self.settings.trusted)
 
-        if _loopback(address):
+        # The health route only. A blanket loopback exemption is a total
+        # bypass the moment a proxy runs on the same box, which is what B6
+        # does, and it would be silent.
+        if scope.get("path") == "/health" and _loopback(address):
             await self.app(scope, receive, send)
             return
 
@@ -290,11 +331,17 @@ class RateLimiter:
 
 
 def _forwarded(scope: Scope) -> str | None:
+    """Every `X-Forwarded-For` line, joined in order.
+
+    The field may repeat and ASGI keeps each line as its own tuple. Reading the
+    first one alone walks a chain the caller controls, which is the hole this
+    module exists to close.
+    """
     headers: list[tuple[bytes, bytes]] = scope.get("headers", [])
-    for name, value in headers:
-        if name == b"x-forwarded-for":
-            return value.decode("latin-1")
-    return None
+    lines = [
+        value.decode("latin-1") for name, value in headers if name == b"x-forwarded-for"
+    ]
+    return ", ".join(lines) if lines else None
 
 
 def _loopback(address: str) -> bool:

@@ -132,3 +132,22 @@ def test_the_off_switch_accepts_what_a_person_would_write(value: str) -> None:
 @pytest.mark.parametrize("value", ["true", "True", "1", "yes", "on"])
 def test_the_on_switch_accepts_what_a_person_would_write(value: str) -> None:
     assert Settings.from_env({"RATE_LIMIT_ENABLED": value}).enabled is True
+
+
+def test_the_default_store_is_private_rather_than_a_guessable_name() -> None:
+    """A world known path plus fail open is a local off switch for the limiter.
+
+    Anyone on a shared host could pre-create or symlink the old fixed name,
+    `Counter` would raise on it, and limiting would stay off for good.
+    """
+    import os
+    import stat
+
+    from catholic_bible.api.ratelimit import default_store
+
+    store = default_store()
+    mode = stat.S_IMODE(store.parent.stat().st_mode)
+
+    assert str(os.getuid()) in store.parent.name
+    assert mode == 0o700, oct(mode)
+    assert Settings.from_env({}).db_path == store

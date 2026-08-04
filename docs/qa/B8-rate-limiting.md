@@ -46,11 +46,22 @@ so the contract file stays the contract.
 README rather than trusting that someone updated it. `test_the_readme_publishes_the_limits_it_enforces` compares the published sentence
 to the shipped settings, so changing one without the other turns the suite red.
 
-**5. Static CDN artifacts stay unlimited.** Met by architecture rather than by
-work, and it is recorded that way instead of being dressed up as a task.
-jsDelivr serves those files and never reaches this service, so there is nothing
-here that could limit them. The README says so where a caller hitting the limit
-would look, and points them at the files instead.
+**5. Static CDN artifacts stay unlimited.** Met, and fetched rather than argued.
+Reasoning about architecture is not verification, so the URL `README.md`
+publishes was requested.
+
+```
+$ curl -sS -o /dev/null -D - "https://cdn.jsdelivr.net/gh/ronaldoscotti/catholic-bible@v1.0.1/data/versions/matos-soares/books/SIR.json"
+HTTP/2 200
+access-control-allow-origin: *
+cache-control: public, max-age=31536000, s-maxage=31536000, immutable
+```
+
+No `ratelimit-*` and no `retry-after`, because the host is `cdn.jsdelivr.net` and
+this process was never involved. `routes.py` has no `StaticFiles` and no
+`FileResponse`, so there is nothing here that could limit them. The README says
+so where a caller hitting the limit would look, and points them at the files
+instead.
 
 ## The security claim, tested rather than asserted
 
@@ -115,7 +126,7 @@ microseconds of work.
 
 ```
 $ uv run pytest -q
-654 passed in 26.23s
+661 passed in 26.02s
 
 $ uv run ruff check . && uv run ruff format --check . && uv run mypy
 All checks passed!
@@ -132,9 +143,41 @@ $ uv run scripts/build-artifacts.py --check
 the committed artifacts match the sources
 ```
 
-596 before this epic and 654 after, which is 58 new tests. 9 on the counter, 26
-on address resolution and configuration, 15 on the middleware and 8 on what the
+596 before this epic and 661 after, which is 65 new tests. 11 on the counter, 27
+on address resolution and configuration, 20 on the middleware and 9 on what the
 deployment ships.
+
+Seven of those arrived in the second review round, and two of them are the ones
+that matter: the hourly window being enforced at all, and the application
+actually installing the middleware it ships.
+
+## What a second reader found that this document had missed
+
+Everything above was written before a review agent read the diff. It found eight
+things, and this document had been confident about two of them.
+
+**Criterion 1 was ticked while the hourly window did nothing.** Housekeeping
+deleted rows by time alone and pruning the minute wiped every hourly bucket. The
+container run pasted at the top of this document exercised a three request
+minute limit, so it proved the minute and said nothing about the hour, and the
+walk above read it as proving both.
+
+```
+requests sent:            6000
+the hourly counter reads: 100
+the hourly limit is:      1000
+bound?                    False
+```
+
+**Criterion 1 was also verified against a limiter the application does not
+install.** `conftest.py` disables the one `app.py` adds and every middleware test
+wraps its own. Commenting out `add_middleware` left 654 tests passing.
+
+Both are fixed, both have tests that were proved to fail first, and the criterion
+came down in the epic file before it went back up. The lesson is narrower than
+"test more": a container run with one window lowered proves one window, and a
+document that says the criteria were walked has to say which numbers each run
+actually touched.
 
 ## What went wrong while running this
 

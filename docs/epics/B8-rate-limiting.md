@@ -32,6 +32,12 @@ An unlimited public API on a single box can be saturated by one careless script,
 - [x] Current limits are documented in the README
 - [x] Static CDN artifacts stay unlimited, since they cost nothing to serve
 
+**The first came down on 2026-08-04, after the pull request opened.** A review found that the hourly window was never enforced. Housekeeping deleted rows by time alone while the window lives in the key, so pruning the minute bucket wiped every hourly bucket for every address. Reproduced at 6000 requests in ten minutes with the hourly counter reading 100 against a limit of 1000. The minute window was always correct. The box went back up the same day. The window is a column rather than part of the bucket string, housekeeping is scoped to one window, and two tests hold it, one on the mechanism and one replaying the 6000 request run.
+
+**The same review found that nothing tested the limiter the application installs.** Every middleware test wrapped `RateLimiter` around the app by hand and `tests/conftest.py` disables the one `app.py` adds, so deleting `add_middleware` left the whole suite green. Criterion 1 was ticked against a limiter the service does not run. `test_the_application_the_service_starts_actually_refuses` boots the real import in a subprocess and asserts a 429, and it was proved to fail with the line removed.
+
+**`RATE_LIMIT_ENABLED` is a kill switch that exists for the test suite.** It is not in these criteria and not in `compose.yaml`. Its only production use would be turning a security control off, so it is named here rather than left to be discovered. `tests/test_deployment.py` asserts nothing that ships sets it.
+
 **The fifth is met by architecture rather than by work.** jsDelivr serves the static files and never reaches this service, so nothing here could limit them. It is recorded as a non-action instead of being dressed up as a task, and the README points a caller who hits the limit at those files.
 
 **The verification was run against a container, not only against the suite.** The window was waited out by trusting `Retry-After` and being readmitted, and a forged `X-Forwarded-For` was proved not to buy a fresh budget. `docs/qa/B8-rate-limiting.md` pastes both.

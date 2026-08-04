@@ -71,6 +71,43 @@ def test_reset_reports_when_the_window_ends(counter: Counter) -> None:
     assert counter.reset_in(window=3600, now=61) == 3539
 
 
+def test_pruning_one_window_leaves_every_other_window_alone(
+    counter: Counter,
+) -> None:
+    """The bug that made the hourly limit unenforceable.
+
+    Housekeeping deleted by time alone. An hourly bucket is aligned to the hour,
+    so it looks ancient to a minute prune, and pruning the minute wiped the hour
+    for every address at once. 6000 requests in ten minutes left the hourly
+    counter reading 100 against a limit of 1000.
+    """
+    counter.hit("1.2.3.4", window=3600, now=0)
+    counter.hit("1.2.3.4", window=3600, now=1800)
+
+    counter.prune(window=60, now=1800)
+
+    assert counter.hit("1.2.3.4", window=3600, now=1800) == 3
+
+
+def test_an_attacker_cannot_outrun_the_hour_by_triggering_housekeeping(
+    counter: Counter,
+) -> None:
+    """The same failure from the outside, which is how it was found."""
+    sent = 0
+    for second in range(600):
+        for _ in range(10):
+            minute = counter.hit("1.2.3.4", window=60, now=second)
+            hour = counter.hit("1.2.3.4", window=3600, now=second)
+            sent += 1
+            if minute % 250 == 0:
+                counter.prune(60, second)
+            if hour % 250 == 0:
+                counter.prune(3600, second)
+
+    assert sent == 6000
+    assert hour == sent, "every request inside the hour has to be counted"
+
+
 def test_pruning_drops_dead_windows_and_keeps_the_live_one(counter: Counter) -> None:
     counter.hit("1.2.3.4", window=60, now=0)
     counter.hit("1.2.3.4", window=60, now=600)

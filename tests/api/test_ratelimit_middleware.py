@@ -149,18 +149,6 @@ def test_two_addresses_do_not_share_a_budget(tmp_path: Path, clock: Clock) -> No
         assert second.get(VERSE).status_code == 200
 
 
-def test_loopback_is_never_counted(tmp_path: Path, clock: Clock) -> None:
-    """The container health check is the service asking itself if it is alive.
-
-    Twelve times a minute, forever, and it would spend a real budget.
-    """
-    settings = Settings(per_minute=2, per_hour=0, db_path=tmp_path / "rl.db")
-
-    with TestClient(stack(settings, clock), client=("127.0.0.1", 1)) as inside:
-        for _ in range(10):
-            assert inside.get("/health").status_code == 200
-
-
 def test_health_counts_against_the_same_budget_as_scripture(
     limited: TestClient,
 ) -> None:
@@ -230,8 +218,102 @@ def test_an_unusable_store_serves_the_request_and_says_so(
         for _ in range(3):
             assert client.get(VERSE).status_code == 200
 
-    assert state.degraded is not None
-    assert "rl.db" in state.degraded
+    assert state.degraded == "rate limiting is unavailable"
+
+
+def test_loopback_is_exempt_on_health_and_counted_everywhere_else(
+    tmp_path: Path, clock: Clock
+) -> None:
+    """The exemption is for the health check, so it covers that route only.
+
+    Exempting every loopback path is a total bypass waiting for B6. Caddy on
+    the same box proxies from `127.0.0.1`, and until the trusted proxy setting
+    is filled in the peer is loopback, so a blanket exemption would serve the
+    whole world unlimited while `/health` reported `ok`.
+    """
+    settings = Settings(per_minute=2, per_hour=0, db_path=tmp_path / "rl.db")
+
+    with TestClient(stack(settings, clock), client=("127.0.0.1", 1)) as inside:
+        for _ in range(6):
+            assert inside.get("/health").status_code == 200
+
+        assert inside.get(VERSE).status_code == 200
+        assert inside.get(VERSE).status_code == 200
+        assert inside.get(VERSE).status_code == 429
+
+
+def test_the_health_body_does_not_publish_the_server_path(
+    tmp_path: Path, clock: Clock
+) -> None:
+    """`/health` is unauthenticated. The log keeps the detail, the body does not."""
+    from catholic_bible.api import app as module
+
+    state = module.LIMITER
+    settings = Settings(
+        per_minute=1, per_hour=0, db_path=tmp_path / "gone" / "rl.db", enabled=True
+    )
+    try:
+        for client in build(settings, clock, state):
+            body = client.get("/health").json()
+
+        assert body["status"] == "degraded"
+        assert body["limiter"] == "rate limiting is unavailable"
+        assert str(tmp_path) not in str(body)
+    finally:
+        state.degraded = None
+
+
+def test_a_recovered_store_stops_reporting_degraded(
+    tmp_path: Path, clock: Clock, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A transient lock must not page somebody until the box is restarted.
+
+    `SQLITE_BUSY` past the timeout is ordinary with several workers on one
+    file. Latching `degraded` forever turns a two second blip into a permanent
+    alarm, and keeping the dead connection turns it into permanent fail open.
+    """
+    from catholic_bible.storage import ratelimit as store
+
+    state = State()
+    settings = Settings(per_minute=5, per_hour=0, db_path=tmp_path / "rl.db")
+    real = store.Counter.hit
+    failing = {"now": True}
+
+    def flaky(self: object, *args: object, **kwargs: object) -> int:
+        if failing["now"]:
+            raise sqlite3.OperationalError("database is locked")
+        return real(self, *args, **kwargs)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(store.Counter, "hit", flaky)
+    for client in build(settings, clock, state):
+        assert client.get(VERSE).status_code == 200
+        assert state.degraded is not None
+
+        failing["now"] = False
+
+        assert client.get(VERSE).status_code == 200
+        assert state.degraded is None, "recovery has to clear the alarm"
+
+
+def test_a_repeated_forwarded_header_is_read_whole(
+    tmp_path: Path, clock: Clock
+) -> None:
+    """HTTP allows the field to repeat and ASGI keeps every line separately.
+
+    Reading only the first one walks a chain the caller controls, which is the
+    spoofing hole this module exists to close.
+    """
+    from catholic_bible.api.ratelimit import _forwarded
+
+    scope = {
+        "type": "http",
+        "headers": [
+            (b"x-forwarded-for", b"9.9.9.9"),
+            (b"x-forwarded-for", b"203.0.113.9"),
+        ],
+    }
+
+    assert _forwarded(scope) == "9.9.9.9, 203.0.113.9"
 
 
 def test_health_says_ok_in_exactly_the_bytes_the_readme_publishes() -> None:
@@ -275,7 +357,7 @@ def test_health_reports_degraded_while_the_limiter_is_unusable(
             body = client.get("/health").json()
 
         assert body["status"] == "degraded"
-        assert "rl.db" in body["limiter"]
+        assert body["limiter"] == "rate limiting is unavailable"
     finally:
         state.degraded = None
 
