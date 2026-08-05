@@ -27,13 +27,13 @@ of them is an estimate and none of them is from documentation.
 |---|---|---|
 | Paragraphs carrying a citation | 1193 of 2865 | the source fixture |
 | Citation labels | 3549, of which 2483 distinct | the source fixture |
-| Labels the B1 parser reads | 3549 of 3549, 100% | `parse_reference` over all of them |
-| Scheme the source is written in | `org` | 3547 map, against 3527 for vulgate and douay |
-| Verses carrying at least one citation | 4123 | ranges expanded onto the spine |
-| Verse to paragraph pairs | 6967 | the same run |
+| Labels the B1 parser reads | 3547 of 3547, 100% | `parse_reference` over all of them |
+| Scheme the source is written in | `org` | 3546 map, against 3526 for vulgate and douay |
+| Verses carrying at least one citation | 4031 | ranges expanded onto the spine |
+| Verse to paragraph pairs | 6830 | the same run |
 | Most cited verse | `MAT.28.19`, 17 paragraphs | the same run |
-| The artifact | 84 KB, 19 KB gzipped | `json.dumps` and `gzip.compress` |
-| Labels that do not reach the spine | 9 of 3549, 0.25% | the same run |
+| The artifact | 82 KB, 19 KB gzipped | `json.dumps` and `gzip.compress` |
+| Labels that do not reach the spine | 1 of 3547, 0.03% | the same run |
 | English edition pages | 374 | the live index |
 | Portuguese edition pages | 26, plus the prologue | the live index |
 | Upstream licence | none declared | the GitHub API |
@@ -90,22 +90,38 @@ A paragraph citing `Mt 28,19-20` answers for both verses. The alternative,
 storing the range and expanding at read time, moves work into every request to
 save 19 KB once. The expansion is 6967 pairs over 4123 verses.
 
-### Nine labels do not reach the spine, and they ship as orphans
+### The extraction was fixed upstream, and nine orphans became one
 
-Two of them name a book the source got wrong. `Jd 13,18` and `Jd 6,11-24` are
-impossible in Jude, which has one chapter and twenty five verses, and both are
-valid in Judith. The alias table here is correct, `Jd` is Jude and `Jt` is
-Judith, so the error is upstream in the extraction rather than in B1.
+Reading the fixture against the spine found nine labels that reach nothing. All
+nine were defects in the extractor rather than in the Catechism, and both were
+fixed at the source before this document was finished. The export here now runs
+against a corrected fixture.
 
-The other seven are range ends that run past the end of their chapter.
-`Gn 6,12-32` against a chapter of 22 verses, `Is 53,12-14` against a chapter of
-12. The upstream extractor recovers the start of a range from a link and the end
-from display text, and its own docstring says so. That recovery is what fails.
+**Two labels named the wrong book.** `Jd 13,18` and `Jd 6,11-24` are impossible
+in Jude, which has one chapter and twenty five verses. The upstream dataset
+writes Judges as `JUD` and the extractor read it as the epistle. Judges 13,18 is
+the angel refusing his name to Manoah and Judges 6,11-24 is the angel appearing
+to Gideon, which is what §206 and §332 are about. The alias table here was
+correct throughout.
 
-They ship as orphans with a reason, the way B1 and B2 handle it. Clamping a
-range end to the last verse of the chapter would be authoring data, and this
-repository does not author data. **Whether to fix the extractor upstream and
-re-export instead is the one question this document leaves open.**
+**Seven labels carried a range end belonging to a different reference.** The
+extractor recovers the start of a range from a link and the end from display
+text, and the display text is the whole footnote, which usually holds several
+references. A link on `Gn 6,12` beside the text `Rom 1:18-32` produced
+`Gn 6,12-32`. The end is accepted now only when the text spells out a chapter and
+a start verse that both match the link. Twenty three labels lost a range end that
+was never theirs.
+
+Where the link and the footnote genuinely disagree the result now under-claims
+rather than over-claims. `Num 12:3,7-8` is disjoint and arrives as `Nm 12,3`, and
+a link on `Eph 1,21` beside a text reading `Eph 1:22-23` arrives as `Ef 1,21`.
+Losing a verse beats asserting one that was not cited.
+
+**One orphan survives and it is upstream data rather than upstream code.** The
+footnote under §2122 reads `2 Cor 9:5-18` and that chapter has fifteen verses. It
+ships as an orphan with a reason, the way B1 and B2 handle it. Clamping it to the
+last verse of the chapter would be authoring data, and this repository does not
+author data.
 
 ### The link is a section page plus a paragraph number, in both languages
 
@@ -163,19 +179,23 @@ One built link is opened against the live site and returns the page holding that
 paragraph.
 
 A sample of citations is read by hand against the printed Catechism, with the
-sample size and the error rate recorded whatever they turn out to be. The two
-Judith labels are already known defects and the sample measures whether they are
-alone.
+sample size and the error rate recorded whatever they turn out to be. Nine
+defects are already known and fixed, and what the sample measures is how many
+more are left that reaching the spine cannot detect. A label that resolves is not
+a label that is right.
 
-## The question this document leaves open
+## What this document no longer leaves open
 
-**The nine unresolved labels.** Ship them as orphans, which is what this document
-assumes and what criterion 8 literally asks for. Or fix the two book codes in the
-upstream extractor, re-export, and ship seven orphans instead of nine. The fix is
-one line in a file this repository does not own, and taking it means the export
-here waits on a change over there.
+**The nine unresolved labels are eight fewer.** They were extraction defects and
+they were fixed upstream, which is where extraction belongs. The remaining one is
+an error in the printed apparatus as the upstream transcribed it and it ships as
+an orphan.
 
-The provenance question was raised and withdrawn. The citation graph is the same
-fact whoever transcribed it, what decides whether it is right is the hand check,
-and the upstream name is one line in `PROVENANCE.json` rather than a decision
-about scope.
+**The provenance question was raised and withdrawn.** The citation graph is the
+same fact whoever transcribed it, what decides whether it is right is the hand
+check, and the upstream name is one line in `PROVENANCE.json` rather than a
+decision about scope.
+
+**Both fixes live in the private repository and are uncommitted there.** Nothing
+in this epic can be exported until they land, and this document is the record of
+what they were.
