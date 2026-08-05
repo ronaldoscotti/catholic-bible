@@ -26,6 +26,7 @@ DEST = Path(__file__).resolve().parent.parent / "src" / "catholic_bible" / "data
 VERBATIM = {
     "versification.json": "database/data/catholic-versification.json",
     "vulgate-scheme.json": "database/data/vulgata-versification.json",
+    "english-scheme.json": "database/data/english-versification.json",
 }
 CANON_PHP = "database/data/catholic-canon.php"
 DOUAY_PHP = "app/Services/Bible/DouayCanonMap.php"

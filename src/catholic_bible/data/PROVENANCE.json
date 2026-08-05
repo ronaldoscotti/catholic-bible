@@ -1,8 +1,8 @@
 {
   "source": {
     "repository": "meu-feed-catolico-api",
-    "commit": "0494a69e66657a16d822898e71f4eb3b2bc4ae80",
-    "commit_date": "2026-08-02T00:02:18-03:00",
+    "commit": "e03acf4de53932c00c1e540ea9679e53a740862d",
+    "commit_date": "2026-08-05T19:07:34-03:00",
     "private": true
   },
   "files": {
@@ -13,6 +13,10 @@
     "douay-names.json": {
       "sha256": "95ad1e1958cbc099d71ea692306eb6a062b5e4ec9d56a920c0f4d4b1549c36f8",
       "from": "app/Services/Bible/DouayCanonMap.php"
+    },
+    "english-scheme.json": {
+      "sha256": "5162023f8e0604fce96a49d7fb8cea73ef699928846d10d62210bd4882e81338",
+      "from": "database/data/english-versification.json"
     },
     "latin-abbreviations.json": {
       "sha256": "dcbd96e3a0969cd9668d016f744603cb3788003f3a2ff54d3bfad13e0b137a9d",

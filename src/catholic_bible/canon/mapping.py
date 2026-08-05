@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 
 from catholic_bible.canon.books import CANON
-from catholic_bible.canon.schemes import DOUAY, ORG, VULGATE
+from catholic_bible.canon.schemes import DOUAY, ENGLISH, ORG, VULGATE
 from catholic_bible.canon.spine import SPINE
 from catholic_bible.canon.verse import VerseId
 
@@ -26,6 +26,7 @@ class Scheme(StrEnum):
     VULGATE = "vulgate"
     ORG = "org"
     DOUAY = "douay"
+    ENGLISH = "english"
 
 
 class OrphanReason(StrEnum):
@@ -62,6 +63,8 @@ def map_address(scheme: Scheme, book: str, chapter: int, verse: int) -> Result:
             target = ORG.to_spine(book, chapter, verse)
         case Scheme.DOUAY:
             target = DOUAY.to_spine(book, chapter, verse)
+        case Scheme.ENGLISH:
+            target = ENGLISH.to_spine(book, chapter, verse)
 
     if SPINE.contains(*target):
         return Mapped(VerseId(*target))
@@ -86,6 +89,8 @@ def to_scheme(scheme: Scheme, verse: VerseId) -> Result:
             target = ORG.from_spine(*source)
         case Scheme.DOUAY:
             target = DOUAY.from_spine(*source)
+        case Scheme.ENGLISH:
+            target = ENGLISH.from_spine(*source)
 
     back = map_address(scheme, *target)
     if isinstance(back, Mapped) and back.verse == verse:

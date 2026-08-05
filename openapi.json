@@ -1003,7 +1003,8 @@
         "enum": [
           "vulgate",
           "org",
-          "douay"
+          "douay",
+          "english"
         ],
         "title": "Scheme",
         "type": "string"
