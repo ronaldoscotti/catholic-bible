@@ -35,13 +35,42 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 0  Understand       docs/method/00-understand.md
 [x] 1  Context          docs/method/01-context.md
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
-[x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5 B8 B9 B10
-[x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8 B9 B10
-[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 B9 merged, B10 open, 783 tests
+[x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5 B8 B9 B10 B11
+[x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8 B9 B10 B11
+[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 B9 B10 merged, B11 blocked, 796 tests
 [x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8 B9 B10
 [x] 7  Code review      docs/reviews/, B0 to B10, one author on B10
-[x] 8  PR               B0 B1 B2 B3 B4 B5 B7 B8 B9 merged. v1.0.0 and v1.0.1 released
+[x] 8  PR               B0 to B10 merged. v1.0.0 and v1.0.1 released
 ```
+
+**B11 is the first epic to stop rather than ship.** One of eight criteria is met
+and the other seven stay unticked, because the resolution it was built on sends
+psalm citations to the wrong verse.
+
+`Scheme.ORG` is hebrew numbering and counts a psalm superscription as verses. The
+Catechism cites in english numbering, which does not. An english address is a
+valid `org` address, so it maps cleanly, raises nothing, produces no orphan and
+lands one or two verses early. Nothing in the mapping layer can see it. Only the
+text can, and the text is what found it.
+
+The first diagnosis was wrong and was corrected before anybody acted on it. It
+said the Copenhagen table was broken. The table is right, and issue `#22` is what
+suggested looking at the input instead, because a table that shifts verses for
+some psalms is not a table that ignores verses. `org` psalm 51 runs 0 to 21,
+which is 19 english verses plus two superscription lines, and OpenBible uses 1 to
+19. The two disagree by exactly the title.
+
+**It is a defect in shipped B4 data, not in this branch.** `PSA.50.10` is
+published against `EZK.36.25` today. The english reference is Ps 51,10, which is
+`PSA.50.12`. It is issue `#36`, it is pinned as a strict xfail so it reports the
+day it is fixed, and the epic waits.
+
+**The page map is the part that shipped, and its own check caught it failing.**
+The first walk produced a map covering 2863 of 2865 paragraphs, which is 99.93%
+correct and exactly the shape that sends readers to the wrong page while looking
+healthy. Detecting where a paragraph begins from the markup does not work, and
+three different shapes were found by three separate failures. Reading the
+sequence instead makes a duplicate and an inversion impossible to express.
 
 **B10 is the first epic where a recommendation was checked by running it.** The
 author was asked to choose between one Python distribution and two, and the
