@@ -37,7 +37,7 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
 [x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5 B8 B9 B10
 [x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8 B9 B10
-[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 B9 merged, B10 open, 782 tests
+[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 B9 merged, B10 open, 783 tests
 [x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8 B9 B10
 [x] 7  Code review      docs/reviews/, B0 to B10, one author on B10
 [x] 8  PR               B0 B1 B2 B3 B4 B5 B7 B8 B9 merged. v1.0.0 and v1.0.1 released
@@ -66,6 +66,14 @@ The same shape twice more. The npm size limit was written down as
 unestablishable from the documentation, and one query against a package
 everybody has installed settled it. Registries answer questions about themselves
 that their documentation does not.
+
+**Re-running the acceptance walk rather than citing it found a defect.** The
+first boot prints a line saying what it is building, because ten seconds of
+silence reads as a hang. Redirected stdout is block buffered and uvicorn logs to
+stderr unbuffered, so in a log the notice arrived after the server had reported
+itself up. Invisible on a terminal, and a log is where a service runs. The test
+that covered the message used `capsys`, which cannot see buffering because
+pytest replaces the stream.
 
 **The shell trap appeared for the third time.** Measuring whether the artifact
 gate rejects a hand edited file printed `exit=0`, because the command was piped

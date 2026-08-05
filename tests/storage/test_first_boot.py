@@ -8,7 +8,10 @@ inside a checkout they do not have.
 
 from __future__ import annotations
 
+import os
 import sqlite3
+import subprocess
+import sys
 from contextlib import closing
 from pathlib import Path
 
@@ -57,6 +60,31 @@ def test_it_does_not_rebuild_what_is_already_there(
     assert bootstrap.ensure() == wanted
     assert wanted.stat().st_mtime_ns == stamped
     assert capsys.readouterr().out == ""
+
+
+def test_the_notice_reaches_a_log_before_the_build_it_announces(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Redirected stdout is block buffered, which is where a service runs.
+
+    `capsys` cannot see this, because pytest replaces the stream. Run for real,
+    into a pipe, and read the line while the build is still going.
+    """
+    wanted = tmp_path / "bible.db"
+    script = "from catholic_bible.storage import bootstrap; bootstrap.ensure()"  # noqa: E501
+    with subprocess.Popen(
+        [sys.executable, "-c", script],
+        stdout=subprocess.PIPE,
+        text=True,
+        env={**os.environ, database.OVERRIDE: str(wanted)},
+    ) as running:
+        assert running.stdout is not None
+        said = running.stdout.readline()
+        building = not wanted.is_file()
+        running.wait(timeout=120)
+
+    assert str(tmp_path) in said, said
+    assert building, "the line only arrived after the build had finished"
 
 
 def test_the_entry_point_builds_before_it_serves(

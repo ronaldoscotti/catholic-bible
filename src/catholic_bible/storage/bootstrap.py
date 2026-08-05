@@ -48,7 +48,14 @@ def ensure() -> Path:
     if target.is_file():
         return target
 
-    print(f"building the read database at {target}, once, this takes a moment")
+    # Flushed, or block buffering holds it until after the build it announces.
+    # On a terminal stdout is line buffered and this is invisible. Redirected
+    # into a log, which is where a service actually runs, the line arrived
+    # after uvicorn had already reported itself up.
+    print(
+        f"building the read database at {target}, once, this takes a moment",
+        flush=True,
+    )
     materialise(target)
     return target
 

@@ -160,6 +160,35 @@ pipe is what gave the real answer. That is the third time this class of shell
 trap has appeared in this repository, and `docs/method/README.md` records the
 first two.
 
+## The defect this walk found in the thing it was checking
+
+Re-running the whole verification for the acceptance walk, rather than citing
+the earlier run, turned up a real one.
+
+```
+$ catholic-bible-api > api.log 2>&1
+$ head -5 api.log
+INFO:     Started server process [57203]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000
+building the read database at /Users/.../1.0.1/bible.db, once, this takes a moment
+```
+
+The build genuinely runs before uvicorn and a test already held that. The
+*message* arrived after uvicorn had reported itself up, because redirected
+stdout is block buffered while uvicorn logs to stderr unbuffered.
+
+**On a terminal this is invisible and in a log it is the whole failure.** The
+line exists because ten seconds of silence reads as a hang, and a service runs
+with its output redirected, which is precisely where the line was late.
+
+`flush=True`. The notice is the first line of the log now.
+
+`capsys` could never have caught it, since pytest replaces the stream, so the
+new test runs the real interpreter into a real pipe and reads the line while the
+build is still going. Removing the flush fails it.
+
 ## What is not covered
 
 **Nothing here proves the OIDC configuration.** Both trusted publisher setups
