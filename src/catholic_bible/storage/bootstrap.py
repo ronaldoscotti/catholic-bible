@@ -1,8 +1,9 @@
 """Making the read database exist, wherever it is supposed to be.
 
-Inside a checkout and inside the Docker image it already does, so nothing here
-runs. Installed from a registry the file cannot ship, because it is derived and
-carries no checksum, and every published file here carries one.
+Inside a checkout and inside the Docker image the build step puts it beside the
+code, so `ensure` finds it and does nothing. Installed from a registry it cannot
+be there, because it is derived and carries no checksum, and every published
+file here carries one.
 
 Ten seconds cold on the machine this was written on, from bytes the reader
 already downloaded when they installed the package. A warm rebuild inside a
@@ -11,12 +12,18 @@ checkout is half that, which is why the message below promises no number.
 
 from __future__ import annotations
 
+import os
 import sqlite3
 from contextlib import closing
 from pathlib import Path
 
 from catholic_bible.storage.build import build
 from catholic_bible.storage.database import resolve
+
+
+def scratch_for(dest: Path) -> Path:
+    """The half written file, named per process so two cannot collide."""
+    return dest.with_suffix(f".{os.getpid()}.building")
 
 
 def materialise(dest: Path) -> None:
@@ -26,9 +33,13 @@ def materialise(dest: Path) -> None:
     otherwise leaves a file that reads as a database, which the next boot finds
     and trusts, and a corpus with holes in it beats no corpus only in the sense
     that it starts.
+
+    The scratch name carries the process id. Two processes bootstrapping the
+    same target, which is what `--workers` does, would otherwise delete each
+    other's half written file and both move the result into place.
     """
     dest.parent.mkdir(parents=True, exist_ok=True)
-    scratch = dest.with_suffix(".building")
+    scratch = scratch_for(dest)
     scratch.unlink(missing_ok=True)
 
     connection = sqlite3.connect(scratch)
@@ -61,11 +72,14 @@ def ensure() -> Path:
 
 
 def main() -> int:
-    """`catholic-bible-build-db`, for an image that wants it in a layer."""
+    """`catholic-bible-build-db`, for an image that wants it in a layer.
+
+    Set `CATHOLIC_BIBLE_DB` to the path the image will read from. Without it
+    this writes where an installed copy would look, which is a per-user cache
+    and belongs to whoever ran the command.
+    """
     target = resolve()
     materialise(target)
-    # `closing`, because sqlite3's own context manager commits and does not
-    # close, so the plain `with` leaks the handle.
     with closing(sqlite3.connect(f"file:{target}?mode=ro", uri=True)) as check:
         verses = check.execute("SELECT COUNT(*) FROM texts").fetchone()[0]
         addresses = check.execute("SELECT COUNT(*) FROM spine").fetchone()[0]

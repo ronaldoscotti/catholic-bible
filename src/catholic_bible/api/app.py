@@ -1,3 +1,5 @@
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from typing import Literal
 
 import uvicorn
@@ -11,9 +13,23 @@ from catholic_bible.api.ratelimit import RateLimiter, State
 from catholic_bible.storage import bootstrap
 from catholic_bible.storage.database import connect
 
+
+@asynccontextmanager
+async def lifespan(served: FastAPI) -> AsyncIterator[None]:
+    """Build the store before the first request, whoever is serving.
+
+    In the lifespan rather than in `main()`, because `uvicorn
+    catholic_bible.api.app:app` and gunicorn are ordinary ways to run this and
+    neither goes through the console script.
+    """
+    bootstrap.ensure()
+    yield
+
+
 app = FastAPI(
     title="Catholic Bible",
     version=__version__,
+    lifespan=lifespan,
     description=(
         "A read-only API for the Catholic Bible. 73 books, Portuguese, English "
         "and Latin, public domain throughout."
@@ -70,10 +86,4 @@ def health() -> Health:
 
 
 def main() -> None:
-    """Serve, building the store first if an installed copy has none yet.
-
-    Before uvicorn rather than on the first request, so a boot that cannot
-    build fails where somebody is watching instead of inside a 500.
-    """
-    bootstrap.ensure()
     uvicorn.run(app, host="0.0.0.0", port=8000)

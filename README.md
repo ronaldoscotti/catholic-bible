@@ -192,8 +192,8 @@ the container in this document did not demote it in the build.
 
 `the-catholic-bible` on PyPI, `the-catholic-bible` on npm and `@v1.0.1` on the
 CDN are the same release. `pyproject.toml` is the only place the number is
-written and everything else is generated from it, so the five files that carry
-it cannot drift apart without the build failing.
+written and the four files that republish it are generated from it, so they
+cannot drift apart without the build failing.
 
 A correction ships as a new version and never as an edit to an old one, which is
 the same promise the CDN tag makes and for the same reason.

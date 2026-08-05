@@ -133,3 +133,105 @@ Windows.
 only way to bring the name into existence, npm's own notice says tokens that
 bypass 2FA are being restricted for direct publishing, and the window for the
 cheap bootstrap is open now with nobody promising how long.
+
+## Second pass, on the open pull request
+
+*2026-08-05. A review agent read the diff against the epic after the pull
+request opened. Thirteen findings. Every one reproduced before anything was
+changed, and the two that mattered most were regressions this branch
+introduced.*
+
+**The Docker image lost its database and nobody noticed.** `build-db.py` was
+rewritten to delegate to `bootstrap.main()`, which routes through `resolve()`.
+`resolve()` answers where to *read* from, and it returns the packaged path only
+when the file is already there. On a clean checkout and inside the Docker
+builder it never is, so the build went to a per-user cache instead.
+
+```
+$ rm src/catholic_bible/data/derived/bible.db
+$ uv run scripts/build-db.py
+built /Users/scotti/Library/Caches/the-catholic-bible/1.0.1/bible.db
+```
+
+The Dockerfile runs that as root, so it wrote to `/root/.cache`, and
+`COPY --from=builder /app /app` discards it. The published image would have
+shipped with no store and rebuilt 107103 verses on **every container start**.
+
+**None of the gates could see it.** `make db` on the author's machine works
+because the file is already there. CI stayed green because `--wait` polls the
+health check and the six second build fits inside the start period. The spec
+even claimed the opposite in writing, that the repository and the image both
+build ahead of time and neither changes behaviour.
+
+`build-db.py` writes to the packaged path unconditionally now, which is what it
+always did. The regression cannot return quietly because `quickstart` asserts
+that a container start does not print the first boot message and that the image
+carries the file.
+
+**The same fix was applied once and left undone next door.** `release.yml`
+creates a virtualenv on the runner's default interpreter, 3.12, against a
+`requires-python` of 3.13. That is the identical defect CI caught in the
+`package` job hours earlier, fixed there and not here. The one job whose entire
+purpose is proving a real install works would have failed on the first release,
+after both registries had permanently accepted the version.
+
+That is the third epic in a row where a fix was narrower than the problem it
+fixed. B9 had two rounds of it. Naming the quantity is what generalises, and
+what generalises here is grepping for the pattern rather than the line.
+
+**An unrelated file was swept into a commit by `git add -A`.**
+`SESSION_PROMPT.md` was modified in the working tree before this session began.
+It is the author's own scratch, it deletes the issue to epic map and the step
+requiring `openapi.json` to be regenerated, and it had no business in a B10
+pull request. Reverted to `main`.
+
+`git add -A` is how that happened and it will happen again. The commits here
+were otherwise clean because nothing else was dirty, which is luck rather than
+method.
+
+### The rest
+
+**The retry loops reported the wrong failure.** Six failed attempts exit
+successfully, so the step died later on a `ModuleNotFoundError` and the log read
+as a broken package rather than an install that never happened.
+
+**The publish was not gated on the artifact check.** `ci.yml` runs it on a tag
+push as a separate workflow racing this one. A tag pushed over a hand edited
+`data/` file would have published to both registries regardless, permanently.
+The `agree` job runs the check itself now.
+
+**Three actions were unpinned**, including `pypa/gh-action-pypi-publish` in the
+job holding `id-token: write`. Every other action in this repository is SHA
+pinned, and the convention exists for that job most of all.
+
+**`workflow_dispatch` was declared and could never succeed**, since the version
+comes from the ref and a manual run gives a branch name. Removed rather than
+repaired, because a trigger that always refuses reads as an escape hatch during
+the one hour somebody needs one.
+
+**The build only ran for one of the two ways to serve.** `uvicorn
+catholic_bible.api.app:app` skipped it entirely and booted into the 503 this
+epic exists to remove. It is a lifespan now, which every server runs.
+
+**The scratch file was shared between processes.** `--workers 4` means four
+builds against one target, each deleting the others' half written file, then all
+four moving the result into place. That is the corrupt database the atomic write
+exists to prevent. The name carries the process id now.
+
+**Two smaller ones.** A test called *all five places* asserted four, counting
+the source file it compares against, and the README repeated the claim. The
+epic's Context still described the two package split the author rejected at the
+spec gate, which matters because the epic file is the source of truth for the
+issue body.
+
+### What this pass says about the first one
+
+The first review found the premise failure and the npm bootstrapping problem,
+both real, and it read the code it had just written. It did not run
+`build-db.py` on a tree without a database, which is the one state every
+stranger and every image build starts from.
+
+**A second reader with no stake found in one pass what the author missed across
+a spec, a plan, an acceptance walk and a QA document.** That is the third time,
+after B8 and B9, and the pattern is not that the author is careless. It is that
+checking your own work asks the questions you already thought of.

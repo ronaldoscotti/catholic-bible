@@ -87,27 +87,40 @@ def test_the_notice_reaches_a_log_before_the_build_it_announces(
     assert building, "the line only arrived after the build had finished"
 
 
-def test_the_entry_point_builds_before_it_serves(
+def test_serving_the_app_directly_builds_it_too(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    """Before uvicorn, not on the first request.
+    """`uvicorn catholic_bible.api.app:app` is a real way to run this.
 
-    Nothing else asserts this. Deleting the call leaves the API booting into
-    the 503 an installed copy was already giving, which reads as working
-    because the process is up.
+    The build used to live in `main()`, so the console script was covered and
+    every other way of serving the same ASGI app booted into the 503 this epic
+    exists to remove. It is a lifespan now, which every server runs.
     """
-    import uvicorn  # noqa: PLC0415
+    from fastapi.testclient import TestClient  # noqa: PLC0415
 
-    from catholic_bible.api import app as application  # noqa: PLC0415
+    from catholic_bible.api.app import app  # noqa: PLC0415
 
     wanted = tmp_path / "bible.db"
     monkeypatch.setenv(database.OVERRIDE, str(wanted))
-    served: list[bool] = []
-    monkeypatch.setattr(uvicorn, "run", lambda *a, **k: served.append(wanted.is_file()))
 
-    application.main()
+    with TestClient(app) as client:
+        assert wanted.is_file()
+        assert client.get("/health").status_code == 200
 
-    assert served == [True]
+
+def test_the_scratch_file_is_not_shared_between_processes(tmp_path: Path) -> None:
+    """`--workers 4` runs four of these at once against one target.
+
+    A fixed scratch name means each deletes the others' half written file and
+    all four move whatever is left into place, which is the corrupt database
+    the atomic write exists to prevent.
+    """
+    seen = {
+        bootstrap.scratch_for(tmp_path / "bible.db"),
+        bootstrap.scratch_for(tmp_path / "bible.db"),
+    }
+
+    assert str(os.getpid()) in str(seen.pop())
 
 
 def test_an_interrupted_build_leaves_no_half_written_store(

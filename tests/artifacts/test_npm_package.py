@@ -69,8 +69,13 @@ def test_the_repository_is_named_so_provenance_can_be_checked() -> None:
     assert "ronaldoscotti/catholic-bible" in json.dumps(repository)
 
 
-def test_the_version_is_the_same_number_in_all_five_places() -> None:
+def test_the_version_reaches_every_file_that_republishes_it() -> None:
     """One number, two generators, and the failure mode is silence.
+
+    Four files are asserted against `pyproject.toml`, which is the source and
+    therefore not one of them. An earlier name said five and counted the
+    source, which is the sort of off by one that makes a reader trust a
+    coverage claim the test does not make.
 
     `build-artifacts.py` writes three of these from `pyproject.toml`.
     `openapi.json` gets there separately, through FastAPI reading

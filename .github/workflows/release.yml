@@ -3,10 +3,13 @@ name: Release
 # The tag is the trigger, never a laptop. `cdn.yml` already fires on the same
 # tags and checks jsDelivr, so a release moves three published surfaces at once
 # and each one proves itself separately.
+# No `workflow_dispatch`. The version is read out of the ref, so a manual run
+# would compare a branch name against the manifest and always refuse. A trigger
+# that cannot succeed is worse than no trigger, because it reads as an escape
+# hatch during the one hour somebody needs one.
 on:
   push:
     tags: ["v*"]
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -21,6 +24,7 @@ jobs:
       version: ${{ steps.read.outputs.version }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
       - id: read
         run: |
           tagged="${GITHUB_REF_NAME#v}"
@@ -33,6 +37,13 @@ jobs:
           esac
           echo "version=$tagged" >> "$GITHUB_OUTPUT"
 
+      # `ci.yml` runs this too, on the same tag push, as a separate workflow
+      # racing this one. A published version is permanent, so the release gates
+      # on it here rather than hoping the other workflow lost the race.
+      - run: uv sync --locked
+      - run: uv run scripts/build-artifacts.py --check
+      - run: uv run scripts/build-openapi.py --check
+
   pypi:
     needs: agree
     runs-on: ubuntu-latest
@@ -43,7 +54,7 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
       - run: uv build --out-dir dist
-      - uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
 
   npm:
     needs: agree
@@ -53,7 +64,7 @@ jobs:
       id-token: write # OIDC, and provenance, which signs against this workflow.
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: "24"
           registry-url: "https://registry.npmjs.org"
@@ -79,20 +90,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: "24"
+
+      # `requires-python` is 3.13 and the runner's default is 3.12, so without
+      # this the one job whose purpose is to prove a real install works would
+      # fail on every release. The `package` job in `ci.yml` learned this the
+      # hard way and this file did not, until a review said so.
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version-file: .python-version
 
       - name: pip install, from the registry rather than from this checkout
         run: |
           version="${{ needs.agree.outputs.version }}"
           python -m venv /tmp/stranger
+          resolved=""
           for attempt in 1 2 3 4 5 6; do
-            /tmp/stranger/bin/pip install --quiet \
-              "the-catholic-bible==$version" && break
+            if /tmp/stranger/bin/pip install --quiet \
+                 "the-catholic-bible==$version"; then
+              resolved=yes
+              break
+            fi
             echo "attempt $attempt did not resolve, waiting"
             sleep 30
           done
+          # Or the step fails several lines down on a ModuleNotFoundError and
+          # the log reads as a broken package rather than an install that never
+          # happened.
+          test -n "$resolved" || { echo "PyPI never served $version"; exit 1; }
           /tmp/stranger/bin/python -c "
           from catholic_bible.canon.reference import parse_reference
           found = parse_reference('Eclo 24,1')
@@ -105,11 +132,16 @@ jobs:
           version="${{ needs.agree.outputs.version }}"
           mkdir -p /tmp/consumer && cd /tmp/consumer
           npm init -y > /dev/null
+          resolved=""
           for attempt in 1 2 3 4 5 6; do
-            npm install --silent "the-catholic-bible@$version" && break
+            if npm install --silent "the-catholic-bible@$version"; then
+              resolved=yes
+              break
+            fi
             echo "attempt $attempt did not resolve, waiting"
             sleep 30
           done
+          test -n "$resolved" || { echo "npm never served $version"; exit 1; }
           node -e "
             const index = require('the-catholic-bible')
             const fs = require('fs')

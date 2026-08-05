@@ -20,8 +20,8 @@ import sys
 from contextlib import closing
 from pathlib import Path
 
-from catholic_bible.storage.bootstrap import main as build_where_it_belongs
 from catholic_bible.storage.bootstrap import materialise
+from catholic_bible.storage.database import DB_PATH
 
 
 def main() -> int:
@@ -29,10 +29,13 @@ def main() -> int:
     parser.add_argument("--dest", default=None)
     args = parser.parse_args()
 
-    if args.dest is None:
-        return build_where_it_belongs()
-
-    dest = Path(args.dest).resolve()
+    # The packaged path, always, and never whatever `resolve()` would pick.
+    # This script only exists inside a checkout, and `resolve()` answers where
+    # to *read* from, which falls through to a per-user cache when the file is
+    # not there yet. That is exactly the state a clean checkout and the Docker
+    # builder are in, so routing this through it sent `make db` and the image
+    # build into `~/.cache` and left the checkout with no database at all.
+    dest = Path(args.dest).resolve() if args.dest else DB_PATH
     materialise(dest)
     with closing(sqlite3.connect(f"file:{dest}?mode=ro", uri=True)) as check:
         verses = check.execute("SELECT COUNT(*) FROM texts").fetchone()[0]

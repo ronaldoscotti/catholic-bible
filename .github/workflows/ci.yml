@@ -38,7 +38,7 @@ jobs:
       # A stranger uses `pip`, so this job does too rather than letting uv
       # manage the interpreter the way the other jobs can. The runner's default
       # is 3.12 and `requires-python` is 3.13, which is what this found.
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version-file: .python-version
 
@@ -122,6 +122,22 @@ jobs:
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
       - run: docker compose up -d --build --wait
+
+      # The image builds the store at image build time, so a container start
+      # must not. This caught a regression where `build-db.py` wrote into the
+      # builder's home cache, which `COPY --from=builder /app /app` discards,
+      # leaving every container start to rebuild 107103 verses.
+      - name: The image carries the database rather than building one
+        run: |
+          docker compose logs api > /tmp/boot.log
+          cat /tmp/boot.log
+          if grep -q "building the read database" /tmp/boot.log; then
+            echo "the image shipped without a store and built one on start"
+            exit 1
+          fi
+          docker compose exec -T api \
+            test -s /app/src/catholic_bible/data/derived/bible.db
+
       - name: The README response is the contract
         run: |
           expected=$(grep -m1 '^{"status"' README.md)

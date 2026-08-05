@@ -18,6 +18,10 @@
 
 Two packages with two different jobs. The Python package carries the reference parser and the canon logic, which is code. The npm package carries data only, since the parser in JavaScript would be a second implementation and nobody has asked for one.
 
+**The first half of that paragraph is what this epic proposed and not what it shipped.** The author chose one Python distribution carrying everything, corpus included, so `pip install` leaves a running API rather than a parser alone. The wheel is 13 MB against the 84 KB this framing implies. `DECISIONS.md` carries the reasoning and what it cost under *One Python distribution carrying everything, against the epic's two*. The paragraph stays as written because the issue body is the record of what was proposed, and this note is the record of what happened to it.
+
+The npm half held exactly as written.
+
 ## Problem
 
 Adoption dies at the install step. A developer who has to clone a repo and run a generator to get a Bible will paste a JSON file from somewhere else instead, which is how the current situation came about.
