@@ -32,7 +32,11 @@ of them is an estimate and none of them is from documentation.
 | Verses carrying at least one citation | 4031 | ranges expanded onto the spine |
 | Verse to paragraph pairs | 6830 | the same run |
 | Most cited verse | `MAT.28.19`, 17 paragraphs | the same run |
-| The artifact | 82 KB, 19 KB gzipped | `json.dumps` and `gzip.compress` |
+| `citations.json`, numbers only | 82 KB, 19 KB gzipped | `json.dumps` and `gzip.compress` |
+| `citations.json`, as shipped | 310 KB, 33 KB gzipped | the same run |
+| `paragraphs.json` | 185 KB, 35 KB gzipped | the same run |
+| Paragraphs per page, English | 7.7 | 2865 over 374 pages |
+| Paragraphs per page, Portuguese | 106.1 | 2865 over 27 pages |
 | Labels that do not reach the spine | 1 of 3547, 0.03% | the same run |
 | English edition pages | 374 | the live index |
 | Portuguese edition pages | 26, plus the prologue | the live index |
@@ -65,10 +69,11 @@ The two editions are not symmetric and no pattern relates them.
 
 ### The dataset is one directory, and deleting it withdraws the epic
 
-`src/catholic_bible/data/catechism/`, holding `citations.json`, `pages.json`,
-`orphans.json` and `PROVENANCE.json`. The criterion asks that withdrawing this
-be deleting one file, and one directory honours that better than one file does,
-because the link map and the orphan report are part of what would have to go.
+`src/catholic_bible/data/catechism/`, holding `citations.json`,
+`paragraphs.json`, `pages.json`, `orphans.json` and `PROVENANCE.json`. The
+criterion asks that withdrawing this be deleting one file, and one directory
+honours that better than one file does, because the link map, the reverse index
+and the orphan report are all part of what would have to go.
 
 Nothing else in the repository grows a Catechism field. The corpus, the
 commentary and the cross-references are untouched.
@@ -84,11 +89,29 @@ This is not a new mechanism. It is the mapping layer B1 already ships, pointed a
 a new source, and the spec records the scheme so that a later reader does not
 have to rediscover it from an orphan report.
 
-### Ranges are expanded onto every verse they cover
+### Ranges are expanded, and the citation as written is kept beside them
 
 A paragraph citing `Mt 28,19-20` answers for both verses. The alternative,
 storing the range and expanding at read time, moves work into every request to
-save 19 KB once. The expansion is 6967 pairs over 4123 verses.
+save a few kilobytes once.
+
+Expanding alone throws away the shape of the citation, and the shape is what a
+reader wants to see. An interface holding only the expansion can say that a verse
+is mentioned somewhere in §1223. Holding the label too, it can say that §1223
+cites Matthew 28,19-20, which is the sentence a person actually reads. Each entry
+carries the paragraph number and the citation as the Catechism wrote it.
+
+The cost is 33 KB gzipped against 19 KB. The published artifact set is 49 MB.
+
+### The index is published in both directions
+
+The source runs from paragraph to verse and this epic exists to publish the
+inverse. Publishing only the inverse throws away the original, which is the
+direction somebody rendering a Catechism paragraph needs, and it is already in
+hand before the inversion runs. It costs 35 KB gzipped.
+
+`citations.json` answers from a verse. `paragraphs.json` answers from a
+paragraph. Neither holds a word of text.
 
 ### The extraction was fixed upstream, and nine orphans became one
 
@@ -123,18 +146,51 @@ ships as an orphan with a reason, the way B1 and B2 handle it. Clamping it to th
 last verse of the chapter would be authoring data, and this repository does not
 author data.
 
-### The link is a section page plus a paragraph number, in both languages
+### The link is a section page plus a paragraph number, and English is the good one
 
-Portuguese comes free, from the ranges in the file names.
+The first draft of this section had the two editions the wrong way round. It
+called Portuguese the cheap win and English the expensive extra, on build cost
+alone, and build cost is not what a reader experiences.
 
-English needs the map built once, by walking the 374 pages and recording the
-first paragraph number on each. That walk is a committed script, it runs on
-demand rather than in CI, and its output is committed with a checksum like every
-other published file here. It self-checks: unless the first paragraph numbers are
-strictly increasing and cover 1 to 2865 without a gap, the build fails rather
-than publishing a map that sends a reader to the wrong page.
+**English lands the reader far closer.** Its 374 pages average 7.7 paragraphs
+each. Portuguese has 27 pages averaging 106. A Portuguese link opens a page
+holding a hundred paragraphs and leaves the reader to search it. An English link
+usually opens a page holding the paragraph and its immediate neighbours, which is
+close enough to read.
+
+So English is built first and it is the one the examples use. Portuguese ships
+too, because this repository serves Portuguese readers and a hundred paragraph
+page beats no link, and the artifact says which is which rather than presenting
+them as equivalent.
+
+Portuguese comes from the ranges in the file names. English needs the map built
+once, by walking the 374 pages and recording the first paragraph number on each.
+That walk is a committed script, it runs on demand rather than in CI, and its
+output is committed with a checksum like every other published file here. It self
+checks: unless the first paragraph numbers are strictly increasing and cover 1 to
+2865 without a gap, the build fails rather than publishing a map that sends a
+reader to the wrong page.
 
 The script reads paragraph numbers and page boundaries. It stores no text.
+
+### Each link carries a text fragment, offered as best effort
+
+A URL ending `#:~:text=1223` scrolls a browser to the paragraph number rather
+than to the top of the page. It is a browser feature and no server promises it,
+so it is a second field beside the plain page link rather than a replacement for
+it, and the field name says it is best effort. It costs nothing and on the
+Portuguese pages it is the difference between a link and a search.
+
+### What is refused, and it would have been the best feature here
+
+A breadcrumb. `Part Three, Section Two, Chapter Two, Article 5` tells a reader
+where a paragraph sits, renders beautifully, and is the single thing that would
+most improve this dataset.
+
+It does not ship. A reader learning that §2258 lives under the fifth commandment
+has learned what §2258 says without leaving here, and that is the line the epic
+drew. The structure of the Catechism is editorial work and a breadcrumb is that
+work in summary. Refusing it costs real quality and the refusal is the point.
 
 ### One route, mirroring the cross-references pair
 
@@ -143,9 +199,19 @@ The script reads paragraph numbers and page boundaries. It stores no text.
 reference, shaped after `/v1/cross-references`. Same 404 reasons, same
 `Cache-Control`, same resolution path.
 
-The response carries paragraph numbers and links. It carries no title, no first
-line, no summary and no snippet, and a test asserts that the response model has
-no field that could hold one.
+`GET /v1/catechism/paragraphs/{number}` serves the other direction, returning
+the verses that paragraph cites, as spine ids and as the citation was written.
+
+The response carries paragraph numbers, citations and links. It carries no title,
+no first line, no summary, no snippet and no breadcrumb, and a test asserts that
+the response model has no field that could hold one.
+
+**A chapter read still says nothing about which of its verses have citations**,
+so an interface marking them makes one call per verse. That is true of commentary
+and cross-references already and fixing it for this one dataset would make the
+API less predictable rather than more. It is named here so it is a known limit
+rather than an oversight, and it belongs to whichever epic takes it on for all
+three at once.
 
 ### The licence line is its own
 
