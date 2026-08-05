@@ -29,7 +29,7 @@ Sem instalar nada, sem chave, sem conta, sem servidor. Cola num arquivo HTML
 vazio e abre no navegador.
 
 ```js
-const book = await (await fetch('https://cdn.jsdelivr.net/gh/ronaldoscotti/catholic-bible@v1.0.1/data/versions/matos-soares/books/SIR.json')).json()
+const book = await (await fetch('https://cdn.jsdelivr.net/gh/ronaldoscotti/catholic-bible@v2.0.0/data/versions/matos-soares/books/SIR.json')).json()
 console.log(book.verses['SIR.24.1'].text)
 ```
 
@@ -38,7 +38,7 @@ dos dados bíblicos livres não carrega. São 371 arquivos publicados assim, 48 
 com três traduções, o Haydock nos dois idiomas, as remissões, o cânon e a
 espinha.
 
-O `@v1.0.1` da URL não é enfeite. Fixa a versão e os bytes daquele endereço nunca
+O `@v2.0.0` da URL não é enfeite. Fixa a versão e os bytes daquele endereço nunca
 mudam. Correção sai como tag nova e a antiga continua respondendo.
 
 ### Ou instalando
@@ -72,7 +72,7 @@ O nome de instalação e o de importação são diferentes. `pip install
 the-catholic-bible` te dá `import catholic_bible`, porque `catholic-bible` no
 PyPI é um projeto sem relação com este que chegou lá antes.
 
-Os dois pacotes e o `@v1.0.1` do CDN são a mesma versão, e o número mora num
+Os dois pacotes e o `@v2.0.0` do CDN são a mesma versão, e o número mora num
 lugar só.
 
 ## O comentário em português

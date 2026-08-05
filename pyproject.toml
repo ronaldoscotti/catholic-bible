@@ -1,6 +1,6 @@
 [project]
 name = "the-catholic-bible"
-version = "1.0.1"
+version = "2.0.0"
 description = "A read-only API and a published dataset for the Catholic Bible."
 readme = "README.md"
 # The files rather than an SPDX expression. The code is MIT and the corpus is

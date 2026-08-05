@@ -117,7 +117,7 @@
   }
  },
  "dataset": "catholic-bible",
- "dataset_version": "1.0.1",
+ "dataset_version": "2.0.0",
  "manifest": "manifest.json",
  "source": {
   "commit": "0494a69e66657a16d822898e71f4eb3b2bc4ae80",
