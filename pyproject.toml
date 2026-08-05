@@ -1,8 +1,11 @@
 [project]
-name = "catholic-bible"
+name = "the-catholic-bible"
 version = "1.0.1"
 description = "A read-only API and a published dataset for the Catholic Bible."
 readme = "README.md"
+# The files rather than an SPDX expression. The code is MIT and the corpus is
+# not, so a field that holds one identifier holds none of them honestly.
+license-files = ["LICENSE"]
 requires-python = ">=3.13"
 dependencies = [
     "fastapi",
@@ -11,6 +14,9 @@ dependencies = [
 
 [project.scripts]
 catholic-bible-api = "catholic_bible.api.app:main"
+# For an image that wants the store in a layer rather than rebuilt on every
+# container start. `catholic-bible-api` does it on its own otherwise.
+catholic-bible-build-db = "catholic_bible.storage.bootstrap:main"
 
 [build-system]
 requires = ["hatchling"]

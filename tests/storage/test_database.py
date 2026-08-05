@@ -24,7 +24,13 @@ def test_it_refuses_a_write(database_path: Path) -> None:
 
 
 def test_it_says_which_file_is_missing(tmp_path: Path) -> None:
-    with pytest.raises(FileNotFoundError, match="make db"):
+    """And names something the reader can actually run.
+
+    It used to say `make db`, which is a Makefile target inside a checkout. A
+    reader who installed from a registry has no Makefile, so the one
+    instruction the failure offered was unreachable from where they stood.
+    """
+    with pytest.raises(FileNotFoundError, match="catholic-bible-build-db"):
         connect(tmp_path / "absent.db")
 
 

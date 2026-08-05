@@ -35,13 +35,51 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 0  Understand       docs/method/00-understand.md
 [x] 1  Context          docs/method/01-context.md
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
-[x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5 B8 B9
-[x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8 B9
-[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 merged, B9 open, 761 tests
-[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8 B9
-[x] 7  Code review      docs/reviews/, B0 B1 B2 B3 B4 B5 B7 B8 B9, one author
-[x] 8  PR               B0 B1 B2 B3 B4 B5 B7 B8 merged. v1.0.0 and v1.0.1 released
+[x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5 B8 B9 B10
+[x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8 B9 B10
+[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 B9 merged, B10 open, 783 tests
+[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8 B9 B10
+[x] 7  Code review      docs/reviews/, B0 to B10, one author on B10
+[x] 8  PR               B0 B1 B2 B3 B4 B5 B7 B8 B9 merged. v1.0.0 and v1.0.1 released
 ```
+
+**B10 is the first epic where a recommendation was checked by running it.** The
+author was asked to choose between one Python distribution and two, and the
+argument for one was that `pip install` leaves a working API in a single
+command. That argument was wrong. The wheel does not carry the derived database,
+so an installed copy answered 503 on `/health` and 500 on every route, and the
+error told the reader to run a Makefile target inside a repository they do not
+have.
+
+Four minutes of building the wheel and running it is what found that, before the
+spec was written rather than after the code was.
+
+**B10 also shows what happens when an open question is left open.** The plan
+listed whether npm will trust a name that has never been published, chose a
+fallback and moved on, which reads as rigour and is a stall. One invocation of
+`npm help trust` said the package must already exist, so the fallback was the
+only path, and two constraints came with it that the plan had not imagined. Had
+it waited for the tag, the release would have failed on npm with the trusted
+publisher correctly configured against a package that does not exist.
+
+The same shape twice more. The npm size limit was written down as
+unestablishable from the documentation, and one query against a package
+everybody has installed settled it. Registries answer questions about themselves
+that their documentation does not.
+
+**Re-running the acceptance walk rather than citing it found a defect.** The
+first boot prints a line saying what it is building, because ten seconds of
+silence reads as a hang. Redirected stdout is block buffered and uvicorn logs to
+stderr unbuffered, so in a log the notice arrived after the server had reported
+itself up. Invisible on a terminal, and a log is where a service runs. The test
+that covered the message used `capsys`, which cannot see buffering because
+pytest replaces the stream.
+
+**The shell trap appeared for the third time.** Measuring whether the artifact
+gate rejects a hand edited file printed `exit=0`, because the command was piped
+into `tail`. B8 found this printing green over a type error and B9 found `grep
+-c` exiting 1 on zero matches. Three epics, three variations, and writing it
+down has not stopped it.
 
 **B9 is the first epic where the plan's refusals were the thing that paid.** It
 listed three assumptions it would not make and required each to be measured

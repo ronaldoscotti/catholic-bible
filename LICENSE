@@ -1,0 +1,53 @@
+This repository publishes two different things under two different terms. The
+code is MIT. The corpus is not, and no part of this file relicenses it.
+
+================================================================================
+The code
+================================================================================
+
+MIT License
+
+Copyright (c) 2026 Ronaldo Scotti
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+The corpus
+================================================================================
+
+Scripture, commentary and cross-references are not covered by the grant above.
+Both published packages carry them, so the terms travel here as well.
+
+  Matos Soares               public domain, Brazilian law article 45
+  Douay-Rheims               public domain, first published 1582 and 1610
+  Clementine Vulgate         public domain, promulgated 1592
+  Haydock, English           public domain, printed 1811 to 1814
+  Haydock, Portuguese        machine translation of a public domain text
+  Douay cross-references     CC0
+  OpenBible cross-references CC BY 4.0, attribution required
+
+Cross-references courtesy of OpenBible.info.
+
+That notice is a condition of CC BY 4.0 and it is not satisfied by this file
+alone. It travels inside every published cross-reference artifact and inside
+every API response drawing on them, because an attribution a consumer never
+reads is not an attribution.
+
+LIMITS.md carries the full audit, the legal basis per asset and what this
+repository refuses to publish at all.

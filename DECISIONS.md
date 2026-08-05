@@ -883,3 +883,98 @@ explain.
 **What lost.** One request instead of two for a reader who wants both. Two
 answers are also two cache entries with different lifetimes and different
 filters, which is the shape a client wants anyway.
+
+## The distribution is `the-catholic-bible` and the import is not
+
+Decided 2026-08-04, while specifying B10.
+
+`catholic-bible` on PyPI is somebody else's project. Robert Colfin published
+0.1.0 on 2026-03-30 and 0.2.0 a month later, and it scrapes `bible.usccb.org`.
+This repository declared that exact name in `pyproject.toml` and had never
+published, so the first tag would have failed on an authorisation error against
+a stranger's project.
+
+The same name is used on npm, where nothing held it, so a reader who finds one
+can guess the other. `catholic_bible` stays the import, so no source file moved.
+
+**What lost.** `catholicbible`, which is the same name with the hyphen removed
+and reads as a typosquat. `catholic-canon` and `deuterocanon`, which each name
+a part of this and would need explaining every time.
+
+## One Python distribution carrying everything, against the epic's two
+
+Decided 2026-08-04, at the B10 spec gate.
+
+B10 describes two packages with two jobs, data on npm and code on PyPI. Under
+that split the wheel would be 84 KB and `pip install` would stop giving anyone
+a running service.
+
+The wheel is 13 MB instead, and 49.3 of its 49.4 unpacked megabytes are corpus.
+That is the price for a reader who only wanted to parse `Eclo 24,1`, and it
+buys a reader who wanted the whole thing an install instead of a checkout.
+
+**What lost.** Fidelity to the epic's framing, and 13 MB. A second Python
+distribution would have kept both, at the cost of two versions to hold in
+lockstep and a second publish job for a repository with one author.
+
+## The database builds on a first boot rather than shipping or being asked for
+
+Decided 2026-08-04, at the B10 spec gate.
+
+`bible.db` is derived, so it is gitignored, so hatchling leaves it out of the
+wheel. An installed copy answered 503 on `/health` and 500 on every `/v1`
+route, and the message told the reader to run `make db`, a Makefile target
+inside a checkout they do not have.
+
+`catholic-bible-api` builds it when it is missing and says so. The standard
+splits on whether materialising the data needs the network. Playwright and
+spaCy make it an explicit command because the alternative is a surprise
+download of hundreds of megabytes. Transformers and `tldextract` do it
+implicitly because the work is local and cached. This is local, offline, and
+ten seconds cold from bytes the reader already downloaded.
+
+The cache path carries the version. `LIMITS.md` already has a heading called
+*A stale database ships without a sound*, and a path reused across upgrades
+would hand that failure to everyone who runs `pip install -U`.
+
+**What lost.** Shipping the database costs 29 MB and publishes a derived
+artifact with no checksum and no provenance record, which every other published
+file here carries. A second command in the quickstart is honest and puts back
+most of what the clone cost.
+
+## The licence is MIT over the code and says so about the corpus
+
+Decided 2026-08-04, at the B10 spec gate.
+
+Both packages carry Scripture, commentary and cross-references. A single MIT
+declaration would relicense somebody else's public domain work and drop the
+attribution CC BY 4.0 requires for the OpenBible cross-references, which this
+repository honours inside every published file and every API response.
+
+`LICENSE` carries the MIT grant and a data section naming the terms per asset.
+`package.json` says `SEE LICENSE IN LICENSE`, which is npm's form for a bundle
+no single identifier describes, and `pyproject.toml` declares `license-files`
+rather than an SPDX expression.
+
+**What lost.** Machine readability. A single SPDX identifier is easier for a
+tool to read and would have been false in one direction or the other.
+
+## npm publishes on a token once and over OIDC afterwards
+
+Decided 2026-08-04, while planning B10.
+
+PyPI accepts a pending publisher, which is a trust relationship for a project
+that does not exist yet, so Python is OIDC from its first byte and never sees a
+token. npm has no equivalent. `npm help trust` says the package must already
+exist, and it refuses the bypass 2FA tokens that continuous integration has to
+use, so the credential that performs the first publish cannot perform the
+configuration.
+
+So the first release publishes to npm with a granular access token held as a
+repository secret, the trusted publisher is configured against the package that
+now exists, and the secret is deleted. Every release after that is OIDC on both
+sides.
+
+**What lost.** Symmetry between the two workflows, and one long-lived
+credential existing for the length of one release. `release.yml` passes the
+secret to a step that works without it, so the steady state needs no edit.

@@ -1,0 +1,156 @@
+name: Release
+
+# The tag is the trigger, never a laptop. `cdn.yml` already fires on the same
+# tags and checks jsDelivr, so a release moves three published surfaces at once
+# and each one proves itself separately.
+# No `workflow_dispatch`. The version is read out of the ref, so a manual run
+# would compare a branch name against the manifest and always refuse. A trigger
+# that cannot succeed is worse than no trigger, because it reads as an escape
+# hatch during the one hour somebody needs one.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  # The tag names a version and `pyproject.toml` holds one. If they disagree,
+  # nothing here should reach a registry, because a published version is
+  # permanent and a wrong one cannot be taken back.
+  agree:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.read.outputs.version }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+      - id: read
+        run: |
+          tagged="${GITHUB_REF_NAME#v}"
+          declared=$(node -e "console.log(require('./package.json').version)")
+          echo "tag says      $tagged"
+          echo "manifest says $declared"
+          case "$tagged" in
+            "$declared"|"$declared"-*) ;;
+            *) echo "the tag and the manifest disagree"; exit 1 ;;
+          esac
+          echo "version=$tagged" >> "$GITHUB_OUTPUT"
+
+      # `ci.yml` runs this too, on the same tag push, as a separate workflow
+      # racing this one. A published version is permanent, so the release gates
+      # on it here rather than hoping the other workflow lost the race.
+      - run: uv sync --locked
+      - run: uv run scripts/build-artifacts.py --check
+      - run: uv run scripts/build-openapi.py --check
+
+  pypi:
+    needs: agree
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write # OIDC. No token is stored anywhere for this.
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+      - run: uv build --out-dir dist
+      - uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
+
+  npm:
+    needs: agree
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write # OIDC, and provenance, which signs against this workflow.
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+          package-manager-cache: false
+
+      # npm will not configure a trusted publisher for a name that has never
+      # been published, and PyPI's pending publisher has no equivalent here. So
+      # the first release authenticates with a token and every release after it
+      # uses OIDC, which is what happens when the secret is absent.
+      #
+      # `NODE_AUTH_TOKEN` unset is not an error. The npm CLI prefers OIDC when
+      # it is available and only falls back to a token, so the same step covers
+      # the bootstrap and the steady state.
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_BOOTSTRAP_TOKEN }}
+
+  # A publish the registries accepted is not a package anybody can install.
+  # Both propagate on their own schedule, which is why this retries rather than
+  # trusting the step above, the same way `cdn.yml` retries jsDelivr.
+  installed:
+    needs: [agree, pypi, npm]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "24"
+
+      # `requires-python` is 3.13 and the runner's default is 3.12, so without
+      # this the one job whose purpose is to prove a real install works would
+      # fail on every release. The `package` job in `ci.yml` learned this the
+      # hard way and this file did not, until a review said so.
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version-file: .python-version
+
+      - name: pip install, from the registry rather than from this checkout
+        run: |
+          version="${{ needs.agree.outputs.version }}"
+          python -m venv /tmp/stranger
+          resolved=""
+          for attempt in 1 2 3 4 5 6; do
+            if /tmp/stranger/bin/pip install --quiet \
+                 "the-catholic-bible==$version"; then
+              resolved=yes
+              break
+            fi
+            echo "attempt $attempt did not resolve, waiting"
+            sleep 30
+          done
+          # Or the step fails several lines down on a ModuleNotFoundError and
+          # the log reads as a broken package rather than an install that never
+          # happened.
+          test -n "$resolved" || { echo "PyPI never served $version"; exit 1; }
+          /tmp/stranger/bin/python -c "
+          from catholic_bible.canon.reference import parse_reference
+          found = parse_reference('Eclo 24,1')
+          print(found)
+          assert found.book == 'SIR', found
+          "
+
+      - name: npm i, and the documented line runs against what was installed
+        run: |
+          version="${{ needs.agree.outputs.version }}"
+          mkdir -p /tmp/consumer && cd /tmp/consumer
+          npm init -y > /dev/null
+          resolved=""
+          for attempt in 1 2 3 4 5 6; do
+            if npm install --silent "the-catholic-bible@$version"; then
+              resolved=yes
+              break
+            fi
+            echo "attempt $attempt did not resolve, waiting"
+            sleep 30
+          done
+          test -n "$resolved" || { echo "npm never served $version"; exit 1; }
+          node -e "
+            const index = require('the-catholic-bible')
+            const fs = require('fs')
+            const path = require.resolve('the-catholic-bible')
+                .replace(/index\.json$/, 'versions/matos-soares/books/SIR.json')
+            const book = JSON.parse(fs.readFileSync(path, 'utf8'))
+            const said = book.verses['SIR.24.1'].text
+            if (!said) throw new Error('Sirach 24:1 is not in the published book')
+            if (index.dataset_version !== '$version')
+              throw new Error('the entry point names ' + index.dataset_version)
+            console.log(index.books + ' books, ' + said.slice(0, 60))
+          "

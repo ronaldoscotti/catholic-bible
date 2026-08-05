@@ -1,0 +1,32 @@
+{
+ "bugs": {
+  "url": "https://github.com/ronaldoscotti/catholic-bible/issues"
+ },
+ "description": "A read-only API and a published dataset for the Catholic Bible.",
+ "files": [
+  "data",
+  "LICENSE",
+  "README.md",
+  "README.pt-BR.md"
+ ],
+ "homepage": "https://github.com/ronaldoscotti/catholic-bible#readme",
+ "keywords": [
+  "bible",
+  "catholic",
+  "deuterocanonical",
+  "vulgate",
+  "dataset"
+ ],
+ "license": "SEE LICENSE IN LICENSE",
+ "main": "data/index.json",
+ "name": "the-catholic-bible",
+ "publishConfig": {
+  "access": "public",
+  "provenance": true
+ },
+ "repository": {
+  "type": "git",
+  "url": "git+https://github.com/ronaldoscotti/catholic-bible.git"
+ },
+ "version": "1.0.1"
+}
