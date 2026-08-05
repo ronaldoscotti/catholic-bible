@@ -29,10 +29,13 @@ three sources, and the one thing worth knowing about them is in the next
 section.
 
 All of it is also published as static files on a CDN, which is the cheapest way
-to use any of this and needs no server at all.
+to use any of this and needs no server at all, and as two packages you can
+install with one command.
 
-There is no full text search and nothing is deployed yet. The API is read only
-and it always will be.
+Full text search over the corpus and over the commentary is here as well, which
+is the one thing a static file cannot answer.
+
+Nothing is deployed yet. The API is read only and it always will be.
 
 ## The deuterocanonical books are the point
 
@@ -105,17 +108,48 @@ API is deployed anywhere, and `LIMITS.md` says plainly that it is not.
 Drop the tag and jsDelivr serves the default branch, which moves. Do not do that
 in anything you ship.
 
-## Quickstart
+### The same bytes from npm
 
-Docker is the only requirement, and there are no credentials to set up.
+If you would rather have the files locally, they ship as a package carrying no
+code and no dependencies.
 
 ```sh
-git clone https://github.com/ronaldoscotti/catholic-bible.git
-cd catholic-bible
-docker compose up --build
+npm i the-catholic-bible
 ```
 
-From another terminal.
+```js
+const index = require('the-catholic-bible')
+console.log(index.books, index.versions.map(v => v.code))
+```
+
+## Quickstart
+
+```sh
+pip install the-catholic-bible
+```
+
+That is the parser, the canon, the versification spine, three translations, the
+commentary and the cross-references. Resolve a reference without a server, a
+key or a network call.
+
+```py
+from catholic_bible.canon.reference import parse_reference
+
+print(parse_reference("Eclo 24,1"))
+print(parse_reference("Jo 3,16"), parse_reference("Jó 3,16"))
+```
+
+`Jo` is John and `Jó` is Job. The accent is never folded, which is the bug that
+sends a Portuguese reader to the wrong book.
+
+The same install carries the API.
+
+```sh
+catholic-bible-api
+```
+
+The read database is derived rather than shipped, so the first run builds it and
+says so, once. From another terminal.
 
 ```sh
 curl http://localhost:8000/health
@@ -144,8 +178,24 @@ curl http://localhost:8000/v1/versions/vulgata-clementina/books/SIR/chapters/24/
 Interactive docs are at `http://localhost:8000/docs` and the published contract
 is `openapi.json` in this repository.
 
-CI runs those same commands on a clean checkout for every push and every pull
-request, because a quickstart nobody executes rots within a month.
+CI runs those same commands against a package installed from a built wheel, on
+every push and every pull request, because a quickstart nobody executes rots
+within a month. It runs them against `docker compose up` as well, so demoting
+the container in this document did not demote it in the build.
+
+### One number for both packages and the dataset
+
+`the-catholic-bible` on PyPI, `the-catholic-bible` on npm and `@v1.0.1` on the
+CDN are the same release. `pyproject.toml` is the only place the number is
+written and everything else is generated from it, so the five files that carry
+it cannot drift apart without the build failing.
+
+A correction ships as a new version and never as an edit to an old one, which is
+the same promise the CDN tag makes and for the same reason.
+
+The install name and the import name differ. `pip install the-catholic-bible`
+gives you `import catholic_bible`, because `catholic-bible` on PyPI is an
+unrelated project that got there first.
 
 ## Reading it
 
@@ -264,15 +314,28 @@ Fetch those instead of looping over the API.
 resolves to the same versions this was written against.
 
 ```sh
+git clone https://github.com/ronaldoscotti/catholic-bible.git
+cd catholic-bible
 uv sync
 make test
 make lint
 make typecheck
 ```
 
-`make fmt` formats and applies safe lint fixes. `make run` is `docker compose up
---build`, which keeps the container as the one way to boot the service instead
-of letting a second path drift beside it.
+`make fmt` formats and applies safe lint fixes.
+
+### The container
+
+```sh
+docker compose up --build
+```
+
+`compose.yaml` is the contract. It reproduces the service on a clean checkout
+with no credentials, and CI runs the quickstart against it on every push. The
+package is the shorter road in and this is the one that proves a stranger can
+rebuild what is published, so neither replaces the other.
+
+`make run` is the same command and `make down` stops it.
 
 ## Layout
 

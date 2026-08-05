@@ -5,8 +5,8 @@
 Uma API somente leitura e um dataset publicado da Bíblia católica. 73 livros,
 português, inglês e latim, domínio público do começo ao fim.
 
-Esta é a porta de entrada. O documento em inglês é o completo, com os onze
-endpoints, o quickstart em Docker e a regra de versionamento.
+Esta é a porta de entrada. O documento em inglês é o completo, com as treze
+rotas, o quickstart, o container e a regra de versionamento.
 
 ## Os deuterocanônicos são o ponto
 
@@ -40,6 +40,36 @@ espinha.
 
 O `@v1.0.1` da URL não é enfeite. Fixa a versão e os bytes daquele endereço nunca
 mudam. Correção sai como tag nova e a antiga continua respondendo.
+
+### Ou instalando
+
+Os mesmos arquivos saem como pacote, sem código e sem dependência nenhuma.
+
+```sh
+npm i the-catholic-bible
+```
+
+O parser de referência, o cânon, a espinha e a API vêm em Python.
+
+```sh
+pip install the-catholic-bible
+```
+
+```py
+from catholic_bible.canon.reference import parse_reference
+
+print(parse_reference("Jo 3,16"), parse_reference("Jó 3,16"))
+```
+
+`Jo` é João e `Jó` é Jó. O acento nunca é dobrado, que é justamente o erro que
+manda o leitor brasileiro para o livro errado.
+
+O nome de instalação e o de importação são diferentes. `pip install
+the-catholic-bible` te dá `import catholic_bible`, porque `catholic-bible` no
+PyPI é um projeto sem relação com este que chegou lá antes.
+
+Os dois pacotes e o `@v1.0.1` do CDN são a mesma versão, e o número mora num
+lugar só.
 
 ## O comentário em português
 
