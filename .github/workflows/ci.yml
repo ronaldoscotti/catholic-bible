@@ -35,6 +35,13 @@ jobs:
         with:
           enable-cache: true
 
+      # A stranger uses `pip`, so this job does too rather than letting uv
+      # manage the interpreter the way the other jobs can. The runner's default
+      # is 3.12 and `requires-python` is 3.13, which is what this found.
+      - uses: actions/setup-python@v6
+        with:
+          python-version-file: .python-version
+
       - run: uv build --out-dir dist
 
       - name: Install it the way a stranger would
