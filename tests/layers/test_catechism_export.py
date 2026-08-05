@@ -124,8 +124,39 @@ def test_an_orphan_is_recorded_against_its_paragraph_and_indexed_nowhere() -> No
     assert by_verse == {}
     assert by_paragraph == {}
     assert orphans == [
-        {"paragraph": 2122, "cited": "2Cor 9,5-18", "reason": "verse_out_of_range"}
+        {
+            "paragraph": 2122,
+            "cited": "2Cor 9,5-18",
+            "reason": "verse_out_of_range",
+            "partial": False,
+        }
     ]
+
+
+def test_a_half_resolvable_citation_keeps_the_part_that_landed() -> None:
+    """`Mt 5,3` is real and `Mt 5,99` is not, and losing both loses a citation."""
+    resolved = EXPORT.resolve("Mt 5,3.99")
+    assert resolved.ids == ["MAT.5.3"]
+    assert resolved.reason == "verse_out_of_range"
+
+    by_verse, by_paragraph, orphans = EXPORT.index({"1716": ["Mt 5,3.99"]})
+    assert list(by_verse) == ["MAT.5.3"]
+    assert by_paragraph["1716"] == [{"cited": "Mt 5,3.99", "ids": ["MAT.5.3"]}]
+    assert orphans == [
+        {
+            "paragraph": 1716,
+            "cited": "Mt 5,3.99",
+            "reason": "verse_out_of_range",
+            "partial": True,
+        }
+    ]
+
+
+def test_an_orphan_reason_is_never_the_string_none() -> None:
+    """`None` in that field buckets under "None" and reads as a category."""
+    for label in ("Zzz 9,9", "this is not a reference", "2Cor 9,5-18"):
+        resolved = EXPORT.resolve(label)
+        assert resolved.reason is not None and resolved.reason != "None"
 
 
 def test_no_exported_record_carries_anything_but_numbers_and_addresses() -> None:

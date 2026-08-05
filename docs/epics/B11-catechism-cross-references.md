@@ -57,9 +57,18 @@ of building the map suggests. Its pages average 7.8 paragraphs. Portuguese
 averages 106, so a Portuguese link opens a page holding a hundred paragraphs and
 leaves the reader searching it.
 
-The map is built and committed. All 2865 paragraphs land on exactly one page in
-both editions, and five links were opened against the live site with the
-paragraph present on the page that came back.
+The map is built and committed, and the first one that passed every structural
+check was wrong. It read footnote markers as paragraphs, so the prologue page
+claimed 1 to 4 off three superscripts and a scripture reference, and every page
+to 17 was one page early. Coverage, ordering and uniqueness all passed, because a
+map that is uniformly early is still contiguous. A reader following a link for
+paragraph 1 would have landed on a page with no paragraph 1 on it.
+
+What catches that is opening the page and looking, so `--verify` does exactly
+that. On the corrected map, 134 paragraphs sampled across both editions and the
+whole range, including 1, 2, 3, 4, 17, 624 and 2865, and every one was on the
+page the map names. Run against the map that shipped, the same check reports
+paragraph 1 absent from the page it was sent to.
 
 ## Blocked
 

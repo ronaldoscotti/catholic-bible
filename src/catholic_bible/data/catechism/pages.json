@@ -4,24 +4,20 @@
    "base": "https://www.vatican.va/archive/ENG0015/",
    "pages": [
     {
-     "file": "__P1.HTM",
+     "file": "__P2.HTM",
      "first": 1
     },
     {
-     "file": "__P2.HTM",
-     "first": 5
-    },
-    {
      "file": "__P3.HTM",
-     "first": 7
+     "first": 4
     },
     {
      "file": "__P4.HTM",
-     "first": 15
+     "first": 11
     },
     {
      "file": "__P5.HTM",
-     "first": 16
+     "first": 13
     },
     {
      "file": "__P6.HTM",
@@ -241,7 +237,7 @@
     },
     {
      "file": "__P1P.HTM",
-     "first": 625
+     "first": 624
     },
     {
      "file": "__P1Q.HTM",

@@ -84,24 +84,35 @@ def resolve(label: str) -> Resolved:
         return Resolved(reason=str(reference.reason))
 
     ids: list[str] = []
+    reason: str | None = None
     for (start_chapter, start_verse), (end_chapter, end_verse) in reference.spans():
         start = map_address(SCHEME, reference.book, start_chapter, start_verse)
         end = map_address(SCHEME, reference.book, end_chapter, end_verse)
+        # A disjoint citation keeps the parts that landed. `Mt 5,3-12.99` is a
+        # real verse span beside a bad one, and discarding both loses a citation
+        # the Catechism actually made.
         if not isinstance(start, Mapped):
-            return Resolved(reason=str(start.reason))
+            reason = reason or str(start.reason)
+            continue
         if not isinstance(end, Mapped):
-            return Resolved(reason=str(end.reason))
+            reason = reason or str(end.reason)
+            continue
 
         first, last = SPINE.order_of(start.verse), SPINE.order_of(end.verse)
         if first is None or last is None:
-            return Resolved(reason="no_counterpart")
+            reason = reason or "no_counterpart"
+            continue
         if last < first:
             first, last = last, first
         for order in range(first, last + 1):
             address = SPINE.at_order(order)
             if address is not None:
                 ids.append(str(address))
-    return Resolved(ids=ids)
+    if not ids:
+        # Never None. A reason of None buckets under the string "None" in the
+        # orphan report and reads as a category rather than a hole.
+        return Resolved(reason=reason or "no_counterpart")
+    return Resolved(ids=ids, reason=reason)
 
 
 def index(
@@ -121,14 +132,18 @@ def index(
         paragraph = int(number)
         for label in sorted(labels):
             resolved = resolve(label)
-            if not resolved.ids:
+            if resolved.reason is not None:
+                # A partial keeps its addresses and is still reported, because a
+                # citation that half resolved is not a citation that resolved.
                 orphans.append(
                     {
                         "paragraph": paragraph,
                         "cited": label,
                         "reason": resolved.reason,
+                        "partial": bool(resolved.ids),
                     }
                 )
+            if not resolved.ids:
                 continue
             by_paragraph.setdefault(number, []).append(
                 {"cited": label, "ids": resolved.ids}
@@ -171,7 +186,8 @@ def main() -> int:
     if dirty:
         parser.error(dirty)
 
-    fixture = json.loads(gzip.open(fixture_path, "rb").read())
+    with gzip.open(fixture_path, "rb") as handle:
+        fixture = json.loads(handle.read())
     by_verse, by_paragraph, orphans = index(fixture)
 
     dest = Path(args.dest).resolve() if args.dest else DEST

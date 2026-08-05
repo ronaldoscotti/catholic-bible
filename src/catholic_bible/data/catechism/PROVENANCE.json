@@ -1,0 +1,17 @@
+{
+ "files": {
+  "pages.json": {
+   "pages": {
+    "en": 368,
+    "pt": 27
+   },
+   "paragraphs": 2865,
+   "sha256": "3ccb5eb4b8e56452ee58bdca9d0dd0b0d251ee3660f201e3a350644022ffb7f8"
+  }
+ },
+ "pages_source": {
+  "carries_no_text": true,
+  "en": "https://www.vatican.va/archive/ENG0015/_INDEX.HTM",
+  "pt": "https://www.vatican.va/archive/cathechism_po/index_new/prima-pagina-cic_po.html"
+ }
+}
