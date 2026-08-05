@@ -24,7 +24,9 @@ import re
 import sys
 import time
 import urllib.request
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 from urllib.parse import urljoin
 
 DEST = (
@@ -52,16 +54,24 @@ TAG = re.compile(r"(?s)<[^>]+>")
 RANGE_IN_NAME = re.compile(r"(\d+)-(\d+)_po\.html$")
 
 
+@dataclass(frozen=True, slots=True)
+class Page:
+    file: str
+    first: int
+    holds: list[int]
+
+
 def fetch(url: str) -> str:
     with urllib.request.urlopen(url, timeout=60) as answer:
-        return answer.read().decode("latin-1")
+        body: bytes = answer.read()
+    return body.decode("latin-1")
 
 
 def plain(html: str) -> str:
     return re.sub(r"\s+", " ", TAG.sub(" ", html))
 
 
-def english_pages() -> list[dict[str, object]]:
+def english_pages() -> list[Page]:
     """Every page of the IntraText build, with the paragraphs it holds.
 
     Detecting where a paragraph begins from the markup does not work. Most open a
@@ -83,7 +93,7 @@ def english_pages() -> list[dict[str, object]]:
     names = list(dict.fromkeys(re.findall(r"(?i)(__P[0-9A-Z]+\.HTM)", index)))
     print(f"english: {len(names)} pages", file=sys.stderr)
 
-    pages = []
+    pages: list[Page] = []
     expected = 1
     for position, name in enumerate(names, start=1):
         text = plain(fetch(urljoin(ENGLISH, name)).split("Previous", 1)[-1])
@@ -97,7 +107,7 @@ def english_pages() -> list[dict[str, object]]:
             cursor = found.end()
             expected += 1
         if held:
-            pages.append({"file": name, "first": held[0], "holds": held})
+            pages.append(Page(file=name, first=held[0], holds=held))
         if position % 50 == 0:
             reached = expected - 1
             print(f"  {position}/{len(names)}, at paragraph {reached}", file=sys.stderr)
@@ -105,20 +115,18 @@ def english_pages() -> list[dict[str, object]]:
     return pages
 
 
-def portuguese_pages() -> list[dict[str, object]]:
+def portuguese_pages() -> list[Page]:
     """The ranges are in the file names, so one request answers the whole edition."""
     index = fetch(PORTUGUESE)
-    pages = {}
+    pages: dict[str, Page] = {}
     for href in HREF.findall(index):
         name = href.rsplit("/", 1)[-1]
         found = RANGE_IN_NAME.search(name)
         if found:
             first, last = int(found[1]), int(found[2])
-            pages[name] = {
-                "file": name,
-                "first": first,
-                "holds": list(range(first, last + 1)),
-            }
+            pages[name] = Page(
+                file=name, first=first, holds=list(range(first, last + 1))
+            )
 
     # The prologue is the one page whose name carries a space rather than a
     # range, and dropping it would leave paragraphs 1 to 25 with no link.
@@ -127,33 +135,31 @@ def portuguese_pages() -> list[dict[str, object]]:
     )
     if prologue is None:
         raise RuntimeError("the portuguese index no longer names the prologue page")
-    pages[prologue] = {
-        "file": prologue.rsplit("/", 1)[-1],
-        "first": 1,
-        "holds": list(range(1, 26)),
-    }
-    return sorted(pages.values(), key=lambda page: page["first"])
+    pages[prologue] = Page(
+        file=prologue.rsplit("/", 1)[-1], first=1, holds=list(range(1, 26))
+    )
+    return sorted(pages.values(), key=lambda page: page.first)
 
 
-def refuse_a_broken_map(edition: str, pages: list[dict[str, object]]) -> None:
+def refuse_a_broken_map(edition: str, pages: list[Page]) -> None:
     """Every paragraph on exactly one page, in order, with nothing missing.
 
     A map that is nearly right sends a reader to the wrong page and looks
     healthy, so this is a failure rather than a warning.
     """
-    firsts = [page["first"] for page in pages]
+    firsts = [page.first for page in pages]
     if firsts != sorted(firsts) or len(set(firsts)) != len(firsts):
         raise RuntimeError(f"{edition}: pages are not in ascending paragraph order")
 
     seen: dict[int, str] = {}
     for page in pages:
-        for number in page["holds"]:
+        for number in page.holds:
             if number in seen:
                 raise RuntimeError(
                     f"{edition}: paragraph {number} is on "
-                    f"{seen[number]} and {page['file']}"
+                    f"{seen[number]} and {page.file}"
                 )
-            seen[number] = str(page["file"])
+            seen[number] = page.file
 
     missing = sorted(set(range(1, LAST + 1)) - set(seen))
     if missing:
@@ -165,8 +171,8 @@ def refuse_a_broken_map(edition: str, pages: list[dict[str, object]]) -> None:
         raise RuntimeError(f"{edition}: paragraphs past {LAST}: {beyond[:8]}")
 
 
-def build() -> dict[str, object]:
-    editions = {}
+def build() -> dict[str, Any]:
+    editions: dict[str, Any] = {}
     for name, base, pages in (
         ("en", ENGLISH, english_pages()),
         ("pt", PORTUGUESE, portuguese_pages()),
@@ -176,12 +182,12 @@ def build() -> dict[str, object]:
             "base": base.rsplit("/", 1)[0] + "/",
             # `holds` is dropped. It exists to prove the map covers everything
             # and the reader only ever needs where a page starts.
-            "pages": [{"file": page["file"], "first": page["first"]} for page in pages],
+            "pages": [{"file": page.file, "first": page.first} for page in pages],
         }
     return {"paragraphs": LAST, "editions": editions}
 
 
-def render(record: dict[str, object]) -> str:
+def render(record: dict[str, Any]) -> str:
     return json.dumps(record, ensure_ascii=False, indent=1, sort_keys=True) + "\n"
 
 
@@ -198,13 +204,9 @@ def main() -> int:
         if not DEST.is_file():
             print(f"missing: {DEST.name}", file=sys.stderr)
             return 1
-        record = json.loads(DEST.read_text(encoding="utf-8"))
+        record: dict[str, Any] = json.loads(DEST.read_text(encoding="utf-8"))
         for name, edition in record["editions"].items():
-            pages = [
-                {"file": page["file"], "first": page["first"], "holds": []}
-                for page in edition["pages"]
-            ]
-            firsts = [page["first"] for page in pages]
+            firsts = [int(page["first"]) for page in edition["pages"]]
             if firsts != sorted(firsts) or len(set(firsts)) != len(firsts):
                 print(f"{name}: pages out of order", file=sys.stderr)
                 return 1
