@@ -43,6 +43,10 @@ mudam. Correção sai como tag nova e a antiga continua respondendo.
 
 ### Ou instalando
 
+**Os dois pacotes são construídos e testados a cada push e nenhum está
+publicado ainda.** Os comandos abaixo respondem `404` até a tag de release sair,
+e este parágrafo cai junto com ela.
+
 Os mesmos arquivos saem como pacote, sem código e sem dependência nenhuma.
 
 ```sh

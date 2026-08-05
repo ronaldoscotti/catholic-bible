@@ -24,12 +24,43 @@ Adoption dies at the install step. A developer who has to clone a repo and run a
 
 ## Acceptance criteria
 
-- [ ] A Python package publishes the reference parser, canon data and the spine, installable with `pip install`
+- [x] A Python package publishes the reference parser, canon data and the spine, installable with `pip install`
 - [ ] An npm package publishes the JSON dataset, installable with `npm i`, with no runtime dependency
-- [ ] Package versions track dataset versions, and the rule is documented
+- [x] Package versions track dataset versions, and the rule is documented
 - [ ] Both packages are published from CI on tag, never from a laptop
 - [ ] The README quickstart uses the package rather than a clone
-- [ ] The Python package passes the B1 conformance corpus in CI
+- [x] The Python package passes the B1 conformance corpus in CI
+
+**Three of six. The three left empty all say the same thing, which is that
+nothing has been published.** They stay empty through the whole pull request
+rather than being ticked on the mechanism that would eventually prove them. B5
+did that once, ticked its fetch criterion on a browser run against a rewritten
+URL, and the acceptance walk caught it.
+
+**One.** The wheel installs into a clean virtualenv and answers. `parse_reference('Eclo 24,1')` returns `SIR 24,1`, `Jo` resolves to `JHN` and `Jó` to `JOB`. The CI `package` job asserts the import comes from `site-packages` before anything else runs, because a source tree on the path would answer for the repository.
+
+**Two.** `package.json` is generated and `npm pack --dry-run` produces 375 files at 48.2 MB unpacked. Nobody can run `npm i the-catholic-bible`, which returns `404` today, so the criterion says installable and this is not.
+
+**Three.** `pyproject.toml` is the only place the number is written. `build-artifacts.py` puts it in `package.json`, `index.json` and `manifest.json`, and FastAPI puts it in `openapi.json` by a separate path. One test asserts all five, which is what stops the generator vouching for the two files it does not own. The rule is in the README under *One number for both packages and the dataset*.
+
+**Four.** `release.yml` exists and has never run. A workflow that reads correctly is not a workflow that publishes.
+
+**Five.** The README leads with `pip install` and the container moved to Development. The command answers `404`, so the quickstart names a package rather than using one, and the README says so in the paragraph above it. That paragraph comes down with the tag and this box goes up with it.
+
+**Six.** 85 conformance cases pass against the installed copy in CI, with the source tree off the path and the files copied out of the checkout so no sibling `conftest.py` can reach them.
+
+## Measured on the branch
+
+| Fact | Value |
+|---|---|
+| Cold database build, CI runner | 6 s |
+| Cold database build, author's laptop | 10 s |
+| Warm rebuild inside a checkout | 5 s |
+| npm tarball | 13.2 MB packed, 48.2 MB unpacked, 375 files |
+| Python wheel | 13 MB, 49.4 MB unpacked |
+| Conformance cases against `site-packages` | 85 |
+
+The first two rows are why the first-boot message promises no number. They differ by 40% and the README would have published whichever one was measured first.
 
 ## Constraints
 

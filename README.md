@@ -124,6 +124,11 @@ console.log(index.books, index.versions.map(v => v.code))
 
 ## Quickstart
 
+**Both packages are built and tested on every push and neither is published
+yet.** The two commands below answer `404` until the release tag goes out, and
+this paragraph comes down when it does. Until then the container under
+[Development](#the-container) is the working way in.
+
 ```sh
 pip install the-catholic-bible
 ```
