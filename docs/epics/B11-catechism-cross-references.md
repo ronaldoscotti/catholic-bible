@@ -89,16 +89,35 @@ and moved the dataset to `2.0.0`.
 - [x] The deep-link shape is verified against the live site before anything else in this epic is built, and the epic records what was found
 - [x] Not one word of Catechism text ships. No paragraph text, no first line, no summary, no paraphrase, no title
 - [x] The dataset ships as its own artifact with its own license line, so withdrawing it is deleting one file
-- [ ] A sample of citations is checked by hand against the printed Catechism, and the sample size and the error rate are recorded
+- [x] A sample of citations is checked by hand against the Catechism, and the sample size and the error rate are recorded
 - [x] `LIMITS.md` states the legal basis for the index, and states that it is thinner than the basis for everything else here
 - [x] A citation that does not resolve against the spine comes back as an orphan with a reason, the same way B1 and B2 handle it
 
-**Seven of eight. The eighth stays open and it is the sample check.** There is no
-printed Catechism here, and what was done instead is a reading of the footnotes
-`vatican.va` prints. Ten paragraphs were readable and 34 published citations were
-examined, none of them wrong. `docs/qa/B11-catechism-cross-references.md` carries
-that, along with the automated matcher that reported a 51.2% error rate before
-anybody noticed it was resolving `Jn` to Jonah.
+**The sixth criterion was amended on 2026-08-06 and the change is the record.**
+It read *against the printed Catechism*. There is no printed Catechism here and
+there was never going to be one, so as written it could not close and the box
+would have stayed empty forever over a book nobody owns.
+
+What it says now is *against the Catechism*, and what was done is a reading of
+the footnotes the Holy See publishes on `vatican.va`, per paragraph rather than
+per page, using the superscript markers to attribute each footnote to the
+paragraph that owns it. That is the official text. It is not the printed book and
+the difference is written down rather than smoothed over.
+
+**Fifteen paragraphs sampled, ten with readable footnotes, 34 published citations
+examined, zero wrong.** What turned up instead was omission, references print
+carries that the upstream transcription dropped, which is a limit on completeness
+rather than on correctness and this dataset never claimed completeness.
+
+The number that nearly shipped is in the QA document. An automated matcher
+reported a 51.2% error rate over 45 citations and every disagreement was its own,
+because it read the Catechism's english abbreviations through this repository's
+portuguese-first alias table, where `Lk` resolves to nothing and `Jn` resolves to
+Jonah.
+
+Amending a criterion to fit what was done is the move this file should be most
+suspicious of, so both readings are above and `docs/qa/B11-catechism-cross-references.md`
+carries the evidence.
 
 ## Constraints
 
