@@ -1,0 +1,13 @@
+{"book":{"abbreviation": "2 Pet.", "chapters": 3, "code": "2PE", "deuterocanonical": false, "group": "EPISTLES", "name": "2 Peter", "testament": "NEW"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"2PE.1.16":[{"cited": "2Pd 1,16-18", "paragraph": 554}],
+"2PE.1.17":[{"cited": "2Pd 1,16-18", "paragraph": 554}],
+"2PE.1.18":[{"cited": "2Pd 1,18-19", "paragraph": 517}, {"cited": "2Pd 1,16-18", "paragraph": 554}],
+"2PE.1.19":[{"cited": "2Pd 1,18-19", "paragraph": 517}, {"cited": "2Pd 1,19", "paragraph": 613}],
+"2PE.1.3":[{"cited": "2Pd 1,3-4", "paragraph": 1996}],
+"2PE.1.4":[{"cited": "2Pd 1,4", "paragraph": 51}, {"cited": "2Pd 1,4", "paragraph": 460}, {"cited": "2Pd 1,4", "paragraph": 1129}, {"cited": "2Pd 1,4", "paragraph": 1265}, {"cited": "2Pd 1,4", "paragraph": 1692}, {"cited": "2Pd 1,4", "paragraph": 1721}, {"cited": "2Pd 1,4", "paragraph": 1812}, {"cited": "2Pd 1,3-4", "paragraph": 1996}],
+"2PE.2.4":[{"cited": "2Pd 2,4", "paragraph": 392}],
+"2PE.3.11":[{"cited": "2Pd 3,11-12", "paragraph": 671}],
+"2PE.3.12":[{"cited": "2Pd 3,11-12", "paragraph": 671}],
+"2PE.3.13":[{"cited": "2Pd 3,13", "paragraph": 671}, {"cited": "2Pd 3,13", "paragraph": 1043}, {"cited": "2Pd 3,13", "paragraph": 1405}],
+"2PE.3.9":[{"cited": "2Pd 3,9", "paragraph": 1037}, {"cited": "2Pd 3,9", "paragraph": 2822}]
+}}

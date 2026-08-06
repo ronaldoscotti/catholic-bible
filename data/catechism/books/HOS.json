@@ -1,0 +1,18 @@
+{"book":{"abbreviation": "Os.", "chapters": 14, "code": "HOS", "deuterocanonical": false, "group": "PROPHETIC", "name": "Osee", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"HOS.1.3":[{"cited": "Os 1,3", "paragraph": 1611}],
+"HOS.11.1":[{"cited": "Os 11,1", "paragraph": 219}, {"cited": "Os 11,1-4", "paragraph": 370}, {"cited": "Os 11,1", "paragraph": 441}, {"cited": "Os 11,1", "paragraph": 530}],
+"HOS.11.2":[{"cited": "Os 11,1-4", "paragraph": 370}],
+"HOS.11.3":[{"cited": "Os 11,1-4", "paragraph": 370}],
+"HOS.11.4":[{"cited": "Os 11,1-4", "paragraph": 370}],
+"HOS.11.9":[{"cited": "Os 11,9", "paragraph": 208}],
+"HOS.2.23":[{"cited": "Os 2,21-22", "paragraph": 2787}],
+"HOS.2.24":[{"cited": "Os 2,21-22", "paragraph": 2787}],
+"HOS.2.3":[{"cited": "Os 2,1", "paragraph": 441}],
+"HOS.2.9":[{"cited": "Os 2,7", "paragraph": 2380}],
+"HOS.6.1":[{"cited": "Os 6,1-6", "paragraph": 2787}],
+"HOS.6.2":[{"cited": "Os 6,2", "paragraph": 627}, {"cited": "Os 6,1-6", "paragraph": 2787}],
+"HOS.6.3":[{"cited": "Os 6,1-6", "paragraph": 2787}],
+"HOS.6.4":[{"cited": "Os 6,1-6", "paragraph": 2787}],
+"HOS.6.5":[{"cited": "Os 6,1-6", "paragraph": 2787}],
+"HOS.6.6":[{"cited": "Os 6,6", "paragraph": 589}, {"cited": "Os 6,6", "paragraph": 2100}, {"cited": "Os 6,1-6", "paragraph": 2787}]
+}}

@@ -239,7 +239,7 @@ They are not symmetric, because the remap table is not a bijection.
 Run backwards naively, the table produces addresses that look right and are not.
 The spine holds `PSA.115.1`, reading it back gives `org` 115:1, and `org` 115:1
 is a different psalm coming from `PSA 113:9`. Sixty two addresses behaved that
-way across the three schemes.
+way across the four schemes.
 
 So the reverse direction computes its candidate and then maps it forward again,
 and it only returns the candidate if it lands where it started. Anything else is
@@ -978,3 +978,42 @@ sides.
 **What lost.** Symmetry between the two workflows, and one long-lived
 credential existing for the length of one release. `release.yml` passes the
 secret to a step that works without it, so the steady state needs no edit.
+
+## The Catechism ships as references and links, and the breadcrumb was refused
+
+B11 publishes which paragraphs of the Catechism cite a verse, and it publishes
+the reverse. It does not publish a word of the text, and the hardest part of
+that was refusing something that would have been genuinely good.
+
+A breadcrumb, `Part Three, Section Two, Chapter Two, Article 5`, renders
+beautifully and tells a reader what a paragraph is about. That is why it does
+not ship. A reader who learns that paragraph 2258 lives under the fifth
+commandment has learned what it says without leaving this dataset, and the
+structure of the Catechism is editorial work rather than a fact about it.
+
+The same reasoning refuses a title, a first line, a summary and an extractive
+snippet. The line is not subtle and it does not move.
+
+## English is the edition the links use, against what building it cost
+
+The first draft of the B11 spec had this backwards. It called the Portuguese map
+the cheap win, because it comes out of the file names, and the English one the
+expensive extra, because it needs a walk over 374 pages.
+
+Build cost is not what a reader experiences. English pages average 7.8
+paragraphs and Portuguese ones 106, so a Portuguese link opens a page holding a
+hundred paragraphs and leaves the reader to search it. The expensive map is the
+one worth having. Both ship, and the artifact says which is which rather than
+presenting them as equivalent.
+
+## A citation is walked in the numbering it was written in
+
+Mapping the two ends of a range and filling the gap on spine order is wrong, and
+it looks right. `Dn 3,1-30` came back as 97 addresses that way, because this
+spine carries the Song of the Three inside Daniel 3 and English does not, so the
+range swallowed 67 verses nobody cited and reported nothing.
+
+The walk uses the source scheme's own verse counts and maps each address on its
+own. A range whose end the source does not have keeps the verses that exist and
+reports the end, because `2Cor 9,5-18` against a chapter of fifteen is a real
+citation with a bad end rather than nothing at all.

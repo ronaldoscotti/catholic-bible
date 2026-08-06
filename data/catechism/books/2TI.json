@@ -1,0 +1,23 @@
+{"book":{"abbreviation": "2 Tim.", "chapters": 4, "code": "2TI", "deuterocanonical": false, "group": "EPISTLES", "name": "2 Timothy", "testament": "NEW"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"2TI.1.10":[{"cited": "2Tm 1,9-10", "paragraph": 1021}],
+"2TI.1.13":[{"cited": "2Tm 1,13-14", "paragraph": 857}],
+"2TI.1.14":[{"cited": "2Tm 1,13-14", "paragraph": 857}],
+"2TI.1.5":[{"cited": "2Tm 1,5", "paragraph": 2220}],
+"2TI.1.6":[{"cited": "2Tm 1,6-7", "paragraph": 1556}, {"cited": "2Tm 1,6", "paragraph": 1577}, {"cited": "2Tm 1,6", "paragraph": 1590}],
+"2TI.1.7":[{"cited": "2Tm 1,6-7", "paragraph": 1556}],
+"2TI.1.8":[{"cited": "2Tm 1,8", "paragraph": 2471}, {"cited": "2Tm 1,8", "paragraph": 2506}],
+"2TI.1.9":[{"cited": "2Tm 1,9-10", "paragraph": 1021}],
+"2TI.2.1":[{"cited": "2Tm 2,1", "paragraph": 2636}],
+"2TI.2.11":[{"cited": "2Tm 2,11", "paragraph": 1010}, {"cited": "2Tm 2,11-12", "paragraph": 1499}, {"cited": "2Tm 2,11-13", "paragraph": 2641}],
+"2TI.2.12":[{"cited": "2Tm 2,11-12", "paragraph": 1499}, {"cited": "2Tm 2,11-13", "paragraph": 2641}],
+"2TI.2.13":[{"cited": "2Tm 2,11-13", "paragraph": 2641}],
+"2TI.2.22":[{"cited": "2Tm 2,22", "paragraph": 2518}],
+"2TI.2.23":[{"cited": "2Tm 2,23-26", "paragraph": 2518}],
+"2TI.2.24":[{"cited": "2Tm 2,23-26", "paragraph": 2518}],
+"2TI.2.25":[{"cited": "2Tm 2,23-26", "paragraph": 2518}],
+"2TI.2.26":[{"cited": "2Tm 2,23-26", "paragraph": 2518}],
+"2TI.2.5":[{"cited": "2Tm 2,5", "paragraph": 1264}, {"cited": "2Tm 2,5", "paragraph": 1544}],
+"2TI.2.8":[{"cited": "2Tm 2,8", "paragraph": 437}],
+"2TI.3.12":[{"cited": "2Tm 3,12", "paragraph": 2847}],
+"2TI.4.1":[{"cited": "2Tm 4,1", "paragraph": 679}]
+}}

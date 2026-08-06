@@ -1,0 +1,12 @@
+{"book":{"abbreviation": "Amos", "chapters": 9, "code": "AMO", "deuterocanonical": false, "group": "PROPHETIC", "name": "Amos", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"AMO.5.21":[{"cited": "Am 5,21-25", "paragraph": 2100}],
+"AMO.5.22":[{"cited": "Am 5,21-25", "paragraph": 2100}],
+"AMO.5.23":[{"cited": "Am 5,21-25", "paragraph": 2100}],
+"AMO.5.24":[{"cited": "Am 5,24", "paragraph": 1435}, {"cited": "Am 5,21-25", "paragraph": 2100}],
+"AMO.5.25":[{"cited": "Am 5,21-25", "paragraph": 2100}],
+"AMO.7.2":[{"cited": "Am 7,2", "paragraph": 2584}],
+"AMO.8.11":[{"cited": "Am 8,11", "paragraph": 2835}],
+"AMO.8.4":[{"cited": "Am 8,4-6", "paragraph": 2409}],
+"AMO.8.5":[{"cited": "Am 8,4-6", "paragraph": 2409}],
+"AMO.8.6":[{"cited": "Am 8,4-6", "paragraph": 2409}]
+}}

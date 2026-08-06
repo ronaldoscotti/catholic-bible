@@ -69,7 +69,7 @@ No install, no key, no account, no server. Paste this into a blank HTML file and
 open it.
 
 ```js
-const book = await (await fetch('https://cdn.jsdelivr.net/gh/ronaldoscotti/catholic-bible@v1.0.1/data/versions/matos-soares/books/SIR.json')).json()
+const book = await (await fetch('https://cdn.jsdelivr.net/gh/ronaldoscotti/catholic-bible@v2.0.0/data/versions/matos-soares/books/SIR.json')).json()
 console.log(book.verses['SIR.24.1'].text)
 ```
 
@@ -94,14 +94,14 @@ CC BY requires rides inside all 73 cross-reference files rather than only here.
 
 ### The version in the URL is the whole contract
 
-`@v1.0.1` is not decoration. Pin it and the bytes behind that URL never change.
+`@v2.0.0` is not decoration. Pin it and the bytes behind that URL never change.
 
 Corrections ship as a new tag and the old one keeps answering, because a
 consumer who pinned a version has to be able to trust the pin. A repository
 ruleset blocks deleting or moving any `v*` tag, so this survives the author
 changing his mind rather than resting on him not doing so.
 
-The package version and the dataset version are the same number. `1.0.1`
+The package version and the dataset version are the same number. `2.0.0`
 governs the shape of these files and the shape of the API. It does not claim the
 API is deployed anywhere, and `LIMITS.md` says plainly that it is not.
 
@@ -161,7 +161,7 @@ curl http://localhost:8000/health
 ```
 
 ```json
-{"status":"ok","version":"1.0.1"}
+{"status":"ok","version":"2.0.0"}
 ```
 
 Then read a verse. Sirach 24:1, in Portuguese, by reference.
@@ -190,7 +190,7 @@ the container in this document did not demote it in the build.
 
 ### One number for both packages and the dataset
 
-`the-catholic-bible` on PyPI, `the-catholic-bible` on npm and `@v1.0.1` on the
+`the-catholic-bible` on PyPI, `the-catholic-bible` on npm and `@v2.0.0` on the
 CDN are the same release. `pyproject.toml` is the only place the number is
 written and the four files that republish it are generated from it, so they
 cannot drift apart without the build failing.
@@ -204,7 +204,7 @@ unrelated project that got there first.
 
 ## Reading it
 
-Thirteen routes, all `GET`, all under `/v1`.
+Sixteen routes, all `GET`, all under `/v1`.
 
 ```
 GET /v1/versions
@@ -214,10 +214,13 @@ GET /v1/versions/{version}/books/{book}/chapters/{chapter}
 GET /v1/versions/{version}/books/{book}/chapters/{chapter}/verses/{verse}
 GET /v1/books/{book}/chapters/{chapter}/verses/{verse}/commentary
 GET /v1/books/{book}/chapters/{chapter}/verses/{verse}/cross-references
+GET /v1/books/{book}/chapters/{chapter}/verses/{verse}/catechism
 GET /v1/passage?ref=&versions=&scheme=
 GET /v1/resolve?ref=&scheme=
 GET /v1/commentary?ref=&scheme=
 GET /v1/cross-references?ref=&scheme=
+GET /v1/catechism?ref=&scheme=
+GET /v1/catechism/paragraphs/{number}
 GET /v1/search?q=&version=&book=&testament=&offset=&limit=
 GET /v1/search/commentary?q=&source=&language=&book=&offset=&limit=
 ```
@@ -227,12 +230,30 @@ the same note whichever translation is on screen. Both languages of a note come
 back together and the rights block on each source says which one a machine
 produced.
 
+**The Catechism routes answer by reference and never with text.** Ask a verse
+which paragraphs cite it, ask a paragraph which verses it cites, and follow the
+link to read the words on `vatican.va`. Not one word of the Catechism ships
+here, permanently, and that includes a title, a first line, a summary and a
+breadcrumb naming where a paragraph sits. `LIMITS.md` states the basis and
+states that it is thinner than the basis for everything else here.
+
+```sh
+curl -s localhost:8000/v1/books/MAT/chapters/28/verses/19/catechism
+```
+
+Seventeen paragraphs cite Matthew 28,19, which is more than cite any other
+verse. Each comes back with the citation as the Catechism wrote it and a link
+to both published editions. The English edition is the one worth following, at
+around eight paragraphs a page against a hundred in Portuguese.
+
 A book is named by its USX code or by any name that resolves, in Portuguese,
 English or Latin. `Jo` is John and `Jó` is Job, and the accent is never folded.
 
 **Say which numbering you wrote a reference in.** `Sl 51,1` means the spine's
-Psalm 51 by default and `?scheme=org` makes it the Miserere, which the spine
-numbers 50. Both answers are correct and only one of them is yours.
+Psalm 51 by default. `?scheme=english` makes it the Miserere, which the spine
+numbers 50 and opens at verse 3, because the Vulgate numbers the two lines of
+the psalm's heading and English does not. `?scheme=org` counts those lines, so
+it lands on the heading itself. Every answer is correct and only one is yours.
 
 Names, abbreviations and notation follow the language of the version being read,
 so the same verse comes back as `Eclo 24,1`, `Ecclus. 24:1` and `Eccli. 24,1`.

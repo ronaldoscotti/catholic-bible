@@ -1,0 +1,13 @@
+{"book":{"abbreviation": "Mal.", "chapters": 3, "code": "MAL", "deuterocanonical": false, "group": "PROPHETIC", "name": "Malachias", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"MAL.1.11":[{"cited": "Ml 1,11", "paragraph": 1350}, {"cited": "Ml 1,11", "paragraph": 2643}],
+"MAL.2.13":[{"cited": "Ml 2,13-17", "paragraph": 1611}],
+"MAL.2.14":[{"cited": "Ml 2,13-17", "paragraph": 1611}],
+"MAL.2.15":[{"cited": "Ml 2,13-17", "paragraph": 1611}],
+"MAL.2.16":[{"cited": "Ml 2,13-17", "paragraph": 1611}],
+"MAL.2.17":[{"cited": "Ml 2,13-17", "paragraph": 1611}],
+"MAL.2.6":[{"cited": "Ml 2,6", "paragraph": 217}],
+"MAL.2.7":[{"cited": "Ml 2,7-9", "paragraph": 1540}],
+"MAL.2.8":[{"cited": "Ml 2,7-9", "paragraph": 1540}],
+"MAL.2.9":[{"cited": "Ml 2,7-9", "paragraph": 1540}],
+"MAL.3.19":[{"cited": "Ml 3,19", "paragraph": 678}]
+}}

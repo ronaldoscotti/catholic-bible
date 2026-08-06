@@ -1,0 +1,10 @@
+{"book":{"abbreviation": "Job", "chapters": 42, "code": "JOB", "deuterocanonical": false, "group": "WISDOM", "name": "Job", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"JOB.1.6":[{"cited": "Jó 1,6", "paragraph": 441}],
+"JOB.12.10":[{"cited": "Jó 12,10", "paragraph": 2318}],
+"JOB.33.23":[{"cited": "Jó 33,23-24", "paragraph": 336}],
+"JOB.33.24":[{"cited": "Jó 33,23-24", "paragraph": 336}],
+"JOB.36.26":[{"cited": "Jó 36,26", "paragraph": 223}],
+"JOB.38.7":[{"cited": "Jó 38,7", "paragraph": 332}],
+"JOB.42.2":[{"cited": "Jó 42,2", "paragraph": 275}],
+"JOB.42.3":[{"cited": "Jó 42,3", "paragraph": 299}]
+}}

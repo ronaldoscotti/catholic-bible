@@ -1,0 +1,17 @@
+{"book":{"abbreviation": "Ecclus.", "chapters": 51, "code": "SIR", "deuterocanonical": true, "group": "WISDOM", "name": "Ecclesiasticus", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"SIR.1.22":[{"cited": "Eclo 1,22", "paragraph": 2339}],
+"SIR.11.14":[{"cited": "Eclo 11,14", "paragraph": 304}],
+"SIR.15.14":[{"cited": "Eclo 15,14", "paragraph": 1730}, {"cited": "Eclo 15,14", "paragraph": 1743}],
+"SIR.17.22":[{"cited": "Eclo 17,22", "paragraph": 2447}],
+"SIR.18.30":[{"cited": "Eclo 18,30", "paragraph": 1809}],
+"SIR.21.28":[{"cited": "Eclo 21,28", "paragraph": 2477}],
+"SIR.27.16":[{"cited": "Eclo 27,16", "paragraph": 2489}],
+"SIR.36.11":[{"cited": "Eclo 36,11", "paragraph": 441}],
+"SIR.43.27":[{"cited": "Eclo 43,27-28", "paragraph": 2129}],
+"SIR.43.28":[{"cited": "Eclo 43,28", "paragraph": 300}, {"cited": "Eclo 43,27-28", "paragraph": 2129}],
+"SIR.48.1":[{"cited": "Eclo 48,1", "paragraph": 696}],
+"SIR.5.2":[{"cited": "Eclo 5,2", "paragraph": 1809}],
+"SIR.50.20":[{"cited": "Eclo 50,20", "paragraph": 433}],
+"SIR.7.27":[{"cited": "Eclo 7,27-28", "paragraph": 2215}],
+"SIR.7.28":[{"cited": "Eclo 7,27-28", "paragraph": 2215}]
+}}

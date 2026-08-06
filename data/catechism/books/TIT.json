@@ -1,0 +1,20 @@
+{"book":{"abbreviation": "Tit.", "chapters": 3, "code": "TIT", "deuterocanonical": false, "group": "EPISTLES", "name": "Titus", "testament": "NEW"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"TIT.1.15":[{"cited": "Tt 1,15", "paragraph": 2518}],
+"TIT.1.5":[{"cited": "Tt 1,5-9", "paragraph": 1577}, {"cited": "Tt 1,5", "paragraph": 1590}],
+"TIT.1.6":[{"cited": "Tt 1,5-9", "paragraph": 1577}],
+"TIT.1.7":[{"cited": "Tt 1,5-9", "paragraph": 1577}],
+"TIT.1.8":[{"cited": "Tt 1,5-9", "paragraph": 1577}],
+"TIT.1.9":[{"cited": "Tt 1,5-9", "paragraph": 1577}],
+"TIT.2.1":[{"cited": "Tt 2,1-6", "paragraph": 2342}],
+"TIT.2.12":[{"cited": "Tt 2,12", "paragraph": 1809}],
+"TIT.2.13":[{"cited": "Tt 2,13", "paragraph": 66}, {"cited": "Tt 2,13", "paragraph": 449}, {"cited": "Tt 2,13", "paragraph": 1041}, {"cited": "Tt 2,13", "paragraph": 1130}, {"cited": "Tt 2,13", "paragraph": 1404}, {"cited": "Tt 2,13", "paragraph": 2760}, {"cited": "Tt 2,13", "paragraph": 2818}],
+"TIT.2.14":[{"cited": "Tt 2,14", "paragraph": 802}],
+"TIT.2.2":[{"cited": "Tt 2,1-6", "paragraph": 2342}],
+"TIT.2.3":[{"cited": "Tt 2,1-6", "paragraph": 2342}],
+"TIT.2.4":[{"cited": "Tt 2,1-6", "paragraph": 2342}],
+"TIT.2.5":[{"cited": "Tt 2,1-6", "paragraph": 2342}],
+"TIT.2.6":[{"cited": "Tt 2,1-6", "paragraph": 2342}],
+"TIT.3.5":[{"cited": "Tt 3,5", "paragraph": 1215}],
+"TIT.3.6":[{"cited": "Tt 3,6-7", "paragraph": 1817}],
+"TIT.3.7":[{"cited": "Tt 3,6-7", "paragraph": 1817}]
+}}

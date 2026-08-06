@@ -1,0 +1,7 @@
+{"book":{"abbreviation": "Mich.", "chapters": 7, "code": "MIC", "deuterocanonical": false, "group": "PROPHETIC", "name": "Micheas", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"MIC.2.2":[{"cited": "Mq 2,2", "paragraph": 2534}],
+"MIC.4.1":[{"cited": "Mq 4,1-4", "paragraph": 762}],
+"MIC.4.2":[{"cited": "Mq 4,1-4", "paragraph": 762}],
+"MIC.4.3":[{"cited": "Mq 4,1-4", "paragraph": 762}],
+"MIC.4.4":[{"cited": "Mq 4,1-4", "paragraph": 762}]
+}}

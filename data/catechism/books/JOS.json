@@ -1,0 +1,4 @@
+{"book":{"abbreviation": "Jos.", "chapters": 24, "code": "JOS", "deuterocanonical": false, "group": "HISTORICAL", "name": "Josue", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"JOS.13.33":[{"cited": "Js 13,33", "paragraph": 1539}],
+"JOS.3.10":[{"cited": "Js 3,10", "paragraph": 2112}]
+}}

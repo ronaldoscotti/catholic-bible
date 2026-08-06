@@ -1,0 +1,17 @@
+{"book":{"abbreviation": "Judg.", "chapters": 21, "code": "JDG", "deuterocanonical": false, "group": "HISTORICAL", "name": "Judges", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"JDG.13.18":[{"cited": "Jz 13,18", "paragraph": 206}],
+"JDG.6.11":[{"cited": "Jz 6,11-24", "paragraph": 332}],
+"JDG.6.12":[{"cited": "Jz 6,11-24", "paragraph": 332}],
+"JDG.6.13":[{"cited": "Jz 6,11-24", "paragraph": 332}],
+"JDG.6.14":[{"cited": "Jz 6,11-24", "paragraph": 332}],
+"JDG.6.15":[{"cited": "Jz 6,11-24", "paragraph": 332}],
+"JDG.6.16":[{"cited": "Jz 6,11-24", "paragraph": 332}],
+"JDG.6.17":[{"cited": "Jz 6,11-24", "paragraph": 332}],
+"JDG.6.18":[{"cited": "Jz 6,11-24", "paragraph": 332}],
+"JDG.6.19":[{"cited": "Jz 6,11-24", "paragraph": 332}],
+"JDG.6.20":[{"cited": "Jz 6,11-24", "paragraph": 332}],
+"JDG.6.21":[{"cited": "Jz 6,11-24", "paragraph": 332}],
+"JDG.6.22":[{"cited": "Jz 6,11-24", "paragraph": 332}],
+"JDG.6.23":[{"cited": "Jz 6,11-24", "paragraph": 332}],
+"JDG.6.24":[{"cited": "Jz 6,11-24", "paragraph": 332}]
+}}

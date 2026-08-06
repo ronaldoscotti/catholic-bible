@@ -35,13 +35,87 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 0  Understand       docs/method/00-understand.md
 [x] 1  Context          docs/method/01-context.md
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
-[x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5 B8 B9 B10
-[x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8 B9 B10
-[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 B9 merged, B10 open, 783 tests
-[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8 B9 B10
-[x] 7  Code review      docs/reviews/, B0 to B10, one author on B10
-[x] 8  PR               B0 B1 B2 B3 B4 B5 B7 B8 B9 merged. v1.0.0 and v1.0.1 released
+[x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5 B8 B9 B10 B11
+[x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8 B9 B10 B11
+[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 B9 B10 merged, B11 open, 866 tests
+[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8 B9 B10 B11
+[x] 7  Code review      docs/reviews/, B0 to B11, one author on B10
+[x] 8  PR               B0 to B10 merged. v1.0.0 and v1.0.1 released
 ```
+
+**B11 stopped rather than ship, and what stopped it is fixed.** Seven of eight
+criteria are met now. What blocked it was that the resolution sent psalm
+citations to the wrong verse, and clearing that took a fourth numbering scheme
+and a correction to 15672 addresses in already published data.
+
+**The eighth criterion stays open, and the attempt to close it produced a wrong
+number first.** A matcher was written to compare each published citation against
+the footnote `vatican.va` prints. It reported a 51.2% error rate over 45
+citations and every disagreement was its own. It resolved the Catechism's English
+abbreviations through this repository's alias table, which is Portuguese first,
+so `Lk` resolved to nothing and `Jn` resolved to Jonah.
+
+Fifteen paragraphs were read by eye instead. Ten had readable footnotes, 34
+published citations were examined and none was wrong. What turned up instead was
+omission, references the printed footnotes carry that the upstream transcription
+dropped. `docs/qa/B11-catechism-cross-references.md` carries both, and the box
+stays empty because there is no printed Catechism here and the criterion asks for
+one.
+
+`Scheme.ORG` is hebrew numbering and counts a psalm superscription as verses. The
+Catechism cites in english numbering, which does not. An english address is a
+valid `org` address, so it maps cleanly, raises nothing, produces no orphan and
+lands one or two verses early. Nothing in the mapping layer can see it. Only the
+text can, and the text is what found it.
+
+The first diagnosis was wrong and was corrected before anybody acted on it. It
+said the Copenhagen table was broken. The table is right, and issue `#22` is what
+suggested looking at the input instead, because a table that shifts verses for
+some psalms is not a table that ignores verses. `org` psalm 51 runs 0 to 21,
+which is 19 english verses plus two superscription lines, and OpenBible uses 1 to
+19. The two disagree by exactly the title.
+
+**It was a defect in shipped B4 data, not in this branch.** `PSA.50.10` was
+published against `EZK.36.25`. The english reference is Ps 51,10, which is
+`PSA.50.12`. Issue `#36` carries it, and closing it added a fourth scheme,
+corrected the apparatus by 15672 addresses and moved the dataset to `2.0.0`.
+The apparatus grew, because reading english as `org` had been dropping
+references rather than only misplacing them, and Daniel left the orphan report
+entirely.
+
+**The page map shipped wrong, and the check it was trusted to have does not
+cover the thing it shipped wrong.** The walk read footnote markers and the
+footnote block as paragraphs, so the prologue page claimed 1 to 4 off three
+superscripts and a `1 Tim 2:3-4`, and every page to 17 was one page early. A
+reader following a link for paragraph 1 would have landed on a page with no
+paragraph 1 on it.
+
+`refuse_a_broken_map` passed on it, and correctly. Coverage, ordering and
+uniqueness are all true of a map that is uniformly one page early, because being
+early is contiguous. That check catches a gap, a duplicate and an inversion, and
+this branch had described it as proof the map was right. Two documents said all
+2865 paragraphs land on the page that holds them, which was false for at least
+seventeen of them, and the five spot checks that were cited could not have
+included any paragraph under 16.
+
+**A review agent found it by opening the pages.** That is the fourth epic in a
+row, after B8, B9 and B10, where a second reader found the worst thing. The
+pattern is not carelessness. The author had written the refusal that named this
+exact failure, in this plan, in these words, and then read the map instead of the
+site.
+
+What answers it is `--verify`, which opens the page the map names and looks for
+the paragraph on it. 134 sampled across both editions and the whole range, zero
+wrong, and run against the map that shipped it reports paragraph 1 absent from
+the page it was sent to. The sample is spread rather than random, because this
+defect was concentrated at the front of the book where fifty random draws would
+probably have missed it.
+
+The same review found five more, including a range pattern that reads
+`prologo%201-25_po.html` as a page starting at 201, harmless today only because
+a dict key happens to collide, and a committed map with no checksum in a
+repository where every other published file has one. Both are fixed and both
+have a test.
 
 **B10 is the first epic where a recommendation was checked by running it.** The
 author was asked to choose between one Python distribution and two, and the

@@ -75,6 +75,13 @@
   "REV"
  ],
  "books": 73,
+ "catechism": {
+  "books": "catechism/books/{book}.json",
+  "orphans": "catechism/orphans.json",
+  "pages": "catechism/pages.json",
+  "paragraphs": "catechism/paragraphs.json",
+  "rights": "Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis"
+ },
  "commentaries": [
   {
    "author": "Rev. George Leo Haydock (1774–1849)",
@@ -117,7 +124,7 @@
   }
  },
  "dataset": "catholic-bible",
- "dataset_version": "1.0.1",
+ "dataset_version": "2.0.0",
  "manifest": "manifest.json",
  "source": {
   "commit": "0494a69e66657a16d822898e71f4eb3b2bc4ae80",

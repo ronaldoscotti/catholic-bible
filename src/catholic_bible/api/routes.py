@@ -14,7 +14,7 @@ from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, Path, Query, Response
 
-from catholic_bible import cross_references
+from catholic_bible import catechism, cross_references
 from catholic_bible.api import errors, models, resolving
 from catholic_bible.canon import psalms
 from catholic_bible.canon.aliases import (
@@ -26,6 +26,7 @@ from catholic_bible.canon.aliases import (
 from catholic_bible.canon.formatter import format_reference
 from catholic_bible.canon.mapping import Scheme
 from catholic_bible.canon.reference import Reference
+from catholic_bible.canon.spine import SPINE
 from catholic_bible.search import compile_query
 from catholic_bible.storage import reader
 from catholic_bible.storage.database import connect
@@ -896,4 +897,130 @@ def _commentary_hit(row: reader.Row) -> models.CommentaryHit:
         reference=format_reference(Reference(book, span), language),
         label=row["label"],
         snippet=str(row["snippet"]),
+    )
+
+
+# One line, published beside every answer. The basis here is thinner than for
+# anything else this serves and LIMITS.md says so at length.
+CATECHISM_RIGHTS = (
+    "Paragraph numbers and references to vatican.va. No Catechism text, "
+    "permanently. See LIMITS.md for the basis"
+)
+
+
+def _links(paragraph: int) -> list[models.CatechismLink]:
+    """English first, because its pages hold around eight paragraphs and the
+    Portuguese ones around a hundred."""
+    return [
+        models.CatechismLink(
+            language=built.language, url=built.url, text_fragment=built.fragment
+        )
+        for built in (catechism.link(paragraph, name) for name in catechism.LANGUAGES)
+    ]
+
+
+def _catechism_out(
+    reference: Reference, orders: list[int], language: Language
+) -> models.CatechismOut:
+    addresses = [SPINE.at_order(order) for order in orders]
+    found: dict[int, str] = {}
+    for address in addresses:
+        if address is None:
+            continue
+        for entry in catechism.citing(address):
+            # A paragraph citing two verses of the span answers once, and the
+            # citation kept is the first, which is the order print uses.
+            found.setdefault(entry.paragraph, entry.cited)
+
+    return models.CatechismOut(
+        reference=format_reference(reference, language),
+        ids=[str(address) for address in addresses if address is not None],
+        rights=CATECHISM_RIGHTS,
+        paragraphs=[
+            models.CatechismParagraph(
+                paragraph=number, cited=found[number], links=_links(number)
+            )
+            for number in sorted(found)
+        ],
+    )
+
+
+@router.get(
+    "/books/{book}/chapters/{chapter}/verses/{verse}/catechism",
+    summary="The Catechism paragraphs that cite one verse",
+    response_model=models.CatechismOut,
+    responses={**errors.NOT_FOUND, **errors.UNPROCESSABLE},
+)
+def read_catechism(
+    book: str,
+    chapter: InPath,
+    verse: InPath,
+    connection: Database,
+    response: Response,
+) -> models.CatechismOut:
+    row = _book_or_404(connection, book)
+    code = str(row["code"])
+    _chapter_or_404(connection, code, chapter)
+
+    address = reader.address(connection, f"{code}.{chapter}.{verse}")
+    if address is None:
+        raise errors.not_found(
+            errors.Reason.NOT_ON_SPINE,
+            f"the spine has no verse {verse} in {code} {chapter}",
+            f"{code}.{chapter}.{verse}",
+        )
+
+    order = int(address["canonical_order"])
+    point = (chapter, verse)
+    language = reader.language_of(str(reader.default_version(connection)["language"]))
+
+    response.headers["Cache-Control"] = CATALOGUE
+    return _catechism_out(Reference(code, (point, point)), [order], language)
+
+
+@router.get(
+    "/catechism",
+    summary="The Catechism paragraphs a written reference points at",
+    response_model=models.CatechismOut,
+    responses=errors.UNPROCESSABLE,
+)
+def catechism_for(
+    connection: Database,
+    response: Response,
+    ref: str,
+    scheme: resolving.InputScheme = resolving.InputScheme.SPINE,
+) -> models.CatechismOut:
+    reference, orders = resolving.read(ref, scheme)
+    language = reader.language_of(str(reader.default_version(connection)["language"]))
+
+    response.headers["Cache-Control"] = CATALOGUE
+    return _catechism_out(reference, orders, language)
+
+
+@router.get(
+    "/catechism/paragraphs/{number}",
+    summary="The verses one Catechism paragraph cites",
+    response_model=models.CatechismParagraphOut,
+    responses=errors.UNPROCESSABLE,
+)
+def read_catechism_paragraph(
+    response: Response,
+    number: Annotated[int, Path(ge=1, le=2865, examples=[1223])],
+) -> models.CatechismParagraphOut:
+    # 200 with nothing rather than 404. 1672 of the 2865 paragraphs cite no
+    # Scripture, and a paragraph that exists and cites nothing is not a
+    # paragraph that does not exist.
+    cites = catechism.cited_by(number)
+
+    response.headers["Cache-Control"] = CATALOGUE
+    return models.CatechismParagraphOut(
+        paragraph=number,
+        links=_links(number),
+        rights=CATECHISM_RIGHTS,
+        cites=[
+            models.CitedVerse(
+                cited=entry.cited, ids=[str(address) for address in entry.ids]
+            )
+            for entry in cites
+        ],
     )

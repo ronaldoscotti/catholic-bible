@@ -1,0 +1,4 @@
+{"book":{"abbreviation": "Eccles.", "chapters": 12, "code": "ECC", "deuterocanonical": false, "group": "WISDOM", "name": "Ecclesiastes", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"ECC.3.20":[{"cited": "Ecl 3,20-21", "paragraph": 703}],
+"ECC.3.21":[{"cited": "Ecl 3,20-21", "paragraph": 703}]
+}}

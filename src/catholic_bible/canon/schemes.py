@@ -1,7 +1,13 @@
 """Translating other numbering schemes into the spine.
 
-Three of them. The Vulgate, `org` (the Copenhagen scheme, anchored on the
-Masoretic text) and Douay.
+Four of them. The Vulgate, `org` (the Copenhagen scheme, anchored on the
+Masoretic text), Douay, and English.
+
+English is not a synonym for `org` and treating it as one is issue #36. `org`
+numbers a psalm superscription as verses and English leaves it unnumbered, so an
+English address read as `org` lands one or two verses early in 62 psalms. It
+resolves, it raises nothing and it produces no orphan, which is why it went
+unnoticed through a whole epic.
 
 None of these validate against the spine. They answer where an address lands,
 and whether that landing exists is the mapping layer's question.
@@ -243,14 +249,70 @@ def _pair_up(mapped: dict[str, str]) -> dict[str, str]:
     return pairs
 
 
-def _load() -> tuple[VulgateScheme, OrgScheme, DouayScheme]:
+class EnglishScheme:
+    """English numbering into the spine, by way of `org`.
+
+    A composition rather than a table of its own. Copenhagen publishes English
+    against `org` and the spine is reached from `org` already, so this maps
+    English to `org` and hands the result to the scheme next door.
+
+    The table is sparse. Only addresses that actually diverge are rewritten and
+    everything else passes through, which is why 72 books come out identical to
+    `org` and the Psalter does not.
+    """
+
+    def __init__(self, table: dict[str, object], org: OrgScheme) -> None:
+        self._org = org
+        mapped = table.get("mappedVerses", {})
+        assert isinstance(mapped, dict)
+        self._to_org = _pair_up(mapped)
+        # First origin wins rather than last. Two english addresses can name one
+        # `org` address, and a dict comprehension keeps whichever came last in
+        # file order, which is arbitrary and silent. Only `ESG 5:2` and
+        # `DAG 3:52` collide today and this spine carries neither book.
+        self._from_org: dict[str, str] = {}
+        for origin, target in self._to_org.items():
+            self._from_org.setdefault(target, origin)
+        counts = table.get("maxVerses", {})
+        assert isinstance(counts, dict)
+        self._counts = counts
+
+    def verse_count(self, book: str, chapter: int) -> int | None:
+        """How many verses english numbers in one chapter.
+
+        Needed to walk a range in the source numbering. Expanding a range on
+        spine order instead reads the gap between two landings as the citation,
+        and where the spine carries verses english does not, the range swallows
+        them. `Dn 3,1-30` came out as 97 addresses that way.
+        """
+        counts = self._counts.get(book)
+        if not isinstance(counts, list) or not 1 <= chapter <= len(counts):
+            return None
+        return int(counts[chapter - 1])
+
+    def to_spine(self, book: str, chapter: int, verse: int) -> Address:
+        target = self._to_org.get(f"{book} {chapter}:{verse}")
+        if target is not None:
+            book, chapter, verse = _parse(target)
+        return self._org.to_spine(book, chapter, verse)
+
+    def from_spine(self, book: str, chapter: int, verse: int) -> Address:
+        as_org = self._org.from_spine(book, chapter, verse)
+        origin = self._from_org.get(f"{as_org[0]} {as_org[1]}:{as_org[2]}")
+        return _parse(origin) if origin is not None else as_org
+
+
+def _load() -> tuple[VulgateScheme, OrgScheme, DouayScheme, EnglishScheme]:
     table: dict[str, object] = json.loads(
         (DATA_DIR / "vulgate-scheme.json").read_text(encoding="utf-8")
     )
     vulgate = VulgateScheme(table)
     org = OrgScheme(table, vulgate)
     vulgate.bind_inverse(org.index())
-    return vulgate, org, DouayScheme()
+    english: dict[str, object] = json.loads(
+        (DATA_DIR / "english-scheme.json").read_text(encoding="utf-8")
+    )
+    return vulgate, org, DouayScheme(), EnglishScheme(english, org)
 
 
-VULGATE, ORG, DOUAY = _load()
+VULGATE, ORG, DOUAY, ENGLISH = _load()

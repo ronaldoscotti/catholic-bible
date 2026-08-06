@@ -573,6 +573,52 @@ and points at the English document for the endpoint list, the quickstart and the
 versioning rule. A reader who only reads Portuguese gets the reasoning and then
 has to cross over for the reference material.
 
+## What the Catechism index rests on, added in B11
+
+The legal basis here is thinner than the basis for anything else in this
+repository, and saying so is the point of this section.
+
+What ships is a paragraph number, a Scripture reference as the Catechism wrote
+it, and a link to the page on `vatican.va` that holds that paragraph. Not one
+word of the text. No paragraph, no title, no first line, no summary and no
+breadcrumb naming where a paragraph sits in the structure. That last one was
+refused deliberately and it would have been the single best feature here,
+because a reader who learns that a paragraph lives under the fifth commandment
+has learned what it says without leaving this dataset.
+
+A paragraph number is a fact. A link is a link. Neither is anybody's property.
+
+The part that is not so simple is the selection. Which verse a paragraph cites
+is editorial work done by the authors of the Catechism, and a compilation of
+that selection attracts thin protection in some jurisdictions, Brazil among
+them under article 7 of the copyright law. The Holy See is also more protective
+of this text than most rights holders are of theirs. The answer taken here is to
+ship the least that is useful and write the basis down, rather than to reason
+from how small the file is.
+
+**The citations were not transcribed here.** They come from
+`nossbigg/catechism-ccc-json`, release v0.0.2, a third party transcription that
+declares no licence. That name is in `PROVENANCE.json` rather than hidden. The
+citation graph is the same fact whoever transcribed it, and what establishes
+whether it is right is the hand check rather than the source's reputation.
+
+**A link lands on a page, not on a paragraph.** `vatican.va` publishes no per
+paragraph address in either edition. English pages hold around eight paragraphs
+and Portuguese ones around a hundred, so a Portuguese link opens a wall of text
+and leaves the reader searching it. Both ship and the artifact says which is
+which. The text fragment appended to each link is a browser feature and no
+server promises it.
+
+**Five citations do not fully resolve** and all five are recorded in
+`catechism/orphans.json` with a reason. Each is written in Vulgate numbering
+inside a source that is otherwise English, so part of the range lands and the
+rest is reported rather than dropped.
+
+**The page map is verified against the site on demand and never in CI.**
+Re-walking 374 pages on somebody else's server is not something to put in a
+build. What CI holds is that the committed map is internally sound and matches
+its checksum.
+
 ## What full-text search cannot do, added in B9
 
 ### It is lexical, and that word is doing real work

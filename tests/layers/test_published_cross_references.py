@@ -49,7 +49,9 @@ def test_the_counts_agree_with_the_provenance() -> None:
     apparatus = load()
     record = PROVENANCE["files"]["references.json"]
 
-    assert len(apparatus.references) == record["references"] == 207636
+    # 207636 before issue #36. The apparatus grew because reading english
+    # addresses as `org` had been dropping references, not only misplacing them.
+    assert len(apparatus.references) == record["references"] == 213267
     assert len({row.anchor for row in apparatus.references}) == record["anchors"]
 
     by_source: dict[str, int] = {}
@@ -99,15 +101,30 @@ def test_the_orphan_report_says_what_it_can_and_cannot_answer() -> None:
     """
     assert set(ORPHANS) == {"douay", "na27", "openbible"}
     assert ORPHANS["openbible"]["fixture_pairs"] == 211804
-    assert ORPHANS["openbible"]["exported"] == 204601
+    assert ORPHANS["openbible"]["exported"] == 210232
     assert ORPHANS["douay"]["fixture_pairs"] is None
     assert ORPHANS["douay"]["why"]
 
 
-def test_the_worst_openbible_losses_are_in_daniel() -> None:
-    """Not noise. The `org` scheme carries Susanna and Bel as their own books
-    and this spine folds them into Daniel 13 and 14, so the remap is where the
-    references go missing."""
+def test_daniel_no_longer_loses_references_to_the_remap() -> None:
+    """This test used to assert the opposite, and issue #36 is why.
+
+    Daniel was the worst pair in the report. The Copenhagen table names the
+    Greek sections `DAG`, `S3Y`, `SUS` and `BEL`, this spine folds them into
+    Daniel, and the remap was handing back a book code the spine does not have,
+    which the import counted as unresolved. Daniel is now absent from the report
+    entirely.
+    """
     worst = ORPHANS["openbible"]["worst"]
 
-    assert next(iter(worst)) == "DAN -> DAN"
+    assert [pair for pair in worst if pair.startswith("DAN")] == []
+
+
+def test_what_the_english_scheme_recovered_is_held_as_a_number() -> None:
+    """5631 references the apparatus used to lose.
+
+    Reading english addresses as `org` did not only misplace references, it
+    dropped the ones whose english address has no `org` counterpart at all.
+    """
+    unaccounted = ORPHANS["openbible"]["unaccounted"]
+    assert unaccounted == 1572, "was 7203 before english numbering was read as english"

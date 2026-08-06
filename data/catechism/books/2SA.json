@@ -1,0 +1,15 @@
+{"book":{"abbreviation": "2 Kgs.", "chapters": 24, "code": "2SA", "deuterocanonical": false, "group": "HISTORICAL", "name": "2 Kings", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"2SA.12.14":[{"cited": "2Sm 12,14", "paragraph": 2538}],
+"2SA.7.18":[{"cited": "2Sm 7,18-29", "paragraph": 2579}],
+"2SA.7.19":[{"cited": "2Sm 7,18-29", "paragraph": 2579}],
+"2SA.7.20":[{"cited": "2Sm 7,18-29", "paragraph": 2579}],
+"2SA.7.21":[{"cited": "2Sm 7,18-29", "paragraph": 2579}],
+"2SA.7.22":[{"cited": "2Sm 7,18-29", "paragraph": 2579}],
+"2SA.7.23":[{"cited": "2Sm 7,18-29", "paragraph": 2579}],
+"2SA.7.24":[{"cited": "2Sm 7,18-29", "paragraph": 2579}],
+"2SA.7.25":[{"cited": "2Sm 7,18-29", "paragraph": 2579}],
+"2SA.7.26":[{"cited": "2Sm 7,18-29", "paragraph": 2579}],
+"2SA.7.27":[{"cited": "2Sm 7,18-29", "paragraph": 2579}],
+"2SA.7.28":[{"cited": "2Sm 7,28", "paragraph": 215}, {"cited": "2Sm 7,28", "paragraph": 2465}, {"cited": "2Sm 7,18-29", "paragraph": 2579}],
+"2SA.7.29":[{"cited": "2Sm 7,18-29", "paragraph": 2579}]
+}}

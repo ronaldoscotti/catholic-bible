@@ -202,6 +202,61 @@ class CrossReferencesOut(BaseModel):
     )
 
 
+class CatechismLink(BaseModel):
+    """Where to read a paragraph. A page, never the paragraph's words."""
+
+    language: str = Field(examples=["en"])
+    url: str = Field(
+        description="The page holding the paragraph on vatican.va",
+        examples=["https://www.vatican.va/archive/ENG0015/__P3I.HTM"],
+    )
+    text_fragment: str = Field(
+        description=(
+            "The same page with a text fragment appended. Browsers that support "
+            "it scroll to the paragraph number. Best effort, no server promises it"
+        )
+    )
+
+
+class CatechismParagraph(BaseModel):
+    """A paragraph that cites the verse asked about.
+
+    Carries its number, the citation as the Catechism wrote it, and where to
+    read it. No text, no title, no first line and no summary, permanently.
+    """
+
+    paragraph: int = Field(ge=1, le=2865, examples=[1223])
+    cited: str = Field(
+        description="The citation as the Catechism wrote it",
+        examples=["Mt 28,19-20"],
+    )
+    links: list[CatechismLink]
+
+
+class CatechismOut(BaseModel):
+    reference: str = Field(examples=["Mt 28,19"])
+    ids: list[str] = Field(examples=[["MAT.28.19"]])
+    rights: str = Field(
+        description="Why this index may be published, in one line",
+        examples=["Paragraph numbers and references. No Catechism text"],
+    )
+    paragraphs: list[CatechismParagraph]
+
+
+class CitedVerse(BaseModel):
+    cited: str = Field(examples=["Mt 28,19-20"])
+    ids: list[str] = Field(examples=[["MAT.28.19", "MAT.28.20"]])
+
+
+class CatechismParagraphOut(BaseModel):
+    """The other direction. What one paragraph cites."""
+
+    paragraph: int = Field(ge=1, le=2865, examples=[1223])
+    links: list[CatechismLink]
+    rights: str
+    cites: list[CitedVerse]
+
+
 class ResolvedOut(BaseModel):
     reference: str = Field(examples=["1Cor 13,4-7"])
     book: str

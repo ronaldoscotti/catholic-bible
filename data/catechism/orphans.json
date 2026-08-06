@@ -1,0 +1,38 @@
+{
+ "by_reason": {
+  "verse_out_of_range": 5
+ },
+ "entries": [
+  {
+   "cited": "Ml 3,19",
+   "paragraph": 678,
+   "partial": true,
+   "reason": "verse_out_of_range"
+  },
+  {
+   "cited": "Zc 2,14",
+   "paragraph": 722,
+   "partial": true,
+   "reason": "verse_out_of_range"
+  },
+  {
+   "cited": "2Mc 12,46",
+   "paragraph": 1032,
+   "partial": true,
+   "reason": "verse_out_of_range"
+  },
+  {
+   "cited": "2Cor 9,5-18",
+   "paragraph": 2122,
+   "partial": true,
+   "reason": "verse_out_of_range"
+  },
+  {
+   "cited": "Dn 3,79-81",
+   "paragraph": 2416,
+   "partial": true,
+   "reason": "verse_out_of_range"
+  }
+ ],
+ "total": 5
+}

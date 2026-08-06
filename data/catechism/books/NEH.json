@@ -1,0 +1,18 @@
+{"book":{"abbreviation": "2 Esd.", "chapters": 13, "code": "NEH", "deuterocanonical": false, "group": "HISTORICAL", "name": "2 Esdras", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"NEH.1.10":[{"cited": "Ne 1,4-11", "paragraph": 2585}],
+"NEH.1.11":[{"cited": "Ne 1,4-11", "paragraph": 2585}],
+"NEH.1.4":[{"cited": "Ne 1,4-11", "paragraph": 2585}],
+"NEH.1.5":[{"cited": "Ne 1,4-11", "paragraph": 2585}],
+"NEH.1.6":[{"cited": "Ne 1,4-11", "paragraph": 2585}],
+"NEH.1.7":[{"cited": "Ne 1,4-11", "paragraph": 2585}],
+"NEH.1.8":[{"cited": "Ne 1,4-11", "paragraph": 2585}],
+"NEH.1.9":[{"cited": "Ne 1,4-11", "paragraph": 2585}],
+"NEH.13.15":[{"cited": "Ne 13,15-22", "paragraph": 2172}],
+"NEH.13.16":[{"cited": "Ne 13,15-22", "paragraph": 2172}],
+"NEH.13.17":[{"cited": "Ne 13,15-22", "paragraph": 2172}],
+"NEH.13.18":[{"cited": "Ne 13,15-22", "paragraph": 2172}],
+"NEH.13.19":[{"cited": "Ne 13,15-22", "paragraph": 2172}],
+"NEH.13.20":[{"cited": "Ne 13,15-22", "paragraph": 2172}],
+"NEH.13.21":[{"cited": "Ne 13,15-22", "paragraph": 2172}],
+"NEH.13.22":[{"cited": "Ne 13,15-22", "paragraph": 2172}]
+}}

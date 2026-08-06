@@ -1,9 +1,313 @@
 {
- "dataset_version": "1.0.1",
+ "dataset_version": "2.0.0",
  "files": {
   "canon.json": {
    "bytes": 13773,
    "sha256": "ac469b3e625861aab4cf8de9340d37dabaaefb2bbd018d5e1ba100ae12a961aa"
+  },
+  "catechism/books/1CH.json": {
+   "bytes": 331,
+   "sha256": "df2a6bc800ae8953969b98626557723935f6bbce33d3daaf07992307ab8bdc6b"
+  },
+  "catechism/books/1CO.json": {
+   "bytes": 14874,
+   "sha256": "201cafb972a5d7788d83811309b6157947525bb0f58b149fd52454069282a0bb"
+  },
+  "catechism/books/1JN.json": {
+   "bytes": 3255,
+   "sha256": "d06b1d564e2365055162440a50a1a102ba1334ff36ac17a9d23cc99093d5135a"
+  },
+  "catechism/books/1KI.json": {
+   "bytes": 8165,
+   "sha256": "4e94c55125c5fecde6f1077eb485e9e807aefefa033fc7d06669dac4e362822f"
+  },
+  "catechism/books/1MA.json": {
+   "bytes": 327,
+   "sha256": "3412adf8d251711cb80987db3c90dbbed489ca4dc9921be20d5f993659aba2e8"
+  },
+  "catechism/books/1PE.json": {
+   "bytes": 4032,
+   "sha256": "5836bb66c71fcb81861f5e5a8fb1ec7cbfa4be40975e8376ac4696ef96b44592"
+  },
+  "catechism/books/1SA.json": {
+   "bytes": 1172,
+   "sha256": "9e1559964ebdf9e2cb17edbc0fea57900891efe50e158917eb2c6b5c3bfe08c8"
+  },
+  "catechism/books/1TH.json": {
+   "bytes": 1555,
+   "sha256": "cdcb217a0beca721b0c4ed5605cefb40a8bd0628b19b021e97d9e4d97041a279"
+  },
+  "catechism/books/1TI.json": {
+   "bytes": 3371,
+   "sha256": "70d3d4975322d79c4a4ce94e13c5ee7faec3abf2a5065ef38f220dbe441b003b"
+  },
+  "catechism/books/2CH.json": {
+   "bytes": 386,
+   "sha256": "f53872e0d9863167287f8012c1b27124e8ad32ba5122be11453680c0fb65fc27"
+  },
+  "catechism/books/2CO.json": {
+   "bytes": 5472,
+   "sha256": "884d23728f37ae176ab5eb89aef1139a4dae764961284a35b66c2eb15a2b081e"
+  },
+  "catechism/books/2JN.json": {
+   "bytes": 319,
+   "sha256": "ce556c894cd9a0d471c00415b315ef6d920d70e97cadc7fbfd66ef9348f2404a"
+  },
+  "catechism/books/2KI.json": {
+   "bytes": 374,
+   "sha256": "7cd51edcb51b90c7a682882e822be2d166c31b6547d7b68c3d0addca6ff8a93e"
+  },
+  "catechism/books/2MA.json": {
+   "bytes": 548,
+   "sha256": "feb8b32b88ebbf98e963a3a9a25a68a7d1075bc7f139a33f1c545c965406737d"
+  },
+  "catechism/books/2PE.json": {
+   "bytes": 1423,
+   "sha256": "f09ced804ec50c80dde5bc4b69f12f3b1a45121a755154f85a7866531701ffc5"
+  },
+  "catechism/books/2SA.json": {
+   "bytes": 1157,
+   "sha256": "27e2c50e4b5537bbd5131b5d65087ec4f8393da4e4cc05760b4b08763745482e"
+  },
+  "catechism/books/2TH.json": {
+   "bytes": 1912,
+   "sha256": "a192a5684d00069752b120daf10cc2a8d1c7a40eba4102e1c59ad28ed5323845"
+  },
+  "catechism/books/2TI.json": {
+   "bytes": 1785,
+   "sha256": "d32ed29f27c7deb1502cde8a6b839e59ab8e08923344b72f09ab57c4b554f5ee"
+  },
+  "catechism/books/3JN.json": {
+   "bytes": 319,
+   "sha256": "845fccffd6a2a78ac6c7cc89ad7a04c0020782c10e0e92ab2b512c1420c07c8c"
+  },
+  "catechism/books/ACT.json": {
+   "bytes": 15860,
+   "sha256": "1e13453f6cdf9942d4b15833a036cb883935d7258f0b55ab198001ed675a10ed"
+  },
+  "catechism/books/AMO.json": {
+   "bytes": 908,
+   "sha256": "56e1ade32a62715dbb8e6eaef36cad48bb0578132325dbf012d172307b9fd479"
+  },
+  "catechism/books/BAR.json": {
+   "bytes": 317,
+   "sha256": "1f102fccb642cc0c744b4a6a06266e6aab3785d47748b74dce36cca6011d1baf"
+  },
+  "catechism/books/COL.json": {
+   "bytes": 4584,
+   "sha256": "8f91050444c331c62da5b65d50249868e9bbf87bc30818a043e66b4f41c2381f"
+  },
+  "catechism/books/DAN.json": {
+   "bytes": 870,
+   "sha256": "7377f5d6195162eff12b3c228e8d506cf33e94883716d7776b60d9168b5c5e63"
+  },
+  "catechism/books/DEU.json": {
+   "bytes": 2980,
+   "sha256": "32fee8fe22beb62bc6017253328b70aeae116e129b8a257e2f2e5a283dfc32e8"
+  },
+  "catechism/books/ECC.json": {
+   "bytes": 437,
+   "sha256": "321920e5a413f3dacc19c942ad26f47f0d973a87633765f23779edabe270ea16"
+  },
+  "catechism/books/EPH.json": {
+   "bytes": 11076,
+   "sha256": "196b03412573015001848ca95cbcfcec8e8765318fca44ef006ef5119d32503e"
+  },
+  "catechism/books/EST.json": {
+   "bytes": 321,
+   "sha256": "b33e40db0d0d2d9015bac3a9896f9c2bdafdaac626239392229946e015dcd644"
+  },
+  "catechism/books/EXO.json": {
+   "bytes": 9927,
+   "sha256": "90a0206de0e2e6d1a61b299046026b0cb3da2ca95d0fcfeeb8b15a1d64ce3370"
+  },
+  "catechism/books/EZK.json": {
+   "bytes": 4571,
+   "sha256": "0acb409662ddbc506ecc0e1b0fa7251f0065fba8a8b72b1fe451deaa5d728f5f"
+  },
+  "catechism/books/EZR.json": {
+   "bytes": 888,
+   "sha256": "cb98a5e4669f15a39cd6c1c9c6022658532e6f8a5c54cfa1f0e32a35d6cba15c"
+  },
+  "catechism/books/GAL.json": {
+   "bytes": 5313,
+   "sha256": "3f327dbe7be8466dc4485a231a5d44eea0a58b83c53948d28e0d783d3d370a11"
+  },
+  "catechism/books/GEN.json": {
+   "bytes": 17380,
+   "sha256": "675b00da09af5fba7c992bf1ae5182bd342077e7d6ee5d3ca2977f32f7d3a45c"
+  },
+  "catechism/books/HAB.json": {
+   "bytes": 319,
+   "sha256": "a1c249fc7c38c1ad550437c4ab755a4cd260d3d33167656bd155ea988af7ca78"
+  },
+  "catechism/books/HAG.json": {
+   "bytes": 318,
+   "sha256": "3f71434f54a3375d93ea5b36c0668c16414b955ebf79e4fea8f098097dbfe521"
+  },
+  "catechism/books/HEB.json": {
+   "bytes": 9683,
+   "sha256": "9ec567d6f6bb221777b500d91b62664c8036f2f365353becc28c85156463ba39"
+  },
+  "catechism/books/HOS.json": {
+   "bytes": 1418,
+   "sha256": "b3c0bf867aba872396709c7d955743cc1e24156986b8ab8764daeaebea79be25"
+  },
+  "catechism/books/ISA.json": {
+   "bytes": 9217,
+   "sha256": "9c6eb9f5a42c1a0137c0d713b52d87670119495f190cf04112ef196bcb84229f"
+  },
+  "catechism/books/JAS.json": {
+   "bytes": 3262,
+   "sha256": "bb9523d221f8a1efc08a3a3daf7d81876b08c414300a6b0140af579ebe567b1c"
+  },
+  "catechism/books/JDG.json": {
+   "bytes": 1158,
+   "sha256": "309498198cda201e2b15c29787e06b4705a8cc7f6685941dd255019670d320bf"
+  },
+  "catechism/books/JDT.json": {
+   "bytes": 1037,
+   "sha256": "8646d9e93603a3c1d575d7825e5f50df8edfb315cccc6cdd18faa859790d175a"
+  },
+  "catechism/books/JER.json": {
+   "bytes": 4590,
+   "sha256": "c97f7864bc4fa58b129f9d47dab4ee2b22b592d172a719485134e2a95eef5c37"
+  },
+  "catechism/books/JHN.json": {
+   "bytes": 39675,
+   "sha256": "0c101d5e3319a29e6efe85a63006ee7afed8f7cfb1d45f88f5140d8fac91b26e"
+  },
+  "catechism/books/JOB.json": {
+   "bytes": 755,
+   "sha256": "190630b1dd03d6173d4436ae9675ef9aed01d640d15e8ff05cfebb9f8fc2f2e0"
+  },
+  "catechism/books/JOL.json": {
+   "bytes": 816,
+   "sha256": "3262fcaf5e69bfcaa1c598837e16c1d5a4aaf7e6db5093b904dd300f10951633"
+  },
+  "catechism/books/JON.json": {
+   "bytes": 317,
+   "sha256": "0a57f19c67d21c37da5203b0db71f2fd022bef9668fff1511cfd074c6991fb6f"
+  },
+  "catechism/books/JOS.json": {
+   "bytes": 427,
+   "sha256": "67fa631bcf649fb4fe5d153ab77719aa5f617d685aaa76d423bf8faaaeb66b81"
+  },
+  "catechism/books/JUD.json": {
+   "bytes": 315,
+   "sha256": "d5fd1cb9ccb9732e8d22d99164e1ab6b486b024663e9a3a9d881fa85e5d17ece"
+  },
+  "catechism/books/LAM.json": {
+   "bytes": 376,
+   "sha256": "bbbdfebd754ae8c50c34c347a8108531afee75d5d1b470b81c471161b44ea96c"
+  },
+  "catechism/books/LEV.json": {
+   "bytes": 1571,
+   "sha256": "81f424b36fba0575212e386ed648baaa5ad3caa00b72f983b8bb490f6a05128c"
+  },
+  "catechism/books/LUK.json": {
+   "bytes": 45580,
+   "sha256": "89821196ecace8a1406f9d5550cd96226729d4cf62a93b574a2b0173ae2efac0"
+  },
+  "catechism/books/MAL.json": {
+   "bytes": 965,
+   "sha256": "3f1c34008ac5d1129ca29967a87016301c59c39de2d83280d93c8b38511123bd"
+  },
+  "catechism/books/MAT.json": {
+   "bytes": 48920,
+   "sha256": "0ed64c5ae8634b3bef96641f7d7321ae2c7bf459372c308bb68f30c8cd1f8c61"
+  },
+  "catechism/books/MIC.json": {
+   "bytes": 582,
+   "sha256": "d8a2d705d26b33adc149e53d2cd559daf34e4325cae3b67a0d2153b601ebde0a"
+  },
+  "catechism/books/MRK.json": {
+   "bytes": 19202,
+   "sha256": "d0c00537a51b466dec52be509352c1d6f95097481fcb02ac24cddde29db10642"
+  },
+  "catechism/books/NAM.json": {
+   "bytes": 317,
+   "sha256": "75cf81987f64cde93a126095dc11b2bdfd953390f391eb88bced36d4ce517bab"
+  },
+  "catechism/books/NEH.json": {
+   "bytes": 1236,
+   "sha256": "a3f58d7b7a76586c55f9e9cf6f8e2858ceae702b1d76e740f8f6807c2b6db4a5"
+  },
+  "catechism/books/NUM.json": {
+   "bytes": 1567,
+   "sha256": "8d98b7bc0a14a1a066b51a2d27a8aed6504eba2c23ed89a322908afc2bae1768"
+  },
+  "catechism/books/OBA.json": {
+   "bytes": 318,
+   "sha256": "01a0d1b606bb95e43d5354b20b433fdfaf81f7f2f4596a93834e86821de1db5b"
+  },
+  "catechism/books/PHM.json": {
+   "bytes": 322,
+   "sha256": "9519029277f5eb76fbcb13da29c170ff74d4807807ba02e0cf42a7b90998d608"
+  },
+  "catechism/books/PHP.json": {
+   "bytes": 3411,
+   "sha256": "1ff2bed86706e76cb68800b589658db98556ab170f3e2d874c11035d90999ba8"
+  },
+  "catechism/books/PRO.json": {
+   "bytes": 1749,
+   "sha256": "2064597253b3838d47ae1bee1fae108eeacc9bbd805d56d6cbf8c4c39b5ad4d5"
+  },
+  "catechism/books/PSA.json": {
+   "bytes": 7428,
+   "sha256": "78c62af43529c2b0ea86872b4a97e04e5a8877a1870aac6eacc1924ca6a74180"
+  },
+  "catechism/books/REV.json": {
+   "bytes": 7952,
+   "sha256": "3aa1e492d84c96c9a9e15357516850e781aa20f11d9887696a53b3f0c09c15a6"
+  },
+  "catechism/books/ROM.json": {
+   "bytes": 16129,
+   "sha256": "5ee1e25d633efdb7693a7f7911f78874189f1d40fb25b14e755f97c8165e3de1"
+  },
+  "catechism/books/RUT.json": {
+   "bytes": 317,
+   "sha256": "b6da601e7c20790f0308fa3c1b23305cd21ce8f1aba6d41ed9c91743f623647a"
+  },
+  "catechism/books/SIR.json": {
+   "bytes": 1277,
+   "sha256": "2ecbb86eded0bfe56825783d24446cf9f87dfb6b0a4e03d3dbb2e99d46579ffa"
+  },
+  "catechism/books/SNG.json": {
+   "bytes": 529,
+   "sha256": "9065c52c691365529cd2323ac92bf12fd6b819627299bcbeb349b41f167576e0"
+  },
+  "catechism/books/TIT.json": {
+   "bytes": 1566,
+   "sha256": "170a2681db767e19210c63ffdf22768b9f6c5ed54d9b1f1ae963738f4160d0aa"
+  },
+  "catechism/books/TOB.json": {
+   "bytes": 1592,
+   "sha256": "e8b4585b44160bf35465cd37354d378f0b24a70266232a0f61717913401c8e48"
+  },
+  "catechism/books/WIS.json": {
+   "bytes": 2470,
+   "sha256": "e507246e425124c00672de6a79c65caea4074bb3c6fac054e02a566f7cf28161"
+  },
+  "catechism/books/ZEC.json": {
+   "bytes": 843,
+   "sha256": "842faff7e802c1b634a655026493638d72c4e43dd413fd4fd8ba4659a1a72581"
+  },
+  "catechism/books/ZEP.json": {
+   "bytes": 558,
+   "sha256": "6f7dda4b5196f977463ef0fecbbce6fb25048694c1ebe076edea79fdc45a39c6"
+  },
+  "catechism/orphans.json": {
+   "bytes": 626,
+   "sha256": "ead44c4011d66f1d66fd86fd66bd8d53d377ff1c6ec1eaaf60624aeb16b4e23c"
+  },
+  "catechism/pages.json": {
+   "bytes": 23407,
+   "sha256": "3ccb5eb4b8e56452ee58bdca9d0dd0b0d251ee3660f201e3a350644022ffb7f8"
+  },
+  "catechism/paragraphs.json": {
+   "bytes": 300308,
+   "sha256": "f71310f358cdd40502a20ed91ea7b8c8f532389c8ae3f333debef014a42e585e"
   },
   "commentary/haydock/books/1CH.json": {
    "bytes": 388557,
@@ -302,280 +606,280 @@
    "sha256": "2ad454e1418bab9d0828059f6548ec483ca03ccadd260578402723c1e72642f2"
   },
   "cross-references/books/1CH.json": {
-   "bytes": 131918,
-   "sha256": "1a206f537224f568e6e64ee68488512988888eadee2f604fffc95064e2c5c67a"
+   "bytes": 133094,
+   "sha256": "464c56c52b25d3c04c829f51f53b5c3f7166bdeccde99124fdfc0bc103dbbc3f"
   },
   "cross-references/books/1CO.json": {
-   "bytes": 263993,
-   "sha256": "2d023f10dab8c6ea1f2ca9cb079f601a550cad93a68144a4799a43204b7d8cad"
+   "bytes": 265681,
+   "sha256": "bb4a3459f7398f61309cbfbdc64c4b4754a9568ef5b0c98cd45606810acf2c24"
   },
   "cross-references/books/1JN.json": {
-   "bytes": 111582,
-   "sha256": "7e51b27d010cf2573cb0d6caaf48f3773b91b6b97cbe1ec6f3be27712a694682"
+   "bytes": 112144,
+   "sha256": "2859f5b7ef99012e373ab66080730ae24e08c1dc1cb5996cfdb071de0326493f"
   },
   "cross-references/books/1KI.json": {
-   "bytes": 162522,
-   "sha256": "14583582604c564bced203473fbccfb0e7976cde7189f257681f9766bb8cfcf9"
+   "bytes": 169358,
+   "sha256": "d8bec5cbd4813eb87fc46e8ba1be1a42744aee30bdcdab371130cb027d030968"
   },
   "cross-references/books/1MA.json": {
    "bytes": 4261,
    "sha256": "11259d3ca86c6b31094dd75bedc6a55c09b8b7656c4e3e043d6b38d7e699d99f"
   },
   "cross-references/books/1PE.json": {
-   "bytes": 125134,
-   "sha256": "18fa56569922bc13bf8da5b4cf8fae10762362d89e9144761c4d143c64667688"
+   "bytes": 126365,
+   "sha256": "1c3b4ee7cdbf6d21670934ecb6a2a5718dce7065e3491d000975452002cbbdd8"
   },
   "cross-references/books/1SA.json": {
-   "bytes": 185138,
-   "sha256": "2a95d1ffc33fb5edd6f6f25693b602b25dbde04e54f25ac5228f0d960bcf44d2"
+   "bytes": 186917,
+   "sha256": "459ef48154721ed3bde791b3f7022f20f4103c6a6eeec395e7bb475aa6221fb3"
   },
   "cross-references/books/1TH.json": {
-   "bytes": 83752,
-   "sha256": "3b6e5a08e74eec12803313eafea83c7f0eea330876eb118832915710585ded23"
+   "bytes": 84108,
+   "sha256": "47e0f0c1ba7a269f5a0c85a5bc23cf504e5d7483473a6e3a7a4984e5f07f5434"
   },
   "cross-references/books/1TI.json": {
-   "bytes": 107806,
-   "sha256": "2e2f0298220a9952c684ee3cee6c27545f9345dfb665d915063c2dd970a17a20"
+   "bytes": 108455,
+   "sha256": "c1845f2d5a6770f8330d2798b72f3f04341baf2016c6c40359ddd81975a2ffef"
   },
   "cross-references/books/2CH.json": {
-   "bytes": 164371,
-   "sha256": "553ae4611362361d5e96dda8a5bcd400784120a32c38c41a4861b6d7989abdc4"
+   "bytes": 166940,
+   "sha256": "bd9ba1a75cc9fbfdbca03d6b6c7a43c7628680012fca880afdf10beceef12555"
   },
   "cross-references/books/2CO.json": {
-   "bytes": 173993,
-   "sha256": "7ae0dfc7d9cd7880a9838ebc0daf075728c05de6b6dfe0b7c295d9e1b2e52386"
+   "bytes": 174740,
+   "sha256": "4888b242fcbcdd9ef581c44d015b32bc0a59b80ba8036b04d80e785850f793a5"
   },
   "cross-references/books/2JN.json": {
-   "bytes": 8818,
-   "sha256": "b45e7f6d892a30ec3881b3f422235ae16b044f7ad0e77b737a6d897700eeff73"
+   "bytes": 8875,
+   "sha256": "aa45d9ec1c45284f7af05bb72befd7a5b70da13553c6f88b91c7faa11f756aa5"
   },
   "cross-references/books/2KI.json": {
-   "bytes": 145971,
-   "sha256": "b9884364169d062e543c54062dbf4c5cb3195493d099200a228c9362267f36dc"
+   "bytes": 148224,
+   "sha256": "8091363209769c3f49d17e5c21818160ee35e7c5fe60d067f9858ad35bd4ff25"
   },
   "cross-references/books/2MA.json": {
    "bytes": 4006,
    "sha256": "eb3044497ef538a658948c887edf5d6db4375dbb6940a15098e8921b2c34f7c3"
   },
   "cross-references/books/2PE.json": {
-   "bytes": 52289,
-   "sha256": "99c05c3e8fe86690b1d80faaec82d0d533a8b4b45bf0c51744b331f8b8a11bfc"
+   "bytes": 52785,
+   "sha256": "9cdb12a0f8dcda2ab3794443a44b08844407d8b54f41db9f83ba0db86ed5843a"
   },
   "cross-references/books/2SA.json": {
-   "bytes": 142560,
-   "sha256": "f155a0c8176a1ae483f526b8243f8ae9425558938945d1d062212b3f910ad221"
+   "bytes": 143587,
+   "sha256": "ff6397c7270d8cb790ba412e9a3d3feb77b2dbce4e9e625382613ebd6a353c60"
   },
   "cross-references/books/2TH.json": {
-   "bytes": 38497,
-   "sha256": "c8c8778507cdf1d1003dea8f0ada8c52d6ccf0bf5718ae4bfe043c03825eded5"
+   "bytes": 39139,
+   "sha256": "6323ca74ce5a1e77dac7112273d8595db6223abcbf2e2d0b13d33e5c7edaedaa"
   },
   "cross-references/books/2TI.json": {
-   "bytes": 84580,
-   "sha256": "db357031effc58c3b16815260e2b04088ed87baeb52f30c6535590afc2de3609"
+   "bytes": 85267,
+   "sha256": "45d2c35e5ea8d66a1959d1d9c2c5a7b0c1121fda25ee53851ab274055d3d24ed"
   },
   "cross-references/books/3JN.json": {
    "bytes": 8234,
-   "sha256": "041f145ae6c221f3746f7c271c29fa62737299425492c4016ce30843ac827c96"
+   "sha256": "9d75ceafe0ab5a2cb948fdc566afae5e770e84adae76cd3e2ec5dacf24122c66"
   },
   "cross-references/books/ACT.json": {
-   "bytes": 466548,
-   "sha256": "b7f3969425fb955b51028ff073bc77fad053402d9a8da59db06a8c5a3c80ab95"
+   "bytes": 472616,
+   "sha256": "9555b80d2c14751fdc9a980e41c2d7b49ac1daaeed1d8e2bb89d0d1c079c8ba5"
   },
   "cross-references/books/AMO.json": {
-   "bytes": 68834,
-   "sha256": "a8e08ae773df23bc69d4f1e57e38c907792496027af6775f832ea529800965b6"
+   "bytes": 70172,
+   "sha256": "68a03701d8ff92820bbe011ec5be010b3e1cde8ea0fa4b3c6fcbe57821184734"
   },
   "cross-references/books/BAR.json": {
    "bytes": 2431,
    "sha256": "1bb844291a370b22e706c2fd6cfc20a27312de4cea887a6e877bcb5b86965edc"
   },
   "cross-references/books/COL.json": {
-   "bytes": 109365,
-   "sha256": "1f6be05acc81ff5d7b0b4fce2951edbbb99efcd83a03d28b308290ecb1def152"
+   "bytes": 109614,
+   "sha256": "4a8e3089c69bf48e727ea01ff9d2245df22f58e483db94654b608b0cde2c9434"
   },
   "cross-references/books/DAN.json": {
-   "bytes": 21507,
-   "sha256": "3aa1328828b44a61f7ca1cc8d673ee7d36db58f21389d07725684e858b94e18e"
+   "bytes": 167424,
+   "sha256": "fb21f1270da8dc9449160f8004b2fb083170926f7b463e131dc7a1b091e816a2"
   },
   "cross-references/books/DEU.json": {
-   "bytes": 335746,
-   "sha256": "10d12a5d596e8148068d81953553a09aba94609ea39974d6c2635a9c4792c30c"
+   "bytes": 340781,
+   "sha256": "b7c6cbcfeccbd89a631addb699827d8053b08ef8200d3a0fb0664ca5f22e9350"
   },
   "cross-references/books/ECC.json": {
-   "bytes": 115279,
-   "sha256": "1505ea31209f85aee527c40f98ddc403aea324015ae1711e2fb24c6d0462edb5"
+   "bytes": 117177,
+   "sha256": "b0c70114a7c680cb34a4c6577e450e771fd44dd10b7fc65ca45c4bccd3076380"
   },
   "cross-references/books/EPH.json": {
-   "bytes": 173657,
-   "sha256": "52cc06509a49c887d697005c07b95e804db227c21b397103fa9db81784176069"
+   "bytes": 174708,
+   "sha256": "52a9d4abd8517538991ed0255ae8460fe3b18c3c5a63e4a8a570907223e17c5c"
   },
   "cross-references/books/EST.json": {
-   "bytes": 37313,
-   "sha256": "a6c9c46603fb692b0a3fc72b23d2efd787adb469597d0492bb7bea0fbfc44595"
+   "bytes": 39390,
+   "sha256": "9d4bc9d439329ab222ae88b0749aac8ef5f0fa895ed8edb0566d28901d5414f4"
   },
   "cross-references/books/EXO.json": {
-   "bytes": 336986,
-   "sha256": "e83343c5c90b58713e1e6805ad15b5a35629c58d0154aac215aa5f01781f0b77"
+   "bytes": 340139,
+   "sha256": "38a3503290816bd9becdbc85b9356185640e2d8ad29284fbf29a3650850ce6a8"
   },
   "cross-references/books/EZK.json": {
-   "bytes": 372943,
-   "sha256": "f56327877c8b7020f947e78350491c16b7828dd34b0cae6a584793845558b29d"
+   "bytes": 381813,
+   "sha256": "2d7dd2cbeabba6e7f061bdfb9a72174db4952d93b3183d33edbcbff0571ca08d"
   },
   "cross-references/books/EZR.json": {
-   "bytes": 47898,
-   "sha256": "f28c31d9982fa52a759b3d6396ce1c67d14370f180ec9441a276e772bd425210"
+   "bytes": 49419,
+   "sha256": "1736396959a8564684874e95ae957d3cb729af0c8ec65da5cdeb536677b387ca"
   },
   "cross-references/books/GAL.json": {
-   "bytes": 118991,
-   "sha256": "7f1d04f935a12df570c9a25398274b8067c89467cebd12e028eb6bb0eab44fbd"
+   "bytes": 119605,
+   "sha256": "8d5c5dfe82c237bc434967a2638a3812cfa5bddc92c78f3834542fba10d1c918"
   },
   "cross-references/books/GEN.json": {
-   "bytes": 465055,
-   "sha256": "ce722435988bdc623c8645dc30236afa7d24c1d1a09bef61856de3bd4f4cb99c"
+   "bytes": 471220,
+   "sha256": "ad84e41a8c6a87247e737ffd5d051da93e036f45bff7f52ff128e6a92bb0ffd7"
   },
   "cross-references/books/HAB.json": {
-   "bytes": 37046,
-   "sha256": "803878d630cd5e526a587518e50587e5c70a2fcd2cd3249d00bae0a1aa6a2620"
+   "bytes": 38230,
+   "sha256": "25ecc3fd6e01cd0600e23d2485d931c92b9f432ac51b3fa26708480c396fe33f"
   },
   "cross-references/books/HAG.json": {
-   "bytes": 18370,
-   "sha256": "abad356493ed8d186e73f1008ee9487ae6edd2039f30d1ff8465b5af0f355913"
+   "bytes": 18851,
+   "sha256": "dbc2667831c817a6a8d907546ba1d3818cbac7bc51c593cee80723e0e5a1b2c3"
   },
   "cross-references/books/HEB.json": {
-   "bytes": 261358,
-   "sha256": "4062a72f08194ed61f924bbf5a35cdee71ab4ce1fc90bc919bdecbed07d031a8"
+   "bytes": 263878,
+   "sha256": "297b27f2753fa5e27462e7cbcbcace02ee87554ceac233e20ab31b6ff26fc967"
   },
   "cross-references/books/HOS.json": {
-   "bytes": 98910,
-   "sha256": "49e8839fa6429c962f14e3f74614c711b510dcc89455f0ab4e23e330cf2a7917"
+   "bytes": 102398,
+   "sha256": "8a121c7eea75432b654c6ba728016f1665d5632f7b5d3c11e0258a1b52c9dd58"
   },
   "cross-references/books/ISA.json": {
-   "bytes": 764977,
-   "sha256": "799480d25fd512e0092e5a0ec2e00fe336f53a3ed61f24a46e9dac061701864d"
+   "bytes": 777554,
+   "sha256": "34199d654db7694e0edf18a9997d1786edfdbc9c269afa1baf431d7b8a4ee11f"
   },
   "cross-references/books/JAS.json": {
-   "bytes": 106580,
-   "sha256": "f91a028af660db6f5f72b6294a8e47972a3c952542f5efc08a9857ce4005db9a"
+   "bytes": 107505,
+   "sha256": "6eac6c0adf7672909cbb3785feaa3380ce53385189b2f523da9c1ebcb3b0964f"
   },
   "cross-references/books/JDG.json": {
-   "bytes": 118252,
-   "sha256": "a20db891aecdda15a39291684b9ed8196b79ba275f8a2fd141def00eac90360a"
+   "bytes": 119120,
+   "sha256": "39cad1b93310ed3d3a97afbcd99124e94d58ca0c666feff4aa2fa538400081b6"
   },
   "cross-references/books/JDT.json": {
    "bytes": 2836,
    "sha256": "a5dedb6f6b53837ad33a0610e5915967cb00de04d51ad1c38ded360908c72c7d"
   },
   "cross-references/books/JER.json": {
-   "bytes": 572243,
-   "sha256": "c5e523d76d8fc997e353ae45ce9f1aa44867af8b607b107e3d6457ab90067268"
+   "bytes": 580556,
+   "sha256": "fc22a7987734a12fcc6dfb3ea90bb72a37b66a311dfec7975a98cabc37c733c2"
   },
   "cross-references/books/JHN.json": {
-   "bytes": 533623,
-   "sha256": "91df99e94f2d8b5f1a4f1703a5ee2267a25aa48e49f30bb7cd7316803a17b9b1"
+   "bytes": 536529,
+   "sha256": "871f27aac2f3846e77007193b58d33d9fa2db6651ae030d3184a5bccb52e5a9e"
   },
   "cross-references/books/JOB.json": {
-   "bytes": 306546,
-   "sha256": "f4cf0b67993ce68eaaf46786511d797fad6bac20937331a79b682ea1599f0e9e"
+   "bytes": 311310,
+   "sha256": "3fc372ac502456e1b236ed1484ee29ab14fbaac83d04f73c16dfbb3b96b22e48"
   },
   "cross-references/books/JOL.json": {
-   "bytes": 33702,
-   "sha256": "47da81c8d120f20fb23b5b6048218520ed2de7d9c00304f330d499b87f9108c0"
+   "bytes": 45359,
+   "sha256": "ffbbf64c1c9914d962b20bc84431f064211ada701454278d4ecf6406bbbc1149"
   },
   "cross-references/books/JON.json": {
-   "bytes": 20722,
-   "sha256": "3b7a4796d4950ad63196566399a9b8d34295529c1099b7286d3e99b33d17f8a8"
+   "bytes": 21706,
+   "sha256": "bf0a08e2d2fd1f18fb7ef3176c0a303d4a903f685efbdb4e142f9dbb47c50196"
   },
   "cross-references/books/JOS.json": {
-   "bytes": 125326,
-   "sha256": "0fa8004416204b42364d480bde212a79a9aac581e9b4303766e7d79b604de73b"
+   "bytes": 126865,
+   "sha256": "a3335328f2b2e642a009051735c103a2dbe511d4f648a851222d366acb2625b5"
   },
   "cross-references/books/JUD.json": {
-   "bytes": 27778,
-   "sha256": "fac2677e6bcea0f6804080633068c8a0229ad41e34cd55c4578b044f3004d024"
+   "bytes": 28073,
+   "sha256": "1ff3fe29f9256d841f55791932007f33ca80c1bcae1600bdc070a387a579c04f"
   },
   "cross-references/books/LAM.json": {
-   "bytes": 57406,
-   "sha256": "caf12a5fdc7e75c4b1a843518db4856a5eb361991e142d89e64de10fba1fdc7d"
+   "bytes": 57699,
+   "sha256": "b7ce4bd3534eff04118e8b2ee3204429815599ba9340b3a1754f18f25f2e43f6"
   },
   "cross-references/books/LEV.json": {
-   "bytes": 179145,
-   "sha256": "41cb8f3b49fc8647fa71825ed3c4fcc8d5fde3ef211950913b7312624a62b206"
+   "bytes": 182157,
+   "sha256": "6397507e2e9513cbbf50254ed4c7806bab3259c30946cd13ca44cf0a86a99c97"
   },
   "cross-references/books/LUK.json": {
-   "bytes": 502140,
-   "sha256": "f187b5508e46419ffd6ef8d6e37cf50d4c80817760a59e5f4edb316401f40d4f"
+   "bytes": 508442,
+   "sha256": "44221938ab95c71770b152f903aa6ebd45f3ac2d658a43bd81be751e5d03496f"
   },
   "cross-references/books/MAL.json": {
-   "bytes": 45021,
-   "sha256": "6e8334327bc098cb3221b64f5c91036cb4041d0b372ec576f73679abbd3f5bf5"
+   "bytes": 54661,
+   "sha256": "9914c85a9dc58b9b167fab5183fcaf00a0832883cc116c4b9941ed45b2352176"
   },
   "cross-references/books/MAT.json": {
-   "bytes": 619032,
-   "sha256": "6d22bb8c1656653c90f37816212dc10df5ea906491f1e2921a97f0a1c47de415"
+   "bytes": 625199,
+   "sha256": "97226986bf04dd50e14b1ea801e9253527117e09762e24c2cfa96e79199a9dcd"
   },
   "cross-references/books/MIC.json": {
-   "bytes": 71488,
-   "sha256": "f30146cb3d083678f49cdccd2c81d2f7998a857fe987eca212b1620f08b584ea"
+   "bytes": 73033,
+   "sha256": "d52d99db4388fc578bac67a0b8a01b951fc21a592e7b2812449536758fc8cf44"
   },
   "cross-references/books/MRK.json": {
-   "bytes": 251837,
-   "sha256": "b3f4d698eedef9924d63e6b099ee9e524000a532c0fe8b9962fd6bffa26474d8"
+   "bytes": 254319,
+   "sha256": "6504344d9432108e6808cb54a0e017f67ecd1d5773085995376d7b7c9f2efefb"
   },
   "cross-references/books/NAM.json": {
-   "bytes": 22347,
-   "sha256": "4750469389d0b1bb40e2ce1ba02c43d96d38281a09a8af1e09ac1960e38e0b54"
+   "bytes": 23667,
+   "sha256": "5d9bb03a3fff2af1c05f8da1a7e51e4abf43363f69c70e755cb36be1ab644661"
   },
   "cross-references/books/NEH.json": {
-   "bytes": 81606,
-   "sha256": "376fe0bb6a1f408aa80bc7b89be625e4ab77ea4b95e70be543a203e8db399606"
+   "bytes": 84567,
+   "sha256": "f5b4d0ccda32469e47ce786cad9ca3a34450491dd6be2733af70a158e9d14ff9"
   },
   "cross-references/books/NUM.json": {
-   "bytes": 198969,
-   "sha256": "cc7a97025258806dc7dd3e30a5ebe2afb8185dee19168ae0c14fb392f5499921"
+   "bytes": 203809,
+   "sha256": "36f22c284166500ccf419bc4d325a50effdf95e0fdf6aada722a609b330243f6"
   },
   "cross-references/books/OBA.json": {
-   "bytes": 9924,
-   "sha256": "072d8ebf492e401d1d678d5ebcd515955b3b01f8a869ffcfda13129fd3a03ec0"
+   "bytes": 10516,
+   "sha256": "7e31e8a352f7d5256623e0e917eda64e18a83f364cf00087f9a0b5f5a41420f9"
   },
   "cross-references/books/PHM.json": {
    "bytes": 9212,
-   "sha256": "bad606a33cd29d6150e69cd6cf5df87382d7ae38eb120cf65dadae158d0a45d8"
+   "sha256": "711eb1052d4db3b8bbbea69298bec6bbad29b053593493a5d173da0e014fe4b8"
   },
   "cross-references/books/PHP.json": {
-   "bytes": 109390,
-   "sha256": "a7377cd3c85828bd1f0488212967a3da532ced7e4d20b1bde39b862f317f1ca2"
+   "bytes": 109795,
+   "sha256": "88ea420159281cce3fba1ef2939c170b9407334564bf1cc8108ea4615ee7cae9"
   },
   "cross-references/books/PRO.json": {
-   "bytes": 440527,
-   "sha256": "c83613438ccb10046d149413f378c9f3a5ff095a2cab565b9c9983163bdbe334"
+   "bytes": 444468,
+   "sha256": "e8472c15d63884e5d34a0dd401ad41b3992b24b01cd1a6dd2ea7fdaa7da2a5bb"
   },
   "cross-references/books/PSA.json": {
-   "bytes": 1427679,
-   "sha256": "4690e1d057cfbdcc14f092b5961e81c1e7fbfe148bd9e3aad4a1de9f83a0c6ce"
+   "bytes": 1442776,
+   "sha256": "b2967dac167098eab070b938ff5fbcd538d358538b66d0fbb54ba363ff0448a8"
   },
   "cross-references/books/REV.json": {
-   "bytes": 297709,
-   "sha256": "cbf219e8aa824f9a6cce43e853d1a87367a07125a358786c7a0cfb2c7add1c58"
+   "bytes": 308298,
+   "sha256": "471669fc33b95d4a9d680fd65d44a809ac5d992681435c33104d1ebbb7584575"
   },
   "cross-references/books/ROM.json": {
-   "bytes": 360627,
-   "sha256": "ab9f912fd48ce548763ea92486db9d3bb400800f8cbd435b2080fcdefbd30fb8"
+   "bytes": 361951,
+   "sha256": "92804e952d75a4d65c7c6e77dc1f2ea4e4108aa3262d4b0d97919ca03727f85d"
   },
   "cross-references/books/RUT.json": {
-   "bytes": 25901,
-   "sha256": "dd979c0d1e777839b35dfd387510cb2f7a5b1e702a38ff3e25814e8adb019b1d"
+   "bytes": 26014,
+   "sha256": "a8d718643badaa262cd16922e3926aa5a5fc74a47e6e130aad15d296f8cd3d9a"
   },
   "cross-references/books/SIR.json": {
    "bytes": 20352,
    "sha256": "c95ed27cae833ffa25745ddc149ac83c2e4284120d44727888dba602d78c6c40"
   },
   "cross-references/books/SNG.json": {
-   "bytes": 40851,
-   "sha256": "6c94a43d939a65e36647d243cf7fc38eb226650872c7d3b50e287d1450b99798"
+   "bytes": 41159,
+   "sha256": "a37c6ce0d0c7e5480440e729dc5babcb36b12114773ef0d490ca23f85cad647c"
   },
   "cross-references/books/TIT.json": {
-   "bytes": 44625,
-   "sha256": "a5cca82aa2ed33a8a92e34d8c1a73237aa6b79874b7b8bb6c0edb5078086bb38"
+   "bytes": 44737,
+   "sha256": "088c542d82496063eb85e9354e58879ef63cfe5f17b88fc0e16bd412e8093405"
   },
   "cross-references/books/TOB.json": {
    "bytes": 3088,
@@ -586,20 +890,20 @@
    "sha256": "e524615e2b23630a3c7251a017b03c06c1522409592e706ce87d9e324ca9dab9"
   },
   "cross-references/books/ZEC.json": {
-   "bytes": 123346,
-   "sha256": "5eee00bd98e140a9ed562c95c426c8c5d1357807d1913e09f69974f158f8ddc0"
+   "bytes": 128519,
+   "sha256": "6edcfc2d62f9e00aee22061faa1fa645d560f10e2bd285ceee67b1af31375447"
   },
   "cross-references/books/ZEP.json": {
-   "bytes": 38611,
-   "sha256": "729e6f27f214420001c3c3f0cfa8f7ceb4de9cfd4151de779d2bc98eb6f78b17"
+   "bytes": 39274,
+   "sha256": "db48f683250fe36047acfe910282e4c9818449990ab03e398b6bf1052bfd03d7"
   },
   "index.json": {
-   "bytes": 4278,
-   "sha256": "01f79cf60c193b58dca1183ec6141ac48e17d4d6ea54b234f6b7a4d4208ce5f2"
+   "bytes": 4581,
+   "sha256": "fdbe4e61067b2a587860000241ab646cf211c05e7b6a4f020dbb291a4d720a99"
   },
   "orphans.json": {
    "bytes": 2956,
-   "sha256": "9fb112191bcb00061d4537d96c7fcc5258dcebcc4a7b7a2633d4d038f940621a"
+   "sha256": "2c1a83de53a7a048e60f9ef87fbe67813b2ee0b17441e7c6dd0ade26b3b4364f"
   },
   "spine.json": {
    "bytes": 8891,

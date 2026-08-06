@@ -50,6 +50,14 @@ URL = f"https://cdn.jsdelivr.net/gh/{REPOSITORY}@{{version}}/data/"
 VERSIONS = ("matos-soares", "douay-rheims", "vulgata-clementina")
 COMMENTARIES = ("haydock",)
 
+# One line beside every catechism file. The basis here is thinner than for
+# anything else published and LIMITS.md carries it at length. It matches the
+# line the API serves, and a test holds the two together.
+CATECHISM_RIGHTS = (
+    "Paragraph numbers and references to vatican.va. No Catechism text, "
+    "permanently. See LIMITS.md for the basis"
+)
+
 LANGUAGES = {"pt-BR": Language.PT, "en-US": Language.EN, "la": Language.LA}
 
 # Copied through with their shape untouched. Renaming versification to spine is
@@ -179,6 +187,35 @@ def build(dest: Path) -> None:
             ),
         )
 
+    citations = load("catechism/citations.json")
+    by_book: dict[str, dict[str, Any]] = {book: {} for book in BOOKS}
+    for address, records in citations.items():
+        by_book[address.split(".")[0]][address] = records
+    for book in BOOKS:
+        write(
+            dest / "catechism" / "books" / f"{book}.json",
+            document(
+                {
+                    "rights": CATECHISM_RIGHTS,
+                    "pages": "catechism/pages.json",
+                    "book": book_block(book, spine, Language.EN),
+                },
+                "citations",
+                by_book[book],
+            ),
+        )
+    # The other direction and the page map travel whole. Both are small, both
+    # are useless split by book, and a consumer rendering a paragraph needs them
+    # together.
+    for name in ("paragraphs.json", "pages.json", "orphans.json"):
+        write(
+            dest / "catechism" / name,
+            json.dumps(
+                load(f"catechism/{name}"), ensure_ascii=False, indent=1, sort_keys=True
+            )
+            + "\n",
+        )
+
     for published, origin in VERBATIM.items():
         write(
             dest / published,
@@ -227,6 +264,13 @@ def index(dest: Path) -> str:
         "cross_references": {
             "sources": load("cross-references/references.json")["sources"],
             "books": "cross-references/books/{book}.json",
+        },
+        "catechism": {
+            "rights": CATECHISM_RIGHTS,
+            "books": "catechism/books/{book}.json",
+            "paragraphs": "catechism/paragraphs.json",
+            "pages": "catechism/pages.json",
+            "orphans": "catechism/orphans.json",
         },
         "source": corpus["source"],
     }
