@@ -70,26 +70,24 @@ def test_psalms_arrive_through_the_org_scheme(label: str, spine: str) -> None:
     assert EXPORT.resolve(label).ids == [spine]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "issue #36. The Catechism cites in english numbering and `org` is hebrew "
-        "numbering, which counts the two superscription lines of psalm 51. The "
-        "address resolves cleanly and lands two verses early, so nothing here "
-        "can catch it and only the text can. B4's apparatus has the same defect."
-    ),
-)
-def test_a_psalm_with_a_numbered_superscription_lands_two_verses_early() -> None:
-    # PSA.50.19 is "cor contritum et humiliatum", which is english Ps 51,17.
-    # PSA.50.17 is "Domine, labia mea aperies", which is english Ps 51,15.
+def test_a_psalm_with_a_numbered_superscription_lands_where_its_words_are() -> None:
+    """Issue #36, closed. This was a strict xfail while the export read `org`.
+
+    PSA.50.19 is "cor contritum et humiliatum", which is english Ps 51,17.
+    PSA.50.17 is "Domine, labia mea aperies", which is english Ps 51,15.
+    """
     assert EXPORT.resolve("Sl 51,17").ids == ["PSA.50.19"]
 
 
-def test_a_verse_past_the_end_of_its_chapter_is_an_orphan_with_a_reason() -> None:
-    # The one label in the real fixture that reaches nothing. 2 Corinthians 9
-    # has fifteen verses and the printed apparatus says 5-18.
+def test_a_range_running_past_its_chapter_keeps_what_exists_and_says_so() -> None:
+    """The one label in the real fixture whose end is wrong.
+
+    2 Corinthians 9 has fifteen verses and the printed apparatus says 5 to 18.
+    Verses 5 to 15 were cited and losing them to report the bad end would lose
+    more than it saves, so both happen.
+    """
     resolved = EXPORT.resolve("2Cor 9,5-18")
-    assert resolved.ids == []
+    assert resolved.ids == [f"2CO.9.{verse}" for verse in range(5, 16)]
     assert resolved.reason == "verse_out_of_range"
 
 
@@ -119,18 +117,42 @@ def test_the_index_runs_both_ways_over_the_same_pairs() -> None:
 
 
 def test_an_orphan_is_recorded_against_its_paragraph_and_indexed_nowhere() -> None:
-    by_verse, by_paragraph, orphans = EXPORT.index({"2122": ["2Cor 9,5-18"]})
+    by_verse, by_paragraph, orphans = EXPORT.index({"2122": ["Zzz 9,9"]})
 
     assert by_verse == {}
     assert by_paragraph == {}
     assert orphans == [
         {
             "paragraph": 2122,
-            "cited": "2Cor 9,5-18",
-            "reason": "verse_out_of_range",
+            "cited": "Zzz 9,9",
+            "reason": "unknown_book",
             "partial": False,
         }
     ]
+
+
+def test_a_range_is_walked_in_the_numbering_it_was_written_in() -> None:
+    """`Dn 3,1-30` names thirty verses and used to come back with ninety seven.
+
+    Mapping the two ends and filling the gap on spine order reads whatever sits
+    between two landings as part of the citation. This spine carries the Song of
+    the Three inside Daniel 3 and english does not, so the range swallowed all
+    of it and reported nothing wrong.
+    """
+    resolved = EXPORT.resolve("Dn 3,1-30")
+    assert len(resolved.ids) == 30
+    assert resolved.ids[0] == "DAN.3.1"
+
+
+def test_a_verse_named_twice_is_published_once() -> None:
+    """`Mt 5,3-5.4` overlaps itself, and a duplicate inflates the pair count."""
+    assert EXPORT.resolve("Mt 5,3-5.4").ids == ["MAT.5.3", "MAT.5.4", "MAT.5.5"]
+
+
+def test_the_english_scheme_recovers_what_org_could_not_reach() -> None:
+    """Both were orphans while the export read `org`, so the citation was lost."""
+    assert EXPORT.resolve("Jl 2,28-32").ids == [f"JOL.3.{v}" for v in range(1, 6)]
+    assert EXPORT.resolve("Ml 4,1-6").ids == [f"MAL.3.{v}" for v in range(19, 25)]
 
 
 def test_a_half_resolvable_citation_keeps_the_part_that_landed() -> None:

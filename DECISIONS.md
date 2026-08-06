@@ -239,7 +239,7 @@ They are not symmetric, because the remap table is not a bijection.
 Run backwards naively, the table produces addresses that look right and are not.
 The spine holds `PSA.115.1`, reading it back gives `org` 115:1, and `org` 115:1
 is a different psalm coming from `PSA 113:9`. Sixty two addresses behaved that
-way across the three schemes.
+way across the four schemes.
 
 So the reverse direction computes its candidate and then maps it forward again,
 and it only returns the candidate if it lands where it started. Anything else is

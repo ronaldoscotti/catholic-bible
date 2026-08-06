@@ -8,8 +8,9 @@ The source fixture runs from paragraph to verse. Both directions are published,
 because the original is what somebody rendering a paragraph needs and it is
 already in hand before the inversion runs.
 
-Citations arrive in modern numbering rather than the spine's, so they map through
-`org`. Reading them against the spine directly loses twenty Psalms silently.
+Citations arrive in english numbering rather than the spine's, so they map
+through `Scheme.ENGLISH`. Reading them against the spine directly loses twenty
+Psalms, and reading them as `org` puts them on the wrong verse without saying so.
 
 Usage:
     scripts/export-catechism.py --source ~/path/to/private/repo
@@ -37,7 +38,7 @@ from catholic_bible.canon.mapping import (  # noqa: E402
     map_address,
 )
 from catholic_bible.canon.reference import Reference, parse_reference  # noqa: E402
-from catholic_bible.canon.spine import SPINE  # noqa: E402
+from catholic_bible.canon.schemes import ENGLISH  # noqa: E402
 
 DEST = (
     Path(__file__).resolve().parent.parent
@@ -60,9 +61,57 @@ UPSTREAM = {
     ),
 }
 
-# The citations count Psalms the modern way. The spine counts them the Vulgate
-# way. Nothing else in the fixture needs a scheme and this one does.
-SCHEME = Scheme.ORG
+# The Catechism cites in english numbering. Not `org`, which is anchored on the
+# Masoretic text and numbers a psalm superscription as verses. Reading one as the
+# other resolves cleanly and lands one or two verses early, which is issue #36.
+SCHEME = Scheme.ENGLISH
+
+
+# A citation nobody wrote. Past this the range is a defect rather than a long
+# reading, and walking it would cost more than reporting it.
+LONGEST = 400
+
+
+def walk(
+    book: str, span: tuple[tuple[int, int], tuple[int, int]]
+) -> tuple[list[tuple[int, int]], str | None]:
+    """Every address a written span names, in the numbering it was written in.
+
+    Walking the source rather than the spine. Mapping the two endpoints and
+    filling the gap on spine order reads whatever sits between two landings as
+    part of the citation, so `Dn 3,1-30` came back as 97 addresses because the
+    spine carries the Song of the Three inside that chapter and english does
+    not. It also hid an inverted result behind a swap, turning a 67 verse
+    citation into two addresses.
+
+    Returns what it walked and a reason when the span is not what was written.
+    A range whose last verse english does not have still yields the verses it
+    does have, and says so, because `2Cor 9,5-18` against a chapter of fifteen
+    is a real citation with a bad end rather than nothing at all.
+    """
+    (first_chapter, first_verse), (last_chapter, last_verse) = span
+    if (last_chapter, last_verse) < (first_chapter, first_verse):
+        return [], "inverted_range"
+
+    ceiling = ENGLISH.verse_count(book, last_chapter)
+    overshoots = ceiling is not None and last_verse > ceiling
+
+    written: list[tuple[int, int]] = []
+    chapter, verse = first_chapter, first_verse
+    while (chapter, verse) <= (last_chapter, last_verse):
+        written.append((chapter, verse))
+        if len(written) > LONGEST:
+            return written, "range_too_long"
+        count = ENGLISH.verse_count(book, chapter)
+        if count is None:
+            # Unknown chapter. The single address still resolves or orphans on
+            # its own, and guessing a length here would invent addresses.
+            return written, None if chapter == last_chapter else "unknown_chapter"
+        if verse >= count:
+            chapter, verse = chapter + 1, 1
+        else:
+            verse += 1
+    return written, "verse_out_of_range" if overshoots else None
 
 
 @dataclass(frozen=True, slots=True)
@@ -85,29 +134,22 @@ def resolve(label: str) -> Resolved:
 
     ids: list[str] = []
     reason: str | None = None
-    for (start_chapter, start_verse), (end_chapter, end_verse) in reference.spans():
-        start = map_address(SCHEME, reference.book, start_chapter, start_verse)
-        end = map_address(SCHEME, reference.book, end_chapter, end_verse)
+    for span in reference.spans():
+        written, complaint = walk(reference.book, span)
+        reason = reason or complaint
         # A disjoint citation keeps the parts that landed. `Mt 5,3-12.99` is a
         # real verse span beside a bad one, and discarding both loses a citation
         # the Catechism actually made.
-        if not isinstance(start, Mapped):
-            reason = reason or str(start.reason)
-            continue
-        if not isinstance(end, Mapped):
-            reason = reason or str(end.reason)
-            continue
-
-        first, last = SPINE.order_of(start.verse), SPINE.order_of(end.verse)
-        if first is None or last is None:
-            reason = reason or "no_counterpart"
-            continue
-        if last < first:
-            first, last = last, first
-        for order in range(first, last + 1):
-            address = SPINE.at_order(order)
-            if address is not None:
-                ids.append(str(address))
+        for chapter, verse in written:
+            landed = map_address(SCHEME, reference.book, chapter, verse)
+            if not isinstance(landed, Mapped):
+                reason = reason or str(landed.reason)
+                continue
+            address = str(landed.verse)
+            # A citation may name the same verse twice, `Mt 5,3-5.4`. Publishing
+            # it twice inflates the pair count and says nothing extra.
+            if address not in ids:
+                ids.append(address)
     if not ids:
         # Never None. A reason of None buckets under the string "None" in the
         # orphan report and reads as a category rather than a hole.
@@ -235,7 +277,21 @@ def main() -> int:
         },
         "carries_no_text": True,
     }
-    (dest / "PROVENANCE.json").write_text(render(provenance), encoding="utf-8")
+    # Merged, not written. `build-catechism-pages.py` records the page map in
+    # this same file and runs at a different time, so whichever goes second must
+    # not erase the other. Clobbering here took the map's only checksum with it
+    # and broke the test that checks it.
+    record = dest / "PROVENANCE.json"
+    held: dict[str, Any] = {}
+    if record.is_file():
+        held = json.loads(record.read_text(encoding="utf-8"))
+    files = held.setdefault("files", {})
+    assert isinstance(files, dict)
+    written = provenance.pop("files")
+    assert isinstance(written, dict)
+    files.update(written)
+    held.update(provenance)
+    record.write_text(render(held), encoding="utf-8")
 
     print(f"{len(by_paragraph)} paragraphs cite {len(by_verse)} verses, {pairs} pairs")
     print(f"{len(orphans)} orphans: {dict(sorted(by_reason.items()))}")

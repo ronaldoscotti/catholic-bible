@@ -273,3 +273,18 @@ def test_an_answer_that_depends_on_the_default_version_is_not_immutable(
         ).headers["cache-control"]
         == IMMUTABLE
     )
+
+
+def test_every_mapping_scheme_is_reachable_over_http() -> None:
+    """`InputScheme` duplicates `Scheme` and the two diverged once already.
+
+    When `english` was added for issue #36 the HTTP layer kept four members, so
+    the numbering most English references are written in had no query value at
+    all and the README's own example returned the wrong verse.
+    """
+    from catholic_bible.api.resolving import InputScheme  # noqa: PLC0415
+    from catholic_bible.canon.mapping import Scheme  # noqa: PLC0415
+
+    assert {str(member) for member in InputScheme} == {
+        str(member) for member in Scheme
+    } | {"spine"}

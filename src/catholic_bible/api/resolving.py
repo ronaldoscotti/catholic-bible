@@ -32,12 +32,19 @@ MAX_SPAN = 500
 
 
 class InputScheme(StrEnum):
-    """Which numbering the caller wrote the reference in."""
+    """Which numbering the caller wrote the reference in.
+
+    One member per `Scheme` plus `spine`. A test holds the two in step, because
+    this duplicated `Scheme` silently and the two diverged the moment `english`
+    was added, leaving the numbering most English references are written in
+    unreachable over HTTP.
+    """
 
     SPINE = "spine"
     VULGATE = "vulgate"
     ORG = "org"
     DOUAY = "douay"
+    ENGLISH = "english"
 
 
 SCHEME_CODE = re.compile(r"^[A-Z0-9]{3}$")

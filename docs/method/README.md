@@ -37,15 +37,16 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
 [x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5 B8 B9 B10 B11
 [x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8 B9 B10 B11
-[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 B9 B10 merged, B11 blocked, 796 tests
+[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 B9 B10 merged, B11 open, 830 tests
 [x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8 B9 B10
 [x] 7  Code review      docs/reviews/, B0 to B10, one author on B10
 [x] 8  PR               B0 to B10 merged. v1.0.0 and v1.0.1 released
 ```
 
-**B11 is the first epic to stop rather than ship.** One of eight criteria is met
-and the other seven stay unticked, because the resolution it was built on sends
-psalm citations to the wrong verse.
+**B11 stopped rather than ship, and what stopped it is fixed.** One of eight
+criteria is met and the other seven stay unticked, because the dataset is not
+exported yet. What blocked it was that the resolution sent psalm citations to the
+wrong verse.
 
 `Scheme.ORG` is hebrew numbering and counts a psalm superscription as verses. The
 Catechism cites in english numbering, which does not. An english address is a
@@ -60,10 +61,13 @@ some psalms is not a table that ignores verses. `org` psalm 51 runs 0 to 21,
 which is 19 english verses plus two superscription lines, and OpenBible uses 1 to
 19. The two disagree by exactly the title.
 
-**It is a defect in shipped B4 data, not in this branch.** `PSA.50.10` is
-published against `EZK.36.25` today. The english reference is Ps 51,10, which is
-`PSA.50.12`. It is issue `#36`, it is pinned as a strict xfail so it reports the
-day it is fixed, and the epic waits.
+**It was a defect in shipped B4 data, not in this branch.** `PSA.50.10` was
+published against `EZK.36.25`. The english reference is Ps 51,10, which is
+`PSA.50.12`. Issue `#36` carries it, and closing it added a fourth scheme,
+corrected the apparatus by 15672 addresses and moved the dataset to `2.0.0`.
+The apparatus grew, because reading english as `org` had been dropping
+references rather than only misplacing them, and Daniel left the orphan report
+entirely.
 
 **The page map shipped wrong, and the check it was trusted to have does not
 cover the thing it shipped wrong.** The walk read footnote markers and the

@@ -787,12 +787,13 @@
         "type": "object"
       },
       "InputScheme": {
-        "description": "Which numbering the caller wrote the reference in.",
+        "description": "Which numbering the caller wrote the reference in.\n\nOne member per `Scheme` plus `spine`. A test holds the two in step, because\nthis duplicated `Scheme` silently and the two diverged the moment `english`\nwas added, leaving the numbering most English references are written in\nunreachable over HTTP.",
         "enum": [
           "spine",
           "vulgate",
           "org",
-          "douay"
+          "douay",
+          "english"
         ],
         "title": "InputScheme",
         "type": "string"

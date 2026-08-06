@@ -266,7 +266,29 @@ class EnglishScheme:
         mapped = table.get("mappedVerses", {})
         assert isinstance(mapped, dict)
         self._to_org = _pair_up(mapped)
-        self._from_org = {target: origin for origin, target in self._to_org.items()}
+        # First origin wins rather than last. Two english addresses can name one
+        # `org` address, and a dict comprehension keeps whichever came last in
+        # file order, which is arbitrary and silent. Only `ESG 5:2` and
+        # `DAG 3:52` collide today and this spine carries neither book.
+        self._from_org: dict[str, str] = {}
+        for origin, target in self._to_org.items():
+            self._from_org.setdefault(target, origin)
+        counts = table.get("maxVerses", {})
+        assert isinstance(counts, dict)
+        self._counts = counts
+
+    def verse_count(self, book: str, chapter: int) -> int | None:
+        """How many verses english numbers in one chapter.
+
+        Needed to walk a range in the source numbering. Expanding a range on
+        spine order instead reads the gap between two landings as the citation,
+        and where the spine carries verses english does not, the range swallows
+        them. `Dn 3,1-30` came out as 97 addresses that way.
+        """
+        counts = self._counts.get(book)
+        if not isinstance(counts, list) or not 1 <= chapter <= len(counts):
+            return None
+        return int(counts[chapter - 1])
 
     def to_spine(self, book: str, chapter: int, verse: int) -> Address:
         target = self._to_org.get(f"{book} {chapter}:{verse}")

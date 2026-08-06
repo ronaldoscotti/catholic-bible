@@ -315,13 +315,20 @@ def main() -> int:
             print(f"missing: {PAGES.name}", file=sys.stderr)
             return 1
         record: dict[str, Any] = json.loads(PAGES.read_text(encoding="utf-8"))
-        if PROVENANCE.is_file():
-            held = json.loads(PROVENANCE.read_text(encoding="utf-8"))
-            recorded = held.get("files", {}).get("pages.json", {}).get("sha256")
-            actual = hashlib.sha256(PAGES.read_bytes()).hexdigest()
-            if recorded and recorded != actual:
-                print("pages.json does not match its checksum", file=sys.stderr)
-                return 1
+        # A missing record fails. Treating it as a pass means the only integrity
+        # guard on the map disappears the moment something overwrites the file,
+        # and `--check` goes on printing ok.
+        if not PROVENANCE.is_file():
+            print("missing: PROVENANCE.json", file=sys.stderr)
+            return 1
+        held = json.loads(PROVENANCE.read_text(encoding="utf-8"))
+        recorded = held.get("files", {}).get("pages.json", {}).get("sha256")
+        if not recorded:
+            print("PROVENANCE.json records no checksum for pages.json", file=sys.stderr)
+            return 1
+        if recorded != hashlib.sha256(PAGES.read_bytes()).hexdigest():
+            print("pages.json does not match its checksum", file=sys.stderr)
+            return 1
         for name, edition in record["editions"].items():
             firsts = [int(page["first"]) for page in edition["pages"]]
             if not firsts:

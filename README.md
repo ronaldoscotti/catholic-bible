@@ -231,8 +231,10 @@ A book is named by its USX code or by any name that resolves, in Portuguese,
 English or Latin. `Jo` is John and `Jó` is Job, and the accent is never folded.
 
 **Say which numbering you wrote a reference in.** `Sl 51,1` means the spine's
-Psalm 51 by default and `?scheme=org` makes it the Miserere, which the spine
-numbers 50. Both answers are correct and only one of them is yours.
+Psalm 51 by default. `?scheme=english` makes it the Miserere, which the spine
+numbers 50 and opens at verse 3, because the Vulgate numbers the two lines of
+the psalm's heading and English does not. `?scheme=org` counts those lines, so
+it lands on the heading itself. Every answer is correct and only one is yours.
 
 Names, abbreviations and notation follow the language of the version being read,
 so the same verse comes back as `Eclo 24,1`, `Ecclus. 24:1` and `Eccli. 24,1`.
