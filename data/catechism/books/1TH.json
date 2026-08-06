@@ -1,0 +1,19 @@
+{"book":{"abbreviation": "1 Thess.", "chapters": 5, "code": "1TH", "deuterocanonical": false, "group": "EPISTLES", "name": "1 Thessalonians", "testament": "NEW"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"1TH.2.13":[{"cited": "1Ts 2,13", "paragraph": 1349}],
+"1TH.4.11":[{"cited": "1Ts 4,11", "paragraph": 2427}],
+"1TH.4.14":[{"cited": "1Ts 4,14", "paragraph": 649}],
+"1TH.4.17":[{"cited": "1Ts 4,17", "paragraph": 1025}],
+"1TH.4.18":[{"cited": "1Ts 4,18", "paragraph": 1687}],
+"1TH.4.7":[{"cited": "1Ts 4,7", "paragraph": 2518}, {"cited": "1Ts 4,7", "paragraph": 2813}],
+"1TH.5.12":[{"cited": "1Ts 5,12", "paragraph": 801}, {"cited": "1Ts 5,12-13", "paragraph": 1269}],
+"1TH.5.13":[{"cited": "1Ts 5,12-13", "paragraph": 1269}],
+"1TH.5.17":[{"cited": "1Ts 5,17", "paragraph": 1174}, {"cited": "1Ts 5,17-18", "paragraph": 2633}, {"cited": "1Ts 5,17", "paragraph": 2742}, {"cited": "1Ts 5,17", "paragraph": 2757}],
+"1TH.5.18":[{"cited": "1Ts 5,17-18", "paragraph": 2633}, {"cited": "1Ts 5,18", "paragraph": 2638}, {"cited": "1Ts 5,18", "paragraph": 2648}],
+"1TH.5.19":[{"cited": "1Ts 5,19", "paragraph": 696}],
+"1TH.5.2":[{"cited": "1Ts 5,2-3", "paragraph": 675}],
+"1TH.5.25":[{"cited": "1Ts 5,25", "paragraph": 2636}],
+"1TH.5.3":[{"cited": "1Ts 5,2-3", "paragraph": 675}],
+"1TH.5.5":[{"cited": "1Ts 5,5", "paragraph": 1216}],
+"1TH.5.6":[{"cited": "1Ts 5,6", "paragraph": 2849}],
+"1TH.5.8":[{"cited": "1Ts 5,8", "paragraph": 1820}]
+}}

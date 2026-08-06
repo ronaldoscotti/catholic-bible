@@ -37,16 +37,30 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 2  Brainstorm       ran, one question at a time, ending in the roadmap
 [x] 3  Spec             docs/specs/, B1 B2 B3 B4 B5 B8 B9 B10 B11
 [x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8 B9 B10 B11
-[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 B9 B10 merged, B11 open, 830 tests
-[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8 B9 B10
+[x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 B9 B10 merged, B11 open, 866 tests
+[x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8 B9 B10 B11
 [x] 7  Code review      docs/reviews/, B0 to B10, one author on B10
 [x] 8  PR               B0 to B10 merged. v1.0.0 and v1.0.1 released
 ```
 
-**B11 stopped rather than ship, and what stopped it is fixed.** One of eight
-criteria is met and the other seven stay unticked, because the dataset is not
-exported yet. What blocked it was that the resolution sent psalm citations to the
-wrong verse.
+**B11 stopped rather than ship, and what stopped it is fixed.** Seven of eight
+criteria are met now. What blocked it was that the resolution sent psalm
+citations to the wrong verse, and clearing that took a fourth numbering scheme
+and a correction to 15672 addresses in already published data.
+
+**The eighth criterion stays open, and the attempt to close it produced a wrong
+number first.** A matcher was written to compare each published citation against
+the footnote `vatican.va` prints. It reported a 51.2% error rate over 45
+citations and every disagreement was its own. It resolved the Catechism's English
+abbreviations through this repository's alias table, which is Portuguese first,
+so `Lk` resolved to nothing and `Jn` resolved to Jonah.
+
+Fifteen paragraphs were read by eye instead. Ten had readable footnotes, 34
+published citations were examined and none was wrong. What turned up instead was
+omission, references the printed footnotes carry that the upstream transcription
+dropped. `docs/qa/B11-catechism-cross-references.md` carries both, and the box
+stays empty because there is no printed Catechism here and the criterion asks for
+one.
 
 `Scheme.ORG` is hebrew numbering and counts a psalm superscription as verses. The
 Catechism cites in english numbering, which does not. An english address is a

@@ -174,6 +174,160 @@
         "title": "BookWhole",
         "type": "object"
       },
+      "CatechismLink": {
+        "description": "Where to read a paragraph. A page, never the paragraph's words.",
+        "properties": {
+          "language": {
+            "examples": [
+              "en"
+            ],
+            "title": "Language",
+            "type": "string"
+          },
+          "text_fragment": {
+            "description": "The same page with a text fragment appended. Browsers that support it scroll to the paragraph number. Best effort, no server promises it",
+            "title": "Text Fragment",
+            "type": "string"
+          },
+          "url": {
+            "description": "The page holding the paragraph on vatican.va",
+            "examples": [
+              "https://www.vatican.va/archive/ENG0015/__P3I.HTM"
+            ],
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "language",
+          "url",
+          "text_fragment"
+        ],
+        "title": "CatechismLink",
+        "type": "object"
+      },
+      "CatechismOut": {
+        "properties": {
+          "ids": {
+            "examples": [
+              [
+                "MAT.28.19"
+              ]
+            ],
+            "items": {
+              "type": "string"
+            },
+            "title": "Ids",
+            "type": "array"
+          },
+          "paragraphs": {
+            "items": {
+              "$ref": "#/components/schemas/CatechismParagraph"
+            },
+            "title": "Paragraphs",
+            "type": "array"
+          },
+          "reference": {
+            "examples": [
+              "Mt 28,19"
+            ],
+            "title": "Reference",
+            "type": "string"
+          },
+          "rights": {
+            "description": "Why this index may be published, in one line",
+            "examples": [
+              "Paragraph numbers and references. No Catechism text"
+            ],
+            "title": "Rights",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reference",
+          "ids",
+          "rights",
+          "paragraphs"
+        ],
+        "title": "CatechismOut",
+        "type": "object"
+      },
+      "CatechismParagraph": {
+        "description": "A paragraph that cites the verse asked about.\n\nCarries its number, the citation as the Catechism wrote it, and where to\nread it. No text, no title, no first line and no summary, permanently.",
+        "properties": {
+          "cited": {
+            "description": "The citation as the Catechism wrote it",
+            "examples": [
+              "Mt 28,19-20"
+            ],
+            "title": "Cited",
+            "type": "string"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/CatechismLink"
+            },
+            "title": "Links",
+            "type": "array"
+          },
+          "paragraph": {
+            "examples": [
+              1223
+            ],
+            "maximum": 2865.0,
+            "minimum": 1.0,
+            "title": "Paragraph",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "paragraph",
+          "cited",
+          "links"
+        ],
+        "title": "CatechismParagraph",
+        "type": "object"
+      },
+      "CatechismParagraphOut": {
+        "description": "The other direction. What one paragraph cites.",
+        "properties": {
+          "cites": {
+            "items": {
+              "$ref": "#/components/schemas/CitedVerse"
+            },
+            "title": "Cites",
+            "type": "array"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/CatechismLink"
+            },
+            "title": "Links",
+            "type": "array"
+          },
+          "paragraph": {
+            "examples": [
+              1223
+            ],
+            "maximum": 2865.0,
+            "minimum": 1.0,
+            "title": "Paragraph",
+            "type": "integer"
+          },
+          "rights": {
+            "title": "Rights",
+            "type": "string"
+          }
+        },
+        "required": [
+          "paragraph",
+          "links",
+          "rights",
+          "cites"
+        ],
+        "title": "CatechismParagraphOut",
+        "type": "object"
+      },
       "ChapterOfBook": {
         "properties": {
           "chapter": {
@@ -267,6 +421,36 @@
           "verses"
         ],
         "title": "ChapterOut",
+        "type": "object"
+      },
+      "CitedVerse": {
+        "properties": {
+          "cited": {
+            "examples": [
+              "Mt 28,19-20"
+            ],
+            "title": "Cited",
+            "type": "string"
+          },
+          "ids": {
+            "examples": [
+              [
+                "MAT.28.19",
+                "MAT.28.20"
+              ]
+            ],
+            "items": {
+              "type": "string"
+            },
+            "title": "Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "cited",
+          "ids"
+        ],
+        "title": "CitedVerse",
         "type": "object"
       },
       "CommentaryEntry": {
@@ -1282,6 +1466,87 @@
         "summary": "Whether the service can answer"
       }
     },
+    "/v1/books/{book}/chapters/{chapter}/verses/{verse}/catechism": {
+      "get": {
+        "operationId": "read_catechism_v1_books__book__chapters__chapter__verses__verse__catechism_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "book",
+            "required": true,
+            "schema": {
+              "title": "Book",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "chapter",
+            "required": true,
+            "schema": {
+              "maximum": 9223372036854775807,
+              "minimum": -9223372036854775808,
+              "title": "Chapter",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "path",
+            "name": "verse",
+            "required": true,
+            "schema": {
+              "maximum": 9223372036854775807,
+              "minimum": -9223372036854775808,
+              "title": "Verse",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatechismOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "No such resource"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The reference cannot be resolved"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too many requests from this address"
+          }
+        },
+        "summary": "The Catechism paragraphs that cite one verse"
+      }
+    },
     "/v1/books/{book}/chapters/{chapter}/verses/{verse}/commentary": {
       "get": {
         "description": "Version agnostic, so no version segment.\n\nA note on John 3:16 is the same note whichever translation is on screen, and\na version in the path would be a claim about what the answer depends on.",
@@ -1443,6 +1708,118 @@
           }
         },
         "summary": "The passages one verse points at"
+      }
+    },
+    "/v1/catechism": {
+      "get": {
+        "operationId": "catechism_for_v1_catechism_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ref",
+            "required": true,
+            "schema": {
+              "title": "Ref",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scheme",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/InputScheme",
+              "default": "spine"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatechismOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The reference cannot be resolved"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too many requests from this address"
+          }
+        },
+        "summary": "The Catechism paragraphs a written reference points at"
+      }
+    },
+    "/v1/catechism/paragraphs/{number}": {
+      "get": {
+        "operationId": "read_catechism_paragraph_v1_catechism_paragraphs__number__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "number",
+            "required": true,
+            "schema": {
+              "examples": [
+                1223
+              ],
+              "maximum": 2865,
+              "minimum": 1,
+              "title": "Number",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatechismParagraphOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The reference cannot be resolved"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too many requests from this address"
+          }
+        },
+        "summary": "The verses one Catechism paragraph cites"
       }
     },
     "/v1/commentary": {

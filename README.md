@@ -204,7 +204,7 @@ unrelated project that got there first.
 
 ## Reading it
 
-Thirteen routes, all `GET`, all under `/v1`.
+Sixteen routes, all `GET`, all under `/v1`.
 
 ```
 GET /v1/versions
@@ -214,10 +214,13 @@ GET /v1/versions/{version}/books/{book}/chapters/{chapter}
 GET /v1/versions/{version}/books/{book}/chapters/{chapter}/verses/{verse}
 GET /v1/books/{book}/chapters/{chapter}/verses/{verse}/commentary
 GET /v1/books/{book}/chapters/{chapter}/verses/{verse}/cross-references
+GET /v1/books/{book}/chapters/{chapter}/verses/{verse}/catechism
 GET /v1/passage?ref=&versions=&scheme=
 GET /v1/resolve?ref=&scheme=
 GET /v1/commentary?ref=&scheme=
 GET /v1/cross-references?ref=&scheme=
+GET /v1/catechism?ref=&scheme=
+GET /v1/catechism/paragraphs/{number}
 GET /v1/search?q=&version=&book=&testament=&offset=&limit=
 GET /v1/search/commentary?q=&source=&language=&book=&offset=&limit=
 ```
@@ -226,6 +229,22 @@ Commentary and cross-references take no version, because a note on John 3:16 is
 the same note whichever translation is on screen. Both languages of a note come
 back together and the rights block on each source says which one a machine
 produced.
+
+**The Catechism routes answer by reference and never with text.** Ask a verse
+which paragraphs cite it, ask a paragraph which verses it cites, and follow the
+link to read the words on `vatican.va`. Not one word of the Catechism ships
+here, permanently, and that includes a title, a first line, a summary and a
+breadcrumb naming where a paragraph sits. `LIMITS.md` states the basis and
+states that it is thinner than the basis for everything else here.
+
+```sh
+curl -s localhost:8000/v1/books/MAT/chapters/28/verses/19/catechism
+```
+
+Seventeen paragraphs cite Matthew 28,19, which is more than cite any other
+verse. Each comes back with the citation as the Catechism wrote it and a link
+to both published editions. The English edition is the one worth following, at
+around eight paragraphs a page against a hundred in Portuguese.
 
 A book is named by its USX code or by any name that resolves, in Portuguese,
 English or Latin. `Jo` is John and `Jó` is Job, and the accent is never folded.

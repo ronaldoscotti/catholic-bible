@@ -1,0 +1,5 @@
+{"book":{"abbreviation": "Cant.", "chapters": 8, "code": "SNG", "deuterocanonical": false, "group": "WISDOM", "name": "Canticle of Canticles", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"SNG.1.7":[{"cited": "Ct 1,7", "paragraph": 2709}],
+"SNG.8.6":[{"cited": "Ct 8,6", "paragraph": 1040}, {"cited": "Ct 8,6-7", "paragraph": 1611}],
+"SNG.8.7":[{"cited": "Ct 8,6-7", "paragraph": 1611}]
+}}

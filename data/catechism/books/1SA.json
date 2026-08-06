@@ -1,0 +1,17 @@
+{"book":{"abbreviation": "1 Kgs.", "chapters": 31, "code": "1SA", "deuterocanonical": false, "group": "HISTORICAL", "name": "1 Kings", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"1SA.1.10":[{"cited": "1Sm 1,9-18", "paragraph": 2578}],
+"1SA.1.11":[{"cited": "1Sm 1,9-18", "paragraph": 2578}],
+"1SA.1.12":[{"cited": "1Sm 1,9-18", "paragraph": 2578}],
+"1SA.1.13":[{"cited": "1Sm 1,9-18", "paragraph": 2578}],
+"1SA.1.14":[{"cited": "1Sm 1,9-18", "paragraph": 2578}],
+"1SA.1.15":[{"cited": "1Sm 1,9-18", "paragraph": 2578}],
+"1SA.1.16":[{"cited": "1Sm 1,9-18", "paragraph": 2578}],
+"1SA.1.17":[{"cited": "1Sm 1,9-18", "paragraph": 2578}],
+"1SA.1.18":[{"cited": "1Sm 1,9-18", "paragraph": 2578}],
+"1SA.1.9":[{"cited": "1Sm 1,9-18", "paragraph": 2578}],
+"1SA.12.23":[{"cited": "1Sm 12,23", "paragraph": 2578}],
+"1SA.16.13":[{"cited": "1Sm 16,13", "paragraph": 695}],
+"1SA.28.19":[{"cited": "1Sm 28,19", "paragraph": 633}],
+"1SA.3.10":[{"cited": "1Sm 3,9-10", "paragraph": 2578}],
+"1SA.3.9":[{"cited": "1Sm 3,9-10", "paragraph": 2578}]
+}}

@@ -1,0 +1,12 @@
+{"book":{"abbreviation": "1 Esd.", "chapters": 10, "code": "EZR", "deuterocanonical": false, "group": "HISTORICAL", "name": "1 Esdras", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"EZR.9.10":[{"cited": "Esd 9,6-15", "paragraph": 2585}],
+"EZR.9.11":[{"cited": "Esd 9,6-15", "paragraph": 2585}],
+"EZR.9.12":[{"cited": "Esd 9,6-15", "paragraph": 2585}],
+"EZR.9.13":[{"cited": "Esd 9,6-15", "paragraph": 2585}],
+"EZR.9.14":[{"cited": "Esd 9,6-15", "paragraph": 2585}],
+"EZR.9.15":[{"cited": "Esd 9,6-15", "paragraph": 2585}],
+"EZR.9.6":[{"cited": "Esd 9,6-15", "paragraph": 2585}],
+"EZR.9.7":[{"cited": "Esd 9,6-15", "paragraph": 2585}],
+"EZR.9.8":[{"cited": "Esd 9,6-15", "paragraph": 2585}],
+"EZR.9.9":[{"cited": "Esd 9,6-15", "paragraph": 2585}]
+}}

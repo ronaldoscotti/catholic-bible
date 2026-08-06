@@ -1,0 +1,22 @@
+{"book":{"abbreviation": "2 Thess.", "chapters": 3, "code": "2TH", "deuterocanonical": false, "group": "EPISTLES", "name": "2 Thessalonians", "testament": "NEW"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"2TH.1.10":[{"cited": "2Ts 1,10", "paragraph": 1041}],
+"2TH.1.11":[{"cited": "2Ts 1,11", "paragraph": 2636}],
+"2TH.2.10":[{"cited": "2Ts 2,3-12", "paragraph": 673}, {"cited": "2Ts 2,4-12", "paragraph": 675}],
+"2TH.2.11":[{"cited": "2Ts 2,3-12", "paragraph": 673}, {"cited": "2Ts 2,4-12", "paragraph": 675}],
+"2TH.2.12":[{"cited": "2Ts 2,3-12", "paragraph": 673}, {"cited": "2Ts 2,4-12", "paragraph": 675}],
+"2TH.2.3":[{"cited": "2Ts 2,3-12", "paragraph": 673}],
+"2TH.2.4":[{"cited": "2Ts 2,3-12", "paragraph": 673}, {"cited": "2Ts 2,4-12", "paragraph": 675}],
+"2TH.2.5":[{"cited": "2Ts 2,3-12", "paragraph": 673}, {"cited": "2Ts 2,4-12", "paragraph": 675}],
+"2TH.2.6":[{"cited": "2Ts 2,3-12", "paragraph": 673}, {"cited": "2Ts 2,4-12", "paragraph": 675}],
+"2TH.2.7":[{"cited": "2Ts 2,7", "paragraph": 671}, {"cited": "2Ts 2,3-12", "paragraph": 673}, {"cited": "2Ts 2,4-12", "paragraph": 675}],
+"2TH.2.8":[{"cited": "2Ts 2,3-12", "paragraph": 673}, {"cited": "2Ts 2,4-12", "paragraph": 675}],
+"2TH.2.9":[{"cited": "2Ts 2,3-12", "paragraph": 673}, {"cited": "2Ts 2,4-12", "paragraph": 675}],
+"2TH.3.10":[{"cited": "2Ts 3,10", "paragraph": 2427}, {"cited": "2Ts 3,6-13", "paragraph": 2830}],
+"2TH.3.11":[{"cited": "2Ts 3,6-13", "paragraph": 2830}],
+"2TH.3.12":[{"cited": "2Ts 3,6-13", "paragraph": 2830}],
+"2TH.3.13":[{"cited": "2Ts 3,6-13", "paragraph": 2830}],
+"2TH.3.6":[{"cited": "2Ts 3,6-13", "paragraph": 2830}],
+"2TH.3.7":[{"cited": "2Ts 3,6-13", "paragraph": 2830}],
+"2TH.3.8":[{"cited": "2Ts 3,6-13", "paragraph": 2830}],
+"2TH.3.9":[{"cited": "2Ts 3,6-13", "paragraph": 2830}]
+}}

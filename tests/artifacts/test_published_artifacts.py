@@ -242,11 +242,42 @@ def test_the_index_advertises_nothing_that_is_missing() -> None:
 def test_no_artifact_carries_catechism_text() -> None:
     """B11 publishes paragraph numbers and links. Never the words.
 
+    This asserted that no artifact mentions `vatican.va`, which held while the
+    Catechism was absent and inverted the day it arrived, since a link to the
+    official text is the whole point. What it asserts now is the shape, because
+    a paragraph's text, title, first line or summary would have to be a field
+    that is not a number, an address, a short citation label or a page URL.
+
     The count is asserted first. A sweep over a tree that does not exist yet
-    passes every content check it makes, which is how this test read before the
-    generator was written.
+    passes every content check it makes.
     """
     paths = list(DATA.rglob("*.json"))
-    assert len(paths) == 371
-    for path in paths:
-        assert "vatican.va" not in path.read_text(encoding="utf-8"), path
+    assert len(paths) == 447
+
+    citations = [
+        path
+        for path in paths
+        if path.parent.name == "books" and path.parent.parent.name == "catechism"
+    ]
+    assert len(citations) == len(BOOKS)
+
+    for path in citations:
+        published = read(path)
+        assert set(published) == {"rights", "pages", "book", "citations"}
+        entries = published["citations"]
+        assert isinstance(entries, dict)
+        for records in entries.values():
+            assert isinstance(records, list)
+            for record in records:
+                assert set(record) == {"paragraph", "cited"}
+                assert isinstance(record["paragraph"], int)
+                # A citation label. Prose does not fit in thirty two characters.
+                assert len(str(record["cited"])) < 32, record
+
+    pages = read(DATA / "catechism" / "pages.json")
+    editions = pages["editions"]
+    assert isinstance(editions, dict)
+    for edition in editions.values():
+        assert str(edition["base"]).startswith("https://www.vatican.va/archive/")
+        for page in edition["pages"]:
+            assert set(page) == {"file", "first"}

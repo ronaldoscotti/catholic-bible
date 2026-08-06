@@ -1,0 +1,11 @@
+{"book":{"abbreviation": "Zach.", "chapters": 14, "code": "ZEC", "deuterocanonical": false, "group": "PROPHETIC", "name": "Zacharias", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"ZEC.1.12":[{"cited": "Zc 1,12", "paragraph": 336}],
+"ZEC.12.10":[{"cited": "Zc 12,10", "paragraph": 1432}, {"cited": "Zc 12,10", "paragraph": 2561}],
+"ZEC.13.1":[{"cited": "Zc 13,1", "paragraph": 2561}],
+"ZEC.14.8":[{"cited": "Zc 14,8", "paragraph": 694}],
+"ZEC.2.14":[{"cited": "Zc 2,14", "paragraph": 722}],
+"ZEC.2.17":[{"cited": "Zc 2,13", "paragraph": 2143}],
+"ZEC.4.14":[{"cited": "Zc 4,14", "paragraph": 436}],
+"ZEC.6.13":[{"cited": "Zc 6,13", "paragraph": 436}],
+"ZEC.9.9":[{"cited": "Zc 9,9", "paragraph": 559}]
+}}

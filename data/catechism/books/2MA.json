@@ -1,0 +1,6 @@
+{"book":{"abbreviation": "2 Mach.", "chapters": 15, "code": "2MA", "deuterocanonical": true, "group": "HISTORICAL", "name": "2 Machabees", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"2MA.10.29":[{"cited": "2Mc 10,29", "paragraph": 333}],
+"2MA.12.45":[{"cited": "2Mc 12,45", "paragraph": 958}],
+"2MA.12.46":[{"cited": "2Mc 12,46", "paragraph": 1032}],
+"2MA.6.30":[{"cited": "2Mc 6,30", "paragraph": 363}]
+}}

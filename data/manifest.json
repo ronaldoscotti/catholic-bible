@@ -5,6 +5,310 @@
    "bytes": 13773,
    "sha256": "ac469b3e625861aab4cf8de9340d37dabaaefb2bbd018d5e1ba100ae12a961aa"
   },
+  "catechism/books/1CH.json": {
+   "bytes": 331,
+   "sha256": "df2a6bc800ae8953969b98626557723935f6bbce33d3daaf07992307ab8bdc6b"
+  },
+  "catechism/books/1CO.json": {
+   "bytes": 14874,
+   "sha256": "201cafb972a5d7788d83811309b6157947525bb0f58b149fd52454069282a0bb"
+  },
+  "catechism/books/1JN.json": {
+   "bytes": 3255,
+   "sha256": "d06b1d564e2365055162440a50a1a102ba1334ff36ac17a9d23cc99093d5135a"
+  },
+  "catechism/books/1KI.json": {
+   "bytes": 8165,
+   "sha256": "4e94c55125c5fecde6f1077eb485e9e807aefefa033fc7d06669dac4e362822f"
+  },
+  "catechism/books/1MA.json": {
+   "bytes": 327,
+   "sha256": "3412adf8d251711cb80987db3c90dbbed489ca4dc9921be20d5f993659aba2e8"
+  },
+  "catechism/books/1PE.json": {
+   "bytes": 4032,
+   "sha256": "5836bb66c71fcb81861f5e5a8fb1ec7cbfa4be40975e8376ac4696ef96b44592"
+  },
+  "catechism/books/1SA.json": {
+   "bytes": 1172,
+   "sha256": "9e1559964ebdf9e2cb17edbc0fea57900891efe50e158917eb2c6b5c3bfe08c8"
+  },
+  "catechism/books/1TH.json": {
+   "bytes": 1555,
+   "sha256": "cdcb217a0beca721b0c4ed5605cefb40a8bd0628b19b021e97d9e4d97041a279"
+  },
+  "catechism/books/1TI.json": {
+   "bytes": 3371,
+   "sha256": "70d3d4975322d79c4a4ce94e13c5ee7faec3abf2a5065ef38f220dbe441b003b"
+  },
+  "catechism/books/2CH.json": {
+   "bytes": 386,
+   "sha256": "f53872e0d9863167287f8012c1b27124e8ad32ba5122be11453680c0fb65fc27"
+  },
+  "catechism/books/2CO.json": {
+   "bytes": 5472,
+   "sha256": "884d23728f37ae176ab5eb89aef1139a4dae764961284a35b66c2eb15a2b081e"
+  },
+  "catechism/books/2JN.json": {
+   "bytes": 319,
+   "sha256": "ce556c894cd9a0d471c00415b315ef6d920d70e97cadc7fbfd66ef9348f2404a"
+  },
+  "catechism/books/2KI.json": {
+   "bytes": 374,
+   "sha256": "7cd51edcb51b90c7a682882e822be2d166c31b6547d7b68c3d0addca6ff8a93e"
+  },
+  "catechism/books/2MA.json": {
+   "bytes": 548,
+   "sha256": "feb8b32b88ebbf98e963a3a9a25a68a7d1075bc7f139a33f1c545c965406737d"
+  },
+  "catechism/books/2PE.json": {
+   "bytes": 1423,
+   "sha256": "f09ced804ec50c80dde5bc4b69f12f3b1a45121a755154f85a7866531701ffc5"
+  },
+  "catechism/books/2SA.json": {
+   "bytes": 1157,
+   "sha256": "27e2c50e4b5537bbd5131b5d65087ec4f8393da4e4cc05760b4b08763745482e"
+  },
+  "catechism/books/2TH.json": {
+   "bytes": 1912,
+   "sha256": "a192a5684d00069752b120daf10cc2a8d1c7a40eba4102e1c59ad28ed5323845"
+  },
+  "catechism/books/2TI.json": {
+   "bytes": 1785,
+   "sha256": "d32ed29f27c7deb1502cde8a6b839e59ab8e08923344b72f09ab57c4b554f5ee"
+  },
+  "catechism/books/3JN.json": {
+   "bytes": 319,
+   "sha256": "845fccffd6a2a78ac6c7cc89ad7a04c0020782c10e0e92ab2b512c1420c07c8c"
+  },
+  "catechism/books/ACT.json": {
+   "bytes": 15860,
+   "sha256": "1e13453f6cdf9942d4b15833a036cb883935d7258f0b55ab198001ed675a10ed"
+  },
+  "catechism/books/AMO.json": {
+   "bytes": 908,
+   "sha256": "56e1ade32a62715dbb8e6eaef36cad48bb0578132325dbf012d172307b9fd479"
+  },
+  "catechism/books/BAR.json": {
+   "bytes": 317,
+   "sha256": "1f102fccb642cc0c744b4a6a06266e6aab3785d47748b74dce36cca6011d1baf"
+  },
+  "catechism/books/COL.json": {
+   "bytes": 4584,
+   "sha256": "8f91050444c331c62da5b65d50249868e9bbf87bc30818a043e66b4f41c2381f"
+  },
+  "catechism/books/DAN.json": {
+   "bytes": 870,
+   "sha256": "7377f5d6195162eff12b3c228e8d506cf33e94883716d7776b60d9168b5c5e63"
+  },
+  "catechism/books/DEU.json": {
+   "bytes": 2980,
+   "sha256": "32fee8fe22beb62bc6017253328b70aeae116e129b8a257e2f2e5a283dfc32e8"
+  },
+  "catechism/books/ECC.json": {
+   "bytes": 437,
+   "sha256": "321920e5a413f3dacc19c942ad26f47f0d973a87633765f23779edabe270ea16"
+  },
+  "catechism/books/EPH.json": {
+   "bytes": 11076,
+   "sha256": "196b03412573015001848ca95cbcfcec8e8765318fca44ef006ef5119d32503e"
+  },
+  "catechism/books/EST.json": {
+   "bytes": 321,
+   "sha256": "b33e40db0d0d2d9015bac3a9896f9c2bdafdaac626239392229946e015dcd644"
+  },
+  "catechism/books/EXO.json": {
+   "bytes": 9927,
+   "sha256": "90a0206de0e2e6d1a61b299046026b0cb3da2ca95d0fcfeeb8b15a1d64ce3370"
+  },
+  "catechism/books/EZK.json": {
+   "bytes": 4571,
+   "sha256": "0acb409662ddbc506ecc0e1b0fa7251f0065fba8a8b72b1fe451deaa5d728f5f"
+  },
+  "catechism/books/EZR.json": {
+   "bytes": 888,
+   "sha256": "cb98a5e4669f15a39cd6c1c9c6022658532e6f8a5c54cfa1f0e32a35d6cba15c"
+  },
+  "catechism/books/GAL.json": {
+   "bytes": 5313,
+   "sha256": "3f327dbe7be8466dc4485a231a5d44eea0a58b83c53948d28e0d783d3d370a11"
+  },
+  "catechism/books/GEN.json": {
+   "bytes": 17380,
+   "sha256": "675b00da09af5fba7c992bf1ae5182bd342077e7d6ee5d3ca2977f32f7d3a45c"
+  },
+  "catechism/books/HAB.json": {
+   "bytes": 319,
+   "sha256": "a1c249fc7c38c1ad550437c4ab755a4cd260d3d33167656bd155ea988af7ca78"
+  },
+  "catechism/books/HAG.json": {
+   "bytes": 318,
+   "sha256": "3f71434f54a3375d93ea5b36c0668c16414b955ebf79e4fea8f098097dbfe521"
+  },
+  "catechism/books/HEB.json": {
+   "bytes": 9683,
+   "sha256": "9ec567d6f6bb221777b500d91b62664c8036f2f365353becc28c85156463ba39"
+  },
+  "catechism/books/HOS.json": {
+   "bytes": 1418,
+   "sha256": "b3c0bf867aba872396709c7d955743cc1e24156986b8ab8764daeaebea79be25"
+  },
+  "catechism/books/ISA.json": {
+   "bytes": 9217,
+   "sha256": "9c6eb9f5a42c1a0137c0d713b52d87670119495f190cf04112ef196bcb84229f"
+  },
+  "catechism/books/JAS.json": {
+   "bytes": 3262,
+   "sha256": "bb9523d221f8a1efc08a3a3daf7d81876b08c414300a6b0140af579ebe567b1c"
+  },
+  "catechism/books/JDG.json": {
+   "bytes": 1158,
+   "sha256": "309498198cda201e2b15c29787e06b4705a8cc7f6685941dd255019670d320bf"
+  },
+  "catechism/books/JDT.json": {
+   "bytes": 1037,
+   "sha256": "8646d9e93603a3c1d575d7825e5f50df8edfb315cccc6cdd18faa859790d175a"
+  },
+  "catechism/books/JER.json": {
+   "bytes": 4590,
+   "sha256": "c97f7864bc4fa58b129f9d47dab4ee2b22b592d172a719485134e2a95eef5c37"
+  },
+  "catechism/books/JHN.json": {
+   "bytes": 39675,
+   "sha256": "0c101d5e3319a29e6efe85a63006ee7afed8f7cfb1d45f88f5140d8fac91b26e"
+  },
+  "catechism/books/JOB.json": {
+   "bytes": 755,
+   "sha256": "190630b1dd03d6173d4436ae9675ef9aed01d640d15e8ff05cfebb9f8fc2f2e0"
+  },
+  "catechism/books/JOL.json": {
+   "bytes": 816,
+   "sha256": "3262fcaf5e69bfcaa1c598837e16c1d5a4aaf7e6db5093b904dd300f10951633"
+  },
+  "catechism/books/JON.json": {
+   "bytes": 317,
+   "sha256": "0a57f19c67d21c37da5203b0db71f2fd022bef9668fff1511cfd074c6991fb6f"
+  },
+  "catechism/books/JOS.json": {
+   "bytes": 427,
+   "sha256": "67fa631bcf649fb4fe5d153ab77719aa5f617d685aaa76d423bf8faaaeb66b81"
+  },
+  "catechism/books/JUD.json": {
+   "bytes": 315,
+   "sha256": "d5fd1cb9ccb9732e8d22d99164e1ab6b486b024663e9a3a9d881fa85e5d17ece"
+  },
+  "catechism/books/LAM.json": {
+   "bytes": 376,
+   "sha256": "bbbdfebd754ae8c50c34c347a8108531afee75d5d1b470b81c471161b44ea96c"
+  },
+  "catechism/books/LEV.json": {
+   "bytes": 1571,
+   "sha256": "81f424b36fba0575212e386ed648baaa5ad3caa00b72f983b8bb490f6a05128c"
+  },
+  "catechism/books/LUK.json": {
+   "bytes": 45580,
+   "sha256": "89821196ecace8a1406f9d5550cd96226729d4cf62a93b574a2b0173ae2efac0"
+  },
+  "catechism/books/MAL.json": {
+   "bytes": 965,
+   "sha256": "3f1c34008ac5d1129ca29967a87016301c59c39de2d83280d93c8b38511123bd"
+  },
+  "catechism/books/MAT.json": {
+   "bytes": 48920,
+   "sha256": "0ed64c5ae8634b3bef96641f7d7321ae2c7bf459372c308bb68f30c8cd1f8c61"
+  },
+  "catechism/books/MIC.json": {
+   "bytes": 582,
+   "sha256": "d8a2d705d26b33adc149e53d2cd559daf34e4325cae3b67a0d2153b601ebde0a"
+  },
+  "catechism/books/MRK.json": {
+   "bytes": 19202,
+   "sha256": "d0c00537a51b466dec52be509352c1d6f95097481fcb02ac24cddde29db10642"
+  },
+  "catechism/books/NAM.json": {
+   "bytes": 317,
+   "sha256": "75cf81987f64cde93a126095dc11b2bdfd953390f391eb88bced36d4ce517bab"
+  },
+  "catechism/books/NEH.json": {
+   "bytes": 1236,
+   "sha256": "a3f58d7b7a76586c55f9e9cf6f8e2858ceae702b1d76e740f8f6807c2b6db4a5"
+  },
+  "catechism/books/NUM.json": {
+   "bytes": 1567,
+   "sha256": "8d98b7bc0a14a1a066b51a2d27a8aed6504eba2c23ed89a322908afc2bae1768"
+  },
+  "catechism/books/OBA.json": {
+   "bytes": 318,
+   "sha256": "01a0d1b606bb95e43d5354b20b433fdfaf81f7f2f4596a93834e86821de1db5b"
+  },
+  "catechism/books/PHM.json": {
+   "bytes": 322,
+   "sha256": "9519029277f5eb76fbcb13da29c170ff74d4807807ba02e0cf42a7b90998d608"
+  },
+  "catechism/books/PHP.json": {
+   "bytes": 3411,
+   "sha256": "1ff2bed86706e76cb68800b589658db98556ab170f3e2d874c11035d90999ba8"
+  },
+  "catechism/books/PRO.json": {
+   "bytes": 1749,
+   "sha256": "2064597253b3838d47ae1bee1fae108eeacc9bbd805d56d6cbf8c4c39b5ad4d5"
+  },
+  "catechism/books/PSA.json": {
+   "bytes": 7428,
+   "sha256": "78c62af43529c2b0ea86872b4a97e04e5a8877a1870aac6eacc1924ca6a74180"
+  },
+  "catechism/books/REV.json": {
+   "bytes": 7952,
+   "sha256": "3aa1e492d84c96c9a9e15357516850e781aa20f11d9887696a53b3f0c09c15a6"
+  },
+  "catechism/books/ROM.json": {
+   "bytes": 16129,
+   "sha256": "5ee1e25d633efdb7693a7f7911f78874189f1d40fb25b14e755f97c8165e3de1"
+  },
+  "catechism/books/RUT.json": {
+   "bytes": 317,
+   "sha256": "b6da601e7c20790f0308fa3c1b23305cd21ce8f1aba6d41ed9c91743f623647a"
+  },
+  "catechism/books/SIR.json": {
+   "bytes": 1277,
+   "sha256": "2ecbb86eded0bfe56825783d24446cf9f87dfb6b0a4e03d3dbb2e99d46579ffa"
+  },
+  "catechism/books/SNG.json": {
+   "bytes": 529,
+   "sha256": "9065c52c691365529cd2323ac92bf12fd6b819627299bcbeb349b41f167576e0"
+  },
+  "catechism/books/TIT.json": {
+   "bytes": 1566,
+   "sha256": "170a2681db767e19210c63ffdf22768b9f6c5ed54d9b1f1ae963738f4160d0aa"
+  },
+  "catechism/books/TOB.json": {
+   "bytes": 1592,
+   "sha256": "e8b4585b44160bf35465cd37354d378f0b24a70266232a0f61717913401c8e48"
+  },
+  "catechism/books/WIS.json": {
+   "bytes": 2470,
+   "sha256": "e507246e425124c00672de6a79c65caea4074bb3c6fac054e02a566f7cf28161"
+  },
+  "catechism/books/ZEC.json": {
+   "bytes": 843,
+   "sha256": "842faff7e802c1b634a655026493638d72c4e43dd413fd4fd8ba4659a1a72581"
+  },
+  "catechism/books/ZEP.json": {
+   "bytes": 558,
+   "sha256": "6f7dda4b5196f977463ef0fecbbce6fb25048694c1ebe076edea79fdc45a39c6"
+  },
+  "catechism/orphans.json": {
+   "bytes": 626,
+   "sha256": "ead44c4011d66f1d66fd86fd66bd8d53d377ff1c6ec1eaaf60624aeb16b4e23c"
+  },
+  "catechism/pages.json": {
+   "bytes": 23407,
+   "sha256": "3ccb5eb4b8e56452ee58bdca9d0dd0b0d251ee3660f201e3a350644022ffb7f8"
+  },
+  "catechism/paragraphs.json": {
+   "bytes": 300308,
+   "sha256": "f71310f358cdd40502a20ed91ea7b8c8f532389c8ae3f333debef014a42e585e"
+  },
   "commentary/haydock/books/1CH.json": {
    "bytes": 388557,
    "sha256": "0a93015ec46eb9aea61e2edda63ffdd552ac39f8c7e68db809684704461d644c"
@@ -594,8 +898,8 @@
    "sha256": "db48f683250fe36047acfe910282e4c9818449990ab03e398b6bf1052bfd03d7"
   },
   "index.json": {
-   "bytes": 4278,
-   "sha256": "44f450845d686dd161dfea3422bfe54f6ca58f3488144b749a0be41b2d81b47f"
+   "bytes": 4581,
+   "sha256": "fdbe4e61067b2a587860000241ab646cf211c05e7b6a4f020dbb291a4d720a99"
   },
   "orphans.json": {
    "bytes": 2956,

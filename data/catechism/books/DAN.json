@@ -1,0 +1,12 @@
+{"book":{"abbreviation": "Dan.", "chapters": 14, "code": "DAN", "deuterocanonical": false, "group": "PROPHETIC", "name": "Daniel", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"DAN.10.10":[{"cited": "Dn 10,9-12", "paragraph": 330}],
+"DAN.10.11":[{"cited": "Dn 10,9-12", "paragraph": 330}],
+"DAN.10.12":[{"cited": "Dn 10,9-12", "paragraph": 330}],
+"DAN.10.9":[{"cited": "Dn 10,9-12", "paragraph": 330}],
+"DAN.12.2":[{"cited": "Dn 12,2", "paragraph": 998}],
+"DAN.14.1":[{"cited": "Dn 14,1-30", "paragraph": 2112}],
+"DAN.3.79":[{"cited": "Dn 3,79-81", "paragraph": 2416}],
+"DAN.7.10":[{"cited": "Dn 7,10", "paragraph": 678}],
+"DAN.7.13":[{"cited": "Dn 7,13", "paragraph": 440}],
+"DAN.7.14":[{"cited": "Dn 7,14", "paragraph": 664}]
+}}

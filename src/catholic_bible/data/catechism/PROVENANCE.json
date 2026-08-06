@@ -1,5 +1,15 @@
 {
+ "carries_no_text": true,
  "files": {
+  "citations.json": {
+   "pairs": 6828,
+   "sha256": "803408ee42a086f17d5b4aee8c91046e9107b30656ae045373004568d2aadf43",
+   "verses": 3997
+  },
+  "orphans.json": {
+   "sha256": "ead44c4011d66f1d66fd86fd66bd8d53d377ff1c6ec1eaaf60624aeb16b4e23c",
+   "total": 5
+  },
   "pages.json": {
    "pages": {
     "en": 368,
@@ -7,11 +17,32 @@
    },
    "paragraphs": 2865,
    "sha256": "3ccb5eb4b8e56452ee58bdca9d0dd0b0d251ee3660f201e3a350644022ffb7f8"
+  },
+  "paragraphs.json": {
+   "paragraphs": 1193,
+   "sha256": "f71310f358cdd40502a20ed91ea7b8c8f532389c8ae3f333debef014a42e585e"
   }
+ },
+ "fixtures": {
+  "database/data/catechism-scripture-citations.json.gz": "5bf919c45140945627088c95bedaa848fd6cb2b55d634aa8914dbcbf4bb1dba5"
  },
  "pages_source": {
   "carries_no_text": true,
   "en": "https://www.vatican.va/archive/ENG0015/_INDEX.HTM",
   "pt": "https://www.vatican.va/archive/cathechism_po/index_new/prima-pagina-cic_po.html"
+ },
+ "scheme": "english",
+ "source": {
+  "commit": "f6090be0efb5a3e4dfd2788ed2c1c095e810b4e5",
+  "commit_date": "2026-08-05T19:57:49-03:00",
+  "private": true,
+  "repository": "meu-feed-catolico-api"
+ },
+ "upstream": {
+  "licence": "none declared",
+  "name": "nossbigg/catechism-ccc-json",
+  "note": "A third-party transcription. The citation graph is a fact whoever transcribed it and what establishes it is the hand check, not this name.",
+  "release": "v0.0.2",
+  "url": "https://github.com/nossbigg/catechism-ccc-json"
  }
 }

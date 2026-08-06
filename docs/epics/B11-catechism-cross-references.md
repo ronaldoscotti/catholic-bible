@@ -70,26 +70,35 @@ whole range, including 1, 2, 3, 4, 17, 624 and 2865, and every one was on the
 page the map names. Run against the map that shipped, the same check reports
 paragraph 1 absent from the page it was sent to.
 
-## Blocked
+## What blocked this, and how it was cleared
 
-**This epic cannot publish a citation until issue #36 is closed.**
+**Issue #36.** `Scheme.ORG` is hebrew numbering and counts a psalm superscription
+as verses. The Catechism cites in english numbering, which does not. An english
+address is a valid `org` address, so it mapped cleanly, produced no orphan, and
+landed one or two verses early. B4's published apparatus had the same defect,
+which is why the issue was against B1 rather than here.
 
-`Scheme.ORG` is hebrew numbering and counts a psalm superscription as verses. The
-Catechism cites in english numbering, which does not. An english address is a
-valid `org` address, so it maps cleanly, produces no orphan, and lands one or two
-verses early. B4's published apparatus has the same defect and that is why the
-issue is against B1 rather than here.
+Closing it added `Scheme.ENGLISH`, corrected 15672 addresses in the published
+apparatus, recovered 5631 references that had been dropped rather than misplaced,
+and moved the dataset to `2.0.0`.
 
 ## Acceptance criteria
 
-- [ ] Given a verse id from the B1 spine, the dataset returns the Catechism paragraph numbers that cite it
-- [ ] Every entry carries a link to the official text on `vatican.va`
+- [x] Given a verse id from the B1 spine, the dataset returns the Catechism paragraph numbers that cite it
+- [x] Every entry carries a link to the official text on `vatican.va`
 - [x] The deep-link shape is verified against the live site before anything else in this epic is built, and the epic records what was found
-- [ ] Not one word of Catechism text ships. No paragraph text, no first line, no summary, no paraphrase, no title
-- [ ] The dataset ships as its own artifact with its own license line, so withdrawing it is deleting one file
+- [x] Not one word of Catechism text ships. No paragraph text, no first line, no summary, no paraphrase, no title
+- [x] The dataset ships as its own artifact with its own license line, so withdrawing it is deleting one file
 - [ ] A sample of citations is checked by hand against the printed Catechism, and the sample size and the error rate are recorded
-- [ ] `LIMITS.md` states the legal basis for the index, and states that it is thinner than the basis for everything else here
-- [ ] A citation that does not resolve against the spine comes back as an orphan with a reason, the same way B1 and B2 handle it
+- [x] `LIMITS.md` states the legal basis for the index, and states that it is thinner than the basis for everything else here
+- [x] A citation that does not resolve against the spine comes back as an orphan with a reason, the same way B1 and B2 handle it
+
+**Seven of eight. The eighth stays open and it is the sample check.** There is no
+printed Catechism here, and what was done instead is a reading of the footnotes
+`vatican.va` prints. Ten paragraphs were readable and 34 published citations were
+examined, none of them wrong. `docs/qa/B11-catechism-cross-references.md` carries
+that, along with the automated matcher that reported a 51.2% error rate before
+anybody noticed it was resolving `Jn` to Jonah.
 
 ## Constraints
 

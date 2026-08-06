@@ -1,0 +1,1595 @@
+{
+ "editions": {
+  "en": {
+   "base": "https://www.vatican.va/archive/ENG0015/",
+   "pages": [
+    {
+     "file": "__P2.HTM",
+     "first": 1
+    },
+    {
+     "file": "__P3.HTM",
+     "first": 4
+    },
+    {
+     "file": "__P4.HTM",
+     "first": 11
+    },
+    {
+     "file": "__P5.HTM",
+     "first": 13
+    },
+    {
+     "file": "__P6.HTM",
+     "first": 18
+    },
+    {
+     "file": "__P7.HTM",
+     "first": 23
+    },
+    {
+     "file": "__P8.HTM",
+     "first": 26
+    },
+    {
+     "file": "__P9.HTM",
+     "first": 27
+    },
+    {
+     "file": "__PA.HTM",
+     "first": 31
+    },
+    {
+     "file": "__PB.HTM",
+     "first": 36
+    },
+    {
+     "file": "__PC.HTM",
+     "first": 39
+    },
+    {
+     "file": "__PD.HTM",
+     "first": 44
+    },
+    {
+     "file": "__PE.HTM",
+     "first": 50
+    },
+    {
+     "file": "__PF.HTM",
+     "first": 51
+    },
+    {
+     "file": "__PG.HTM",
+     "first": 54
+    },
+    {
+     "file": "__PH.HTM",
+     "first": 65
+    },
+    {
+     "file": "__PI.HTM",
+     "first": 68
+    },
+    {
+     "file": "__PJ.HTM",
+     "first": 74
+    },
+    {
+     "file": "__PK.HTM",
+     "first": 75
+    },
+    {
+     "file": "__PL.HTM",
+     "first": 80
+    },
+    {
+     "file": "__PM.HTM",
+     "first": 84
+    },
+    {
+     "file": "__PN.HTM",
+     "first": 96
+    },
+    {
+     "file": "__PO.HTM",
+     "first": 101
+    },
+    {
+     "file": "__PP.HTM",
+     "first": 105
+    },
+    {
+     "file": "__PQ.HTM",
+     "first": 109
+    },
+    {
+     "file": "__PR.HTM",
+     "first": 120
+    },
+    {
+     "file": "__PS.HTM",
+     "first": 131
+    },
+    {
+     "file": "__PT.HTM",
+     "first": 134
+    },
+    {
+     "file": "__PU.HTM",
+     "first": 142
+    },
+    {
+     "file": "__PV.HTM",
+     "first": 144
+    },
+    {
+     "file": "__PW.HTM",
+     "first": 150
+    },
+    {
+     "file": "__PX.HTM",
+     "first": 153
+    },
+    {
+     "file": "__PY.HTM",
+     "first": 166
+    },
+    {
+     "file": "__PZ.HTM",
+     "first": 168
+    },
+    {
+     "file": "__P10.HTM",
+     "first": 170
+    },
+    {
+     "file": "__P11.HTM",
+     "first": 172
+    },
+    {
+     "file": "__P12.HTM",
+     "first": 176
+    },
+    {
+     "file": "__P14.HTM",
+     "first": 185
+    },
+    {
+     "file": "__P15.HTM",
+     "first": 198
+    },
+    {
+     "file": "__P16.HTM",
+     "first": 199
+    },
+    {
+     "file": "__P17.HTM",
+     "first": 232
+    },
+    {
+     "file": "__P18.HTM",
+     "first": 268
+    },
+    {
+     "file": "__P19.HTM",
+     "first": 279
+    },
+    {
+     "file": "__P1A.HTM",
+     "first": 325
+    },
+    {
+     "file": "__P1B.HTM",
+     "first": 355
+    },
+    {
+     "file": "__P1C.HTM",
+     "first": 385
+    },
+    {
+     "file": "__P1D.HTM",
+     "first": 422
+    },
+    {
+     "file": "__P1E.HTM",
+     "first": 430
+    },
+    {
+     "file": "__P1F.HTM",
+     "first": 436
+    },
+    {
+     "file": "__P1G.HTM",
+     "first": 441
+    },
+    {
+     "file": "__P1H.HTM",
+     "first": 446
+    },
+    {
+     "file": "__P1I.HTM",
+     "first": 452
+    },
+    {
+     "file": "__P1J.HTM",
+     "first": 456
+    },
+    {
+     "file": "__P1K.HTM",
+     "first": 484
+    },
+    {
+     "file": "__P1L.HTM",
+     "first": 512
+    },
+    {
+     "file": "__P1M.HTM",
+     "first": 571
+    },
+    {
+     "file": "__P1N.HTM",
+     "first": 574
+    },
+    {
+     "file": "__P1O.HTM",
+     "first": 595
+    },
+    {
+     "file": "__P1P.HTM",
+     "first": 624
+    },
+    {
+     "file": "__P1Q.HTM",
+     "first": 631
+    },
+    {
+     "file": "__P1R.HTM",
+     "first": 632
+    },
+    {
+     "file": "__P1S.HTM",
+     "first": 638
+    },
+    {
+     "file": "__P1T.HTM",
+     "first": 659
+    },
+    {
+     "file": "__P1U.HTM",
+     "first": 665
+    },
+    {
+     "file": "__P1V.HTM",
+     "first": 668
+    },
+    {
+     "file": "__P1W.HTM",
+     "first": 678
+    },
+    {
+     "file": "__P1X.HTM",
+     "first": 680
+    },
+    {
+     "file": "__P1Y.HTM",
+     "first": 683
+    },
+    {
+     "file": "__P1Z.HTM",
+     "first": 687
+    },
+    {
+     "file": "__P20.HTM",
+     "first": 689
+    },
+    {
+     "file": "__P21.HTM",
+     "first": 691
+    },
+    {
+     "file": "__P22.HTM",
+     "first": 702
+    },
+    {
+     "file": "__P23.HTM",
+     "first": 717
+    },
+    {
+     "file": "__P24.HTM",
+     "first": 731
+    },
+    {
+     "file": "__P25.HTM",
+     "first": 742
+    },
+    {
+     "file": "__P26.HTM",
+     "first": 748
+    },
+    {
+     "file": "__P27.HTM",
+     "first": 751
+    },
+    {
+     "file": "__P28.HTM",
+     "first": 781
+    },
+    {
+     "file": "__P29.HTM",
+     "first": 811
+    },
+    {
+     "file": "__P2A.HTM",
+     "first": 871
+    },
+    {
+     "file": "__P2B.HTM",
+     "first": 946
+    },
+    {
+     "file": "__P2C.HTM",
+     "first": 963
+    },
+    {
+     "file": "__P2D.HTM",
+     "first": 976
+    },
+    {
+     "file": "__P2E.HTM",
+     "first": 977
+    },
+    {
+     "file": "__P2F.HTM",
+     "first": 981
+    },
+    {
+     "file": "__P2G.HTM",
+     "first": 988
+    },
+    {
+     "file": "__P2H.HTM",
+     "first": 992
+    },
+    {
+     "file": "__P2I.HTM",
+     "first": 1005
+    },
+    {
+     "file": "__P2J.HTM",
+     "first": 1015
+    },
+    {
+     "file": "__P2K.HTM",
+     "first": 1020
+    },
+    {
+     "file": "__P2L.HTM",
+     "first": 1021
+    },
+    {
+     "file": "__P2M.HTM",
+     "first": 1023
+    },
+    {
+     "file": "__P2N.HTM",
+     "first": 1030
+    },
+    {
+     "file": "__P2O.HTM",
+     "first": 1033
+    },
+    {
+     "file": "__P2P.HTM",
+     "first": 1038
+    },
+    {
+     "file": "__P2Q.HTM",
+     "first": 1042
+    },
+    {
+     "file": "__P2R.HTM",
+     "first": 1051
+    },
+    {
+     "file": "__P2S.HTM",
+     "first": 1061
+    },
+    {
+     "file": "__P2T.HTM",
+     "first": 1066
+    },
+    {
+     "file": "__P2U.HTM",
+     "first": 1076
+    },
+    {
+     "file": "__P2V.HTM",
+     "first": 1077
+    },
+    {
+     "file": "__P2W.HTM",
+     "first": 1084
+    },
+    {
+     "file": "__P2X.HTM",
+     "first": 1091
+    },
+    {
+     "file": "__P2Y.HTM",
+     "first": 1110
+    },
+    {
+     "file": "__P2Z.HTM",
+     "first": 1113
+    },
+    {
+     "file": "__P30.HTM",
+     "first": 1114
+    },
+    {
+     "file": "__P31.HTM",
+     "first": 1117
+    },
+    {
+     "file": "__P32.HTM",
+     "first": 1122
+    },
+    {
+     "file": "__P33.HTM",
+     "first": 1127
+    },
+    {
+     "file": "__P34.HTM",
+     "first": 1130
+    },
+    {
+     "file": "__P35.HTM",
+     "first": 1131
+    },
+    {
+     "file": "__P36.HTM",
+     "first": 1135
+    },
+    {
+     "file": "__P37.HTM",
+     "first": 1136
+    },
+    {
+     "file": "__P38.HTM",
+     "first": 1145
+    },
+    {
+     "file": "__P39.HTM",
+     "first": 1163
+    },
+    {
+     "file": "__P3A.HTM",
+     "first": 1179
+    },
+    {
+     "file": "__P3B.HTM",
+     "first": 1187
+    },
+    {
+     "file": "__P3C.HTM",
+     "first": 1200
+    },
+    {
+     "file": "__P3D.HTM",
+     "first": 1207
+    },
+    {
+     "file": "__P3E.HTM",
+     "first": 1210
+    },
+    {
+     "file": "__P3F.HTM",
+     "first": 1212
+    },
+    {
+     "file": "__P3G.HTM",
+     "first": 1213
+    },
+    {
+     "file": "__P3H.HTM",
+     "first": 1214
+    },
+    {
+     "file": "__P3I.HTM",
+     "first": 1217
+    },
+    {
+     "file": "__P3J.HTM",
+     "first": 1229
+    },
+    {
+     "file": "__P3K.HTM",
+     "first": 1246
+    },
+    {
+     "file": "__P3L.HTM",
+     "first": 1256
+    },
+    {
+     "file": "__P3M.HTM",
+     "first": 1257
+    },
+    {
+     "file": "__P3N.HTM",
+     "first": 1262
+    },
+    {
+     "file": "__P3O.HTM",
+     "first": 1275
+    },
+    {
+     "file": "__P3P.HTM",
+     "first": 1285
+    },
+    {
+     "file": "__P3Q.HTM",
+     "first": 1286
+    },
+    {
+     "file": "__P3R.HTM",
+     "first": 1293
+    },
+    {
+     "file": "__P3S.HTM",
+     "first": 1302
+    },
+    {
+     "file": "__P3T.HTM",
+     "first": 1306
+    },
+    {
+     "file": "__P3U.HTM",
+     "first": 1312
+    },
+    {
+     "file": "__P3V.HTM",
+     "first": 1315
+    },
+    {
+     "file": "__P3W.HTM",
+     "first": 1322
+    },
+    {
+     "file": "__P3X.HTM",
+     "first": 1324
+    },
+    {
+     "file": "__P3Y.HTM",
+     "first": 1328
+    },
+    {
+     "file": "__P3Z.HTM",
+     "first": 1333
+    },
+    {
+     "file": "__P40.HTM",
+     "first": 1345
+    },
+    {
+     "file": "__P41.HTM",
+     "first": 1356
+    },
+    {
+     "file": "__P42.HTM",
+     "first": 1382
+    },
+    {
+     "file": "__P43.HTM",
+     "first": 1402
+    },
+    {
+     "file": "__P44.HTM",
+     "first": 1406
+    },
+    {
+     "file": "__P45.HTM",
+     "first": 1420
+    },
+    {
+     "file": "__P46.HTM",
+     "first": 1422
+    },
+    {
+     "file": "__P47.HTM",
+     "first": 1423
+    },
+    {
+     "file": "__P48.HTM",
+     "first": 1425
+    },
+    {
+     "file": "__P49.HTM",
+     "first": 1427
+    },
+    {
+     "file": "__P4A.HTM",
+     "first": 1430
+    },
+    {
+     "file": "__P4B.HTM",
+     "first": 1434
+    },
+    {
+     "file": "__P4C.HTM",
+     "first": 1440
+    },
+    {
+     "file": "__P4D.HTM",
+     "first": 1450
+    },
+    {
+     "file": "__P4E.HTM",
+     "first": 1461
+    },
+    {
+     "file": "__P4F.HTM",
+     "first": 1468
+    },
+    {
+     "file": "__P4G.HTM",
+     "first": 1471
+    },
+    {
+     "file": "__P4H.HTM",
+     "first": 1480
+    },
+    {
+     "file": "__P4I.HTM",
+     "first": 1485
+    },
+    {
+     "file": "__P4J.HTM",
+     "first": 1499
+    },
+    {
+     "file": "__P4K.HTM",
+     "first": 1500
+    },
+    {
+     "file": "__P4L.HTM",
+     "first": 1514
+    },
+    {
+     "file": "__P4M.HTM",
+     "first": 1517
+    },
+    {
+     "file": "__P4N.HTM",
+     "first": 1520
+    },
+    {
+     "file": "__P4O.HTM",
+     "first": 1524
+    },
+    {
+     "file": "__P4P.HTM",
+     "first": 1526
+    },
+    {
+     "file": "__P4Q.HTM",
+     "first": 1533
+    },
+    {
+     "file": "__P4R.HTM",
+     "first": 1536
+    },
+    {
+     "file": "__P4S.HTM",
+     "first": 1537
+    },
+    {
+     "file": "__P4T.HTM",
+     "first": 1539
+    },
+    {
+     "file": "__P4U.HTM",
+     "first": 1554
+    },
+    {
+     "file": "__P4V.HTM",
+     "first": 1572
+    },
+    {
+     "file": "__P4W.HTM",
+     "first": 1575
+    },
+    {
+     "file": "__P4X.HTM",
+     "first": 1577
+    },
+    {
+     "file": "__P4Y.HTM",
+     "first": 1581
+    },
+    {
+     "file": "__P4Z.HTM",
+     "first": 1590
+    },
+    {
+     "file": "__P50.HTM",
+     "first": 1601
+    },
+    {
+     "file": "__P51.HTM",
+     "first": 1602
+    },
+    {
+     "file": "__P52.HTM",
+     "first": 1621
+    },
+    {
+     "file": "__P53.HTM",
+     "first": 1625
+    },
+    {
+     "file": "__P54.HTM",
+     "first": 1638
+    },
+    {
+     "file": "__P55.HTM",
+     "first": 1643
+    },
+    {
+     "file": "__P56.HTM",
+     "first": 1655
+    },
+    {
+     "file": "__P57.HTM",
+     "first": 1659
+    },
+    {
+     "file": "__P58.HTM",
+     "first": 1667
+    },
+    {
+     "file": "__P59.HTM",
+     "first": 1677
+    },
+    {
+     "file": "__P5A.HTM",
+     "first": 1680
+    },
+    {
+     "file": "__P5B.HTM",
+     "first": 1681
+    },
+    {
+     "file": "__P5C.HTM",
+     "first": 1684
+    },
+    {
+     "file": "__P5D.HTM",
+     "first": 1691
+    },
+    {
+     "file": "__P5E.HTM",
+     "first": 1699
+    },
+    {
+     "file": "__P5F.HTM",
+     "first": 1700
+    },
+    {
+     "file": "__P5G.HTM",
+     "first": 1701
+    },
+    {
+     "file": "__P5H.HTM",
+     "first": 1710
+    },
+    {
+     "file": "__P5I.HTM",
+     "first": 1716
+    },
+    {
+     "file": "__P5J.HTM",
+     "first": 1718
+    },
+    {
+     "file": "__P5K.HTM",
+     "first": 1720
+    },
+    {
+     "file": "__P5L.HTM",
+     "first": 1725
+    },
+    {
+     "file": "__P5M.HTM",
+     "first": 1730
+    },
+    {
+     "file": "__P5N.HTM",
+     "first": 1731
+    },
+    {
+     "file": "__P5O.HTM",
+     "first": 1739
+    },
+    {
+     "file": "__P5P.HTM",
+     "first": 1743
+    },
+    {
+     "file": "__P5Q.HTM",
+     "first": 1749
+    },
+    {
+     "file": "__P5R.HTM",
+     "first": 1750
+    },
+    {
+     "file": "__P5S.HTM",
+     "first": 1755
+    },
+    {
+     "file": "__P5T.HTM",
+     "first": 1757
+    },
+    {
+     "file": "__P5U.HTM",
+     "first": 1762
+    },
+    {
+     "file": "__P5V.HTM",
+     "first": 1763
+    },
+    {
+     "file": "__P5W.HTM",
+     "first": 1767
+    },
+    {
+     "file": "__P5X.HTM",
+     "first": 1771
+    },
+    {
+     "file": "__P5Y.HTM",
+     "first": 1776
+    },
+    {
+     "file": "__P5Z.HTM",
+     "first": 1777
+    },
+    {
+     "file": "__P60.HTM",
+     "first": 1783
+    },
+    {
+     "file": "__P61.HTM",
+     "first": 1786
+    },
+    {
+     "file": "__P62.HTM",
+     "first": 1790
+    },
+    {
+     "file": "__P63.HTM",
+     "first": 1795
+    },
+    {
+     "file": "__P64.HTM",
+     "first": 1803
+    },
+    {
+     "file": "__P65.HTM",
+     "first": 1804
+    },
+    {
+     "file": "__P66.HTM",
+     "first": 1812
+    },
+    {
+     "file": "__P67.HTM",
+     "first": 1830
+    },
+    {
+     "file": "__P68.HTM",
+     "first": 1833
+    },
+    {
+     "file": "__P69.HTM",
+     "first": 1846
+    },
+    {
+     "file": "__P6A.HTM",
+     "first": 1849
+    },
+    {
+     "file": "__P6B.HTM",
+     "first": 1852
+    },
+    {
+     "file": "__P6C.HTM",
+     "first": 1854
+    },
+    {
+     "file": "__P6D.HTM",
+     "first": 1865
+    },
+    {
+     "file": "__P6E.HTM",
+     "first": 1870
+    },
+    {
+     "file": "__P6F.HTM",
+     "first": 1877
+    },
+    {
+     "file": "__P6G.HTM",
+     "first": 1878
+    },
+    {
+     "file": "__P6H.HTM",
+     "first": 1886
+    },
+    {
+     "file": "__P6I.HTM",
+     "first": 1890
+    },
+    {
+     "file": "__P6J.HTM",
+     "first": 1897
+    },
+    {
+     "file": "__P6K.HTM",
+     "first": 1905
+    },
+    {
+     "file": "__P6L.HTM",
+     "first": 1913
+    },
+    {
+     "file": "__P6M.HTM",
+     "first": 1918
+    },
+    {
+     "file": "__P6N.HTM",
+     "first": 1928
+    },
+    {
+     "file": "__P6O.HTM",
+     "first": 1929
+    },
+    {
+     "file": "__P6P.HTM",
+     "first": 1934
+    },
+    {
+     "file": "__P6Q.HTM",
+     "first": 1939
+    },
+    {
+     "file": "__P6R.HTM",
+     "first": 1943
+    },
+    {
+     "file": "__P6S.HTM",
+     "first": 1949
+    },
+    {
+     "file": "__P6T.HTM",
+     "first": 1950
+    },
+    {
+     "file": "__P6U.HTM",
+     "first": 1954
+    },
+    {
+     "file": "__P6V.HTM",
+     "first": 1961
+    },
+    {
+     "file": "__P6W.HTM",
+     "first": 1965
+    },
+    {
+     "file": "__P6X.HTM",
+     "first": 1975
+    },
+    {
+     "file": "__P6Y.HTM",
+     "first": 1987
+    },
+    {
+     "file": "__P6Z.HTM",
+     "first": 1996
+    },
+    {
+     "file": "__P70.HTM",
+     "first": 2006
+    },
+    {
+     "file": "__P71.HTM",
+     "first": 2012
+    },
+    {
+     "file": "__P72.HTM",
+     "first": 2017
+    },
+    {
+     "file": "__P73.HTM",
+     "first": 2030
+    },
+    {
+     "file": "__P74.HTM",
+     "first": 2032
+    },
+    {
+     "file": "__P75.HTM",
+     "first": 2041
+    },
+    {
+     "file": "__P76.HTM",
+     "first": 2044
+    },
+    {
+     "file": "__P77.HTM",
+     "first": 2047
+    },
+    {
+     "file": "__P78.HTM",
+     "first": 2052
+    },
+    {
+     "file": "__P79.HTM",
+     "first": 2075
+    },
+    {
+     "file": "__P7A.HTM",
+     "first": 2083
+    },
+    {
+     "file": "__P7C.HTM",
+     "first": 2084
+    },
+    {
+     "file": "__P7D.HTM",
+     "first": 2095
+    },
+    {
+     "file": "__P7E.HTM",
+     "first": 2110
+    },
+    {
+     "file": "__P7F.HTM",
+     "first": 2129
+    },
+    {
+     "file": "__P7G.HTM",
+     "first": 2133
+    },
+    {
+     "file": "__P7I.HTM",
+     "first": 2142
+    },
+    {
+     "file": "__P7J.HTM",
+     "first": 2150
+    },
+    {
+     "file": "__P7K.HTM",
+     "first": 2156
+    },
+    {
+     "file": "__P7L.HTM",
+     "first": 2160
+    },
+    {
+     "file": "__P7N.HTM",
+     "first": 2168
+    },
+    {
+     "file": "__P7O.HTM",
+     "first": 2174
+    },
+    {
+     "file": "__P7P.HTM",
+     "first": 2189
+    },
+    {
+     "file": "__P7Q.HTM",
+     "first": 2196
+    },
+    {
+     "file": "__P7R.HTM",
+     "first": 2197
+    },
+    {
+     "file": "__P7S.HTM",
+     "first": 2201
+    },
+    {
+     "file": "__P7T.HTM",
+     "first": 2207
+    },
+    {
+     "file": "__P7U.HTM",
+     "first": 2214
+    },
+    {
+     "file": "__P7V.HTM",
+     "first": 2232
+    },
+    {
+     "file": "__P7W.HTM",
+     "first": 2234
+    },
+    {
+     "file": "__P7X.HTM",
+     "first": 2247
+    },
+    {
+     "file": "__P7Y.HTM",
+     "first": 2258
+    },
+    {
+     "file": "__P7Z.HTM",
+     "first": 2259
+    },
+    {
+     "file": "__P80.HTM",
+     "first": 2284
+    },
+    {
+     "file": "__P81.HTM",
+     "first": 2302
+    },
+    {
+     "file": "__P82.HTM",
+     "first": 2318
+    },
+    {
+     "file": "__P84.HTM",
+     "first": 2331
+    },
+    {
+     "file": "__P85.HTM",
+     "first": 2337
+    },
+    {
+     "file": "__P86.HTM",
+     "first": 2360
+    },
+    {
+     "file": "__P87.HTM",
+     "first": 2380
+    },
+    {
+     "file": "__P88.HTM",
+     "first": 2392
+    },
+    {
+     "file": "__P89.HTM",
+     "first": 2401
+    },
+    {
+     "file": "__P8A.HTM",
+     "first": 2402
+    },
+    {
+     "file": "__P8B.HTM",
+     "first": 2407
+    },
+    {
+     "file": "__P8C.HTM",
+     "first": 2419
+    },
+    {
+     "file": "__P8D.HTM",
+     "first": 2426
+    },
+    {
+     "file": "__P8E.HTM",
+     "first": 2437
+    },
+    {
+     "file": "__P8F.HTM",
+     "first": 2443
+    },
+    {
+     "file": "__P8G.HTM",
+     "first": 2450
+    },
+    {
+     "file": "__P8H.HTM",
+     "first": 2464
+    },
+    {
+     "file": "__P8I.HTM",
+     "first": 2465
+    },
+    {
+     "file": "__P8J.HTM",
+     "first": 2471
+    },
+    {
+     "file": "__P8K.HTM",
+     "first": 2475
+    },
+    {
+     "file": "__P8L.HTM",
+     "first": 2488
+    },
+    {
+     "file": "__P8M.HTM",
+     "first": 2493
+    },
+    {
+     "file": "__P8N.HTM",
+     "first": 2500
+    },
+    {
+     "file": "__P8O.HTM",
+     "first": 2504
+    },
+    {
+     "file": "__P8P.HTM",
+     "first": 2514
+    },
+    {
+     "file": "__P8Q.HTM",
+     "first": 2517
+    },
+    {
+     "file": "__P8R.HTM",
+     "first": 2520
+    },
+    {
+     "file": "__P8S.HTM",
+     "first": 2528
+    },
+    {
+     "file": "__P8T.HTM",
+     "first": 2534
+    },
+    {
+     "file": "__P8U.HTM",
+     "first": 2535
+    },
+    {
+     "file": "__P8V.HTM",
+     "first": 2541
+    },
+    {
+     "file": "__P8W.HTM",
+     "first": 2544
+    },
+    {
+     "file": "__P8X.HTM",
+     "first": 2548
+    },
+    {
+     "file": "__P8Y.HTM",
+     "first": 2551
+    },
+    {
+     "file": "__P8Z.HTM",
+     "first": 2558
+    },
+    {
+     "file": "__P90.HTM",
+     "first": 2566
+    },
+    {
+     "file": "__P91.HTM",
+     "first": 2568
+    },
+    {
+     "file": "__P92.HTM",
+     "first": 2590
+    },
+    {
+     "file": "__P93.HTM",
+     "first": 2598
+    },
+    {
+     "file": "__P94.HTM",
+     "first": 2620
+    },
+    {
+     "file": "__P95.HTM",
+     "first": 2623
+    },
+    {
+     "file": "__P96.HTM",
+     "first": 2626
+    },
+    {
+     "file": "__P97.HTM",
+     "first": 2629
+    },
+    {
+     "file": "__P98.HTM",
+     "first": 2634
+    },
+    {
+     "file": "__P99.HTM",
+     "first": 2637
+    },
+    {
+     "file": "__P9A.HTM",
+     "first": 2639
+    },
+    {
+     "file": "__P9B.HTM",
+     "first": 2644
+    },
+    {
+     "file": "__P9C.HTM",
+     "first": 2650
+    },
+    {
+     "file": "__P9D.HTM",
+     "first": 2652
+    },
+    {
+     "file": "__P9E.HTM",
+     "first": 2661
+    },
+    {
+     "file": "__P9F.HTM",
+     "first": 2663
+    },
+    {
+     "file": "__P9G.HTM",
+     "first": 2680
+    },
+    {
+     "file": "__P9H.HTM",
+     "first": 2683
+    },
+    {
+     "file": "__P9I.HTM",
+     "first": 2692
+    },
+    {
+     "file": "__P9J.HTM",
+     "first": 2697
+    },
+    {
+     "file": "__P9K.HTM",
+     "first": 2700
+    },
+    {
+     "file": "__P9L.HTM",
+     "first": 2705
+    },
+    {
+     "file": "__P9M.HTM",
+     "first": 2709
+    },
+    {
+     "file": "__P9N.HTM",
+     "first": 2720
+    },
+    {
+     "file": "__P9O.HTM",
+     "first": 2725
+    },
+    {
+     "file": "__P9P.HTM",
+     "first": 2726
+    },
+    {
+     "file": "__P9Q.HTM",
+     "first": 2729
+    },
+    {
+     "file": "__P9R.HTM",
+     "first": 2734
+    },
+    {
+     "file": "__P9S.HTM",
+     "first": 2742
+    },
+    {
+     "file": "__P9T.HTM",
+     "first": 2746
+    },
+    {
+     "file": "__P9U.HTM",
+     "first": 2752
+    },
+    {
+     "file": "__P9V.HTM",
+     "first": 2759
+    },
+    {
+     "file": "__P9W.HTM",
+     "first": 2761
+    },
+    {
+     "file": "__P9X.HTM",
+     "first": 2762
+    },
+    {
+     "file": "__P9Y.HTM",
+     "first": 2765
+    },
+    {
+     "file": "__P9Z.HTM",
+     "first": 2767
+    },
+    {
+     "file": "__PA0.HTM",
+     "first": 2773
+    },
+    {
+     "file": "__PA1.HTM",
+     "first": 2777
+    },
+    {
+     "file": "__PA2.HTM",
+     "first": 2779
+    },
+    {
+     "file": "__PA3.HTM",
+     "first": 2786
+    },
+    {
+     "file": "__PA4.HTM",
+     "first": 2794
+    },
+    {
+     "file": "__PA5.HTM",
+     "first": 2797
+    },
+    {
+     "file": "__PA6.HTM",
+     "first": 2803
+    },
+    {
+     "file": "__PA7.HTM",
+     "first": 2807
+    },
+    {
+     "file": "__PA8.HTM",
+     "first": 2816
+    },
+    {
+     "file": "__PA9.HTM",
+     "first": 2822
+    },
+    {
+     "file": "__PAA.HTM",
+     "first": 2828
+    },
+    {
+     "file": "__PAB.HTM",
+     "first": 2838
+    },
+    {
+     "file": "__PAC.HTM",
+     "first": 2846
+    },
+    {
+     "file": "__PAD.HTM",
+     "first": 2855
+    },
+    {
+     "file": "__PAE.HTM",
+     "first": 2857
+    }
+   ]
+  },
+  "pt": {
+   "base": "https://www.vatican.va/archive/cathechism_po/index_new/",
+   "pages": [
+    {
+     "file": "prologo%201-25_po.html",
+     "first": 1
+    },
+    {
+     "file": "p1s1c1_26-49_po.html",
+     "first": 26
+    },
+    {
+     "file": "p1s1c2_50-141_po.html",
+     "first": 50
+    },
+    {
+     "file": "p1s1c3_142-184_po.html",
+     "first": 142
+    },
+    {
+     "file": "p1s2_185-197_po.html",
+     "first": 185
+    },
+    {
+     "file": "p1s2c1_198-421_po.html",
+     "first": 198
+    },
+    {
+     "file": "p1s2cap2_422-682_po.html",
+     "first": 422
+    },
+    {
+     "file": "p1s2cap3_683-1065_po.html",
+     "first": 683
+    },
+    {
+     "file": "p2s1cap1_1066-1075_po.html",
+     "first": 1066
+    },
+    {
+     "file": "p2s1cap1_1076-1134_po.html",
+     "first": 1076
+    },
+    {
+     "file": "p2s1cap2_1135-1209_po.html",
+     "first": 1135
+    },
+    {
+     "file": "p2s2cap1_1210-1419_po.html",
+     "first": 1210
+    },
+    {
+     "file": "p2s2cap1_1420-1532_po.html",
+     "first": 1420
+    },
+    {
+     "file": "p2s2cap3_1533-1666_po.html",
+     "first": 1533
+    },
+    {
+     "file": "p2s2cap4_1667-1690_po.html",
+     "first": 1667
+    },
+    {
+     "file": "p3-intr_1691-1698_po.html",
+     "first": 1691
+    },
+    {
+     "file": "p3s1cap1_1699-1876_po.html",
+     "first": 1699
+    },
+    {
+     "file": "p3s1cap2_1877-1948_po.html",
+     "first": 1877
+    },
+    {
+     "file": "p3s1cap3_1949-2051_po.html",
+     "first": 1949
+    },
+    {
+     "file": "p3s2-intr_2052-2082_po.html",
+     "first": 2052
+    },
+    {
+     "file": "p3s2cap1_2083-2195_po.html",
+     "first": 2083
+    },
+    {
+     "file": "p3s2cap2_2196-2557_po.html",
+     "first": 2196
+    },
+    {
+     "file": "p4-intr_2558-2565_po.html",
+     "first": 2558
+    },
+    {
+     "file": "p4s1cap1_2566-2649_po.html",
+     "first": 2566
+    },
+    {
+     "file": "p4s1cap2_2650-2696_po.html",
+     "first": 2650
+    },
+    {
+     "file": "p4s1cap3_2697-2758_po.html",
+     "first": 2697
+    },
+    {
+     "file": "p4s2_2759-2865_po.html",
+     "first": 2759
+    }
+   ]
+  }
+ },
+ "paragraphs": 2865
+}

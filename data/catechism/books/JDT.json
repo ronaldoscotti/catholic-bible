@@ -1,0 +1,15 @@
+{"book":{"abbreviation": "Jdt.", "chapters": 16, "code": "JDT", "deuterocanonical": true, "group": "HISTORICAL", "name": "Judith", "testament": "OLD"},"pages":"catechism/pages.json","rights":"Paragraph numbers and references to vatican.va. No Catechism text, permanently. See LIMITS.md for the basis","citations":{
+"JDT.9.10":[{"cited": "Jt 9,2-14", "paragraph": 2585}],
+"JDT.9.11":[{"cited": "Jt 9,2-14", "paragraph": 2585}],
+"JDT.9.12":[{"cited": "Jt 9,2-14", "paragraph": 2585}],
+"JDT.9.13":[{"cited": "Jt 9,2-14", "paragraph": 2585}],
+"JDT.9.14":[{"cited": "Jt 9,2-14", "paragraph": 2585}],
+"JDT.9.2":[{"cited": "Jt 9,2-14", "paragraph": 2585}],
+"JDT.9.3":[{"cited": "Jt 9,2-14", "paragraph": 2585}],
+"JDT.9.4":[{"cited": "Jt 9,2-14", "paragraph": 2585}],
+"JDT.9.5":[{"cited": "Jt 9,2-14", "paragraph": 2585}],
+"JDT.9.6":[{"cited": "Jt 9,2-14", "paragraph": 2585}],
+"JDT.9.7":[{"cited": "Jt 9,2-14", "paragraph": 2585}],
+"JDT.9.8":[{"cited": "Jt 9,2-14", "paragraph": 2585}],
+"JDT.9.9":[{"cited": "Jt 9,2-14", "paragraph": 2585}]
+}}
