@@ -39,7 +39,7 @@ lives in `docs/epics/` with a matching GitHub issue.
 [x] 4  Plan             docs/plans/, B1 B2 B3 B4 B5 B8 B9 B10 B11
 [x] 5  Implement        B0 B1 B2 B3 B4 B5 B7 B8 B9 B10 merged, B11 open, 866 tests
 [x] 6  QA               docs/qa/, B0 B1 B2 B3 B4 B5 B7 B8 B9 B10 B11
-[x] 7  Code review      docs/reviews/, B0 to B10, one author on B10
+[x] 7  Code review      docs/reviews/, B0 to B11, one author on B10
 [x] 8  PR               B0 to B10 merged. v1.0.0 and v1.0.1 released
 ```
 
